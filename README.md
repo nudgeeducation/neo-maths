@@ -1,10 +1,10 @@
 # NEO Maths · GreenPrint
 
-**Repository:** TheNovacene/maths
+**Repository:** nudgeeducation/neo-maths (transferred from TheNovacene/maths, 29 September 2026)
 
 The working curriculum vault and public site for **NEO Maths** — the mathematics curriculum of Nudge Education Online, operated by Nudge Education Ltd.
 
-**Live site:** https://thenovacene.github.io/maths/ (once GitHub Pages is enabled)
+**Live site:** https://nudgeeducation.github.io/neo-maths/
 
 This is v2 of the NEO Maths repository. Where [neo-maths](https://github.com/TheNovacene/neo-maths) (v1) collected the open lesson library, this repository holds the **GreenPrint** curriculum build: the design records, curriculum maps, production lessons and QA materials — plus the public site that serves each lesson as an interactive webpage, connected to the Six Cornerstones and ready for progress tracking.
 
@@ -78,10 +78,10 @@ a relational operating protocol for AI agents collaborating in this repository
 ## Licences
 
 Code and tooling are under the [MIT Licence](LICENSE). Curriculum content —
-lessons, guidance, media, the vault — is © The Novacene and co-authors under
+lessons, guidance, media, the vault — is © Nudge Education Ltd and co-authors under
 **CC BY-NC-ND 4.0**; see [CONTENT_LICENSE.md](CONTENT_LICENSE.md).
 
 ---
 
 
-Nudge Education Online · [nudgeeducation.online](https://nudgeeducation.online) · neo@nudgeeducation.co.uk
+Nudge Education Online · [nudgeeducation.online](https://nudgeeducation.online) · neo@nudgeeducation.online

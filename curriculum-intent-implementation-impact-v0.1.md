@@ -199,7 +199,7 @@ The curriculum is not a static document; it is a live, navigable data structure 
 
 ## 2.6 How a subject curriculum is built to this intent — mathematics as the pilot
 
-Mathematics is the first subject built to this intent, and the working pattern for those that follow. The existing GCSE maths content (authored as *Verse-al Maths*) has been duplicated into a NEO working repository (`neo-maths`, held in The Novacene organisation until the authoring partner is paid, then transferred to Nudge Education) and is being re-based from the Ways of Knowing onto the Cornerstones. Sequencing follows the intent above: a broad Key Stage 3 with a strong Year 9 emphasis, then Year 10 as Year 1 of the iGCSE, mapped closely to the Pearson Edexcel International GCSE Mathematics A (4MA1) specification, with tiered entry so a learner meets maths where they actually are. The maths build is the proving ground for the Cornerstone design principles in §1.4; what is learned there feeds back into this document.
+Mathematics is the first subject built to this intent, and the working pattern for those that follow. The existing GCSE maths content (authored as *Verse-al Maths*) has been duplicated into a NEO working repository (`nudgeeducation/neo-maths`, transferred from The Novacene organisation to Nudge Education on 29 September 2026 once the authoring partner was paid) and is being re-based from the Ways of Knowing onto the Cornerstones. Sequencing follows the intent above: a broad Key Stage 3 with a strong Year 9 emphasis, then Year 10 as Year 1 of the iGCSE, mapped closely to the Pearson Edexcel International GCSE Mathematics A (4MA1) specification, with tiered entry so a learner meets maths where they actually are. The maths build is the proving ground for the Cornerstone design principles in §1.4; what is learned there feeds back into this document.
 
 ---
 
@@ -256,6 +256,6 @@ Grades, mastery judgements and portfolios all matter. But the ultimate measure o
 
 ## Attribution
 
-Nudge Education Online is operated by **Nudge Education Ltd** (Company Number 10192753). The Cornerstones, Modes and Mastery scale are defined in the NEO Teaching and Learning Policy v04.26. The Curriculum × Overlay architecture is defined in the NEO Curriculum Vault Tagging Schema v0.3. The mathematics curriculum derives from *Verse-al Maths* and *Relating Intelligently* / Relational Intelligence is a NEO adaptation of Novacene work — both **The Novacene Ltd** IP, used by NEO under licence. This document is a working draft prepared in Cowork for review by the Head of School; it names roles, not individuals.
+Nudge Education Online is operated by **Nudge Education Ltd** (Company Number 10192753). The Cornerstones, Modes and Mastery scale are defined in the NEO Teaching and Learning Policy v04.26. The Curriculum × Overlay architecture is defined in the NEO Curriculum Vault Tagging Schema v0.3. The mathematics curriculum derives from *Verse-al Maths* and is now **Nudge Education Ltd** IP (transferred 29 September 2026); *Relating Intelligently* / Relational Intelligence is a NEO adaptation of **The Novacene Ltd** IP, used by NEO under licence. This document is a working draft prepared in Cowork for review by the Head of School; it names roles, not individuals.
 
 *Connection before curriculum. Always.*
