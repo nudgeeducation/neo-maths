@@ -85,3 +85,12 @@ lessons, guidance, media, the vault — is © Nudge Education Ltd and co-authors
 
 
 Nudge Education Online · [nudgeeducation.online](https://nudgeeducation.online) · neo@nudgeeducation.online
+
+## Google Classroom sync
+
+`scripts/classroom/classroom_sync.gs` mirrors `docs/data/curriculum.json` into a
+Google Classroom course — one Topic per unit, one Material per lesson, each a
+link to the lesson page on this site. Git stays canonical; Classroom is derived.
+Re-run after any curriculum change; it is idempotent. Setup and the target
+course id are at the top of the script. It creates topics and materials only —
+no learner data is read or written.
