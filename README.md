@@ -88,9 +88,10 @@ Nudge Education Online · [nudgeeducation.online](https://nudgeeducation.online)
 
 ## Google Classroom sync
 
-`scripts/classroom/classroom_sync.gs` mirrors `docs/data/curriculum.json` into a
-Google Classroom course — one Topic per unit, one Material per lesson, each a
-link to the lesson page on this site. Git stays canonical; Classroom is derived.
+`scripts/classroom/classroom_sync.gs` mirrors `docs/data/curriculum.json` into the
+Google Classroom master courses — Foundations units to the Foundation master,
+Intermediate units to the Intermediate master — one Topic per unit, one Material
+per lesson, each a link to the lesson page on this site. Git stays canonical; Classroom is derived.
 Re-run after any curriculum change; it is idempotent. Setup and the target
 course id are at the top of the script. It creates topics and materials only —
 no learner data is read or written.
