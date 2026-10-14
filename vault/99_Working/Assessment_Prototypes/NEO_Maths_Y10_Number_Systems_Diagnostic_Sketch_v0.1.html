@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before You Set Off · Number Systems</title>
+<style>
+:root{--bg:#efe9df;--paper:#f7f3ea;--card:#fff;--ink:#2f3429;--muted:#5c6b4f;--h1:#3f5f45;--h2:#6a7f4e;--gold:#d8b26e;--teal:#2AB3A0;--blue:#365a68;--line:#cdbfa9;
+--ready:#e3f0df;--strength:#e5eef2;--refresh:#fff1cf;--new:#f1e9dc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif;line-height:1.55}
+body.comfort{font-size:1.15em;letter-spacing:.02em;line-height:1.8}
+.top{background:#1b2b3a;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;gap:10px;flex-wrap:wrap}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.85em}
+.top button{background:var(--teal);color:#08201d;border:0;border-radius:8px;padding:7px 12px;font-weight:700;cursor:pointer}
+.neo{max-width:860px;margin:18px auto;padding:22px;background:var(--paper);border-radius:18px}
+h1{color:var(--h1);margin:.2em 0 .1em}h2{color:var(--h2);margin:.2em 0 .5em}
+.dq{color:var(--h2);font-style:italic;font-size:1.1em;margin:0 0 14px}
+.info{background:#fffaf0;padding:14px 16px;border-left:6px solid var(--gold);border-radius:12px;margin:14px 0}
+.glass{background:#e5eef2;padding:12px 16px;border-radius:12px;margin:14px 0;font-size:.95em}
+.glass summary{font-weight:700;cursor:pointer}
+.card{background:var(--card);padding:18px;border-radius:14px;margin:14px 0}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.step{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:#fff;font-weight:700;cursor:pointer;color:var(--ink)}
+.step.done{background:var(--h1);border-color:var(--h1);color:#fff}
+.step.here{outline:3px solid var(--teal);outline-offset:2px}
+.qtext{font-size:1.25em;margin:4px 0 14px}
+.qtext .big{font-family:Georgia,'Times New Roman',serif;font-size:1.25em}
+.label{font-weight:700;color:var(--muted);margin:10px 0 6px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button.opt,button.go,button.soft{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;color:var(--ink);font-size:1em}
+button.opt[aria-pressed=true]{background:var(--h1);color:#fff;border-color:var(--h1)}
+button.go{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.soft{border-style:dashed;color:var(--muted)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input.ans{font-size:1.15em;padding:8px 10px;border-radius:8px;border:1px solid #738697;width:11em}
+.locked{opacity:.45;pointer-events:none}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;display:none}
+.fb.show{display:block}.fb.good{background:var(--ready)}.fb.try{background:var(--refresh)}.fb.calm{background:var(--strength)}
+.nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px;flex-wrap:wrap}
+.map{display:grid;gap:10px;margin:12px 0}
+.stone{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;background:#fff;border:2px solid transparent}
+.stone .n{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:#fff;border:2px solid var(--line)}
+.stone.ready{border-color:#9cc59a}.stone.ready .n{background:#9cc59a;color:#fff;border-color:#9cc59a}
+.stone.refresh{border-color:var(--gold)}.stone.refresh .n{background:var(--refresh)}
+.stone.build{border-color:var(--line)}
+.stone small{display:block;color:var(--muted)}
+.pack{background:var(--new);border-radius:12px;padding:12px 16px}
+.pack li{margin:4px 0}
+table.adult{width:100%;border-collapse:collapse;font-size:.92em;background:#fff}
+table.adult th,table.adult td{border:1px solid #d9d2c4;padding:6px 8px;text-align:left;vertical-align:top}
+table.adult th{background:#eef3e8}
+textarea{width:100%;min-height:70px;border-radius:8px;border:1px solid #738697;padding:8px;font:inherit}
+.sketch{font-size:.85em;color:var(--muted);text-align:center;margin:18px 0 4px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="top"><b>NEO MATHS · BEFORE YOU SET OFF</b><span>Number Systems and Calculator Judgement</span><button id="comfortBtn" aria-pressed="false">Aa Comfort</button></div>
+<main class="neo">
+
+<section id="intro">
+  <h1>Before you set off</h1>
+  <p class="dq">Number Systems and Calculator Judgement · Year 10 · Spring term</p>
+  <div class="info">
+    <p><b>This is not a test.</b> There is no clock, no score and nothing to lose. It takes about 15 minutes, and you can stop and come back.</p>
+    <p>It's like packing for a journey. Eight short questions help us work out what you're already carrying, and what's worth packing before we start the unit.</p>
+    <p>For each question, first tell us how it feels, then have a go. <b>"This is new to me" is a perfectly good answer</b> — it tells us where to start.</p>
+  </div>
+  <details class="glass">
+    <summary>What is saved, and who can see it?</summary>
+    <p>Only your answers and how each question felt to you. <b>Nothing else</b>: not how long you took, not how many times you tried, not what you clicked.</p>
+    <p>Your supporting adult sees exactly the same summary you see at the end. You can look at it, change an answer, and run it again whenever you like.</p>
+    <p><i>In this sketch, nothing is saved at all.</i></p>
+  </details>
+  <div class="row"><button class="go" id="startBtn">Let's begin</button></div>
+</section>
+
+<section id="quiz" class="hide">
+  <div class="steps" id="steps" aria-label="Questions. You can go to any question in any order."></div>
+  <div class="card" id="qcard"></div>
+  <div class="nav">
+    <button class="soft" id="prevBtn">← Back</button>
+    <button class="go" id="nextBtn">Next →</button>
+  </div>
+</section>
+
+<section id="summary" class="hide">
+  <h1>Your map for this unit</h1>
+  <p class="dq">Here's what you're already carrying, and what to pack before we start.</p>
+  <div class="map" id="map"></div>
+  <div class="pack" id="pack"></div>
+  <div class="card">
+    <div class="label">How do you feel about starting this unit? (Optional — only kept if you choose to share it.)</div>
+    <textarea id="feel" placeholder="Anything you'd like your supporting adult to know…"></textarea>
+  </div>
+  <details class="glass" id="adultBox">
+    <summary>See exactly what your supporting adult sees</summary>
+    <div id="adult"></div>
+  </details>
+  <div class="row"><button class="soft" id="reviewBtn">← Change an answer</button><button class="soft" id="restartBtn">Start again</button></div>
+</section>
+
+<p class="sketch">Sketch for discussion · v0.1 · 6 October 2026 · not yet a live assessment</p>
+</main>
+
+<script>
+// Tolerant number reader: fractions, unicode fractions, decimals, powers (5^2, 5²), unicode minus, a few words.
+function num(v){
+  var s=String(v).trim().toLowerCase().replace(/−/g,'-').replace(/\s+/g,'').replace(/÷/g,'/');
+  var glyph={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅔':2/3,'⅛':.125,'⅜':.375};
+  if(glyph[s]!=null) return glyph[s];
+  var words={'aquarter':.25,'quarter':.25,'half':.5,'ahalf':.5,'threequarters':.75,'onehundredth':.01,'twentyfive':25,'nineteen':19,'twohundred':200};
+  if(words[s.replace(/-/g,'')]!=null) return words[s.replace(/-/g,'')];
+  s=s.replace(/²/g,'^2').replace(/³/g,'^3').replace(/⁻²/g,'^-2');
+  var m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\^(-?\d+)$/))) return Math.pow(+m[1],+m[2]);
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/))) return +m[1]/+m[2];
+  if(/^-?\d*\.?\d+$/.test(s)) return +s;
+  return NaN;
+}
+function near(a,b){return Math.abs(a-b)<1e-9}
+
+var LESSONS=[
+  'Fractions, decimals and percentages fluently','Recurring decimals as fractions','Order of operations and calculator judgement',
+  'Negative and fractional indices','Surds: meaning and simplifying','Surds: manipulating and rationalising','Estimating and judging reasonableness'];
+
+var Q=[
+ {html:'Write <span class="big">18/24</span> in its simplest form.', type:'input', lessons:[0], route:'Equivalent fractions',
+  check:function(v){var s=String(v).replace(/\s/g,''); if(/^(3\/4|¾)$/.test(s)) return 'right'; if(near(num(v),.75)) return 'value'; return 'no';},
+  value:'That is exactly the right value. Can you write it as a fraction in its simplest form?',
+  hint:'Find the biggest number that divides both 18 and 24, and divide top and bottom by it.',
+  show:'18 and 24 are both in the 6 times table: 18 ÷ 6 = 3 and 24 ÷ 6 = 4, so 18/24 = 3/4.'},
+ {html:'Work out <span class="big">2/3 + 1/4</span>.', type:'input', lessons:[0], route:'Adding fractions',
+  check:function(v){return near(num(v),11/12)?'right':'no';},
+  hint:'Give both fractions the same denominator first. What number do 3 and 4 both go into?',
+  show:'Both go into 12: 2/3 = 8/12 and 1/4 = 3/12, so the total is 11/12.'},
+ {html:'Write <span class="big">3/8</span> as a decimal.', type:'input', lessons:[0,1], route:'Fractions to decimals',
+  check:function(v){return near(num(v),.375)?'right':'no';},
+  hint:'3/8 means 3 ÷ 8. You could also start from 1/8 = 0.125.',
+  show:'1/8 = 0.125, so 3/8 = 3 × 0.125 = 0.375.'},
+ {html:'Work out <span class="big">3 + 4 × 2²</span>.', type:'input', lessons:[2], route:'Order of operations',
+  check:function(v){var n=num(v); if(near(n,19)) return 'right'; if(near(n,28)||near(n,196)||near(n,67)) return 'order'; return 'no';},
+  order:'That would be the answer if we worked from left to right. Which part does the order of operations say to do first?',
+  hint:'Powers first, then multiplication, then addition.',
+  show:'2² = 4, then 4 × 4 = 16, then 3 + 16 = 19.'},
+ {html:'Work out <span class="big">5⁶ ÷ 5⁴</span>. You can leave your answer as a power of 5.', type:'input', lessons:[3], route:'Index laws (Year 9 Accuracy, Powers and Scale, Lesson 3)',
+  check:function(v){return near(num(v),25)?'right':'no';},
+  hint:'Dividing powers of the same number: what happens to the indices?',
+  show:'Subtract the indices: 5⁶ ÷ 5⁴ = 5² = 25.'},
+ {html:'Write <span class="big">10⁻²</span> as a decimal.', type:'input', lessons:[3], route:'Negative powers in standard form (Year 9 Accuracy, Powers and Scale, Lesson 4)',
+  check:function(v){var n=num(v); if(near(n,.01)) return 'right'; if(near(n,-100)||near(n,-20)) return 'neg'; return 'no';},
+  neg:'A negative power doesn\'t make the number negative. Think about what happens to 10², 10¹, 10⁰… as the power goes down.',
+  hint:'10¹ = 10, 10⁰ = 1, 10⁻¹ = 0.1. Keep going.',
+  show:'Each step down divides by 10: 10⁻¹ = 0.1, so 10⁻² = 0.01.'},
+ {html:'Which is the <b>largest square number</b> that divides exactly into <span class="big">72</span>?', type:'choice', options:['4','9','36','64'], answer:'36', lessons:[4,5], route:'Square numbers and factors',
+  hint:'Check each one: does it divide 72 with nothing left over? Then pick the largest that does.',
+  show:'72 = 36 × 2, and 36 = 6². (64 does not divide 72.) This is the key move for simplifying surds.'},
+ {html:'Roughly how big is <span class="big">38.7 × 4.92</span>?', type:'choice', options:['about 20','about 200','about 2000'], answer:'about 200', lessons:[6], route:'Estimate before you calculate (Year 9 Accuracy, Powers and Scale, Lesson 2)',
+  hint:'Round each number to one significant figure first.',
+  show:'38.7 ≈ 40 and 4.92 ≈ 5, so the answer is about 40 × 5 = 200.'}
+];
+var FEEL=[['sure','I\'ve got this'],['unsure','Not sure'],['new','This is new to me']];
+var st=Q.map(function(){return {feel:null,first:null,last:null,result:null,skipped:false};});
+var cur=0;
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function drawSteps(){
+  $('steps').innerHTML=Q.map(function(_,i){var s=st[i];var done=s.result||s.skipped;
+    return '<button class="step'+(done?' done':'')+(i===cur?' here':'')+'" data-i="'+i+'" aria-label="Question '+(i+1)+(done?', answered':'')+'">'+(i+1)+'</button>';}).join('');
+  [].forEach.call($('steps').children,function(b){b.onclick=function(){cur=+b.dataset.i;draw();};});
+}
+function draw(){
+  drawSteps();
+  var q=Q[cur],s=st[cur];
+  var h='<div class="label">Question '+(cur+1)+' of '+Q.length+'</div><div class="qtext">'+q.html+'</div>';
+  h+='<div class="label">First, how does this one feel?</div><div class="row">'+FEEL.map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
+  h+='<div id="ansArea" class="'+(s.feel?'':'locked')+'"><div class="label">Now have a go</div><div class="row">';
+  if(q.type==='input') h+='<input class="ans" id="ans" autocomplete="off" aria-label="Your answer" value="'+esc(s.last||'')+'"><button class="go" id="checkBtn">Check</button>';
+  else h+=q.options.map(function(o){return '<button class="opt" data-pick="'+esc(o)+'" aria-pressed="'+(s.last===o)+'">'+esc(o)+'</button>';}).join('');
+  h+='<button class="soft" id="skipBtn">Skip — I\'d rather learn this in the unit</button></div></div><div class="fb" id="fb"></div>';
+  $('qcard').innerHTML=h;
+  [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;draw();};});
+  if(q.type==='input'){ $('checkBtn').onclick=function(){mark($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')mark(this.value);}; }
+  else [].forEach.call(document.querySelectorAll('[data-pick]'),function(b){b.onclick=function(){mark(b.dataset.pick);};});
+  $('skipBtn').onclick=function(){s.skipped=true;s.result=null;fb('calm','That\'s fine. This will be built step by step in the unit, and we\'ll add it to your packing list.');drawSteps();};
+  if(s.result||s.skipped) replay();
+  $('prevBtn').disabled=cur===0;
+  $('nextBtn').textContent=cur===Q.length-1?'See my map →':'Next →';
+}
+function fb(kind,msg){var f=$('fb');f.className='fb show '+kind;f.innerHTML=msg;}
+function replay(){var q=Q[cur],s=st[cur];
+  if(s.skipped) fb('calm','You chose to learn this one in the unit. You can still have a go if you like.');
+  else if(s.result==='right') fb('good','<b>Yes.</b> '+q.show);
+  else fb('try','Not quite yet. '+q.hint+' <button class="soft" id="showBtn">Show me how</button>');
+  var sb=$('showBtn'); if(sb) sb.onclick=function(){fb('calm',q.show+' You can try again, or move on — either is fine.');};
+}
+function mark(v){
+  var q=Q[cur],s=st[cur]; if(String(v).trim()==='') return;
+  var r= q.type==='choice' ? (v===q.answer?'right':'no') : q.check(v);
+  if(s.first===null) s.first=v;
+  s.last=v; s.skipped=false;
+  if(r==='right'){ s.result= s.result==='notyet'?'second':'right';
+    if(s.result==='second') fb('good','<b>Yes — you got there.</b> '+q.show); else fb('good','<b>Yes.</b> '+q.show);
+  } else {
+    s.result= s.result==='second'||s.result==='right' ? s.result : 'notyet';
+    var extra=q[r]||''; fb('try',(extra?extra+' ':'Not quite yet. ')+(extra?'':q.hint)+' <button class="soft" id="showBtn">Show me how</button>');
+    $('showBtn').onclick=function(){fb('calm',q.show+' You can try again, or move on — either is fine.');};
+  }
+  drawSteps();
+}
+// Learner-facing outcome for one question.
+function outcome(s){
+  if(s.result==='right') return s.feel==='sure'?'ready':'strength';
+  if(s.result==='second') return 'refresh';
+  if(s.result==='notyet' && s.feel==='sure') return 'look';
+  if(s.result===null && !s.skipped) return 'open';
+  return 'new';
+}
+var OUT={ready:'Ready',strength:'Hidden strength — you knew more than you thought',refresh:'Got there with a nudge',look:'Worth a second look',new:'New ground',open:'Not tried yet'};
+function summary(){
+  $('quiz').classList.add('hide');$('summary').classList.remove('hide');
+  var o=st.map(outcome);
+  $('map').innerHTML=LESSONS.map(function(t,li){
+    var qs=Q.map(function(q,i){return q.lessons.indexOf(li)>=0?i:-1;}).filter(function(i){return i>=0;});
+    var os=qs.map(function(i){return o[i];});
+    var cls= os.some(function(x){return x==='new'||x==='open';})?'build': os.some(function(x){return x==='look'||x==='refresh';})?'refresh':'ready';
+    var msg={ready:'Ready to go — you\'re carrying what this lesson needs.',refresh:'A quick refresh before this lesson would help.',build:'We\'ll build this together in the lesson.'}[cls];
+    return '<div class="stone '+cls+'"><div class="n">'+(li+1)+'</div><div><b>'+t+'</b><small>'+msg+'</small></div></div>';
+  }).join('');
+  var routes=Q.filter(function(q,i){return ['look','new','refresh'].indexOf(o[i])>=0;}).map(function(q){return q.route;});
+  routes=routes.filter(function(r,i){return routes.indexOf(r)===i;});
+  $('pack').innerHTML= routes.length ? '<b>Your packing list</b><p>These short Reconnection Routes would help before the unit starts. Each one takes about ten minutes and brings you straight back.</p><ul>'+routes.map(function(r){return '<li>'+esc(r)+'</li>';}).join('')+'</ul>'
+    : '<b>Your packing list is empty.</b> You\'re carrying everything this unit builds on. Enjoy the journey.';
+  var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
+  $('adult').innerHTML='<p>The same information you have just seen, as a table. There are no scores, times or attempt counts.</p><table class="adult"><tr><th>#</th><th>Question</th><th>How it felt</th><th>Outcome</th><th>Suggested route</th></tr>'+
+    Q.map(function(q,i){var x=o[i];return '<tr><td>'+(i+1)+'</td><td>'+q.html+'</td><td>'+feelTxt[st[i].feel]+'</td><td>'+OUT[x]+'</td><td>'+(['look','new','refresh'].indexOf(x)>=0?esc(q.route):'—')+'</td></tr>';}).join('')+'</table>'+
+    '<p><b>For the adult:</b> "Worth a second look" (confident but not yet right) is the most useful signal — it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud to the learner.</p>';
+}
+$('startBtn').onclick=function(){$('intro').classList.add('hide');$('quiz').classList.remove('hide');draw();};
+$('prevBtn').onclick=function(){if(cur>0){cur--;draw();}};
+$('nextBtn').onclick=function(){if(cur<Q.length-1){cur++;draw();}else summary();};
+$('reviewBtn').onclick=function(){$('summary').classList.add('hide');$('quiz').classList.remove('hide');cur=0;draw();};
+$('restartBtn').onclick=function(){st=Q.map(function(){return {feel:null,first:null,last:null,result:null,skipped:false};});cur=0;$('summary').classList.add('hide');$('quiz').classList.remove('hide');draw();};
+$('comfortBtn').onclick=function(){var on=document.body.classList.toggle('comfort');this.setAttribute('aria-pressed',on);};
+</script>
+</body>
+</html>

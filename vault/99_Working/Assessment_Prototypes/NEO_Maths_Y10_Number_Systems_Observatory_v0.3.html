@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Observatory · Number Systems</title>
+<style>
+:root{--ink:#2f3429;--paper:#f7f3ea;--h1:#3f5f45;--h2:#6a7f4e;--gold:#d8b26e;--teal:#2AB3A0;--blue:#365a68;--night:#0f1a24;
+--ready:#e3f0df;--strength:#e5eef2;--refresh:#fff1cf;--new:#f1e9dc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);font-family:Arial,sans-serif;color:var(--ink);overflow:hidden}
+body.comfort{font-size:1.15em;letter-spacing:.02em}
+body.comfort .panel,body.comfort .hud{line-height:1.75}
+.top{position:fixed;inset:0 0 auto 0;height:52px;background:#1b2b3a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;gap:10px;z-index:30}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.8em;white-space:nowrap}
+.top .tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.top button{background:#2b4152;color:#fff;border:1px solid #4d6577;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:.82em}
+.top button[aria-pressed=true]{background:var(--teal);color:#08201d;border-color:var(--teal)}
+
+/* 3D scene */
+#vp{position:fixed;top:52px;left:0;right:0;bottom:0;overflow:hidden;perspective:900px;perspective-origin:50% 40%}
+#world{position:absolute;left:50%;top:46%;width:0;height:0;transform-style:preserve-3d;transition:transform 2.6s cubic-bezier(.45,.05,.35,1)}
+body.still #world{transition:none}
+body.flat #vp,body.flat #veil{display:none}
+body.flat{background:#efe9df;overflow:auto}
+body.flat .hud{position:static;transform:none;margin:76px auto 20px}
+.f{position:absolute;transform-style:preserve-3d}
+.wall{background:linear-gradient(180deg,#cdbb9b 0%,#bda983 55%,#a08b66 100%);box-shadow:inset 0 0 120px rgba(40,25,10,.45)}
+.wall.side{background:linear-gradient(90deg,#a9946e 0%,#c8b591 100%)}
+.wall.side.r{background:linear-gradient(270deg,#a9946e 0%,#c8b591 100%)}
+.floor{background:repeating-linear-gradient(90deg,#6d4e33 0 118px,#5e422b 118px 120px),#6d4e33;box-shadow:inset 0 0 220px rgba(0,0,0,.55)}
+.floor.tiles{background:repeating-conic-gradient(#7a6a55 0 25%,#5b4c3a 0 50%) 0 0/120px 120px;box-shadow:inset 0 0 220px rgba(0,0,0,.55)}
+.ceiling{background:radial-gradient(circle at 20% 30%,#fff 0 1.5px,transparent 2px),radial-gradient(circle at 70% 60%,#fff 0 1px,transparent 2px),radial-gradient(circle at 45% 80%,#ffe9b0 0 1.5px,transparent 2px),radial-gradient(circle at 85% 20%,#fff 0 1px,transparent 2px),#16263a;background-size:180px 160px,230px 210px,260px 240px,150px 170px}
+.prop{position:absolute;left:50%;top:50%;transform:translate(-50%,-55%)}
+.p-window{width:260px;height:300px;border-radius:130px 130px 10px 10px;border:14px solid #7a6243;background:radial-gradient(circle at 30% 30%,#fff 0 2px,transparent 3px),radial-gradient(circle at 65% 55%,#fff 0 1.5px,transparent 2.5px),radial-gradient(circle at 50% 80%,#ffe9b0 0 2px,transparent 3px),linear-gradient(#0d1b2e,#24395a);background-size:90px 80px,120px 110px,140px 130px,100% 100%;box-shadow:0 0 40px rgba(120,160,220,.35)}
+.p-charts{display:flex;gap:26px;align-items:flex-start}
+.p-charts svg{width:190px;height:250px;border:8px solid #8a6d40;border-radius:4px;box-shadow:0 6px 0 rgba(0,0,0,.25),0 0 22px rgba(120,160,220,.25);background:#13223a}
+.p-charts svg:nth-child(1){transform:rotate(-2deg)}.p-charts svg:nth-child(2){transform:translateY(-18px)}.p-charts svg:nth-child(3){transform:rotate(2deg)}
+.p-gears{position:relative;width:420px;height:300px}
+.p-gears i{position:absolute;border-radius:50%;border:22px dotted #8f6a26;background:radial-gradient(circle,#5a3b22 0 18%,#c9a35a 19% 60%,transparent 61%);animation:spin 40s linear infinite}
+.p-gears i:nth-child(1){width:220px;height:220px;left:20px;top:40px}
+.p-gears i:nth-child(2){width:150px;height:150px;left:228px;top:10px;animation-direction:reverse;animation-duration:28s}
+.p-gears i:nth-child(3){width:120px;height:120px;left:250px;top:160px;animation-duration:22s}
+@keyframes spin{to{transform:rotate(360deg)}}
+body.still .p-gears i{animation:none}
+@media (prefers-reduced-motion:reduce){.p-gears i{animation:none}}
+.p-orrery{position:relative;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,#f6c45a 0 26px,transparent 28px),radial-gradient(circle,transparent 0 78px,rgba(80,60,30,.6) 79px 81px,transparent 82px),radial-gradient(circle,transparent 0 128px,rgba(80,60,30,.6) 129px 131px,transparent 132px),radial-gradient(circle,transparent 0 170px,rgba(80,60,30,.6) 171px 173px,transparent 174px)}
+.p-orrery i{position:absolute;border-radius:50%}
+.p-orrery i:nth-child(1){width:22px;height:22px;background:#7fb6e0;left:250px;top:170px}
+.p-orrery i:nth-child(2){width:30px;height:30px;background:#c86b4a;left:60px;top:80px}
+.p-orrery i:nth-child(3){width:18px;height:18px;background:#9cc59a;left:170px;top:5px}
+.p-shelves{width:560px;height:340px;border:12px solid #5a3b22;background:linear-gradient(transparent 31%,#5a3b22 31% 34%,transparent 34% 64%,#5a3b22 64% 67%,transparent 67%),repeating-linear-gradient(90deg,#7b2f2f 0 22px,#2f4f6b 22px 40px,#6b5a2f 40px 64px,#3f5f45 64px 84px,#8a6d40 84px 100px)}
+.p-blueprint{width:440px;height:300px;border:10px solid #8a6d40;background:repeating-linear-gradient(0deg,transparent 0 28px,rgba(255,255,255,.25) 28px 29px),repeating-linear-gradient(90deg,transparent 0 28px,rgba(255,255,255,.25) 28px 29px),#2b5f8f;color:#fff;font-family:Georgia,serif;font-size:46px;display:grid;place-items:center;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.p-dials{display:flex;gap:26px}
+.p-dials i{display:block;width:130px;height:130px;border-radius:50%;border:10px solid #8f6a26;background:conic-gradient(from 200deg,#2f3429 0 2deg,transparent 2deg),repeating-conic-gradient(#3a2a10 0 1deg,transparent 1deg 15deg),radial-gradient(circle,#f7efd9 0 60%,#e6d5ae 61%);box-shadow:0 0 18px rgba(255,210,120,.35)}
+.arch{position:absolute;left:50%;bottom:0;width:220px;height:380px;margin-left:-110px;border-radius:110px 110px 0 0;background:#2a1d14;overflow:hidden;border:10px solid #7a6243;border-bottom:0}
+.arch .curtain{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#5d2f3a 0 18px,#4c2530 18px 30px);transition:transform 1.4s ease}
+.arch.open .curtain{transform:translateY(-100%)}
+.arch .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(255,200,110,.55),transparent 60%)}
+.door{background:repeating-linear-gradient(90deg,#5a3b22 0 46px,#4b311c 46px 50px);border:8px solid #3a2614;transform-origin:0 50%;transition:transform 1.8s ease;cursor:pointer}
+body.still .door{transition:none}
+.door .lock{position:absolute;right:26px;top:48%;width:46px;height:62px;border-radius:10px;background:linear-gradient(#e4c27a,#a9802f);box-shadow:0 0 0 3px #6b5020,0 0 18px rgba(255,210,120,.5)}
+.door .lock:after{content:"";position:absolute;left:18px;top:20px;width:10px;height:22px;border-radius:5px;background:#3a2614}
+.lintel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.plaque{background:linear-gradient(#e9d7a8,#c9ad6c);color:#3a2a10;font-family:Georgia,serif;font-weight:700;font-size:26px;padding:8px 26px;border-radius:6px;box-shadow:0 2px 0 #7a6243;white-space:nowrap}
+.lamp{width:44px;height:44px;border-radius:50%;background:#6f6a60;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25);transition:all 1.2s}
+.lamp.gold{background:radial-gradient(circle,#fff5c9,#f2c14e 60%,#c58a1c);box-shadow:0 0 30px 12px rgba(242,193,78,.7)}
+.lamp.blue{background:radial-gradient(circle,#e8f6ff,#7fb6e0 60%,#3f7aa8);box-shadow:0 0 30px 12px rgba(127,182,224,.6)}
+.dome{position:absolute;left:50%;top:6%;width:900px;height:520px;margin-left:-450px;border-radius:450px 450px 0 0;border:16px solid #7a6243;background:radial-gradient(circle at 25% 35%,#fff 0 2px,transparent 3px),radial-gradient(circle at 60% 25%,#ffe9b0 0 2.5px,transparent 3.5px),radial-gradient(circle at 75% 60%,#fff 0 1.5px,transparent 2.5px),linear-gradient(#0b1626,#2b4470);background-size:110px 100px,170px 150px,90px 120px,100% 100%}
+.telescope{position:absolute;left:50%;bottom:0;width:0;height:0}
+.telescope .tube{position:absolute;left:-40px;bottom:260px;width:360px;height:70px;border-radius:35px;background:linear-gradient(#d9b56a,#8f6a26);transform:rotate(-28deg);transform-origin:20px 35px}
+.telescope .stand{position:absolute;left:-12px;bottom:0;width:24px;height:280px;background:#5a3b22}
+
+/* Furniture, field-kit objects and notes */
+.desk svg,.plant svg{width:100%;height:100%;display:block}
+.item{cursor:pointer;transition:opacity 1s,filter .6s}
+.item svg{width:100%;height:100%}
+.item.ready{filter:drop-shadow(0 0 14px rgba(255,220,130,.95))}
+.item.taken{opacity:0;pointer-events:none}
+.rug{border-radius:16px;box-shadow:0 0 0 14px rgba(0,0,0,.08)}
+.note{position:absolute;left:60px;top:250px;width:150px;height:110px;background:#f3e6c4;border:6px solid #8a6d40;border-radius:4px;font-family:Georgia,serif;font-size:21px;font-weight:700;color:#3a2a10;display:grid;place-items:center;text-align:center;cursor:pointer;transform:rotate(-3deg);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.note:before{content:"";position:absolute;top:-12px;left:66px;width:14px;height:14px;border-radius:50%;background:#b0412f}
+
+/* HUD and panels */
+#veil{position:fixed;inset:52px 0 0 0;background:#000;opacity:0;pointer-events:none;transition:opacity .9s;z-index:5}
+#veil.on{opacity:1}
+.hud{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(780px,calc(100% - 24px));background:rgba(247,243,234,.97);border-radius:16px;padding:12px 16px 14px;z-index:10;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.where{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.where .room{font-weight:700;color:var(--h1)}
+.where .leads{font-size:.88em;color:#5c6b4f}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:13px;height:13px;border-radius:50%;background:#d9d2c4;border:2px solid #b9ae98}
+.dots i.gold{background:#f2c14e;border-color:#c58a1c}.dots i.blue{background:#7fb6e0;border-color:#3f7aa8}
+.dots i.here{outline:3px solid var(--teal);outline-offset:1px}
+.dots i.domedot{border-radius:3px}
+.hud .say{margin:0 0 10px;font-size:1.05em}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button.go,button.opt,button.soft{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;color:var(--ink);font-size:1em}
+button.go{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.soft{border-style:dashed;color:#5c6b4f}
+button.opt[aria-pressed=true]{background:var(--h1);color:#fff;border-color:var(--h1)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.modal{position:fixed;inset:52px 0 0 0;display:none;align-items:center;justify-content:center;z-index:20;background:rgba(10,16,24,.55);padding:16px}
+.modal.show{display:flex}
+.panel{background:var(--paper);border-radius:18px;padding:20px 22px;width:min(680px,100%);max-height:calc(100vh - 90px);overflow:auto}
+.panel h2{color:var(--h1);margin:0 0 4px}
+.panel .sub{color:#5c6b4f;margin:0 0 10px;font-size:.92em}
+.panel .q{font-size:1.25em;margin:6px 0 12px}.big{font-family:Georgia,'Times New Roman',serif;font-size:1.25em;white-space:nowrap}
+.label{font-weight:700;color:#5c6b4f;margin:12px 0 6px}
+input.ans{font-size:1.15em;padding:8px 10px;border-radius:8px;border:1px solid #738697;width:10em}
+.locked{opacity:.45;pointer-events:none}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;display:none}
+.fb.show{display:block}.fb.good{background:var(--ready)}.fb.try{background:var(--refresh)}.fb.calm{background:var(--strength)}
+.info{background:#fffaf0;padding:12px 14px;border-left:6px solid var(--gold);border-radius:10px;margin:12px 0}
+.glass{background:#e5eef2;padding:10px 14px;border-radius:10px;margin:10px 0;font-size:.95em}
+.glass summary{font-weight:700;cursor:pointer}
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.roomcard{border-radius:12px;padding:10px;background:#fff;border:3px solid #d9d2c4;text-align:center;font-size:.92em}
+.roomcard .lampdot{width:20px;height:20px;border-radius:50%;margin:0 auto 6px;background:#c9c2b4}
+.roomcard.gold{border-color:#f2c14e}.roomcard.gold .lampdot{background:#f2c14e;box-shadow:0 0 12px #f2c14e}
+.roomcard.blue{border-color:#7fb6e0}.roomcard.blue .lampdot{background:#7fb6e0;box-shadow:0 0 12px #7fb6e0}
+.roomcard.unvisited{opacity:.6}
+.roomcard small{display:block;color:#5c6b4f;margin-top:4px}
+.pack{background:var(--new);border-radius:12px;padding:10px 14px}
+table.adult{width:100%;border-collapse:collapse;font-size:.88em;background:#fff}
+table.adult th,table.adult td{border:1px solid #d9d2c4;padding:6px 8px;text-align:left;vertical-align:top}
+table.adult th{background:#eef3e8}
+textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;padding:8px;font:inherit}
+.small{font-size:.85em;color:#5c6b4f}
+.tool{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start;background:#fff;border-radius:12px;padding:12px 14px;margin:10px 0}
+.tool .ic svg{width:72px;height:72px}
+.tool h3{margin:0 0 4px;color:var(--h1);font-size:1.05em}
+.tool p{margin:4px 0}
+.tool table.sq{border-collapse:collapse;font-size:.95em}
+.tool table.sq td{border:1px solid #d9d2c4;padding:3px 7px;text-align:center}
+.kitlist{columns:2;margin:6px 0 0;padding-left:18px}
+.didyou{background:#fffaf0;border-left:6px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:1.05em}
+@media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
+@media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
+</style>
+</head>
+<body>
+<div class="top"><b>NEO MATHS · THE OBSERVATORY</b>
+  <div class="tools">
+    <button id="kitBtn" title="The tools you have collected">Field kit · <span id="kitCount">0</span></button>
+    <button id="planBtn" title="See your floor plan at any time">Floor plan</button>
+    <button id="stillBtn" aria-pressed="false" title="No movement: rooms change with a gentle fade">Still mode</button>
+    <button id="flatBtn" aria-pressed="false" title="No 3D at all: just the questions, one room at a time">Flat view</button>
+    <button id="comfortBtn" aria-pressed="false" title="Larger text and more space">Aa Comfort</button>
+  </div></div>
+<div id="vp" aria-hidden="true"><div id="world"></div></div>
+<div id="veil"></div>
+
+<div class="hud" id="hud">
+  <div class="where"><div><span class="room" id="roomName"></span> <span class="leads" id="leads"></span></div><div class="dots" id="dots" aria-hidden="true"></div></div>
+  <p class="say" id="say" aria-live="polite"></p>
+  <div class="row" id="acts"></div>
+</div>
+
+<div class="modal show" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wt"><div class="panel" id="welcomePanel"></div></div>
+<div class="modal" id="lockModal" role="dialog" aria-modal="true" aria-labelledby="lt"><div class="panel" id="lockPanel"></div></div>
+<div class="modal" id="kitModal" role="dialog" aria-modal="true" aria-labelledby="kt"><div class="panel" id="kitPanel"></div></div>
+<div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
+
+<script>
+/* ---------- Answer reading: equivalent forms always accepted ---------- */
+function num(v){
+  var s=String(v).trim().toLowerCase().replace(/−/g,'-').replace(/\s+/g,'').replace(/÷/g,'/');
+  var g={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅜':.375}; if(g[s]!=null) return g[s];
+  var w={'nineteen':19,'twentyfive':25,'twohundred':200}; if(w[s.replace(/-/g,'')]!=null) return w[s.replace(/-/g,'')];
+  s=s.replace(/²/g,'^2').replace(/³/g,'^3'); var m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\^(-?\d+(?:\.\d+)?)$/))) return Math.pow(+m[1],+m[2]);
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/))) return +m[1]/+m[2];
+  if(/^-?\d*\.?\d+$/.test(s)) return +s; return NaN;
+}
+function near(a,b,t){return Math.abs(a-b)<(t||1e-9)}
+function alg(v){return String(v).toLowerCase().replace(/\s+/g,'').replace(/[×*·]/g,'').replace(/−/g,'-');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function $(id){return document.getElementById(id);}
+
+/* ---------- The unit: one room per lesson ---------- */
+var ROOMS=[
+ {name:'The Entrance Hall', lesson:'Lesson 1 · Fractions, decimals and percentages fluently', prop:'<div class="prop p-window"></div>', floor:'',
+  arrive:'You step into the Entrance Hall. Starlight comes through the tall window. Ahead, a heavy door with a brass lock.',
+  q:'The lock asks for <span class="big">2/3 + 1/4</span>.', speak:'The lock asks for two thirds plus one quarter.', route:'Adding fractions',
+  check:function(v){var n=num(v); if(near(n,11/12,6e-4)) return 'right'; if(near(n,3/7,6e-4)) return 'tops'; return 'no';},
+  why:{tops:'The tops and bottoms were added separately. Fractions need a common denominator before they can be added.'},
+  adult:{tops:'Added numerators and denominators separately (3/7): worth revisiting why a common denominator is needed.'},
+  hint:'Give both fractions the same denominator first. What number do 3 and 4 both go into?',
+  show:'Both go into 12: 2/3 = 8/12 and 1/4 = 3/12, so the total is 11/12.'},
+ {name:'The Map Room', lesson:'Lesson 2 · Recurring decimals as fractions', prop:'<div class="prop p-charts"><svg viewBox="0 0 175 235" role="img" aria-label="Star chart: The Plough"><circle cx="14" cy="20" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="160" cy="30" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="30" cy="150" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="140" cy="190" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="70" cy="12" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="165" cy="120" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="12" cy="205" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="95" cy="160" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="150" cy="70" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="40" cy="95" r="0.9" fill="#c9d6ea" opacity=".7"/><polyline points="20,48 48,60 74,78 100,92 106,132 150,136 148,98 100,92" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="20" cy="48" r="3" fill="#fff6d8"/><circle cx="48" cy="60" r="3" fill="#fff6d8"/><circle cx="74" cy="78" r="3" fill="#fff6d8"/><circle cx="100" cy="92" r="3.5" fill="#fff6d8"/><circle cx="106" cy="132" r="3.5" fill="#fff6d8"/><circle cx="150" cy="136" r="3.5" fill="#fff6d8"/><circle cx="148" cy="98" r="3.5" fill="#fff6d8"/><rect x="6" y="196" width="163" height="32" rx="4" fill="#e9d7a8"/><text x="87.5" y="218" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#3a2a10">The Plough</text><text x="160" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#e9d7a8">N</text><path d="M160 26 l-3 8 h6z" fill="#e9d7a8"/></svg><svg viewBox="0 0 175 235" role="img" aria-label="Star chart: Orion"><circle cx="14" cy="20" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="160" cy="30" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="30" cy="150" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="140" cy="190" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="70" cy="12" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="165" cy="120" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="12" cy="205" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="95" cy="160" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="150" cy="70" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="40" cy="95" r="0.9" fill="#c9d6ea" opacity=".7"/><polyline points="87,26 52,48 74,108 56,172" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><polyline points="87,26 122,44 100,116 124,168" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><polyline points="52,48 122,44" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><polyline points="74,108 87,112 100,116" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="87" cy="26" r="2.5" fill="#fff6d8"/><circle cx="52" cy="48" r="4" fill="#fff6d8"/><circle cx="122" cy="44" r="3.5" fill="#fff6d8"/><circle cx="74" cy="108" r="3" fill="#fff6d8"/><circle cx="87" cy="112" r="3" fill="#fff6d8"/><circle cx="100" cy="116" r="3" fill="#fff6d8"/><circle cx="56" cy="172" r="3.5" fill="#fff6d8"/><circle cx="124" cy="168" r="4" fill="#fff6d8"/><rect x="6" y="196" width="163" height="32" rx="4" fill="#e9d7a8"/><text x="87.5" y="218" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#3a2a10">Orion</text><text x="160" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#e9d7a8">N</text><path d="M160 26 l-3 8 h6z" fill="#e9d7a8"/></svg><svg viewBox="0 0 175 235" role="img" aria-label="Star chart: Cassiopeia"><circle cx="14" cy="20" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="160" cy="30" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="30" cy="150" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="140" cy="190" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="70" cy="12" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="165" cy="120" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="12" cy="205" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="95" cy="160" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="150" cy="70" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="40" cy="95" r="0.9" fill="#c9d6ea" opacity=".7"/><polyline points="20,84 54,124 86,88 118,128 152,92" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="20" cy="84" r="3.5" fill="#fff6d8"/><circle cx="54" cy="124" r="3.5" fill="#fff6d8"/><circle cx="86" cy="88" r="4" fill="#fff6d8"/><circle cx="118" cy="128" r="3.5" fill="#fff6d8"/><circle cx="152" cy="92" r="3.5" fill="#fff6d8"/><rect x="6" y="196" width="163" height="32" rx="4" fill="#e9d7a8"/><text x="87.5" y="218" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#3a2a10">Cassiopeia</text><text x="160" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#e9d7a8">N</text><path d="M160 26 l-3 8 h6z" fill="#e9d7a8"/></svg></div>', floor:'',
+  arrive:'The Map Room. Star charts of the Plough, Orion and Cassiopeia hang on the wall, each star carefully placed.',
+  q:'One of these fractions makes a decimal that <b>goes on for ever</b>. Which one opens the lock?', speak:'One of these fractions makes a decimal that goes on for ever. Which one opens the lock?',
+  choices:['3/8','1/3','1/4','7/10'], answer:'1/3', route:'Fractions to decimals',
+  why:{'3/8':'3/8 = 0.375. It stops after three digits.','1/4':'1/4 = 0.25. It stops after two digits.','7/10':'7/10 = 0.7. It stops after one digit.'},
+  adult:{'3/8':'Chose a terminating fraction: may not yet connect fractions with their decimal forms.','1/4':'Chose a terminating fraction: may not yet connect fractions with their decimal forms.','7/10':'Chose a terminating fraction: may not yet connect fractions with their decimal forms.'},
+  hint:'Try dividing: which top number divided by its bottom number never comes out exactly?',
+  show:'1 ÷ 3 = 0.3333… and the 3s never stop. That is a recurring decimal, written 0.3̇.'},
+ {name:'The Clockwork Room', lesson:'Lesson 3 · Order of operations and calculator judgement', prop:'<div class="prop p-gears"><i></i><i></i><i></i></div>', floor:'tiles',
+  arrive:'The Clockwork Room. Brass gears turn slowly on the wall, each waiting for the one before.',
+  q:'The clock\'s key is the value of <span class="big">3 + 4 × 2²</span>.', speak:'The clock\'s key is the value of three plus four times two squared.', route:'Order of operations',
+  check:function(v){var n=num(v); if(near(n,19)) return 'right'; if(near(n,28)) return 'ltr'; if(near(n,67)) return 'sq'; if(near(n,196)) return 'ltr'; return 'no';},
+  why:{ltr:'That would be the answer if we worked from left to right. Which part does the order of operations say to do first?', sq:'It looks as if 4 × 2 was squared together. The square belongs only to the 2.'},
+  adult:{ltr:'Worked left to right: order of operations not yet secure.', sq:'Applied the power to 4 × 2: unsure what an index applies to.'},
+  hint:'Powers first, then multiplication, then addition.', show:'2² = 4, then 4 × 4 = 16, then 3 + 16 = 19.'},
+ {name:'The Orrery', lesson:'Lesson 4 · Negative and fractional indices', prop:'<div class="prop p-orrery"><i></i><i></i><i></i></div>', floor:'',
+  arrive:'The Orrery. Model planets hang in their orbits, each one a power further from the Sun.',
+  q:'The orrery turns to <span class="big">5⁶ ÷ 5⁴</span>. You can leave your answer as a power of 5.', speak:'The orrery turns to five to the power six, divided by five to the power four.', route:'Index laws (Year 9 Accuracy, Powers and Scale, Lesson 3)',
+  check:function(v){var t=alg(v).replace(/\^/g,''); var n=num(v); if(near(n,25)) return 'right'; if(near(n,Math.pow(5,10))||t==='510') return 'add'; if(near(n,Math.pow(5,1.5))||t==='51.5') return 'div'; if(near(n,1.5)) return 'div'; return 'no';},
+  why:{add:'Adding the indices is the rule for multiplying. What happens to the indices when we divide?', div:'The indices were divided. When we divide powers of the same number, what do we do with the indices?'},
+  adult:{add:'Added indices when dividing: index laws mixed up.', div:'Divided indices when dividing powers: index laws not yet secure.'},
+  hint:'Write it out: 5⁶ is six 5s multiplied together, 5⁴ is four. How many are left after cancelling?',
+  show:'Subtract the indices: 5⁶ ÷ 5⁴ = 5² = 25.'},
+ {name:'The Library', lesson:'Lesson 5 · Surds: meaning and simplifying', prop:'<div class="prop p-shelves"></div>', floor:'tiles',
+  arrive:'The Library. Tall shelves of square-bound books. The librarian\'s lock likes square numbers.',
+  q:'Which is the <b>largest square number</b> that divides exactly into <span class="big">72</span>?', speak:'Which is the largest square number that divides exactly into seventy-two?',
+  choices:['4','9','36','64'], answer:'36', route:'Square numbers and factors',
+  why:{'64':'64 is a square number, but does it divide 72 exactly?','4':'4 does divide 72, but there\'s a larger square number that does too.','9':'9 does divide 72, but there\'s a larger square number that does too.'},
+  adult:{'64':'Chose the largest square below 72 without checking it divides: worth a quick look at factors.','4':'Found a square factor but not the largest: on the right track.','9':'Found a square factor but not the largest: on the right track.'},
+  hint:'Check each one: does it divide 72 with nothing left over? Then pick the largest that does.',
+  show:'72 = 36 × 2, and 36 = 6². This is the key move for simplifying surds: √72 = √36 × √2 = 6√2.'},
+ {name:'The Workshop', lesson:'Lesson 6 · Surds: manipulating and rationalising', prop:'<div class="prop p-blueprint">2(x + 5) = ?</div>', floor:'tiles',
+  arrive:'The Workshop. A blueprint is pinned to the wall. Every bracket on it must be opened up.',
+  q:'Expand <span class="big">2(x + 5)</span>.', speak:'Expand two, bracket, x plus five.', route:'Expanding brackets',
+  check:function(v){var t=alg(v); if(t==='2x+10'||t==='10+2x') return 'right'; if(t==='2x+5'||t==='5+2x') return 'half'; return 'no';},
+  why:{half:'Only the x was multiplied by 2. The 5 is inside the bracket too.'},
+  adult:{half:'Multiplied only the first term in the bracket: expanding brackets not yet secure.'},
+  hint:'Multiply everything inside the bracket by 2.', show:'2 × x = 2x and 2 × 5 = 10, so 2(x + 5) = 2x + 10.'},
+ {name:'The Instrument Room', lesson:'Lesson 7 · Estimating and judging reasonableness', prop:'<div class="prop p-dials"><i></i><i></i><i></i></div>', floor:'',
+  arrive:'The Instrument Room. Dials and gauges line the wall. Good observers always check that a reading makes sense.',
+  q:'Roughly how big is <span class="big">38.7 × 4.92</span>?', speak:'Roughly how big is thirty-eight point seven times four point nine two?',
+  choices:['about 20','about 200','about 2000'], answer:'about 200', route:'Estimate before you calculate (Year 9 Accuracy, Powers and Scale, Lesson 2)',
+  why:{'about 20':'Check the size of each number: 38.7 is about 40, and 4.92 is about 5.','about 2000':'Check the size of each number: 38.7 is about 40, and 4.92 is about 5.'},
+  adult:{'about 20':'Estimate out by a power of ten: worth checking rounding and place value.','about 2000':'Estimate out by a power of ten: worth checking rounding and place value.'},
+  hint:'Round each number to one significant figure first.', show:'38.7 ≈ 40 and 4.92 ≈ 5, so the answer is about 40 × 5 = 200.'}
+];
+var DOME=ROOMS.length;
+
+/* ---------- The field kit: one tool per room ---------- */
+var IC={
+ wall:'<svg viewBox="0 0 100 100"><rect x="8" y="14" width="84" height="16" rx="2" fill="#c9a35a" stroke="#5a3b22" stroke-width="2"/><g fill="#e4c27a" stroke="#5a3b22" stroke-width="2"><rect x="8" y="34" width="42" height="16"/><rect x="50" y="34" width="42" height="16"/><rect x="8" y="54" width="28" height="16"/><rect x="36" y="54" width="28" height="16"/><rect x="64" y="54" width="28" height="16"/></g><g fill="#f3dfa8" stroke="#5a3b22" stroke-width="2"><rect x="8" y="74" width="21" height="16"/><rect x="29" y="74" width="21" height="16"/><rect x="50" y="74" width="21" height="16"/><rect x="71" y="74" width="21" height="16"/></g></svg>',
+ compass:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#f7efd9" stroke="#8f6a26" stroke-width="8"/><path d="M50 18 L58 50 L50 82 L42 50 Z" fill="#b0412f"/><path d="M50 50 L58 50 L50 82 L42 50 Z" fill="#365a68"/><circle cx="50" cy="50" r="5" fill="#3a2a10"/><text x="50" y="16" font-size="10" text-anchor="middle" fill="#3a2a10" font-family="Georgia">N</text></svg>',
+ key:'<svg viewBox="0 0 100 100"><circle cx="28" cy="50" r="18" fill="none" stroke="#c9a35a" stroke-width="10"/><rect x="44" y="45" width="46" height="10" rx="3" fill="#c9a35a"/><rect x="72" y="55" width="7" height="14" fill="#c9a35a"/><rect x="83" y="55" width="7" height="10" fill="#c9a35a"/><circle cx="28" cy="50" r="18" fill="none" stroke="#8f6a26" stroke-width="2"/></svg>',
+ ring:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="32" fill="none" stroke="#c9a35a" stroke-width="16"/><circle cx="50" cy="50" r="32" fill="none" stroke="#8f6a26" stroke-width="2" stroke-dasharray="4 6"/><text x="50" y="58" font-size="22" text-anchor="middle" fill="#3a2a10" font-family="Georgia" font-style="italic">aⁿ</text></svg>',
+ book:'<svg viewBox="0 0 100 100"><rect x="18" y="12" width="64" height="78" rx="4" fill="#2f4f6b" stroke="#1b2b3a" stroke-width="3"/><rect x="18" y="12" width="10" height="78" fill="#1b2b3a"/><rect x="36" y="34" width="38" height="26" fill="#e9d7a8"/><text x="55" y="53" font-size="16" text-anchor="middle" fill="#3a2a10" font-family="Georgia" font-weight="bold">n²</text></svg>',
+ spanner:'<svg viewBox="0 0 100 100"><g transform="rotate(-40 50 50)"><rect x="44" y="30" width="12" height="58" rx="6" fill="#9aa5ad" stroke="#5c6670" stroke-width="2"/><circle cx="50" cy="24" r="17" fill="#9aa5ad" stroke="#5c6670" stroke-width="2"/><rect x="44" y="4" width="12" height="20" fill="#efe9df"/></g><text x="72" y="88" font-size="16" fill="#3a2a10" font-family="Georgia">( )</text></svg>',
+ glass:'<svg viewBox="0 0 100 100"><circle cx="42" cy="42" r="26" fill="#d6eef9" stroke="#8f6a26" stroke-width="8"/><rect x="58" y="62" width="12" height="34" rx="5" fill="#5a3b22" transform="rotate(-45 64 79)"/><text x="42" y="49" font-size="17" text-anchor="middle" fill="#365a68" font-family="Georgia">≈</text></svg>'
+};
+function fracWall(){ var rows=[1,2,3,4,6,12], h='<svg viewBox="0 0 300 150" style="width:100%;max-width:360px"><g font-family="Arial" font-size="11" text-anchor="middle">';
+  rows.forEach(function(n,k){ for(var j=0;j<n;j++){ var w=280/n, x=10+j*w, y=4+k*24; h+='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="20" fill="'+['#c9a35a','#e4c27a','#f3dfa8','#ecdcb4','#f7efd9','#fffaf0'][k]+'" stroke="#5a3b22"/>'; if(n<=6||j%2===0) h+='<text x="'+(x+w/2)+'" y="'+(y+14)+'">'+(n===1?'1':'1/'+n)+'</text>'; } });
+  return h+'</g></svg>'; }
+function squares(){ var h='<table class="sq"><tr>'; for(var n=1;n<=12;n++){ h+='<td>'+n+'² = '+n*n+'</td>'; if(n%4===0&&n<12) h+='</tr><tr>'; } return h+'</tr></table>'; }
+var KIT=[
+ {name:'fraction wall', title:'Fraction wall', icon:IC.wall, body:function(){return fracWall()+'<p>Fractions that line up are equal: 1/2 = 3/6 = 6/12, and 1/3 = 4/12. To add fractions, find a row where both of them line up.</p>';}},
+ {name:'decimal compass', title:'Decimal compass', icon:IC.compass, body:function(){return '<p><b>Fraction to decimal: divide the top by the bottom.</b></p><p>5/8 = 5 ÷ 8 = 0.625 — it stops, so it is a <b>terminating</b> decimal.</p><p>2/3 = 2 ÷ 3 = 0.666… — the 6s go on for ever, so it is a <b>recurring</b> decimal, written 0.6̇.</p>';}},
+ {name:'brass key', title:'Order-of-operations key', icon:IC.key, body:function(){return '<p><b>Brackets → Powers → × and ÷ → + and −</b></p><p>× and ÷ are done left to right, and so are + and −.</p><p>Example: 2 + 3 × 4² = 2 + 3 × 16 = 2 + 48 = 50.</p>';}},
+ {name:'power ring', title:'Power ring', icon:IC.ring, body:function(){return '<p><b>Multiplying</b> powers of the same number: <b>add</b> the indices. 2³ × 2⁴ = 2⁷</p><p><b>Dividing</b>: <b>subtract</b> the indices. 7⁹ ÷ 7² = 7⁷</p><p>A power of a power: <b>multiply</b> the indices. (3²)⁴ = 3⁸</p><p>Anything to the power 0 is 1. Coming up in the unit: 2⁻¹ = 1/2.</p>';}},
+ {name:'book of squares', title:'Book of squares', icon:IC.book, body:function(){return squares()+'<p>Knowing these by heart makes surds much easier: √50 = √25 × √2 = 5√2.</p>';}},
+ {name:'bracket spanner', title:'Bracket spanner', icon:IC.spanner, body:function(){return '<p><b>Multiply everything inside the bracket.</b></p><p>3(x + 4) = 3 × x + 3 × 4 = 3x + 12</p><p>An area picture helps: a rectangle 3 tall, split into x and 4 wide, has area 3x + 12.</p>';}},
+ {name:"estimator’s glass", title:"Estimator’s glass", icon:IC.glass, body:function(){return '<p><b>Round each number to 1 significant figure, then calculate.</b></p><p>61.8 × 3.1 ≈ 60 × 3 = 180</p><p>Then ask: is my calculator answer close to my estimate? If not, check it.</p>';}}
+];
+var NOTES=[
+ 'The Ancient Egyptians wrote almost every fraction as a sum of unit fractions, like 1/2 + 1/4. Two-thirds was a special exception: it had its own symbol.',
+ '1/7 = 0.142857142857… The same six digits repeat for ever. Try 2/7 on a calculator: the same six digits appear, starting in a different place.',
+ 'A clock does a special kind of arithmetic: 9 o’clock plus 5 hours is 2 o’clock, not 14. Mathematicians call this modular arithmetic.',
+ 'Sunlight takes about 5 × 10² seconds to reach Earth: just over eight minutes. When you look at the Sun’s light, you are seeing it as it was eight minutes ago.',
+ '√2 cannot be written as a fraction, so its decimal never ends and never repeats. The Ancient Greeks discovered this about 2,500 years ago.',
+ 'Builders check that a corner is square with 3, 4 and 5: a triangle with sides 3, 4 and 5 always has a right angle. You met why in Pythagoras.',
+ 'Weather forecasters round their readings too: a temperature of 18.6 °C is usually reported as 19 °C.'
+];
+var RUGS=['#7b2f2f','#2f4f6b','#3f5f45','#6b4a7a','#7a5a2f','#2f5f5a','#6b3a2f'];
+var DESK='<svg viewBox="0 0 300 150"><rect x="10" y="40" width="280" height="16" rx="3" fill="#7a5233"/><rect x="24" y="56" width="14" height="94" fill="#5a3b22"/><rect x="262" y="56" width="14" height="94" fill="#5a3b22"/><rect x="40" y="56" width="220" height="38" fill="#6b472b"/><rect x="132" y="68" width="36" height="8" rx="4" fill="#c9a35a"/><rect x="236" y="20" width="6" height="22" fill="#3a2a10"/><path d="M222 4 L256 4 L250 22 L228 22 Z" fill="#2f5f5a"/><ellipse cx="239" cy="40" rx="30" ry="8" fill="rgba(255,220,140,.35)"/></svg>';
+var PLANT='<svg viewBox="0 0 150 260"><ellipse cx="55" cy="90" rx="20" ry="58" fill="#4d7a3f" transform="rotate(-22 55 90)"/><ellipse cx="95" cy="92" rx="20" ry="60" fill="#5f8a4e" transform="rotate(20 95 92)"/><ellipse cx="75" cy="70" rx="18" ry="66" fill="#41693a"/><ellipse cx="40" cy="140" rx="16" ry="40" fill="#5f8a4e" transform="rotate(-50 40 140)"/><ellipse cx="112" cy="140" rx="16" ry="40" fill="#4d7a3f" transform="rotate(50 112 140)"/><path d="M38 170 L112 170 L102 255 L48 255 Z" fill="#b5653f"/><rect x="32" y="162" width="86" height="16" rx="4" fill="#9a5233"/></svg>';
+
+/* ---------- State, kept only on this device ---------- */
+var KEY='neo-observatory-number-systems-v03';
+function fresh(){return ROOMS.map(function(){return {feel:null,result:null,side:false,signal:null,kit:false};});}
+var st=fresh(), at=0, opened=[];
+function save(){try{localStorage.setItem(KEY,JSON.stringify({st:st,at:at}));}catch(e){}}
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.st&&d.st.length===ROOMS.length)return d;}catch(e){}return null;}
+function forget(){try{localStorage.removeItem(KEY);}catch(e){}}
+
+/* ---------- Building the rooms ---------- */
+var D=1300,W=1200,H=700,L=1200,DW=280,DH=460, world=$('world'), building=0;
+function face(w,h,tf,cls,html){var e=document.createElement('div');e.className='f '+cls;
+  e.style.cssText='width:'+w+'px;height:'+h+'px;left:'+(-w/2)+'px;top:'+(-h/2)+'px;transform:'+tf;if(html)e.innerHTML=html;e.dataset.r=building;world.appendChild(e);return e;}
+function build(i){
+  building=i;
+  var z=-i*D, zb=z-L/2, last=i===DOME, r=ROOMS[i]||{};
+  face(W,L,'translate3d(0,'+H/2+'px,'+z+'px) rotateX(90deg)','floor '+(r.floor||''));
+  face(W,L,'translate3d(0,'+(-H/2)+'px,'+z+'px) rotateX(-90deg)','ceiling');
+  face(L,H,'translate3d('+(-W/2)+'px,0,'+z+'px) rotateY(90deg)','wall side', last?'<div class="prop p-window"></div>':r.prop);
+  face(L,H,'translate3d('+(W/2)+'px,0,'+z+'px) rotateY(-90deg)','wall side r', last?'<div class="prop p-window"></div>':'<div class="arch" id="arch'+i+'"><div class="glow"></div><div class="curtain"></div></div>');
+  if(last){ face(W,H,'translate3d(0,0,'+zb+'px)','wall','<div class="dome"></div><div class="telescope"><div class="stand"></div><div class="tube"></div></div>'); return; }
+  var pw=(W-DW)/2;
+  var lw=face(pw,H,'translate3d('+(-(DW/2+pw/2))+'px,0,'+zb+'px)','wall','<div class="note" role="button" tabindex="-1">Did you<br>know?</div>');
+  lw.querySelector('.note').onclick=function(){ if(i===at) readNote(); };
+  face(pw,H,'translate3d('+(DW/2+pw/2)+'px,0,'+zb+'px)','wall');
+  face(DW+2,H-DH,'translate3d(0,'+(-DH/2)+'px,'+zb+'px)','wall');
+  face(560,170,'translate3d(0,'+(-DH/2-30)+'px,'+(zb+1)+'px)','lintel','<div class="plaque">'+r.name+'</div><div class="lamp" id="lamp'+i+'"></div>');
+  var d=face(DW,DH,'translate3d(0,'+((H-DH)/2)+'px,'+zb+'px)','door','<div class="lock"></div>'); d.id='door'+i;
+  d.onclick=function(){ if(i===at && !isOpen(i)) openLock(); };
+  // Furniture kept to the edges, so the door and the desk stay the focus.
+  var rug=face(640,420,'translate3d(0,'+(H/2-2)+'px,'+(z-40)+'px) rotateX(90deg)','rug'); rug.style.background='repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 10px,transparent 10px 40px),'+RUGS[i]; rug.style.border='10px solid rgba(233,215,168,.55)';
+  face(300,150,'translate3d(-380px,'+(H/2-75)+'px,'+(z-330)+'px)','desk',DESK);
+  var it=face(96,96,'translate3d(-420px,'+(H/2-150-40)+'px,'+(z-328)+'px)','item',KIT[i].icon); it.id='item'+i;
+  it.onclick=function(){ if(i===at) pickUp(); };
+  face(150,260,'translate3d(420px,'+(H/2-130)+'px,'+(z-470)+'px)','plant',PLANT);
+}
+for(var i=0;i<=DOME;i++) build(i);
+function place(i,glide){ world.style.transform='translate3d(0,0,'+(-300+i*D)+'px)'; if(!glide) hideBehind(); }
+// Rooms already left sit between the viewer and the screen, so hide them once we have arrived.
+function hideBehind(){ [].forEach.call(world.children,function(e){ e.style.visibility= +e.dataset.r<at?'hidden':''; }); }
+function isOpen(i){var s=st[i];return s.result==='right'||s.result==='second';}
+function still(){return document.body.classList.contains('still');}
+function flat(){return document.body.classList.contains('flat');}
+function setStill(on){document.body.classList.toggle('still',on);$('stillBtn').setAttribute('aria-pressed',on);}
+function setFlat(on){document.body.classList.toggle('flat',on);$('flatBtn').setAttribute('aria-pressed',on);}
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) setStill(true);
+// Restore lamps, doors and curtains to match the saved state.
+function restoreScene(){ kitCount(); st.forEach(function(s,i){ if(s.kit){ $('item'+i).classList.add('taken'); } if(isOpen(i)){ $('door'+i).style.transform+=' rotateY(-100deg)'; $('lamp'+i).classList.add('gold'); } else if(s.side){ $('arch'+i).classList.add('open'); $('lamp'+i).classList.add('blue'); } }); }
+
+/* ---------- HUD ---------- */
+function dots(){ $('dots').innerHTML=ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side?'blue':'';return '<i class="'+c+(i===at?' here':'')+'"></i>';}).join('')+'<i class="domedot'+(at===DOME?' here':'')+'"></i>'; }
+function hud(text,buttons){
+  $('roomName').textContent= at===DOME?'The Dome':ROOMS[at].name;
+  $('leads').textContent= at===DOME?'· the end of the expedition':'· leads into '+ROOMS[at].lesson;
+  $('say').innerHTML=text; dots(); var a=$('acts'); a.innerHTML='';
+  buttons.forEach(function(b){var e=document.createElement('button');e.className=b[2]||'go';e.textContent=b[0];e.onclick=b[1];if(b[3])e.disabled=true;a.appendChild(e);});
+}
+function roomHud(){
+  if(at===DOME){ hud('You\'ve reached the dome. The whole sky is open above you.',[['See your floor plan',showPlan,'go']]); return; }
+  var r=ROOMS[at], s=st[at], done=isOpen(at), side=s.side;
+  var text=r.arrive, resolved=done||side, k=KIT[at];
+  if(done) text='The door is open, and the lamp above it is lit.'; else if(side) text='The curtain is drawn back. A lantern lights the side passage, and this lock is on your packing list.';
+  if(resolved && !s.kit) text+=' On the desk, the '+k.name+' is waiting for you.';
+  if(resolved && s.kit) text+=' The '+k.name+' is in your field kit.';
+  var b=[['Examine the lock',openLock,'go',done],['Take the side passage',takeSide,'soft',done||side]];
+  if(resolved && !s.kit) b.push(['Pick up the '+k.name,pickUp,'go']);
+  b.push([at===DOME-1?'Walk on into the dome →':'Walk on →',walkOn,'go',!resolved]);
+  b.push(['Did you know?',readNote,'soft']);
+  hud(text,b);
+  var el=$('item'+at); if(el) el.classList.toggle('ready',resolved && !s.kit);
+}
+
+/* ---------- Field kit and notes ---------- */
+function kitCount(){ var n=st.filter(function(s){return s.kit;}).length; $('kitCount').textContent=n; return n; }
+function toolCard(i){ var k=KIT[i]; return '<div class="tool"><div class="ic">'+k.icon+'</div><div><h3>'+k.title+'</h3><p class="small">Found in '+ROOMS[i].name+'</p>'+k.body()+'</div></div>'; }
+function kitModal(html){ $('kitPanel').innerHTML=html+'<div class="row" style="margin-top:12px"><button class="go" id="kitClose">Back to the expedition</button></div>'; $('kitModal').classList.add('show'); $('kitClose').onclick=function(){$('kitModal').classList.remove('show');try{speechSynthesis.cancel();}catch(e){}}; setTimeout(function(){$('kitClose').focus();},0); }
+function pickUp(){
+  var s=st[at]; if(s.kit) return;
+  if(!(isOpen(at)||s.side)){ $('say').innerHTML='Something on the desk catches your eye. It will be yours to take once you\'ve dealt with the lock — either way through.'; return; }
+  s.kit=true; save(); kitCount(); var el=$('item'+at); if(el){el.classList.remove('ready');el.classList.add('taken');}
+  kitModal('<h2 id="kt">You add the '+KIT[at].name+' to your field kit</h2><p class="sub">It comes with you through the Observatory and into the unit. Looking things up in your kit is good practice, and it is never recorded.</p>'+toolCard(at));
+  roomHud();
+}
+function showKit(){
+  var have=ROOMS.map(function(r,i){return i;}).filter(function(i){return st[i].kit;});
+  kitModal('<h2 id="kt">Your field kit</h2><p class="sub">Tools you have collected. Use them whenever they help, in the Observatory and in the unit. Using your kit is never recorded.</p>'+
+    (have.length?have.map(toolCard).join(''):'<p>Your kit is empty so far. Each room has a tool waiting on its desk.</p>'));
+}
+function readNote(){
+  var i=at===DOME?DOME-1:at;
+  kitModal('<h2 id="kt">Did you know?</h2><p class="sub">'+ROOMS[i].name+' · just for interest: this is not part of the expedition</p><div class="didyou">'+NOTES[i]+'</div>'+('speechSynthesis' in window?'<div class="row" style="margin-top:10px"><button class="soft" id="noteRead">🔊 Read aloud</button></div>':''));
+  if($('noteRead')) $('noteRead').onclick=function(){speak(NOTES[i]);};
+}
+
+/* ---------- The lock panel ---------- */
+function speak(t){ try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang='en-GB'; u.rate=.92; speechSynthesis.speak(u);}catch(e){} }
+function openLock(){
+  var r=ROOMS[at], s=st[at];
+  var h='<h2 id="lt">'+r.name+'</h2><p class="sub">'+r.lesson+'</p><div class="q">'+r.q+'</div>';
+  if('speechSynthesis' in window) h+='<div class="row"><button class="soft" id="readBtn">🔊 Read aloud</button></div>';
+  h+='<div class="label">First, how does this lock look to you?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Not sure'],['new','This is new to me']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
+  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
+  var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
+  if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
+  h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show');
+  if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
+  [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
+  if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
+  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; }
+  $('sideFromLock').onclick=function(){closeLock();takeSide();}; $('closeLock').onclick=closeLock;
+  setTimeout(function(){var f=document.querySelector('[data-feel]');if(f)f.focus();},0);
+}
+function closeLock(){ try{speechSynthesis.cancel();}catch(e){} $('lockModal').classList.remove('show'); roomHud(); }
+function fb(k,m){var f=$('fb');f.className='fb show '+k;f.innerHTML=m;}
+function tryKey(v){
+  var r=ROOMS[at], s=st[at]; if(!String(v).trim()) return;
+  var res=r.choices?(v===r.answer?'right':v):r.check(v);
+  if(res==='right'){
+    s.result= s.result==='notyet'?'second':'right'; save();
+    fb('good','<b>The key turns.</b> '+r.show);
+    setTimeout(function(){closeLock();$('door'+at).style.transform+=' rotateY(-100deg)';$('lamp'+at).classList.add('gold');roomHud();},1700);
+  } else {
+    if(s.result===null) s.result='notyet';
+    if(!s.signal && r.adult && r.adult[res]) s.signal=r.adult[res];
+    save();
+    var why=r.why&&r.why[res];
+    fb('try',(why?why:'The key doesn\'t turn yet. '+r.hint)+' <button class="soft" id="showBtn">Show me how</button>');
+    $('showBtn').onclick=function(){fb('calm',r.show+' You can try the key again, or take the side passage. Either is fine.');};
+  }
+}
+function takeSide(){ var s=st[at]; s.side=true; save(); $('arch'+at).classList.add('open'); $('lamp'+at).classList.add('blue'); roomHud(); }
+function walkOn(){
+  var viaDoor=isOpen(at), next=at+1;
+  hud('…',[]);
+  if(flat()){ at=next; place(at); save(); arrive(); return; }
+  if(!viaDoor || still()){
+    $('veil').classList.add('on');
+    setTimeout(function(){at=next;world.style.transition='none';place(at);world.offsetWidth;world.style.transition='';save();setTimeout(function(){$('veil').classList.remove('on');arrive();},350);},950);
+  } else { at=next; place(at,true); save(); setTimeout(function(){hideBehind();arrive();},2700); }
+}
+function arrive(){ roomHud(); if(at===DOME) setTimeout(showPlan, flat()?0:1200); }
+
+/* ---------- Floor plan and the adult view ---------- */
+function outcome(i){ var s=st[i];
+  if(s.result==='right') return s.feel==='sure'?'ready':'strength';
+  if(s.result==='second') return 'refresh';
+  if(s.result==='notyet' && s.feel==='sure') return 'look';
+  if(s.result===null && !s.side) return 'unvisited';
+  return 'new'; }
+var OUT={ready:'Ready',strength:'Hidden strength',refresh:'Got there with a nudge',look:'Worth a second look',new:'New ground',unvisited:'Not visited yet'};
+var LEARN={ready:'You\'re carrying what this lesson needs.',strength:'You knew more than you thought.',refresh:'A quick refresh before this lesson would help.',look:'Worth another look before the lesson.',new:'We\'ll build this together in the lesson.',unvisited:'Waiting for you.'};
+function showPlan(){
+  var o=ROOMS.map(function(r,i){return outcome(i);}), done=at===DOME;
+  var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
+  var h='<h2 id="pt">Your floor plan</h2><p class="sub">Number Systems and Calculator Judgement · Year 10 · Spring term</p><p>'+(done?'Gold lamps are rooms you unlocked. Blue lanterns mark rooms we\'ll explore together in the unit.':'Your expedition so far. You can carry on whenever you like.')+'</p><div class="plan">'+
+    ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side||o[i]==='new'||o[i]==='look'?'blue':o[i]==='unvisited'?'unvisited':'';
+      return '<div class="roomcard '+c+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson.replace(/^Lesson (\d) · /,'Lesson $1: ')+'</small><small><b>'+OUT[o[i]]+'</b> · '+LEARN[o[i]]+'</small></div>';}).join('')+
+    '<div class="roomcard"><div class="lampdot" style="border-radius:4px;background:#2b4470"></div><b>The Dome</b><small>'+(done?'Reached':'At the end of the corridor')+'</small></div></div>';
+  var routes=ROOMS.filter(function(r,i){return ['look','new','refresh'].indexOf(o[i])>=0;}).map(function(r){return r.route;});
+  routes=routes.filter(function(x,i){return routes.indexOf(x)===i;});
+  h+= routes.length?'<div class="pack"><b>Your packing list</b><p>Short Reconnection Routes to try before the unit starts. Each one takes about ten minutes and brings you straight back.</p><ul>'+routes.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+    : (done?'<div class="pack"><b>Your packing list is empty.</b> You\'re carrying everything this unit builds on. Enjoy the journey.</div>':'');
+  var have=ROOMS.map(function(r,i){return i;}).filter(function(i){return st[i].kit;}), missed=ROOMS.map(function(r,i){return i;}).filter(function(i){return !st[i].kit;});
+  h+='<div class="label">Your field kit for this unit</div>'+(have.length?'<ul class="kitlist">'+have.map(function(i){return '<li>'+KIT[i].title+'</li>';}).join('')+'</ul>':'<p class="small">Empty so far.</p>')+
+     (missed.length&&done?'<p class="small">Still waiting on a desk: '+missed.map(function(i){return KIT[i].title+' ('+ROOMS[i].name+')';}).join(', ')+'. Your supporting adult can give you these at the start of the unit.</p>':'');
+  if(done) h+='<div class="label">How do you feel about starting this unit? (Optional — only kept if you choose to share it.)</div><textarea placeholder="Anything you\'d like your supporting adult to know…"></textarea>';
+  h+='<details class="glass" id="adultDetails"><summary>See exactly what your supporting adult sees</summary><p class="small">The same information as your floor plan. No scores, no times, no attempt counts.</p><table class="adult"><tr><th>Room · lesson</th><th>How the lock looked</th><th>Outcome</th><th>What it might suggest</th><th>Suggested route</th></tr>'+
+    ROOMS.map(function(r,i){var x=o[i];return '<tr><td>'+r.name+'<br><span class="small">'+r.lesson+'</span></td><td>'+feelTxt[st[i].feel]+'</td><td>'+OUT[x]+'</td><td>'+(st[i].signal?esc(st[i].signal):(x==='strength'?'Felt unsure but was right: worth saying out loud.':x==='new'&&st[i].side?'Chose to learn this in the unit.':'—'))+'</td><td>'+(['look','new','refresh'].indexOf(x)>=0?esc(r.route):'—')+'</td></tr>';}).join('')+
+    '</table><p class="small"><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) is the most useful signal; it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud. Outcomes use the learner\'s own words and never a score.</p></details>';
+  h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the dome':'Back to the expedition')+'</button><button class="soft" id="printPlan">Print or save this floor plan</button>'+(done?'<button class="soft" id="againBtn">Start a new expedition</button>':'')+'</div>';
+  h+='<p class="small" style="margin-top:12px">Prototype v0.3 · 7 October 2026 · for discussion · saved only on this device</p>';
+  $('planPanel').innerHTML=h; $('planModal').classList.add('show');
+  $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
+  $('printPlan').onclick=function(){$('adultDetails').open=true;window.print();};
+  if($('againBtn')) $('againBtn').onclick=function(){forget();location.reload();};
+}
+
+/* ---------- Welcome ---------- */
+function welcome(){
+  var saved=load();
+  var h='<h2 id="wt">Welcome to the Observatory</h2><p class="sub">Number Systems and Calculator Judgement · Year 10 · before you set off</p>'+
+   '<div class="info"><p><b>This is an expedition, not a test.</b> There is no clock, no score and nothing to lose. It takes about 20 minutes, and you can stop and come back.</p>'+
+   '<p>There are seven rooms, one for each lesson in the unit. Each has a locked door, and the right answer is the key. If a lock looks unfamiliar, every room also has a <b>side passage</b> that leads on just the same. Taking it is a good choice: it tells us what to help you with.</p><p>In every room you will also find a <b>tool for your field kit</b> on the desk. It comes with you into the unit, and looking things up in it is never recorded.</p></div>'+
+   '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>Your supporting adult sees exactly the floor plan you see. In this prototype, your progress is kept only on this device so you can come back to it, and nothing is sent anywhere.</p></details>'+
+   '<p>If moving between rooms feels uncomfortable, choose <b>Still mode</b>: rooms change with a gentle fade and nothing moves. <b>Flat view</b> shows just the questions, with no 3D at all. Every question has a <b>Read aloud</b> button. You can change any of these from the top bar at any time.</p>'+
+   '<div class="row">'+(saved?'<button class="go" id="contBtn">Continue where you left off</button><button class="soft" id="newBtn">Start a new expedition</button>':'<button class="go" id="enterBtn">Step inside</button><button class="soft" id="enterStillBtn">Step inside in Still mode</button><button class="soft" id="enterFlatBtn">Use Flat view</button>')+'</div>';
+  $('welcomePanel').innerHTML=h;
+  function go(){ $('welcome').classList.remove('show'); world.style.transition='none'; place(at); world.offsetWidth; world.style.transition=''; roomHud(); }
+  if(saved){ $('contBtn').onclick=function(){st=saved.st;at=saved.at;restoreScene();go();}; $('newBtn').onclick=function(){forget();st=fresh();at=0;go();}; }
+  else { $('enterBtn').onclick=go; $('enterStillBtn').onclick=function(){setStill(true);go();}; $('enterFlatBtn').onclick=function(){setFlat(true);go();}; }
+}
+place(0); welcome();
+$('kitBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) showKit(); };
+$('planBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) showPlan(); };
+$('stillBtn').onclick=function(){setStill(!still());};
+$('flatBtn').onclick=function(){setFlat(!flat());};
+$('comfortBtn').onclick=function(){var on=document.body.classList.toggle('comfort');this.setAttribute('aria-pressed',on);};
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if($('lockModal').classList.contains('show')) closeLock(); else { $('planModal').classList.remove('show'); $('kitModal').classList.remove('show'); } } });
+</script>
+</body>
+</html>

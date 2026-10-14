@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Walled Garden · Inequalities</title>
+<style>
+:root{--ink:#2f3429;--paper:#f7f3ea;--h1:#3f5f45;--h2:#6a7f4e;--gold:#d8b26e;--teal:#2AB3A0;--blue:#365a68;--night:#0f1a24;
+--ready:#e3f0df;--strength:#e5eef2;--refresh:#fff1cf;--new:#f1e9dc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);font-family:Arial,sans-serif;color:var(--ink);overflow:hidden}
+body.comfort{font-size:1.15em;letter-spacing:.02em}
+.top{position:fixed;inset:0 0 auto 0;height:52px;background:#1b2b3a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;gap:10px;z-index:20}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.8em}
+.top .tools{display:flex;gap:8px}
+.top button,.top a{background:#2b4152;color:#fff;border:1px solid #4d6577;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:.85em;text-decoration:none}
+.top button[aria-pressed=true]{background:var(--teal);color:#08201d;border-color:var(--teal)}
+
+/* The 3D scene */
+#vp{position:fixed;top:52px;left:0;right:0;bottom:0;overflow:hidden;perspective:900px;perspective-origin:50% 40%;background:#cfe8f7}
+body.flat #vp,body.flat #veil{display:none}
+body.flat{background:#efe9df;overflow:auto}
+body.flat .hud{position:static;transform:none;margin:80px auto 20px}
+#world{position:absolute;left:50%;top:46%;width:0;height:0;transform-style:preserve-3d;transition:transform 2.6s cubic-bezier(.45,.05,.35,1)}
+body.still #world{transition:none}
+.f{position:absolute;transform-style:preserve-3d}
+.wall{background:radial-gradient(circle at 30% 40%,rgba(255,255,255,.08) 0 10px,transparent 11px),radial-gradient(circle at 70% 70%,rgba(0,0,0,.08) 0 12px,transparent 13px),linear-gradient(180deg,#5f8a4e 0%,#4d7a3f 60%,#3f6833 100%);background-size:60px 54px,74px 66px,100% 100%;box-shadow:inset 0 0 120px rgba(10,30,10,.45)}
+.wall.side{background:radial-gradient(circle at 30% 40%,rgba(255,255,255,.08) 0 10px,transparent 11px),radial-gradient(circle at 70% 70%,rgba(0,0,0,.1) 0 12px,transparent 13px),linear-gradient(90deg,#41693a 0%,#5d8a4c 100%);background-size:60px 54px,74px 66px,100% 100%}
+.wall.side.r{background:radial-gradient(circle at 30% 40%,rgba(255,255,255,.08) 0 10px,transparent 11px),radial-gradient(circle at 70% 70%,rgba(0,0,0,.1) 0 12px,transparent 13px),linear-gradient(270deg,#41693a 0%,#5d8a4c 100%);background-size:60px 54px,74px 66px,100% 100%}
+.floor{background:radial-gradient(circle,#b9ad95 0 2px,transparent 3px),radial-gradient(circle,#8f8470 0 2px,transparent 3px),#a59a82;background-size:22px 22px,31px 29px;box-shadow:inset 0 0 220px rgba(40,40,20,.45)}
+.ceiling{background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,.9) 0 60px,transparent 120px),radial-gradient(ellipse at 75% 65%,rgba(255,255,255,.8) 0 50px,transparent 110px),linear-gradient(#8ec5ea,#cfe8f7);background-size:520px 420px,640px 480px,100% 100%}
+.window{position:absolute;left:50%;top:18%;width:280px;height:320px;margin-left:-140px;border-radius:140px 140px 0 0;border:14px solid #8a7a5c;
+  background:radial-gradient(circle at 75% 25%,#fff6c9 0 22px,transparent 24px),linear-gradient(transparent 62%,#7da05a 62%,#6b8f4b 100%),linear-gradient(#8ec5ea,#d6eef9);box-shadow:0 0 30px rgba(255,250,210,.4)}
+.arch{position:absolute;left:50%;bottom:0;width:220px;height:380px;margin-left:-110px;border-radius:110px 110px 0 0;background:#2d3b22;overflow:hidden;border:10px solid #8a7a5c;border-bottom:0}
+.arch .curtain{position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,#3e6b2f 0 9px,transparent 10px),radial-gradient(circle at 70% 60%,#2f5a24 0 11px,transparent 12px),#355f2a;background-size:34px 30px,40px 36px;transition:transform 1.4s ease}
+.arch.open .curtain{transform:translateY(-100%)}
+.arch .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(255,240,170,.6),transparent 60%)}
+.door{background:repeating-linear-gradient(90deg,#8a6a43 0 34px,#77593a 34px 38px);border:8px solid #4f3b22;transform-origin:0 50%;transition:transform 1.8s ease;cursor:pointer}
+body.still .door{transition:none}
+.door .lock{position:absolute;right:26px;top:48%;width:46px;height:62px;border-radius:10px;background:linear-gradient(#e4c27a,#a9802f);box-shadow:0 0 0 3px #6b5020,0 0 18px rgba(255,210,120,.5)}
+.door .lock:after{content:"";position:absolute;left:18px;top:20px;width:10px;height:22px;border-radius:5px;background:#3a2614}
+.lintel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.plaque{background:linear-gradient(#e9d7a8,#c9ad6c);color:#3a2a10;font-family:Georgia,serif;font-weight:700;font-size:26px;padding:8px 26px;border-radius:6px;box-shadow:0 2px 0 #7a6243}
+.lamp{width:44px;height:44px;border-radius:50%;background:#6f6a60;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25);transition:all 1.2s}
+.lamp.gold{background:radial-gradient(circle,#fff5c9,#f2c14e 60%,#c58a1c);box-shadow:0 0 30px 12px rgba(242,193,78,.7)}
+.lamp.blue{background:radial-gradient(circle,#e8f6ff,#7fb6e0 60%,#3f7aa8);box-shadow:0 0 30px 12px rgba(127,182,224,.6)}
+.view{position:absolute;left:50%;top:6%;width:940px;height:540px;margin-left:-470px;border-radius:30px 30px 0 0;border:16px solid #8a7a5c;overflow:hidden;
+  background:linear-gradient(transparent 48%,rgba(255,255,255,.0) 48%),repeating-linear-gradient(90deg,transparent 0 92px,rgba(255,255,255,.55) 92px 95px),repeating-linear-gradient(0deg,transparent 0 92px,rgba(255,255,255,.55) 92px 95px),linear-gradient(#8ec5ea 0 40%,#9cc46f 40%,#6f9a48 100%)}
+.view .axisx{position:absolute;left:0;right:0;top:70%;height:5px;background:#3b4a2a}
+.view .axisy{position:absolute;top:40%;bottom:0;left:50%;width:5px;background:#3b4a2a}
+.view .sun{position:absolute;right:90px;top:40px;width:70px;height:70px;border-radius:50%;background:#fff3b0;box-shadow:0 0 40px #fff3b0}
+/* HUD and panels */
+#veil{position:fixed;inset:52px 0 0 0;background:#000;opacity:0;pointer-events:none;transition:opacity .9s;z-index:5}
+#veil.on{opacity:1}
+.hud{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(760px,calc(100% - 24px));background:rgba(247,243,234,.97);border-radius:16px;padding:14px 16px;z-index:10;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.hud .say{margin:0 0 10px;font-size:1.05em}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button.go,button.opt,button.soft{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;color:var(--ink);font-size:1em}
+button.go{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.soft{border-style:dashed;color:#5c6b4f}
+button.opt[aria-pressed=true]{background:var(--h1);color:#fff;border-color:var(--h1)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.modal{position:fixed;inset:52px 0 0 0;display:none;align-items:center;justify-content:center;z-index:15;background:rgba(10,16,24,.55);padding:16px}
+.modal.show{display:flex}
+.panel{background:var(--paper);border-radius:18px;padding:20px 22px;width:min(640px,100%);max-height:calc(100vh - 90px);overflow:auto}
+.panel h2{color:var(--h1);margin:0 0 6px}
+.panel .q{font-size:1.25em;margin:6px 0 14px}.big{font-family:Georgia,'Times New Roman',serif;font-size:1.25em}
+.label{font-weight:700;color:#5c6b4f;margin:12px 0 6px}
+input.ans{font-size:1.15em;padding:8px 10px;border-radius:8px;border:1px solid #738697;width:10em}
+.locked{opacity:.45;pointer-events:none}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;display:none}
+.fb.show{display:block}.fb.good{background:var(--ready)}.fb.try{background:var(--refresh)}.fb.calm{background:var(--strength)}
+.info{background:#fffaf0;padding:12px 14px;border-left:6px solid var(--gold);border-radius:10px;margin:12px 0}
+.glass{background:#e5eef2;padding:10px 14px;border-radius:10px;margin:10px 0;font-size:.95em}
+.glass summary{font-weight:700;cursor:pointer}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.roomcard{border-radius:12px;padding:12px;background:#fff;border:3px solid #d9d2c4;text-align:center}
+.roomcard .lampdot{width:22px;height:22px;border-radius:50%;margin:0 auto 6px;background:#9a948a}
+.roomcard.gold{border-color:#f2c14e}.roomcard.gold .lampdot{background:#f2c14e;box-shadow:0 0 12px #f2c14e}
+.roomcard.blue{border-color:#7fb6e0}.roomcard.blue .lampdot{background:#7fb6e0;box-shadow:0 0 12px #7fb6e0}
+.roomcard small{display:block;color:#5c6b4f;margin-top:4px}
+.pack{background:var(--new);border-radius:12px;padding:10px 14px}
+table.adult{width:100%;border-collapse:collapse;font-size:.9em;background:#fff}
+table.adult th,table.adult td{border:1px solid #d9d2c4;padding:6px 8px;text-align:left;vertical-align:top}
+table.adult th{background:#eef3e8}
+textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;padding:8px;font:inherit}
+.sketch{font-size:.8em;color:#5c6b4f;text-align:center;margin-top:12px}
+@media (max-width:600px){.plan{grid-template-columns:1fr}.top span{display:none}}
+</style>
+</head>
+<body>
+<div class="top"><b>NEO MATHS · THE WALLED GARDEN</b><span style="font-size:.9em">Inequalities · before you set off</span>
+  <div class="tools"><button id="stillBtn" aria-pressed="false" title="No movement at all: rooms change with a gentle fade">Still mode</button><button id="comfortBtn" aria-pressed="false">Aa Comfort</button><button id="flatBtn" aria-pressed="false" title="No 3D at all: just the questions, one at a time">Flat view</button></div></div>
+<div id="vp" aria-hidden="true"><div id="world"></div></div>
+<div id="veil"></div>
+
+<div class="hud" id="hud" aria-live="polite">
+  <p class="say" id="say"></p>
+  <div class="row" id="acts"></div>
+</div>
+
+<div class="modal show" id="welcome" role="dialog" aria-labelledby="wt"><div class="panel">
+  <h2 id="wt">Welcome to the Walled Garden</h2>
+  <div class="info">
+    <p><b>This is an expedition, not a test.</b> There is no clock, no score and nothing to lose. Take as long as you like.</p>
+    <p>Each garden has a locked gate. The right answer is the key. If a lock looks unfamiliar, every garden also has a <b>gap in the hedge</b> that leads on just the same. Taking it is a good choice: it tells us what to help you with.</p>
+  </div>
+  <details class="glass"><summary>What is saved, and who can see it?</summary>
+    <p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries. Your supporting adult sees exactly the floor plan you see at the end.</p>
+    <p><i>In this sketch, nothing is saved at all.</i></p></details>
+  <p>If moving between gardens feels uncomfortable, choose <b>Still mode</b>: gardens change with a gentle fade and nothing moves. Or choose <b>Flat view</b> for just the questions, with no 3D at all. You can switch at any time from the top bar.</p>
+  <div class="row"><button class="go" id="enterBtn">Step inside</button><button class="soft" id="enterStillBtn">Step inside in Still mode</button></div>
+  <p class="sketch">Sketch for discussion · v0.1 · 7 October 2026 · Year 9 · gatehouse and two gardens</p>
+</div></div>
+
+<div class="modal" id="lockModal" role="dialog" aria-labelledby="lt"><div class="panel" id="lockPanel"></div></div>
+<div class="modal" id="planModal" role="dialog" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
+
+<script>
+function num(v){
+  var s=String(v).trim().toLowerCase().replace(/−/g,'-').replace(/\s+/g,'').replace(/÷/g,'/');
+  var g={'½':.5,'¼':.25,'¾':.75,'⅜':.375}; if(g[s]!=null) return g[s];
+  var w={'threequarters':.75,'nineteen':19}; if(w[s.replace(/-/g,'')]!=null) return w[s.replace(/-/g,'')];
+  s=s.replace(/²/g,'^2'); var m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\^(-?\d+)$/))) return Math.pow(+m[1],+m[2]);
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/))) return +m[1]/+m[2];
+  if(/^-?\d*\.?\d+$/.test(s)) return +s; return NaN;
+}
+function near(a,b){return Math.abs(a-b)<1e-9}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function pair(v){var m=String(v).replace(/−/g,'-').match(/-?\d+(?:\.\d+)?/g);return m&&m.length===2?[+m[0],+m[1]]:null;}
+var ROOMS=[
+ {name:'The Gatehouse', lesson:'Inequality symbols and double-ended inequalities', route:'Ordering negative numbers',
+  arrive:'You step through into the Gatehouse garden. High hedges all round, blue sky above. Ahead, a wooden gate with a brass lock.',
+  q:'The gate opens for the <b>greater</b> of these two numbers. Which is greater?', choices:['−3','−7','They are equal'], answer:'−3',
+  wrong:{'−7':'7 is bigger than 3, but these are negative. Picture a number line: which one is further to the right?'},
+  hint:'On a number line, numbers get greater as you move to the right.', show:'−3 is to the right of −7 on a number line, so −3 is greater: −3 > −7.'},
+ {name:'The Orchard', lesson:'Solving linear inequalities and showing them on a number line', route:'One- and two-step equations',
+  arrive:'The Orchard. Apple trees line the path. The next gate has a lock with a number dial.',
+  q:'The dial needs the value of <span class="big">x</span> when <span class="big">3x + 5 = 20</span>.',
+  check:function(v){var n=num(v); if(near(n,5)) return 'right'; if(near(n,15)) return 'half'; if(near(n,25/3)) return 'add'; return 'no';},
+  half:'That is the value of 3x. What does that make x?', add:'Check the first step: to undo + 5, do we add 5 or subtract 5?',
+  hint:'Undo the + 5 first, then undo the × 3.', show:'3x + 5 = 20, so 3x = 15, so x = 5. Check: 3 × 5 + 5 = 20.'},
+ {name:'The Watchtower Garden', lesson:'Inequalities as regions on a graph', route:'Coordinates in four quadrants',
+  arrive:'The Watchtower Garden. Steps lead up to a lookout over the fields. The last gate has a lock with a small map grid.',
+  q:'Start at the origin (0, 0). Go <b>3 right</b> and <b>2 down</b>. The gate opens for the coordinates of that point. Type them like (3, 4).',
+  check:function(v){var p=pair(v); if(!p) return 'fmt'; if(p[0]===3&&p[1]===-2) return 'right'; if(p[0]===-2&&p[1]===3) return 'swap'; if(p[0]===3&&p[1]===2) return 'sign'; return 'no';},
+  fmt:'Type two numbers, across first and then up or down, like (3, 4).', swap:'Both numbers are right but in the wrong order. Which comes first: across or up and down?', sign:'Nearly. Going down from the origin: is the y-coordinate positive or negative?',
+  hint:'The first number is how far across, the second is how far up (or down, which is negative).', show:'3 right and 2 down is the point (3, −2).'}
+];
+var D=1300, W=1200, H=700, L=1200, DW=280, DH=460;
+var st=ROOMS.map(function(){return {feel:null,result:null,side:false};});
+var at=0, world=document.getElementById('world');
+function $(id){return document.getElementById(id);}
+
+function face(w,h,tf,cls,html){var e=document.createElement('div');e.className='f '+cls;
+  e.style.cssText='width:'+w+'px;height:'+h+'px;left:'+(-w/2)+'px;top:'+(-h/2)+'px;transform:'+tf;if(html)e.innerHTML=html;world.appendChild(e);return e;}
+function build(i,last){
+  var z=-i*D, zb=z-L/2;
+  face(W,L,'translate3d(0,'+H/2+'px,'+z+'px) rotateX(90deg)','floor');
+  face(W,L,'translate3d(0,'+(-H/2)+'px,'+z+'px) rotateX(-90deg)','ceiling');
+  face(L,H,'translate3d('+(-W/2)+'px,0,'+z+'px) rotateY(90deg)','wall side','<div class="window"></div>');
+  face(L,H,'translate3d('+(W/2)+'px,0,'+z+'px) rotateY(-90deg)','wall side r', last?'<div class="window"></div>':'<div class="arch" id="arch'+i+'"><div class="glow"></div><div class="curtain"></div></div>');
+  if(last){ face(W,H,'translate3d(0,0,'+zb+'px)','wall','<div class="view"><div class="sun"></div><div class="axisx"></div><div class="axisy"></div></div>'); return; }
+  var pw=(W-DW)/2;
+  face(pw,H,'translate3d('+(-(DW/2+pw/2))+'px,0,'+zb+'px)','wall');
+  face(pw,H,'translate3d('+(DW/2+pw/2)+'px,0,'+zb+'px)','wall');
+  face(DW+2,H-DH,'translate3d(0,'+(-DH/2)+'px,'+zb+'px)','wall lintel');
+  // Plaque and lamp sit on a wider band above the door.
+  face(520,170,'translate3d(0,'+(-DH/2-30)+'px,'+(zb+1)+'px)','lintel','<div class="plaque">'+ROOMS[i].name+'</div><div class="lamp" id="lamp'+i+'"></div>');
+  var d=face(DW,DH,'translate3d(0,'+((H-DH)/2)+'px,'+zb+'px)','door','<div class="lock"></div>'); d.id='door'+i;
+  d.onclick=function(){ if(i===at) openLock(); };
+}
+for(var i=0;i<ROOMS.length;i++) build(i,false); build(ROOMS.length,true);
+
+function place(i){ world.style.transform='translate3d(0,0,'+(-300+i*D)+'px)'; }
+function still(){return document.body.classList.contains('still');}
+function setStill(on){document.body.classList.toggle('still',on);$('stillBtn').setAttribute('aria-pressed',on);}
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) setStill(true);
+place(0);
+
+function hud(text,buttons){ $('say').innerHTML=text; var a=$('acts'); a.innerHTML='';
+  buttons.forEach(function(b){var e=document.createElement('button');e.className=b[2]||'go';e.textContent=b[0];e.onclick=b[1];if(b[3])e.disabled=true;a.appendChild(e);}); }
+function roomHud(){
+  var r=ROOMS[at], s=st[at], done=s.result==='right'||s.result==='second', side=s.side;
+  var text=r.arrive; if(done) text='The gate is open, and the lamp above it is lit.'; else if(side) text='The ivy parts. A lantern lights the gap in the hedge, and you\'ve added this lock to your packing list.';
+  hud(text,[
+    ['Examine the lock',openLock,'go', done],
+    ['Take the gap in the hedge',takeSide,'soft', done||side],
+    [at===ROOMS.length-1?'Climb up to the lookout →':'Walk on →',walkOn,'go', !(done||side)]
+  ]);
+}
+function openLock(){
+  var r=ROOMS[at], s=st[at];
+  var h='<h2 id="lt">'+r.name+'</h2><div class="q">'+r.q+'</div>';
+  h+='<div class="label">First, how does this lock look to you?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Not sure'],['new','This is new to me']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
+  h+='<div id="ansArea" class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
+  h+='<div class="fb" id="fb"></div><div class="row" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the gap in the hedge instead</button><button class="soft" id="closeLock">Step back</button></div>';
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show');
+  [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;openLock();setTimeout(function(){var a=$('ans');if(a)a.focus();},0);};});
+  if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
+  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; }
+  $('sideFromLock').onclick=function(){closeLock();takeSide();}; $('closeLock').onclick=closeLock;
+}
+function closeLock(){$('lockModal').classList.remove('show');roomHud();}
+function fb(k,m){var f=$('fb');f.className='fb show '+k;f.innerHTML=m;}
+function tryKey(v){
+  var r=ROOMS[at], s=st[at]; if(!String(v).trim()) return;
+  var res=r.choices?(v===r.answer?'right':(r.wrong&&r.wrong[v]?'wrong:'+v:'no')):r.check(v);
+  if(res==='right'){
+    s.result= s.result==='notyet'?'second':'right';
+    fb('good','<b>The key turns.</b> '+r.show);
+    setTimeout(function(){closeLock();$('door'+at).style.transform+=' rotateY(-100deg)';$('lamp'+at).classList.add('gold');roomHud();},1600);
+  } else {
+    // The right value in a different form is not a miss; only a wrong value counts.
+    if(s.result===null && res!=='value' && res!=='fmt') s.result='notyet';
+    var extra=res.indexOf('wrong:')===0?r.wrong[res.slice(6)]:r[res]; fb('try',(extra?extra:'The key doesn\'t turn yet. '+r.hint)+' <button class="soft" id="showBtn">Show me how</button>');
+    $('showBtn').onclick=function(){fb('calm',r.show+' You can try the key again, or take the gap in the hedge. Either is fine.');};
+  }
+}
+function takeSide(){ var s=st[at]; s.side=true; var a=$('arch'+at); if(a)a.classList.add('open'); $('lamp'+at).classList.add('blue'); roomHud(); }
+function walkOn(){
+  if(document.body.classList.contains('flat')){ at=at+1; place(at); arrive(); return; }
+  var s=st[at], viaDoor=s.result==='right'||s.result==='second';
+  var next=at+1;
+  hud('…',[]);
+  if(!viaDoor || still()){
+    $('veil').classList.add('on');
+    setTimeout(function(){at=next;place(at);setTimeout(function(){$('veil').classList.remove('on');arrive();},350);},950);
+  } else { at=next; place(at); setTimeout(arrive,2700); }
+}
+function arrive(){ if(at>=ROOMS.length){ hud('You\'ve reached the lookout. The fields stretch out below like a giant grid.',[['See your floor plan',showPlan,'go']]); setTimeout(showPlan,1200);} else roomHud(); }
+
+function outcome(s){
+  if(s.result==='right') return s.feel==='sure'?'ready':'strength';
+  if(s.result==='second') return 'refresh';
+  if(s.result==='notyet' && s.feel==='sure') return 'look';
+  return 'new';
+}
+var OUT={ready:'Ready',strength:'Hidden strength — you knew more than you thought',refresh:'Got there with a nudge',look:'Worth a second look',new:'New ground'};
+function showPlan(){
+  var o=st.map(outcome), feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
+  var h='<h2 id="pt">Your floor plan</h2><p>Gold lamps are gates you unlocked. Blue lanterns mark gardens we\'ll explore together in the unit.</p><div class="plan">'+
+    ROOMS.map(function(r,i){var gold=st[i].result==='right'||st[i].result==='second';
+      return '<div class="roomcard '+(gold?'gold':'blue')+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson+'</small><small>'+OUT[o[i]]+'</small></div>';}).join('')+'</div>';
+  var routes=ROOMS.filter(function(r,i){return ['look','new','refresh'].indexOf(o[i])>=0;}).map(function(r){return r.route;});
+  h+= routes.length?'<div class="pack"><b>Your packing list</b><p>Short Reconnection Routes to try before the unit starts. Each one brings you straight back.</p><ul>'+routes.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+    :'<div class="pack"><b>Your packing list is empty.</b> You\'re carrying everything these gardens need.</div>';
+  h+='<div class="label">How do you feel about starting this unit? (Optional — only kept if you choose to share it.)</div><textarea placeholder="Anything you\'d like your supporting adult to know…"></textarea>';
+  h+='<details class="glass"><summary>See exactly what your supporting adult sees</summary><table class="adult"><tr><th>Garden</th><th>How the lock looked</th><th>Outcome</th><th>Suggested route</th></tr>'+
+    ROOMS.map(function(r,i){var x=o[i];return '<tr><td>'+r.name+'</td><td>'+feelTxt[st[i].feel]+'</td><td>'+OUT[x]+'</td><td>'+(['look','new','refresh'].indexOf(x)>=0?esc(r.route):'—')+'</td></tr>';}).join('')+
+    '</table><p><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud.</p></details>';
+  h+='<div class="row"><button class="soft" id="againBtn">Explore again</button></div><p class="sketch">Sketch for discussion · v0.1 · a full version would have one garden per lesson in the unit</p>';
+  $('planPanel').innerHTML=h; $('planModal').classList.add('show'); $('againBtn').onclick=function(){location.reload();};
+}
+function enter(stillOn){ if(stillOn) setStill(true); $('welcome').classList.remove('show'); roomHud(); }
+$('enterBtn').onclick=function(){enter(false);}; $('enterStillBtn').onclick=function(){enter(true);};
+$('stillBtn').onclick=function(){setStill(!still());};
+$('flatBtn').onclick=function(){var on=document.body.classList.toggle('flat');this.setAttribute('aria-pressed',on);};
+$('comfortBtn').onclick=function(){var on=document.body.classList.toggle('comfort');this.setAttribute('aria-pressed',on);};
+</script>
+</body>
+</html>
