@@ -80,6 +80,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Constructions/Lesson_07_Putting_It_Together/NEO_Maths_Y9_Constructions_Lesson_07_Putting_It_Together_v0.1.html",
     "ineq-01-inequality-symbols":
         "02_Foundations/01_Lessons/Inequalities/Lesson_01_Inequality_Symbols/NEO_Maths_Y9_Inequalities_Lesson_01_Inequality_Symbols_v0.1.html",
+    "ineq-02-solving-linear-inequalities":
+        "02_Foundations/01_Lessons/Inequalities/Lesson_02_Solving_Linear_Inequalities/NEO_Maths_Y9_Inequalities_Lesson_02_Solving_Linear_Inequalities_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

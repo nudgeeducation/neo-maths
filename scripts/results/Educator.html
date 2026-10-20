@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>
+body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif;line-height:1.5}
+.top{background:#1b2b3a;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;gap:10px;flex-wrap:wrap}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.85em}
+.top a{color:#fff;font-weight:700;font-size:.9em;text-decoration:none;background:#2b4152;border:1px solid #4d6577;border-radius:8px;padding:6px 10px}
+.neo{max-width:1180px;margin:18px auto;padding:22px;background:#f7f3ea;border-radius:18px}
+h1{color:#3f5f45;margin:.1em 0}h2{color:#6a7f4e;margin:.8em 0 .3em}
+.sub{color:#5c6b4f;margin:0 0 12px}
+.info{background:#fffaf0;padding:12px 16px;border-left:6px solid #d8b26e;border-radius:12px;margin:14px 0}
+.card{background:#fff;border-radius:14px;padding:14px 16px;margin:12px 0;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9em}
+th,td{border:1px solid #d9d2c4;padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#eef3e8;position:sticky;top:0}
+td.o{font-size:.85em;white-space:nowrap}
+.Ready{background:#e3f0df}.Hidden{background:#e5eef2}.Got{background:#fff8e1}.Worth{background:#fff1cf;font-weight:700}.New{background:#f1e9dc}
+select{font-size:1em;padding:6px 8px;border-radius:8px;border:1px solid #bcae98}
+a.learner{color:#365a68;font-weight:600}
+.small{font-size:.86em;color:#5c6b4f}
+.key span{display:inline-block;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;font-size:.85em}
+</style>
+</head>
+<body>
+<div class="top"><b>NEO MATHS · EDUCATOR DASHBOARD</b><span><a href="<?= appUrl ?>?page=passport">My learner view</a> <a href="<?= appUrl ?>?page=observatory">The Observatory</a></span></div>
+<main class="neo">
+  <h1>Diagnostic expeditions</h1>
+  <p class="sub" id="who">Loading…</p>
+  <div class="info">Each learner's latest expedition per unit, in the learner's own words. There are no scores. <b>"Worth a second look"</b> (felt sure, not yet right) is the most useful signal: it often points to a misconception worth a conversation. <b>"Hidden strength"</b> is worth saying out loud to the learner. Select a learner to open the passport they see.</div>
+  <p><label for="unit"><b>Unit</b></label> <select id="unit" onchange="draw()"></select></p>
+  <div class="key small">Key: <span class="Ready">Ready</span><span class="Hidden">Hidden strength</span><span class="Got">Got there with a nudge</span><span class="Worth">Worth a second look</span><span class="New">New ground</span></div>
+  <h2>Learners and rooms</h2><div class="card" id="grid"></div>
+  <h2>Where to look first</h2><div class="card" id="signals"></div>
+  <h2>Comments learners chose to share</h2><div class="card" id="notes"></div>
+</main>
+<script>
+var DATA=null, APP=<?= appUrl ?>;
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function day(iso){ var d=new Date(iso); return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}); }
+function cls(o){ return String(o||'').split(' ')[0]; }
+// Latest expedition per learner for the chosen unit.
+function latest(unitId){
+  var by={};
+  DATA.rows.filter(function(r){return r.unitId===unitId;}).forEach(function(r){
+    var k=r.learner; if(!by[k]||by[k].saved<r.saved) by[k]={saved:r.saved,expedition:r.expedition,rows:[]};
+  });
+  DATA.rows.forEach(function(r){ if(r.unitId===unitId&&by[r.learner]&&by[r.learner].expedition===r.expedition) by[r.learner].rows.push(r); });
+  return by;
+}
+function draw(){
+  var u=document.getElementById('unit').value, by=latest(u), learners=Object.keys(by).sort();
+  var rooms=[]; learners.forEach(function(l){ by[l].rows.forEach(function(r){ if(rooms.indexOf(r.room)<0) rooms.push(r.room); }); });
+  document.getElementById('grid').innerHTML=!learners.length?'No expeditions saved for this unit yet.':
+    '<table><tr><th>Learner</th><th>Completed</th>'+rooms.map(function(r){return '<th>'+esc(r)+'</th>';}).join('')+'</tr>'+
+    learners.map(function(l){ var map={}; by[l].rows.forEach(function(r){map[r.room]=r;});
+      return '<tr><td><a class="learner" href="'+APP+'?page=passport&learner='+encodeURIComponent(l)+'">'+esc(l)+'</a></td><td>'+day(by[l].saved)+'</td>'+
+        rooms.map(function(rm){ var r=map[rm]; return r?'<td class="o '+cls(r.outcome)+'" title="'+esc((r.felt?'Felt: '+r.felt+'. ':'')+(r.suggests||''))+'">'+esc(r.outcome)+'</td>':'<td></td>'; }).join('')+'</tr>'; }).join('')+'</table>';
+  // Signals: misconception notes and the routes most often suggested.
+  var looks=[], routes={};
+  learners.forEach(function(l){ by[l].rows.forEach(function(r){
+    if(r.outcome==='Worth a second look'||(r.suggests&&r.outcome!=='Hidden strength'&&r.suggests!=='Chose to learn this in the unit.')) looks.push('<li><b>'+esc(r.room)+'</b> · '+esc(l)+': '+esc(r.suggests||'felt sure but not yet right')+'</li>');
+    if(r.route){ routes[r.route]=(routes[r.route]||[]); routes[r.route].push(l); } }); });
+  var rk=Object.keys(routes).sort(function(a,b){return routes[b].length-routes[a].length;});
+  document.getElementById('signals').innerHTML=
+    '<b>Possible misconceptions</b>'+(looks.length?'<ul>'+looks.join('')+'</ul>':'<p class="small">None so far.</p>')+
+    '<b>Reconnection Routes suggested</b>'+(rk.length?'<ul>'+rk.map(function(k){return '<li>'+esc(k)+' — '+routes[k].map(esc).join(', ')+'</li>';}).join('')+'</ul>':'<p class="small">None so far.</p>');
+  var notes=DATA.comments.filter(function(c){return c.unitId===u;}).sort(function(a,b){return a.saved<b.saved?1:-1;});
+  document.getElementById('notes').innerHTML=notes.length?'<ul>'+notes.map(function(c){return '<li>'+day(c.saved)+' · <b>'+esc(c.learner)+'</b>: “'+esc(c.comment)+'”</li>';}).join('')+'</ul>':'<p class="small">None shared yet.</p>';
+}
+google.script.run.withSuccessHandler(function(d){
+  DATA=d; document.getElementById('who').textContent='Signed in as '+d.educator;
+  var units={}; d.rows.forEach(function(r){units[r.unitId]=r.unit;});
+  var ids=Object.keys(units); document.getElementById('unit').innerHTML=ids.length?ids.map(function(k){return '<option value="'+esc(k)+'">'+esc(units[k])+'</option>';}).join(''):'<option value="">No results yet</option>';
+  draw();
+}).withFailureHandler(function(e){ document.getElementById('who').textContent='The dashboard could not load: '+(e&&e.message); }).getEducatorData();
+</script>
+</body>
+</html>

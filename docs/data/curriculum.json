@@ -334,6 +334,14 @@
           "file": "lessons/inequalities/01-inequality-symbols.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ineq-02-solving-linear-inequalities",
+          "num": "Lesson 02",
+          "title": "Solving linear inequalities",
+          "file": "lessons/inequalities/02-solving-linear-inequalities.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

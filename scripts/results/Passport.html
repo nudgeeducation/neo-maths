@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>
+body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif;line-height:1.55}
+.top{background:#1b2b3a;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;gap:10px;flex-wrap:wrap}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.85em}
+.top a{color:#fff;font-weight:700;font-size:.9em;text-decoration:none;background:#2b4152;border:1px solid #4d6577;border-radius:8px;padding:6px 10px}
+.neo{max-width:960px;margin:18px auto;padding:22px;background:#f7f3ea;border-radius:18px}
+h1{color:#3f5f45;margin:.1em 0}h2{color:#6a7f4e;margin:.6em 0 .3em}
+.sub{color:#5c6b4f;margin:0 0 12px}
+.info{background:#fffaf0;padding:12px 16px;border-left:6px solid #d8b26e;border-radius:12px;margin:14px 0}
+.unit{background:#fff;border-radius:14px;padding:16px;margin:16px 0}
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.room{border-radius:12px;padding:10px;background:#fbf7ef;border:3px solid #d9d2c4;text-align:center;font-size:.92em}
+.room .dot{width:18px;height:18px;border-radius:50%;margin:0 auto 6px;background:#c9c2b4}
+.room.gold{border-color:#f2c14e}.room.gold .dot{background:#f2c14e;box-shadow:0 0 10px #f2c14e}
+.room.blue{border-color:#7fb6e0}.room.blue .dot{background:#7fb6e0;box-shadow:0 0 10px #7fb6e0}
+.room small{display:block;color:#5c6b4f;margin-top:4px}
+.pack{background:#f1e9dc;border-radius:12px;padding:10px 14px;margin-top:10px}
+.small{font-size:.88em;color:#5c6b4f}
+button{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;color:#2f3429;font-size:1em}
+@media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}}
+@media print{.top,.noprint{display:none}body{background:#fff}.neo{margin:0}}
+</style>
+</head>
+<body>
+<div class="top"><b>NEO MATHS · MY LEARNER PASSPORT</b>
+  <span><a href="<?= appUrl ?>?page=observatory">The Observatory</a> <? if (isStaff) { ?><a href="<?= appUrl ?>?page=educator">Educator dashboard</a><? } ?></span></div>
+<main class="neo">
+  <h1 id="title">My learner passport</h1>
+  <p class="sub" id="who">Loading your record…</p>
+  <div class="info">This is everything saved about your diagnostic expeditions: exactly what your supporting adult and NEO maths staff can see. There are no scores and no times. Gold lamps are doors you unlocked; blue lanterns are rooms we will explore together in the unit.</div>
+  <div id="units"></div>
+  <div class="row noprint"><button onclick="window.print()">Print or save my passport</button></div>
+</main>
+<script>
+var OPENED=['Ready','Hidden strength','Got there with a nudge'];
+var MEANING={'Ready':'You’re carrying what this lesson needs.','Hidden strength':'You knew more than you thought.','Got there with a nudge':'A quick refresh before this lesson would help.','Worth a second look':'Worth another look before the lesson.','New ground':'We’ll build this together in the lesson.'};
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function day(iso){ var d=new Date(iso); return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}); }
+// One unit's latest expedition, as rooms in the order they were saved.
+function render(data, heading){
+  document.getElementById('who').textContent=(heading||'Record for ')+data.learner;
+  var byUnit={}, order=[];
+  data.rows.forEach(function(r){ if(!byUnit[r.unitId]){byUnit[r.unitId]={};order.push(r.unitId);} (byUnit[r.unitId][r.expedition]=byUnit[r.unitId][r.expedition]||[]).push(r); });
+  if(!order.length){ document.getElementById('units').innerHTML='<div class="unit">No expeditions saved yet. When you finish a diagnostic, it will appear here.</div>'; return; }
+  document.getElementById('units').innerHTML=order.map(function(u){
+    var exps=Object.keys(byUnit[u]).map(function(k){return byUnit[u][k];}).sort(function(a,b){return a[0].saved<b[0].saved?1:-1;});
+    var rows=exps[0], routes=[];
+    rows.forEach(function(r){ if(r.route&&routes.indexOf(r.route)<0) routes.push(r.route); });
+    var notes=(data.comments||[]).filter(function(c){return c.unitId===u&&c.expedition===rows[0].expedition;});
+    return '<section class="unit"><h2>'+esc(rows[0].unit)+'</h2><p class="small">Expedition completed '+day(rows[0].saved)+(exps.length>1?' · '+exps.length+' expeditions saved; showing the latest':'')+'</p>'+
+      '<div class="plan">'+rows.map(function(r){ var gold=OPENED.indexOf(r.outcome)>=0;
+        return '<div class="room '+(gold?'gold':'blue')+'"><div class="dot"></div><b>'+esc(r.room)+'</b><small>'+esc(r.lesson)+'</small><small><b>'+esc(r.outcome)+'</b> · '+esc(MEANING[r.outcome]||'')+'</small>'+(r.suggests?'<small>'+esc(r.suggests)+'</small>':'')+'</div>'; }).join('')+'</div>'+
+      (routes.length?'<div class="pack"><b>Reconnection Routes to try</b><ul>'+routes.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>':'<div class="pack"><b>No Reconnection Routes needed</b> for this unit.</div>')+
+      (notes.length?'<p class="small"><b>What you shared:</b> “'+esc(notes[notes.length-1].comment)+'”</p>':'')+'</section>';
+  }).join('');
+}
+function fail(e){ document.getElementById('who').textContent='Your record could not be loaded just now. Please refresh the page. ('+esc(e&&e.message)+')'; }
+// The page runs inside Google's frame, so its own address is read through google.script.url.
+google.script.url.getLocation(function(loc){
+  var who=loc.parameter.learner;
+  if(who){ document.getElementById('title').textContent='Learner passport'; google.script.run.withSuccessHandler(function(d){render(d,'Record for ');}).withFailureHandler(fail).getLearnerPassport(who); }
+  else google.script.run.withSuccessHandler(function(d){render(d,'Your record · ');}).withFailureHandler(fail).getMyPassport();
+});
+</script>
+</body>
+</html>

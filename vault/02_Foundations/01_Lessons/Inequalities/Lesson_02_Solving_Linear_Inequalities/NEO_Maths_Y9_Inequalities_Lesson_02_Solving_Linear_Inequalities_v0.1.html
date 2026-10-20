@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Solving linear inequalities</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Inequalities</h1>
+<h2>Solving linear inequalities</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Can I solve an inequality like an equation — and where does it behave differently?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — solving by keeping the balance, with one surprise to <em>discover</em> rather than memorise.</p>
+<p><b>Stepping Stone:</b> solve a linear inequality by doing the <b>same to both sides</b>; explain why <b>multiplying or dividing by a negative number reverses</b> the inequality; and <b>check</b> a solution by testing a value.</p>
+<p><b>You will need:</b> solving one- and two-step equations with inverse operations, and the inequality symbols from Lesson 1 — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 8 · Move 14 · Reflect 10 · Create 8 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Inequalities_Lesson_02_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Inequalities_Lesson_02_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write 2 &lt; 5. Now multiply both numbers by −1 and mark them on a number line. Is the smaller number still on the left?')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — What keeps the order?</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">Solving an equation means doing the <b>same to both sides</b> until <span class="uk">x</span> stands alone. An inequality can be solved the same way — as long as each step keeps the statement <b>true</b>. Before solving anything, find out which steps keep an inequality true. Take two numbers in order, do the same thing to both, and see whether the order survives.</p>
+</div>
+<p><b>What to do:</b> choose an operation. First <b>predict</b> whether <span class="uk">a</span> will still be less than <span class="uk">b</span>, then watch both numbers move on the number line. Try every operation, and try the other pairs too.</p>
+<p><b>What you are trying to notice:</b> adding, subtracting, and multiplying or dividing by a <b>positive</b> number keep the order. Multiplying or dividing by a <b>negative</b> number <b>reflects</b> both numbers across 0 — and a reflection reverses their order.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔍 The flip detector</h3>
+<div class="buttonrow" style="justify-content:center" id="fdPairs"></div>
+<div class="card" style="text-align:center"><svg id="fdSvg" class="graphsvg" style="max-width:560px" viewBox="0 0 560 130" role="img" aria-label="Number line showing a and b before and after the operation"></svg></div>
+<div id="fdStatement" class="bignum" style="font-size:1.4em"></div>
+<div class="buttonrow" style="justify-content:center" id="fdOps"></div>
+<div id="fdPredict" class="buttonrow" style="justify-content:center"></div>
+<div id="fdRead" class="feedback" aria-live="polite"></div>
+<div id="fdLog" class="clue small"></div>
+<p><b>Carry this forward:</b> the order of two numbers survives every step except multiplying or dividing by a negative number. That step reverses it.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT (hero) ================= -->
+<details class="hs">
+<summary>🚶 Movement — The tipped balance</summary>
+<p><b>What to do:</b> the balance shows an inequality. Choose an operation and a number, then press <b>Do it to both sides</b>. Keep going until <span class="uk">x</span> stands alone. When you multiply or divide by a negative number, you decide which symbol keeps the statement true.</p>
+<p><b>What you are trying to notice:</b> the balance is drawn with a <b>test value</b> — one value of <span class="uk">x</span> that makes the inequality true. Most steps leave it tipped the same way. Multiplying or dividing by a negative tips it the <b>other</b> way, so the symbol must turn round to stay true.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">⚖️ Solve by keeping the balance</h3>
+<div id="bsTask" class="bignum" style="font-size:1.4em"></div>
+<div class="card" style="text-align:center"><svg id="bsSvg" class="graphsvg" style="max-width:520px" viewBox="0 0 520 240" role="img" aria-label="A balance tipped to show which side is greater for the test value"></svg></div>
+<div class="buttonrow" style="justify-content:center">
+<select id="bsOp" aria-label="Operation"><option value="add">Add</option><option value="sub" selected>Subtract</option><option value="mul">Multiply by</option><option value="div">Divide by</option></select>
+<input id="bsNum" class="numin" value="2" aria-label="Number">
+<button onclick="bsApply()">Do it to both sides</button>
+<button onclick="bsUndo()">↶ Undo</button>
+</div>
+<div id="bsFlip" class="buttonrow" style="justify-content:center"></div>
+<div id="bsRead" class="feedback" aria-live="polite"></div>
+<div id="bsSteps" class="clue"></div>
+<div class="card" style="text-align:center"><svg id="bsLine" class="graphsvg" style="max-width:560px" viewBox="0 0 560 110" role="img" aria-label="The solution on a number line"></svg></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="bsReset()">↺ Start this one again</button><button onclick="bsNext()">Next inequality →</button></div>
+<p><b>Carry this forward:</b> solve an inequality exactly like an equation — and whenever you multiply or divide both sides by a negative number, <b>reverse the symbol</b>.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Does every line agree?</summary>
+<p><b>What to do:</b> here is someone's working. Slide the <b>test value</b> and watch whether each line is true (✓) or false (✗) for that value. If every line always agrees, the working is correct. If two lines ever disagree, find the <b>first line that goes wrong</b>.</p>
+<p><b>What you are trying to notice:</b> each line of correct working says the same thing about <span class="uk">x</span> in a different way, so a test value is either true on every line or false on every line. Where the lines disagree, a step broke the truth — very often a forgotten reversal.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧪 Test the working</h3>
+<div id="rfLines" class="card"></div>
+<div class="buttonrow" style="justify-content:center">
+<label for="rfX"><b>Test value <span class="uk">x</span> =</b></label>
+<input id="rfX" type="range" min="-6" max="6" step="1" value="0" oninput="rfDraw()" style="width:220px">
+<span id="rfXv" class="bignum" style="min-width:2.5em"></span>
+</div>
+<div class="buttonrow" style="justify-content:center" id="rfChoices"></div>
+<div id="rfRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rfNext()">Next working →</button></div>
+<p><b>Carry this forward:</b> check a solution by testing a value in the <b>original</b> inequality. A value inside your answer should make it true; a value outside should make it false.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Inequalities from real life</summary>
+<p><b>What to do:</b> each situation has a limit. Choose the inequality that describes it, solve it, then decide what the answer means in real life.</p>
+<p><b>What you are trying to notice:</b> the algebra gives a range, but the situation decides which values make sense — a taxi cannot charge for half a mile, so a whole-number answer may be needed. Reading the answer back into the story is part of solving.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧭 From story to solution</h3>
+<div id="ctSay" class="clue" style="font-size:1.1em"></div>
+<div id="ctStep" class="card"></div>
+<div id="ctRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ctNext()">Next situation →</button></div>
+</div>
+<div class="card" style="border:2px solid #b9a2cf;background:#f7f2fb">
+<h3 style="margin-top:0">✨ Make your own <span class="stretch">stretch</span></h3>
+<p>Invent a situation with a limit where solving needs a step that <b>reverses</b> the inequality — for example, something that goes <em>down</em> each time, with a minimum you must keep. Write it, solve it on the Scratchpad, and explain the reversal in one sentence.</p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>You discovered something today rather than being told it: a reflection across zero turns an order round. Ideas you find yourself tend to stay. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> can you picture the number line flipping over, with every number landing on the other side of zero? Hold that picture for a moment. It is the reason for the rule.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds the habit of <b>asking why a rule is true</b>. "Flip the sign for a negative" can be learned as a trick and forgotten, or understood as a reflection and kept. Checking with a test value also feeds <b>self-trust</b>: you do not need anyone to tell you whether your answer is right — you can find out.</p>
+<p class="small">Carry one idea forward: when a rule surprises you, test it with real numbers until it stops being a surprise.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Solve, check and explain</summary>
+<p><b>Your task:</b> show that you can solve inequalities and that you know <em>why</em> the method works.</p>
+<ul>
+<li>Solve four inequalities, showing every step: <b>2<span class="uk">x</span> + 3 &lt; 15</b>, <b>4<span class="uk">x</span> − 1 ≥ 11</b>, <b>9 − 3<span class="uk">x</span> &gt; 0</b> and <b>6 − 2<span class="uk">x</span> ≤ 14</b>.</li>
+<li>Show each answer on a number line, with the right circle at the boundary.</li>
+<li>For each, <b>check</b> with a test value from inside your answer and one from outside.</li>
+<li>Explain, with your own numerical example, why multiplying or dividing by a negative number reverses the inequality.</li>
+<li><span class="stretch">stretch</span> Write a real-life situation that leads to one of your inequalities and say what the answer means in the story.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_INEQ_SOLVE_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows an inequality can be solved like an equation.</td><td>Knows the symbol reverses for a negative.</td><td>Explains the reversal with a numerical example.</td><td>Explains the reversal as a reflection across zero.</td></tr>
+<tr><td><b>Application</b></td><td>Solves a one-step inequality.</td><td>Solves two-step inequalities with positive coefficients.</td><td>Solves all four, reversing the symbol correctly.</td><td>Solves and represents all four accurately, including boundaries.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes an answer.</td><td>Shows the steps.</td><td>Shows steps and a number line for each.</td><td>Explains each step another learner could follow.</td></tr>
+<tr><td><b>Reflection</b></td><td>Tests one value.</td><td>Tests a value for each answer.</td><td>Tests inside and outside values, and spots an error if one appears.</td><td>Uses testing to check, and repairs, a piece of faulty working.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Solving linear inequalities — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type your answer like <b>x &gt; 5</b>. You can use the palette, or write &lt;= for ≤ and &gt;= for ≥.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write each step of your solution on its own line. Then test one value in the first line and in your answer: do they agree?')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["x","<",">","\u2264","\u2265","\u2212"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- CONNECTION: the flip detector ---------------- */
+var FD_PAIRS=[[2,5],[-3,1],[-6,-2]];
+var FD_OPS=[{k:'add',n:3,lab:'+ 3'},{k:'sub',n:5,lab:'− 5'},{k:'mul',n:2,lab:'× 2'},{k:'div',n:2,lab:'÷ 2'},{k:'mul',n:-1,lab:'× (−1)'},{k:'div',n:-2,lab:'÷ (−2)'}];
+var fd={p:0,op:null,shown:false,tried:{},lo:-12,hi:12};
+function opApply(k,n,v){ return k==='add'?v+n:k==='sub'?v-n:k==='mul'?v*n:v/n; }
+function fdDraw(){
+  var pr=FD_PAIRS[fd.p], a=pr[0], b=pr[1], h=nlAxis(fd.lo,fd.hi,{labelEvery:2});
+  var pt=function(v,lab,col,y,faded){ var x=nlX(v,fd.lo,fd.hi); return '<g opacity="'+(faded?0.35:1)+'"><circle cx="'+x+'" cy="'+y+'" r="12" fill="'+col+'"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="14" fill="#fff">'+lab+'</text></g>'; };
+  if(fd.op!==null&&fd.shown){ var o=FD_OPS[fd.op], na=opApply(o.k,o.n,a), nb=opApply(o.k,o.n,b);
+    h+=pt(a,'a','#b0412f',NL.y-24,true)+pt(b,'b','#365a68',NL.y-24,true);
+    h+='<g stroke="#8c9cab" stroke-width="1.5" stroke-dasharray="4 4" fill="none"><path d="M'+nlX(a,fd.lo,fd.hi)+' '+(NL.y-36)+' Q'+((nlX(a,fd.lo,fd.hi)+nlX(na,fd.lo,fd.hi))/2)+' '+(NL.y-70)+' '+nlX(na,fd.lo,fd.hi)+' '+(NL.y-48)+'"/><path d="M'+nlX(b,fd.lo,fd.hi)+' '+(NL.y-36)+' Q'+((nlX(b,fd.lo,fd.hi)+nlX(nb,fd.lo,fd.hi))/2)+' '+(NL.y-70)+' '+nlX(nb,fd.lo,fd.hi)+' '+(NL.y-48)+'"/></g>';
+    h+=pt(na,'a','#b0412f',NL.y-24,false)+pt(nb,'b','#365a68',NL.y-24,false); }
+  else h+=pt(a,'a','#b0412f',NL.y-24,false)+pt(b,'b','#365a68',NL.y-24,false);
+  document.getElementById('fdSvg').innerHTML=h;
+  var st='<span class="uk">a</span> = '+fmt(a)+', &nbsp;<span class="uk">b</span> = '+fmt(b)+' &nbsp; so &nbsp;'+fmt(a)+' &lt; '+fmt(b);
+  if(fd.op!==null&&fd.shown){ var o2=FD_OPS[fd.op], na2=opApply(o2.k,o2.n,a), nb2=opApply(o2.k,o2.n,b);
+    st+='<br><span style="font-size:.85em">after '+o2.lab+': &nbsp;'+fmt(na2)+' '+(na2<nb2?'&lt;':'&gt;')+' '+fmt(nb2)+(na2<nb2?' &nbsp;— order kept':' &nbsp;— order reversed')+'</span>'; }
+  document.getElementById('fdStatement').innerHTML=st;
+}
+function fdRenderButtons(){
+  document.getElementById('fdPairs').innerHTML=FD_PAIRS.map(function(p,i){return '<button class="chip'+(i===fd.p?' active':'')+'" onclick="fdPair('+i+')">'+fmt(p[0])+' and '+fmt(p[1])+'</button>';}).join('');
+  document.getElementById('fdOps').innerHTML=FD_OPS.map(function(o,i){return '<button class="chip'+(i===fd.op?' active':'')+'" onclick="fdPick('+i+')">'+o.lab+'</button>';}).join('');
+}
+function fdPair(i){ fd.p=i; fd.op=null; fd.shown=false; document.getElementById('fdPredict').innerHTML=''; document.getElementById('fdRead').style.display='none'; fdRenderButtons(); fdDraw(); }
+function fdPick(i){ fd.op=i; fd.shown=false; fdRenderButtons(); fdDraw(); document.getElementById('fdRead').style.display='none';
+  document.getElementById('fdPredict').innerHTML='<span><b>Predict:</b> after '+FD_OPS[i].lab+', will <span class="uk">a</span> still be less than <span class="uk">b</span>?</span> <button onclick="fdGuess(true)">Yes, the order stays</button><button onclick="fdGuess(false)">No, it reverses</button>'; }
+function fdGuess(stays){
+  var o=FD_OPS[fd.op], pr=FD_PAIRS[fd.p], na=opApply(o.k,o.n,pr[0]), nb=opApply(o.k,o.n,pr[1]), kept=na<nb, fb=document.getElementById('fdRead');
+  fd.shown=true; fdDraw(); document.getElementById('fdPredict').innerHTML=''; fb.style.display='block';
+  fd.tried[o.lab]=kept;
+  var why= o.n<0&&(o.k==='mul'||o.k==='div') ? 'Multiplying or dividing by a negative number reflects both numbers across 0. The one that was further left lands further right, so the order reverses.'
+         : (o.k==='add'||o.k==='sub') ? 'Adding or subtracting moves both numbers the same distance in the same direction, so their order stays.'
+         : 'Multiplying or dividing by a positive number stretches or shrinks the line about 0, but nothing crosses over, so the order stays.';
+  fb.className=(stays===kept)?'feedback good':'feedback warn';
+  fb.innerHTML=(stays===kept?'Your prediction was right. ':'Not what you predicted — look at the line. ')+why;
+  var keys=Object.keys(fd.tried);
+  document.getElementById('fdLog').innerHTML='<b>Your discoveries so far:</b> order kept by '+(keys.filter(function(k){return fd.tried[k];}).join(', ')||'—')+'; order reversed by '+(keys.filter(function(k){return !fd.tried[k];}).join(', ')||'—')+'.';
+}
+function fdInit(){ fdRenderButtons(); fdDraw(); document.getElementById('fdLog').innerHTML='Try each operation, then try the other pairs.'; }
+
+/* ---------------- MOVEMENT (hero): the tipped balance ---------------- */
+var BS=[
+ {a:3,b:2,rel:'>',c:11,test:4},
+ {a:2,b:-5,rel:'≤',c:7,test:5},
+ {a:-2,b:5,rel:'≥',c:1,test:0},
+ {a:-3,b:4,rel:'<',c:10,test:0},
+ {a:-3,b:4,rel:'>',c:-8,test:0,stretch:true}
+];
+var FLIP={'<':'>','>':'<','≤':'≥','≥':'≤'};
+var bs={i:0,s:null,hist:[],await:null};
+function nfix(v){ return Math.round(v*1e6)/1e6; }
+function lhsText(a,b){
+  var t=a===1?'':a===-1?'−':fmt(a); t+='<span class="uk">x</span>';
+  if(Math.abs(b)>1e-9) t+=(b>0?' + ':' − ')+fmt(Math.abs(b));
+  return t;
+}
+function relHtml(r){ return r==='<'?'&lt;':r==='>'?'&gt;':r; }
+function relTrue(r,L,R){ return r==='<'?L<R-1e-9:r==='>'?L>R+1e-9:r==='≤'?L<=R+1e-9:L>=R-1e-9; }
+function bsLine(s,rel){ return lhsText(s.a,s.b)+' '+relHtml(rel||s.rel)+' '+fmt(s.c); }
+function bsDraw(){
+  var s=bs.s, p=BS[bs.i], L=s.a*p.test+s.b, R=s.c, tilt=L>R?1:L<R?-1:0, ang=tilt*9;
+  var rel=bs.await?'?':relHtml(s.rel);
+  var h='<polygon points="260,214 244,236 276,236" fill="#6b4a2f"/><rect x="190" y="234" width="140" height="6" rx="3" fill="#6b4a2f"/>';
+  h+='<g transform="rotate('+(-ang)+' 260 214)"><rect x="70" y="210" width="380" height="8" rx="4" fill="#8a6a43"/>';
+  // pans hang from each end of the beam; the heavier (greater) side sits lower
+  h+='<line x1="110" y1="214" x2="110" y2="150" stroke="#8a6a43" stroke-width="2"/><line x1="410" y1="214" x2="410" y2="150" stroke="#8a6a43" stroke-width="2"/></g>';
+  var dy=Math.sin(ang*Math.PI/180)*150;
+  h+='<g transform="translate(0,'+dy+')"><rect x="30" y="112" width="160" height="40" rx="10" fill="#fffaf0" stroke="#8a6a43" stroke-width="2"/><text x="110" y="138" text-anchor="middle" font-family="Georgia" font-size="18" fill="#2f3429">'+lhsText(s.a,s.b).replace(/<[^>]+>/g,'')+'</text><text x="110" y="172" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">= '+fmt(nfix(L))+'</text></g>';
+  h+='<g transform="translate(0,'+(-dy)+')"><rect x="330" y="112" width="160" height="40" rx="10" fill="#fffaf0" stroke="#8a6a43" stroke-width="2"/><text x="410" y="138" text-anchor="middle" font-family="Georgia" font-size="18" fill="#2f3429">'+fmt(s.c)+'</text><text x="410" y="172" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">= '+fmt(nfix(R))+'</text></g>';
+  h+='<text x="260" y="140" text-anchor="middle" font-family="Georgia" font-size="34" font-weight="bold" fill="'+(bs.await?'#b0412f':'#3f5f45')+'">'+rel+'</text>';
+  h+='<text x="260" y="30" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">Test value <tspan font-style="italic" font-family="Georgia">x</tspan> = '+fmt(p.test)+' (it makes the inequality true)</text>';
+  h+='<text x="260" y="54" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">'+(tilt>0?'The left side is greater, so the balance tips down on the left.':tilt<0?'The right side is greater, so the balance tips down on the right.':'Both sides are equal.')+'</text>';
+  document.getElementById('bsSvg').innerHTML=h;
+  document.getElementById('bsTask').innerHTML=(p.stretch?'<span class="stretch">stretch</span> ':'')+'Solve: '+bsLine(BS[bs.i]);
+  document.getElementById('bsSteps').innerHTML='<b>Your working:</b><br>'+bs.hist.map(function(x){return bsLine(x);}).concat([bs.await?bsLine(s,'?'):bsLine(s)]).join('<br>');
+  var solved=!bs.await&&Math.abs(s.a-1)<1e-9&&Math.abs(s.b)<1e-9, line=nlAxis(-6,10);
+  if(solved){ var r=(s.rel==='>'||s.rel==='≥')?{lo:s.c,loInc:s.rel==='≥',hi:null}:{lo:null,hi:s.c,hiInc:s.rel==='≤'}; line+=nlSet(r,-6,10); }
+  document.getElementById('bsLine').innerHTML=line;
+  return solved;
+}
+function bsMsg(cls,html){ var fb=document.getElementById('bsRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function bsApply(){
+  if(bs.await){ bsMsg('warn','First choose the symbol that keeps the statement true.'); return; }
+  var k=document.getElementById('bsOp').value, n=num(document.getElementById('bsNum').value);
+  if(isNaN(n)){ bsMsg('warn','Type the number to use, for example 2 or −3.'); return; }
+  if((k==='mul'||k==='div')&&Math.abs(n)<1e-12){ bsMsg('warn',k==='div'?'Dividing by 0 is not possible.':'Multiplying both sides by 0 makes both sides 0 — the information about <span class="uk">x</span> is lost. Choose another number.'); return; }
+  var s=bs.s; bs.hist.push({a:s.a,b:s.b,c:s.c,rel:s.rel});
+  var t={a:nfix(opApply(k==='add'||k==='sub'?'mul':k,k==='add'||k==='sub'?1:n,s.a)),b:nfix(opApply(k,n,s.b)),c:nfix(opApply(k,n,s.c)),rel:s.rel};
+  bs.s=t;
+  if((k==='mul'||k==='div')&&n<0){ bs.await=FLIP[s.rel]; bsDraw();
+    document.getElementById('bsFlip').innerHTML='<b>Which symbol keeps it true?</b> '+['<','>','≤','≥'].map(function(r){return '<button class="chip" onclick="bsRel(\''+r+'\')">'+relHtml(r)+'</button>';}).join('');
+    bsMsg('','You '+(k==='mul'?'multiplied':'divided')+' both sides by a negative number. Look at the balance: with the test value, which side is greater now?'); document.getElementById('bsRead').style.background='#e5edf4'; return; }
+  var solved=bsDraw();
+  bsMsg('good','Both sides changed in the same way and the balance still tips the same way, so the symbol stays '+relHtml(t.rel)+'.'+(solved?' <b><span class="uk">x</span> stands alone: '+bsLine(t)+'.</b> The number line shows every value that works.':''));
+}
+function bsRel(r){
+  var p=BS[bs.i], s=bs.s, L=s.a*p.test+s.b;
+  if(r!==bs.await){ bsMsg('warn','Test it: with <span class="uk">x</span> = '+fmt(p.test)+', the left side is '+fmt(nfix(L))+' and the right side is '+fmt(s.c)+'. Is “'+fmt(nfix(L))+' '+relHtml(r)+' '+fmt(s.c)+'” true? Choose the symbol that makes it true and keeps the same meaning (with or without “equal to”).'); return; }
+  s.rel=r; bs.await=null; document.getElementById('bsFlip').innerHTML='';
+  var solved=bsDraw();
+  bsMsg('good','Yes — the balance tipped the other way, so the symbol reversed: '+relHtml(FLIP[r])+' became '+relHtml(r)+'.'+(solved?' <b><span class="uk">x</span> stands alone: '+bsLine(s)+'.</b> The number line shows every value that works.':''));
+}
+function bsUndo(){ if(!bs.hist.length) return; var h=bs.hist.pop(); bs.s=h; bs.await=null; document.getElementById('bsFlip').innerHTML=''; document.getElementById('bsRead').style.display='none'; bsDraw(); }
+function bsReset(){ var p=BS[bs.i]; bs.s={a:p.a,b:p.b,c:p.c,rel:p.rel}; bs.hist=[]; bs.await=null; document.getElementById('bsFlip').innerHTML=''; document.getElementById('bsRead').style.display='none'; bsDraw(); }
+function bsNext(){ bs.i=(bs.i+1)%BS.length; bsReset(); }
+function bsInit(){ bsReset(); }
+
+/* ---------------- REFLECTION: does every line agree? ---------------- */
+var RF=[
+ {lines:[['2<span class="uk">x</span> + 3 &lt; 9',function(x){return 2*x+3<9;}],['2<span class="uk">x</span> &lt; 6',function(x){return 2*x<6;}],['<span class="uk">x</span> &lt; 3',function(x){return x<3;}]],wrong:null,
+  why:'Every test value is true on all three lines or false on all three, so the working is correct.'},
+ {lines:[['5 − 2<span class="uk">x</span> ≥ 1',function(x){return 5-2*x>=1;}],['−2<span class="uk">x</span> ≥ −4',function(x){return -2*x>=-4;}],['<span class="uk">x</span> ≥ 2',function(x){return x>=2;}]],wrong:2,
+  why:'Dividing both sides by −2 should reverse the symbol: the answer is <span class="uk">x</span> ≤ 2. Try <span class="uk">x</span> = 0: true on lines 1 and 2, false on line 3.'},
+ {lines:[['4<span class="uk">x</span> − 1 &gt; 7',function(x){return 4*x-1>7;}],['4<span class="uk">x</span> &gt; 6',function(x){return 4*x>6;}],['<span class="uk">x</span> &gt; 1.5',function(x){return x>1.5;}]],wrong:1,
+  why:'Adding 1 to both sides gives 4<span class="uk">x</span> &gt; 8, not 6. Try <span class="uk">x</span> = 2: 4 × 2 − 1 = 7, and 7 &gt; 7 is false — but 8 &gt; 6 is true.'},
+ {lines:[['3 − <span class="uk">x</span> &gt; 5',function(x){return 3-x>5;}],['−<span class="uk">x</span> &gt; 2',function(x){return -x>2;}],['<span class="uk">x</span> &lt; −2',function(x){return x<-2;}]],wrong:null,
+  why:'Every line agrees. Dividing by −1 reversed &gt; to &lt;, exactly as it should.'}
+];
+var rf={i:0};
+function rfDraw(){
+  var w=RF[rf.i], x=+document.getElementById('rfX').value; document.getElementById('rfXv').textContent=fmt(x);
+  document.getElementById('rfLines').innerHTML='<table><tr><th>Line</th><th>Working</th><th>With <span class="uk">x</span> = '+fmt(x)+'</th></tr>'+w.lines.map(function(l,i){ var t=l[1](x); return '<tr><td>'+(i+1)+'</td><td style="font-size:1.15em">'+l[0]+'</td><td style="font-weight:bold;color:'+(t?'#3f5f45':'#b0412f')+'">'+(t?'✓ true':'✗ false')+'</td></tr>'; }).join('')+'</table>';
+}
+function rfRender(){
+  var w=RF[rf.i];
+  document.getElementById('rfChoices').innerHTML='<button class="chip" onclick="rfPick(null)">Every line agrees — the working is correct</button>'+w.lines.slice(1).map(function(_,i){return '<button class="chip" onclick="rfPick('+(i+1)+')">Line '+(i+2)+' goes wrong</button>';}).join('');
+  document.getElementById('rfRead').style.display='none'; rfDraw();
+}
+function rfPick(k){ var w=RF[rf.i], fb=document.getElementById('rfRead'); fb.style.display='block';
+  if(k===w.wrong){ fb.className='feedback good'; fb.innerHTML='Yes. '+w.why; }
+  else { fb.className='feedback warn'; fb.innerHTML=w.wrong===null?'Look again: try several test values. Do the lines ever disagree?':'Not quite. Slide the test value until two lines disagree — the first line that changes from the one above it is where the working goes wrong.'; } }
+function rfNext(){ rf.i=(rf.i+1)%RF.length; document.getElementById('rfX').value=0; rfRender(); }
+function rfInit(){ rfRender(); }
+
+/* ---------------- CREATIVITY: from story to solution ---------------- */
+var CT=[
+ {say:'A taxi costs £3 plus £2 for every mile. You have <b>at most £20</b> to spend. (<span class="uk">m</span> = number of miles)',opts:['3 + 2<span class="uk">m</span> ≤ 20','3 + 2<span class="uk">m</span> &lt; 20','2 + 3<span class="uk">m</span> ≤ 20'],ans:0,
+  why:{1:'“At most £20” lets you spend exactly £20, so the symbol includes the boundary.',2:'The £3 is paid once; the £2 is paid for every mile, so it goes with <span class="uk">m</span>.'},
+  lab:'<span class="uk">m</span> ≤',val:8.5,steps:'3 + 2<span class="uk">m</span> ≤ 20 → 2<span class="uk">m</span> ≤ 17 → <span class="uk">m</span> ≤ 8.5',ask:'The meter only charges for whole miles. What is the greatest number of whole miles you can travel?',whole:8,
+  end:'Up to <b>8 whole miles</b>: 3 + 2 × 8 = £19, and a ninth mile would cost £21.'},
+ {say:'A phone plan costs £12 a month plus £0.50 for each gigabyte of data. The bill must stay <b>under £20</b>. (<span class="uk">g</span> = gigabytes)',opts:['12 + 0.5<span class="uk">g</span> &lt; 20','12 + 0.5<span class="uk">g</span> ≤ 20','0.5 + 12<span class="uk">g</span> &lt; 20'],ans:0,
+  why:{1:'“Under £20” does not allow a bill of exactly £20.',2:'£12 is the fixed monthly cost; £0.50 is charged per gigabyte, so it goes with <span class="uk">g</span>.'},
+  lab:'<span class="uk">g</span> &lt;',val:16,steps:'12 + 0.5<span class="uk">g</span> &lt; 20 → 0.5<span class="uk">g</span> &lt; 8 → <span class="uk">g</span> &lt; 16',ask:'Data is charged in whole gigabytes. What is the greatest whole number of gigabytes you can use?',whole:15,
+  end:'Up to <b>15 GB</b>: 16 GB would make the bill exactly £20, which is not under £20.'},
+ {say:'In a puzzle game you start with 40 points and lose 6 points for every hint. You need <b>at least 10 points</b> left to unlock the next level. (<span class="uk">h</span> = hints)',opts:['40 − 6<span class="uk">h</span> ≥ 10','40 − 6<span class="uk">h</span> &gt; 10','40 + 6<span class="uk">h</span> ≥ 10'],ans:0,
+  why:{1:'“At least 10” lets you finish with exactly 10 points, so the symbol includes the boundary.',2:'Each hint takes points away, so 6<span class="uk">h</span> is subtracted.'},
+  lab:'<span class="uk">h</span> ≤',val:5,steps:'40 − 6<span class="uk">h</span> ≥ 10 → −6<span class="uk">h</span> ≥ −30 → divide by −6 and reverse: <span class="uk">h</span> ≤ 5',ask:'What is the greatest number of hints you can use?',whole:5,
+  end:'Up to <b>5 hints</b>: 40 − 6 × 5 = 10 points, which is exactly enough. Notice the reversal when dividing by −6.'}
+];
+var ct={i:0,step:0};
+function ctRender(){
+  var c=CT[ct.i], el=document.getElementById('ctStep'); document.getElementById('ctSay').innerHTML=c.say; document.getElementById('ctRead').style.display='none';
+  if(ct.step===0) el.innerHTML='<p><b>1. Which inequality describes the situation?</b></p><div class="buttonrow">'+c.opts.map(function(o,i){return '<button class="chip" onclick="ctOpt('+i+')">'+o+'</button>';}).join('')+'</div>';
+  else if(ct.step===1) el.innerHTML='<p><b>2. Solve it.</b> '+c.opts[c.ans]+'</p><p>'+c.lab+' <input id="ctVal" class="numin" aria-label="Boundary value"> <button onclick="ctSolve()">Check</button></p>';
+  else if(ct.step===2) el.innerHTML='<p><b>3. What does it mean?</b> '+c.ask+'</p><p><input id="ctWhole" class="numin" aria-label="Whole-number answer"> <button onclick="ctWholeCheck()">Check</button></p>';
+  else el.innerHTML='<p><b>Solved.</b> '+c.steps+'</p><p>'+c.end+'</p>';
+}
+function ctMsg(cls,html){ var fb=document.getElementById('ctRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function ctOpt(i){ var c=CT[ct.i]; if(i===c.ans){ ct.step=1; ctRender(); ctMsg('good','Yes — that matches every part of the story.'); } else ctMsg('warn',c.why[i]); }
+function ctSolve(){ var c=CT[ct.i], v=signedNum(document.getElementById('ctVal').value);
+  if(!isNaN(v)&&Math.abs(v-c.val)<1e-6){ ct.step=2; ctRender(); ctMsg('good','Yes: '+c.steps+'.'); }
+  else ctMsg('warn','Not yet. Undo the fixed amount first, then divide by the number with the letter — and if that number is negative, reverse the symbol.'); }
+function ctWholeCheck(){ var c=CT[ct.i], v=signedNum(document.getElementById('ctWhole').value);
+  if(v===c.whole){ ct.step=3; ctRender(); ctMsg('good','Yes.'); }
+  else ctMsg('warn','Check it in the story: does your number keep within the limit? Does one more break it?'); }
+function ctNext(){ ct.i=(ct.i+1)%CT.length; ct.step=0; ctRender(); }
+function ctInit(){ ctRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    eq:{title:'Two-step equations',prompt:'Solve 2x + 3 = 11. What is x?',answer:4,hint:'Undo the + 3 first (subtract 3 from both sides: 2x = 8), then undo the × 2.'},
+    inverse:{title:'Inverse operations',prompt:'What undoes “multiply by 3”? (for example: add 2)',answer:'divide by 3',hint:'The inverse of multiplying by 3 is dividing by 3.'},
+    negatives:{title:'Multiplying negatives',prompt:'Work out −3 × −2.',answer:6,hint:'A negative times a negative is positive: 3 × 2 = 6.'}
+  };
+  function matches(r,v){ if(typeof r.answer==='number'){var n=signedNum(v);return !isNaN(n)&&Math.abs(n-r.answer)<=0.001;} var s=normText(v), a=normText(r.answer); return s===a||s.indexOf(a)===0||(a==='divide by 3'&&/^(divide|div)\b.*3/.test(s)); }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// Inequality text in one canonical form: <= becomes ≤, unicode minus, no spaces.
+function normIneq(v){ return String(v).toLowerCase().replace(/\s+/g,'').replace(/<=|=</g,'≤').replace(/>=|=>/g,'≥').replace(/−|–/g,'-'); }
+// An inequality answer in canonical form "x>5": either way round (5<x), <= for ≤, number words and fractions allowed.
+function ineqCanon(v){
+  var s=String(v).toLowerCase().replace(/<=|=</g,'≤').replace(/>=|=>/g,'≥').replace(/−|–/g,'-');
+  var m=s.match(/^\s*(.+?)\s*(≤|≥|<|>)\s*(.+?)\s*$/); if(!m) return null;
+  var rev={'<':'>','>':'<','≤':'≥','≥':'≤'}, L=m[1].trim(), R=m[3].trim(), isVar=function(z){return /^[a-z]$/.test(z);};
+  if(isVar(L)&&!isVar(R)){ var n=signedNum(R); return isNaN(n)?null:L+m[2]+(Math.round(n*1e6)/1e6); }
+  if(isVar(R)&&!isVar(L)){ var n2=signedNum(L); return isNaN(n2)?null:R+rev[m[2]]+(Math.round(n2*1e6)/1e6); }
+  return null;
+}
+function ineqIs(v,target){ var a=ineqCanon(v); return a!==null&&a===ineqCanon(target); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+var PRACTICE=[
+ {label:"1 of 7 · One step",q:"Solve <b><span class=\"uk\">x</span> + 7 &gt; 12</b>.",a:[],eq:function(v){return ineqIs(v,'x>5');},prompt:"What undoes + 7? Do it to both sides.",hint:"Subtract 7 from both sides.",sol:"<span class=\"uk\">x</span> + 7 &gt; 12 → subtract 7 → <span class=\"uk\">x</span> &gt; 5."},
+ {label:"2 of 7 · Dividing by a positive",q:"Solve <b>3<span class=\"uk\">x</span> ≤ 18</b>.",a:[],eq:function(v){return ineqIs(v,'x<=6');},prompt:"What undoes × 3? Is 3 positive or negative?",hint:"Divide both sides by 3. It is positive, so the symbol stays ≤.",sol:"3<span class=\"uk\">x</span> ≤ 18 → divide by 3 → <span class=\"uk\">x</span> ≤ 6."},
+ {label:"3 of 7 · Two steps",q:"Solve <b>2<span class=\"uk\">x</span> − 5 &lt; 9</b>.",a:[],eq:function(v){return ineqIs(v,'x<7');},prompt:"Which step comes first: undoing the − 5 or the × 2?",hint:"Add 5 to both sides (2<span class=\"uk\">x</span> &lt; 14), then divide by 2.",sol:"2<span class=\"uk\">x</span> − 5 &lt; 9 → 2<span class=\"uk\">x</span> &lt; 14 → <span class=\"uk\">x</span> &lt; 7."},
+ {label:"4 of 7 · Dividing by a negative",q:"Solve <b>−4<span class=\"uk\">x</span> ≥ 12</b>.",a:[],eq:function(v){return ineqIs(v,'x<=-3');},prompt:"You will divide by −4. What happens to the symbol?",hint:"Dividing by a negative reverses ≥ to ≤.",sol:"−4<span class=\"uk\">x</span> ≥ 12 → divide by −4 and reverse → <span class=\"uk\">x</span> ≤ −3. Check with <span class=\"uk\">x</span> = −4: 16 ≥ 12 ✓."},
+ {label:"5 of 7 · A hidden negative",q:"Solve <b>7 − <span class=\"uk\">x</span> &gt; 2</b>.",a:[],eq:function(v){return ineqIs(v,'x<5');},prompt:"After subtracting 7, what is in front of <span class=\"uk\">x</span>?",hint:"−<span class=\"uk\">x</span> &gt; −5. Multiply by −1 and reverse.",sol:"7 − <span class=\"uk\">x</span> &gt; 2 → −<span class=\"uk\">x</span> &gt; −5 → <span class=\"uk\">x</span> &lt; 5."},
+ {label:"6 of 7 · Test a value",q:"Is <span class=\"uk\">x</span> = 4 a solution of <b>3<span class=\"uk\">x</span> − 2 &gt; 10</b>? Answer yes or no.",a:["no","no it is not","no, it is not"],eq:function(v){return false;},prompt:"Put 4 into the left side. Is the result greater than 10?",hint:"3 × 4 − 2 = 10. Is 10 &gt; 10 true?",sol:"No. 3 × 4 − 2 = 10, and 10 &gt; 10 is false. The solution is <span class=\"uk\">x</span> &gt; 4, which leaves 4 out."},
+ {label:"7 of 7 · Putting it together (stretch)",q:"Solve <b>5 − 3<span class=\"uk\">x</span> ≤ −7</b>.",a:[],eq:function(v){return ineqIs(v,'x>=4');},prompt:"Subtract 5 first. Then what are you dividing by?",hint:"−3<span class=\"uk\">x</span> ≤ −12. Dividing by −3 reverses ≤ to ≥.",sol:"5 − 3<span class=\"uk\">x</span> ≤ −7 → −3<span class=\"uk\">x</span> ≤ −12 → <span class=\"uk\">x</span> ≥ 4. Check with <span class=\"uk\">x</span> = 5: 5 − 15 = −10 ≤ −7 ✓."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Check each step — and whether you multiplied or divided by a negative — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  fdInit();
+  bsInit();
+  rfInit();
+  ctInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>
