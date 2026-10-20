@@ -321,6 +321,23 @@
       ]
     },
     {
+      "id": "inequalities",
+      "title": "Inequalities",
+      "stage": "Foundations",
+      "strand": "Algebra",
+      "source": "vault/02_Foundations/01_Lessons/Inequalities",
+      "lessons": [
+        {
+          "id": "ineq-01-inequality-symbols",
+          "num": "Lesson 01",
+          "title": "Inequality symbols and double-ended inequalities",
+          "file": "lessons/inequalities/01-inequality-symbols.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "straight-lines",
       "title": "Straight Lines and Connected Representations",
       "stage": "Intermediate",
