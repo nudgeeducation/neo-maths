@@ -25,7 +25,7 @@ a.learner{color:#365a68;font-weight:600}
 </style>
 </head>
 <body>
-<div class="top"><b>NEO MATHS · EDUCATOR DASHBOARD</b><span><a href="<?= appUrl ?>?page=passport">My learner view</a> <a href="<?= appUrl ?>?page=observatory">The Observatory</a></span></div>
+<div class="top"><b>NEO MATHS · EDUCATOR DASHBOARD</b><span><a href="<?= appUrl ?>?page=passport">My learner view</a> <? for (var i = 0; i < expeditions.length; i++) { ?><a href="<?= appUrl ?>?page=<?= expeditions[i].page ?>"><?= expeditions[i].name ?></a> <? } ?></span></div>
 <main class="neo">
   <h1>Diagnostic expeditions</h1>
   <p class="sub" id="who">Loading…</p>

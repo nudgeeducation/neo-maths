@@ -28,7 +28,7 @@ button{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#
 </head>
 <body>
 <div class="top"><b>NEO MATHS · MY LEARNER PASSPORT</b>
-  <span><a href="<?= appUrl ?>?page=observatory">The Observatory</a> <? if (isStaff) { ?><a href="<?= appUrl ?>?page=educator">Educator dashboard</a><? } ?></span></div>
+  <span><? for (var i = 0; i < expeditions.length; i++) { ?><a href="<?= appUrl ?>?page=<?= expeditions[i].page ?>"><?= expeditions[i].name ?></a> <? } ?><? if (isStaff) { ?><a href="<?= appUrl ?>?page=educator">Educator dashboard</a><? } ?></span></div>
 <main class="neo">
   <h1 id="title">My learner passport</h1>
   <p class="sub" id="who">Loading your record…</p>

@@ -23,8 +23,11 @@ const CONFIG = {
   SHEET_NAME: 'NEO Maths Results',
   DOMAIN: 'nudgeeducation.online',
   STAFF_GROUP: '',                                     // optional, e.g. 'maths-staff@nudgeeducation.online'
+  // One entry per diagnostic expedition: ?page=<key> opens it. Add a line here for each new unit.
   DIAGNOSTICS: {
-    'observatory': { file: 'Observatory', title: 'The Observatory · Number Systems' }
+    'observatory': { file: 'Observatory', title: 'The Observatory · Number Systems', short: 'The Observatory' },
+    'garden': { file: 'WalledGarden', title: 'The Walled Garden · Inequalities', short: 'The Walled Garden' },
+    'workshop': { file: 'Workshop', title: 'The Inventor\u2019s Workshop · Formulae and Rearranging', short: 'The Inventor\u2019s Workshop' }
   }
 };
 
@@ -86,8 +89,9 @@ function doGet(e) {
   const t = HtmlService.createTemplateFromFile(name);
   t.appUrl = url;
   t.isStaff = isStaff_(email);
+  t.expeditions = Object.keys(CONFIG.DIAGNOSTICS).map(k => ({ page: k, name: CONFIG.DIAGNOSTICS[k].short }));
   return t.evaluate()
-    .setTitle(name === 'Observatory' ? CONFIG.DIAGNOSTICS.observatory.title : name === 'Educator' ? 'NEO Maths · Educator dashboard' : 'NEO Maths · My learner passport')
+    .setTitle(CONFIG.DIAGNOSTICS[page] ? CONFIG.DIAGNOSTICS[page].title : name === 'Educator' ? 'NEO Maths · Educator dashboard' : 'NEO Maths · My learner passport')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }

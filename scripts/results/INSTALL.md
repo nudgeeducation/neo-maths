@@ -4,7 +4,7 @@ About 15 minutes, once. Done by someone with a NEO Google account (`@nudgeeducat
 
 **What you will end up with**
 - A spreadsheet called **NEO Maths Results** in the Diagnostic Assessments folder, with three tabs: **Diagnostics**, **Comments** and **Staff**.
-- One web address that opens the Observatory, the learner passport and the educator dashboard.
+- One web address that opens every diagnostic expedition, the learner passport and the educator dashboard.
 
 ## 1. Create the project
 
@@ -45,6 +45,8 @@ Add these endings to the Web app URL:
 | Ending | Opens |
 | --- | --- |
 | `?page=observatory` | The Observatory diagnostic (Year 10, Number Systems) |
+| `?page=garden` | The Walled Garden diagnostic (Year 9, Inequalities) |
+| `?page=workshop` | The Inventor's Workshop diagnostic (Year 9, Formulae and Rearranging) |
 | `?page=passport` | The learner passport: the signed-in person's own record |
 | `?page=educator` | The educator dashboard (Staff tab only) |
 
@@ -53,6 +55,17 @@ Complete the Observatory once with a test learner account, then check that seven
 ## Updating later
 
 When Claude changes a file: paste the new contents over the old in the editor, save, then **Deploy ▸ Manage deployments ▸** the pencil icon **▸ Version: New version ▸ Deploy**. The web address stays the same.
+
+## Adding a new expedition
+
+Each new unit's diagnostic is one more HTML file, plus one line in `Code.gs`. Claude prepares both.
+
+1. Next to **Files**, click **+ ▸ HTML** and give the new file the name Claude gives you, for example `Workshop` (without `.html`). Paste its contents.
+2. Paste the updated `Code.gs` over the old one. Its `DIAGNOSTICS` list now has a line for the new expedition.
+3. Paste the updated `Passport.html` and `Educator.html` if Claude has changed them. Their top bars list every expedition automatically.
+4. Save, then **Deploy ▸ Manage deployments ▸** the pencil icon **▸ Version: New version ▸ Deploy**.
+
+The new expedition opens at the same web address with its own ending, for example `?page=workshop`.
 
 ## What is saved
 
