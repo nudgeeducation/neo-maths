@@ -84,6 +84,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Inequalities/Lesson_02_Solving_Linear_Inequalities/NEO_Maths_Y9_Inequalities_Lesson_02_Solving_Linear_Inequalities_v0.1.html",
     "ineq-03-solutions-on-a-number-line":
         "02_Foundations/01_Lessons/Inequalities/Lesson_03_Showing_Solutions_on_a_Number_Line/NEO_Maths_Y9_Inequalities_Lesson_03_Showing_Solutions_on_a_Number_Line_v0.1.html",
+    "ineq-04-regions-on-a-graph":
+        "02_Foundations/01_Lessons/Inequalities/Lesson_04_Inequalities_as_Regions/NEO_Maths_Y9_Inequalities_Lesson_04_Inequalities_as_Regions_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
@@ -196,6 +198,8 @@ CHROME_STYLE = """
   .neo-chrome-footer a:hover { text-decoration: underline; }
   .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
   .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
   /* --- Comfort & Access --- */
   .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
   .neo-comfort-btn:hover{filter:brightness(1.06)}

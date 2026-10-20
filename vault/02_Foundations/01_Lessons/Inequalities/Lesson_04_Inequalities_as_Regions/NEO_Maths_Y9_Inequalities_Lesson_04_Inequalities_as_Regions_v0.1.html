@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Inequalities as regions on a graph</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Inequalities</h1>
+<h2>Inequalities as regions on a graph</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Where do all the allowed points live?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — the last lesson of the unit. A number line becomes a whole flat plane, and a solution set becomes a <b>region</b>.</p>
+<p><b>Stepping Stone:</b> represent and identify <b>regions</b> on a graph defined by simple linear inequalities such as <span class="uk">x</span> &gt; 2, <span class="uk">y</span> ≤ 3 and <span class="uk">x</span> + <span class="uk">y</span> &lt; 5; draw the boundary <b>dashed</b> when it is excluded and <b>solid</b> when it is included; and find the <b>whole-number points</b> in a region.</p>
+<p><b>You will need:</b> plotting coordinates in all four quadrants, and open and filled circles from Lesson 3 — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 6 · Move 8 · Reflect 16 · Create 10 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Inequalities_Lesson_04_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Inequalities_Lesson_04_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Mark five points with x &gt; 2 and five points without. Where could you draw a line between them?')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — From a line to a plane</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">On a number line, <span class="uk">x</span> &gt; 2 is a <b>ray</b>: an open circle at 2 and an arrow to the right. On a graph there is a second coordinate, <span class="uk">y</span>, and the rule says nothing about it. So the ray can sit at <b>every</b> height — and all those rays together fill a whole <b>region</b>.</p>
+</div>
+<p><b>What to do:</b> move the slider to choose a height. At each height, the ray for the rule is drawn and stays. Try several heights, then press <b>Fill in every height</b>. Then try the second rule.</p>
+<p><b>What you are trying to notice:</b> the open circles line up into a <b>dashed line</b>, and filled circles line up into a <b>solid line</b>. The boundary of a region keeps the same meaning as the circle: dashed for "not included", solid for "included".</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🟩 Sweep the ray</h3>
+<div class="buttonrow" style="justify-content:center" id="cnRules"></div>
+<div class="card" style="text-align:center"><svg id="cnSvg" class="graphsvg" style="max-width:420px" viewBox="0 0 444 444" role="img" aria-label="Coordinate grid showing the rule's rays at the heights you have chosen"></svg></div>
+<div class="buttonrow" style="justify-content:center"><label for="cnS" id="cnSl"><b></b></label><input id="cnS" type="range" min="-5" max="5" step="1" value="0" oninput="cnSlide(this.value)" style="width:220px"><span id="cnSv" class="bignum" style="min-width:2.5em"></span></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="cnFill()">Fill in every height</button><button onclick="cnSet(cn.i)">↺ Start again</button></div>
+<div id="cnRead" class="feedback" aria-live="polite"></div>
+<p><b>Carry this forward:</b> a rule about <span class="uk">x</span> alone gives a region beside a <b>vertical</b> line; a rule about <span class="uk">y</span> alone gives a region above or below a <b>horizontal</b> line.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — The wandering point</summary>
+<p><b>What to do:</b> drag the point around the grid (or use the arrow buttons). The table shows, for wherever the point is, whether it obeys each of three rules. Then take on the challenges one at a time.</p>
+<p><b>What you are trying to notice:</b> as the point crosses a boundary line, one tick turns into a cross. The <b>allowed region</b> is the place where every rule shows a tick.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">📍 Move the point</h3>
+<div id="wpTask" class="clue" style="font-size:1.1em"></div>
+<div class="card" style="text-align:center"><svg id="wpSvg" class="graphsvg" style="max-width:420px;touch-action:none" viewBox="0 0 444 444" role="img" aria-label="Coordinate grid with a point you can drag"></svg></div>
+<div class="buttonrow" style="justify-content:center">
+<button onclick="wpStep(-1,0)" aria-label="Move left">←</button><button onclick="wpStep(0,1)" aria-label="Move up">↑</button><button onclick="wpStep(0,-1)" aria-label="Move down">↓</button><button onclick="wpStep(1,0)" aria-label="Move right">→</button>
+<span id="wpAt" class="bignum" style="min-width:5em"></span>
+</div>
+<div id="wpTable" class="card"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wpCheck()">✅ Check this point</button><button id="wpShowBtn" onclick="wpToggle()">Show the region</button></div>
+<div id="wpRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wpNext()">Next challenge →</button></div>
+<p><b>Carry this forward:</b> a point is in the region only if it obeys <b>every</b> rule. On a boundary, check whether the line itself is included.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION (hero) ================= -->
+<details class="es">
+<summary>🪞 Reflection — Allowed points</summary>
+<p><b>What to do:</b> tap whole-number points on the grid to <b>test</b> them against the rule. A point that obeys turns green; one that does not turns grey. When you have tested at least six, press <b>Show every point</b>. Then decide where the boundary line goes, and whether it is <b>dashed</b> or <b>solid</b>.</p>
+<p><b>What you are trying to notice:</b> the green points are not scattered — they sit on one side of a straight line. Finding that line, and deciding whether points <em>on</em> it are allowed, is how you draw the whole region.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🎯 Test, then find the boundary</h3>
+<div id="apTask" class="bignum" style="font-size:1.3em"></div>
+<div class="card" style="text-align:center"><svg id="apSvg" class="graphsvg" style="max-width:440px" viewBox="0 0 444 444" role="img" aria-label="Coordinate grid of whole-number points: tap a point to test it"></svg></div>
+<div id="apTest" class="readout" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button id="apShowBtn" onclick="apShow()">Show every point</button></div>
+<div id="apStep" class="card" style="display:none"></div>
+<div id="apRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="apReset()">↺ Start this one again</button><button onclick="apNext()">Next rule →</button></div>
+<p><b>Carry this forward:</b> to draw a region, draw the boundary line (dashed or solid), then test one point to see which side is allowed.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The region builder</summary>
+<p><b>What to do:</b> build up to four rules from parts, and watch the allowed region appear where they overlap. Each challenge asks you to trap a particular set of points. There is usually more than one way.</p>
+<p><b>What you are trying to notice:</b> each rule cuts the plane along a line, and every rule you add can only make the region <b>smaller</b>. Choosing the cuts is a design decision.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧱 Build the region</h3>
+<div id="rbTask" class="clue" style="font-size:1.1em"></div>
+<div class="buttonrow" style="justify-content:center">
+<select id="rbVar" aria-label="Left side"><option value="x">x</option><option value="y">y</option><option value="xy">x + y</option></select>
+<select id="rbRel" aria-label="Symbol"><option>&lt;</option><option>≤</option><option>&gt;</option><option>≥</option></select>
+<input id="rbNum" class="numin" value="0" aria-label="Number">
+<button onclick="rbAdd()">Add rule</button>
+</div>
+<div id="rbList" class="buttonrow" style="justify-content:center"></div>
+<div class="card" style="text-align:center"><svg id="rbSvg" class="graphsvg" style="max-width:440px" viewBox="0 0 444 444" role="img" aria-label="Coordinate grid showing the region allowed by your rules"></svg></div>
+<div id="rbSays" class="readout" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rbCheck()">✅ Check my region</button><button onclick="rbClear()">Clear rules</button></div>
+<div id="rbRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rbNext()">Next challenge →</button></div>
+</div>
+<div class="card" style="border:2px solid #b9a2cf;background:#f7f2fb">
+<h3 style="margin-top:0">✨ Make your own <span class="stretch">stretch</span></h3>
+<p>Design a map: a park, a car park or a games board on a grid, where something is only allowed in one area (a dog-walking zone, the area a sprinkler reaches, where a piece may move). Write the rules that describe the area, build them in the region builder, and list the whole-number points that are allowed.</p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to close the unit</summary>
+<p>This unit began with a single question: when the answer isn't a single number, how do we describe all the numbers that work? You have answered it four ways — with symbols, by solving, on a number line, and now as a region. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> picture an open circle stretching upwards into a dashed line, and an arrow spreading out into a shaded region. The same idea, grown into a bigger space.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds the habit of <b>noticing when an old idea grows</b>. Open and filled circles became dashed and solid lines; overlapping number lines became overlapping regions. Mathematics often works like this — a small idea, understood well, carries into places you have not been yet. The same thinking is used to plan where a delivery van can reach, or which mix of two products a business can afford to make.</p>
+<p class="small">Carry one idea forward: when something new feels unfamiliar, ask which old idea it might be wearing.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Map the allowed region</summary>
+<p><b>Your task:</b> show that you can draw, read and explain regions on a graph.</p>
+<ul>
+<li>On a coordinate grid from −5 to 5, draw the region where <b><span class="uk">x</span> ≥ −2</b>, <b><span class="uk">y</span> &lt; 3</b> and <b><span class="uk">x</span> + <span class="uk">y</span> ≤ 4</b> are all true. Draw each boundary <b>dashed</b> or <b>solid</b>, and shade the region.</li>
+<li>Mark and list every whole-number point in the region that has <b>both coordinates positive</b>.</li>
+<li>Choose one point on each boundary line and say whether it is in the region, and why.</li>
+<li>Explain how dashed and solid lines connect to open and filled circles on a number line.</li>
+<li><span class="stretch">stretch</span> Design a map with an allowed area, write its rules, and explain what the whole-number points mean in your situation.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_INEQ_REGIONS_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows a rule picks out some points on a grid.</td><td>Knows a rule about <span class="uk">x</span> alone gives a region beside a vertical line.</td><td>Explains dashed and solid boundaries by testing points on the line.</td><td>Explains a region as a number-line set swept across the plane.</td></tr>
+<tr><td><b>Application</b></td><td>Tests whether a point obeys one rule.</td><td>Draws one region with the correct boundary.</td><td>Draws the three-rule region accurately, with correct line styles.</td><td>Draws the region and finds every required whole-number point.</td></tr>
+<tr><td><b>Communication</b></td><td>Labels the boundary lines.</td><td>Shades and labels the region clearly.</td><td>Explains each boundary decision in words.</td><td>Explains the region so another learner could draw it from the description.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one point.</td><td>Checks a point inside the region against every rule.</td><td>Checks points on each boundary as well.</td><td>Connects regions to the rest of the unit — symbols, solving and number lines.</td></tr>
+</table>
+<p class="small">This is the last lesson of the unit. A short end-of-unit assessment follows.</p>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Inequalities as regions on a graph — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type inequalities like <b>y &lt; 3</b>, and points like <b>(2, 1)</b>. You can use the palette, or write &lt;= for ≤ and &gt;= for ≥.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Draw the boundary line first. Dashed or solid? Then test one point to choose the side.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["x","y","<",">","\u2264","\u2265","\u2212","(",")",","];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Shared coordinate-plane drawing ---------------- */
+// Grid from −5 to 5; the drawing box runs to ±5.5. A rule is {a,b,rel,c}: a·x + b·y rel c.
+var PL={o:222,s:36,m:5.5};
+function px(x){ return PL.o+x*PL.s; } function py(y){ return PL.o-y*PL.s; }
+var XU='<span class="uk">x</span>', YU='<span class="uk">y</span>';
+function nfix(v){ return Math.round(v*1e6)/1e6; }
+function relHtml(r){ return r==='<'?'&lt;':r==='>'?'&gt;':r; }
+function relTrue(r,L,R){ return r==='<'?L<R-1e-9:r==='>'?L>R+1e-9:r==='≤'?L<=R+1e-9:L>=R-1e-9; }
+function lhs(r,html){ var x=html?XU:'x', y=html?YU:'y'; return r.a&&r.b?x+' + '+y:r.a?x:y; }
+function ruleHtml(r){ return lhs(r,true)+' '+relHtml(r.rel)+' '+fmt(r.c); }
+function rulePlain(r){ return lhs(r,false)+' '+r.rel+' '+fmt(r.c); }
+function lineHtml(r){ return lhs(r,true)+' = '+fmt(r.c); }
+function obeys(r,x,y){ return relTrue(r.rel,r.a*x+r.b*y,r.c); }
+function obeysAll(rs,x,y){ return rs.every(function(r){return obeys(r,x,y);}); }
+function inclusive(r){ return r.rel==='≤'||r.rel==='≥'; }
+function testLine(r,x,y){ var v=r.a*x+r.b*y; return (r.a&&r.b?fmt(x)+' + '+fmt(y)+' = '+fmt(v)+', and ':'')+fmt(v)+' '+relHtml(r.rel)+' '+fmt(r.c)+' '+(obeys(r,x,y)?'✓':'✗'); }
+function sameRule(a,b){
+  if(!a||!b) return false;
+  var eq=function(p,q){ return (p==null&&q==null)||(p!=null&&q!=null&&Math.abs(p-q)<1e-9); };
+  return eq(a.lo,b.lo)&&eq(a.hi,b.hi)&&(a.lo==null||!!a.loInc===!!b.loInc)&&(a.hi==null||!!a.hiInc===!!b.hiInc);
+}
+function pt(x,y){ return '('+fmt(x)+', '+fmt(y)+')'; }
+// The axes, light grid lines and labels.
+function planeGrid(){
+  var h='', m=PL.m, k;
+  for(k=-5;k<=5;k++){ h+='<line x1="'+px(k)+'" y1="'+py(m)+'" x2="'+px(k)+'" y2="'+py(-m)+'" stroke="#e2d9c8" stroke-width="1"/><line x1="'+px(-m)+'" y1="'+py(k)+'" x2="'+px(m)+'" y2="'+py(k)+'" stroke="#e2d9c8" stroke-width="1"/>'; }
+  h+='<line x1="'+px(-m)+'" y1="'+py(0)+'" x2="'+px(m)+'" y2="'+py(0)+'" stroke="#2f3429" stroke-width="1.6"/><line x1="'+px(0)+'" y1="'+py(m)+'" x2="'+px(0)+'" y2="'+py(-m)+'" stroke="#2f3429" stroke-width="1.6"/>';
+  h+=planeLabels();
+  return h;
+}
+function planeLabels(){
+  var h='', m=PL.m, k;
+  for(k=-5;k<=5;k++){ if(!k) continue;
+    var halo=' stroke="#fbf7ef" stroke-width="3" paint-order="stroke" pointer-events="none"';
+    h+='<text x="'+(px(k)+9)+'" y="'+(py(0)+18)+'" text-anchor="middle" font-family="Arial" font-size="11" fill="#5c6b4f"'+halo+'>'+fmt(k)+'</text>';
+    h+='<text x="'+(px(0)-9)+'" y="'+(py(k)-6)+'" text-anchor="end" font-family="Arial" font-size="11" fill="#5c6b4f"'+halo+'>'+fmt(k)+'</text>'; }
+  h+='<text x="'+(px(0)-7)+'" y="'+(py(0)+16)+'" text-anchor="end" font-family="Arial" font-size="11" fill="#5c6b4f" stroke="#fbf7ef" stroke-width="3" paint-order="stroke" pointer-events="none">O</text>';
+  h+='<text x="'+(px(m)-4)+'" y="'+(py(0)-6)+'" text-anchor="end" font-family="Georgia" font-style="italic" font-size="15" fill="#2f3429">x</text><text x="'+(px(0)+8)+'" y="'+(py(m)+14)+'" font-family="Georgia" font-style="italic" font-size="15" fill="#2f3429">y</text>';
+  return h;
+}
+// Clip the drawing box by each rule's half-plane (Sutherland–Hodgman) to get the region polygon.
+function regionPoly(rs){
+  var m=PL.m, poly=[[-m,-m],[m,-m],[m,m],[-m,m]];
+  rs.forEach(function(r){
+    var f=function(p){ var v=r.a*p[0]+r.b*p[1]-r.c; return (r.rel==='<'||r.rel==='≤')?-v:v; }, out=[];
+    for(var i=0;i<poly.length;i++){ var P=poly[i], Q=poly[(i+1)%poly.length], fp=f(P), fq=f(Q);
+      if(fp>=0) out.push(P);
+      if((fp>=0)!==(fq>=0)){ var t=fp/(fp-fq); out.push([P[0]+t*(Q[0]-P[0]),P[1]+t*(Q[1]-P[1])]); } }
+    poly=out; });
+  return poly;
+}
+function regionSvg(rs,col){ var p=regionPoly(rs); if(p.length<3) return '';
+  return '<path d="M'+p.map(function(q){return px(q[0])+' '+py(q[1]);}).join(' L')+' Z" fill="'+(col||'#3f5f45')+'" fill-opacity=".2"/>'; }
+// The boundary line of a rule, clipped to the box, dashed when the line is excluded.
+function boundarySvg(r,col,style){
+  var m=PL.m, pts=[], add=function(x,y){ if(Math.abs(x)<=m+1e-9&&Math.abs(y)<=m+1e-9&&!pts.some(function(q){return Math.abs(q[0]-x)<1e-6&&Math.abs(q[1]-y)<1e-6;})) pts.push([x,y]); };
+  [-m,m].forEach(function(X){ if(r.b) add(X,(r.c-r.a*X)/r.b); });
+  [-m,m].forEach(function(Y){ if(r.a) add((r.c-r.b*Y)/r.a,Y); });
+  if(pts.length<2) return '';
+  var dashed=style==null?!inclusive(r):style==='dashed';
+  return '<line x1="'+px(pts[0][0])+'" y1="'+py(pts[0][1])+'" x2="'+px(pts[1][0])+'" y2="'+py(pts[1][1])+'" stroke="'+(col||'#3f5f45')+'" stroke-width="3"'+(dashed?' stroke-dasharray="9 7"':'')+'/>';
+}
+function planeSvg(rs,opt){ opt=opt||{}; return '<svg class="graphsvg" style="max-width:'+(opt.w||300)+'px" viewBox="0 0 444 444" role="img" aria-label="Coordinate grid with a shaded region">'+planeGrid()+regionSvg(rs)+rs.map(function(r){return boundarySvg(r);}).join('')+'</svg>'; }
+function intPoints(rs){ var out=[]; for(var y=5;y>=-5;y--) for(var x=-5;x<=5;x++) if(obeysAll(rs,x,y)) out.push([x,y]); return out; }
+// A whole-number point on a rule's line inside the grid (for "is the line itself included?").
+function pointOn(r){ var best=null; for(var x=-5;x<=5;x++) for(var y=-5;y<=5;y++) if(Math.abs(r.a*x+r.b*y-r.c)<1e-9&&(!best||Math.abs(x)+Math.abs(y)<Math.abs(best[0])+Math.abs(best[1]))) best=[x,y]; return best||[0,0]; }
+
+/* ---------------- CONNECTION: from a line to a plane ---------------- */
+var CN=[{a:1,b:0,rel:'>',c:2},{a:0,b:1,rel:'≤',c:1}];
+var cn={i:0,traced:{},filled:false,at:0};
+function cnRay(r,t){
+  var h='', col='#365a68';
+  if(r.a){ var y=t, x0=px(r.c), y0=py(y), up=r.rel==='>'||r.rel==='≥';
+    h+='<line x1="'+x0+'" y1="'+y0+'" x2="'+(up?px(5.5)-6:px(-5.5)+6)+'" y2="'+y0+'" stroke="'+col+'" stroke-width="4"/>';
+    h+=up?'<path d="M'+(px(5.5)+2)+' '+y0+' l-10 -6 v12 z" fill="'+col+'"/>':'<path d="M'+(px(-5.5)-2)+' '+y0+' l10 -6 v12 z" fill="'+col+'"/>';
+    h+='<circle cx="'+x0+'" cy="'+y0+'" r="6" fill="'+(inclusive(r)?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="2.5"/>'; }
+  else { var x=t, xx=px(x), yy=py(r.c), upy=r.rel==='>'||r.rel==='≥';
+    h+='<line x1="'+xx+'" y1="'+yy+'" x2="'+xx+'" y2="'+(upy?py(5.5)+6:py(-5.5)-6)+'" stroke="'+col+'" stroke-width="4"/>';
+    h+=upy?'<path d="M'+xx+' '+(py(5.5)-2)+' l-6 10 h12 z" fill="'+col+'"/>':'<path d="M'+xx+' '+(py(-5.5)+2)+' l-6 -10 h12 z" fill="'+col+'"/>';
+    h+='<circle cx="'+xx+'" cy="'+yy+'" r="6" fill="'+(inclusive(r)?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="2.5"/>'; }
+  return h;
+}
+function cnDraw(){
+  var r=CN[cn.i], h=planeGrid();
+  if(cn.filled) h+=regionSvg([r])+boundarySvg(r);
+  Object.keys(cn.traced).forEach(function(t){ h+=cnRay(r,+t); });
+  if(!cn.filled){ h+='<g opacity=".45">'+cnRay(r,cn.at)+'</g>'; }
+  document.getElementById('cnSvg').innerHTML=h;
+  document.getElementById('cnRules').innerHTML=CN.map(function(q,i){return '<button class="chip'+(i===cn.i?' active':'')+'" onclick="cnSet('+i+')">'+ruleHtml(q)+'</button>';}).join('');
+  document.getElementById('cnSl').innerHTML='<b>'+(r.a?'Height '+YU:'Across '+XU)+' =</b>';
+  document.getElementById('cnSv').textContent=fmt(cn.at);
+}
+function cnMsg(cls,html){ var fb=document.getElementById('cnRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function cnSlide(v){
+  var r=CN[cn.i]; cn.at=Math.round(signedNum(v)); cn.traced[cn.at]=true; cnDraw();
+  var n=Object.keys(cn.traced).length;
+  cnMsg('good',(r.a?'At height '+YU+' = '+fmt(cn.at)+', the points with '+ruleHtml(r)+' form a ray.':'At '+XU+' = '+fmt(cn.at)+', the points with '+ruleHtml(r)+' form a ray going '+(r.rel==='<'||r.rel==='≤'?'down':'up')+'.')
+    +' The rule says nothing about '+(r.a?YU:XU)+', so the same ray appears at every '+(r.a?'height':'position')+'. ('+n+' of 11 so far.)');
+}
+function cnFill(){
+  var r=CN[cn.i]; cn.filled=true; for(var t=-5;t<=5;t++) cn.traced[t]=true; cnDraw();
+  cnMsg('good','All the rays together fill a region. The '+(inclusive(r)?'filled':'open')+' circles line up into a <b>'+(inclusive(r)?'solid':'dashed')+'</b> line, '+lineHtml(r)+', because points on it '+(inclusive(r)?'<b>are</b>':'are <b>not</b>')+' included.');
+}
+function cnSet(i){ cn.i=i; cn.traced={}; cn.filled=false; cn.at=0; document.getElementById('cnS').value=0; document.getElementById('cnRead').style.display='none'; cnDraw(); }
+function cnInit(){ cnSet(0); }
+
+/* ---------------- MOVEMENT: the wandering point ---------------- */
+var WP_RULES=[{a:1,b:0,rel:'≥',c:-1},{a:0,b:1,rel:'<',c:3},{a:1,b:1,rel:'≤',c:4}];
+var WP=[
+ {say:'Find a point that obeys <b>all three</b> rules.',ok:function(x,y){ return obeysAll(WP_RULES,x,y); },
+  no:'At least one rule shows a cross. Move the point until all three show a tick.'},
+ {say:'Find a point that obeys <b>exactly two</b> of the rules.',ok:function(x,y){ return WP_RULES.filter(function(r){return obeys(r,x,y);}).length===2; },
+  no:'Count the ticks: you need exactly two. Try stepping across just one boundary.'},
+ {say:'Find a point that obeys all three rules, where <b>one step to the right</b> would break a rule.',ok:function(x,y){ return obeysAll(WP_RULES,x,y)&&!obeysAll(WP_RULES,x+1,y); },
+  no:'Either a rule is broken here, or one step right is still allowed. Move right until the next step would cross a boundary.'},
+ {say:'Find a point that obeys all three rules with the <b>greatest possible '+YU+'</b>.',ok:function(x,y){ return obeysAll(WP_RULES,x,y)&&y===2; },
+  no:'Can you go higher and still keep every tick? Remember '+YU+' &lt; 3 leaves 3 out.'}
+];
+var wp={i:0,x:0,y:0,show:false,drag:false};
+function wpDraw(){
+  var h=planeGrid();
+  if(wp.show) h+=regionSvg(WP_RULES)+WP_RULES.map(function(r){return boundarySvg(r);}).join('');
+  var all=obeysAll(WP_RULES,wp.x,wp.y);
+  h+='<circle cx="'+px(wp.x)+'" cy="'+py(wp.y)+'" r="11" fill="'+(all?'#3f5f45':'#b0412f')+'" stroke="#fff" stroke-width="3" style="cursor:grab"/>';
+  document.getElementById('wpSvg').innerHTML=h;
+  document.getElementById('wpAt').textContent=pt(wp.x,wp.y);
+  document.getElementById('wpTask').innerHTML=(wp.i+1)+' of '+WP.length+' · '+WP[wp.i].say;
+  document.getElementById('wpTable').innerHTML='<table><tr><th>Rule</th><th>At '+pt(wp.x,wp.y)+'</th></tr>'+WP_RULES.map(function(r){return '<tr><td>'+ruleHtml(r)+'</td><td>'+testLine(r,wp.x,wp.y)+'</td></tr>';}).join('')+'</table>';
+  document.getElementById('wpShowBtn').textContent=wp.show?'Hide the region':'Show the region';
+}
+function wpMove(x,y){ wp.x=Math.max(-5,Math.min(5,Math.round(x))); wp.y=Math.max(-5,Math.min(5,Math.round(y))); document.getElementById('wpRead').style.display='none'; wpDraw(); }
+function wpStep(dx,dy){ wpMove(wp.x+dx,wp.y+dy); }
+function wpToggle(){ wp.show=!wp.show; wpDraw(); }
+function wpCheck(){ var c=WP[wp.i], fb=document.getElementById('wpRead'); fb.style.display='block';
+  if(c.ok(wp.x,wp.y)){ fb.className='feedback good'; fb.innerHTML='Yes — '+pt(wp.x,wp.y)+' works.'+(wp.i===3?' Every allowed point with '+YU+' = 2 is on the top edge of the region, just below the dashed line '+YU+' = 3.':''); }
+  else { fb.className='feedback warn'; fb.innerHTML=c.no; } }
+function wpNext(){ wp.i=(wp.i+1)%WP.length; document.getElementById('wpRead').style.display='none'; wpDraw(); }
+function wpPointer(e){
+  var svg=document.getElementById('wpSvg'), b=svg.getBoundingClientRect(); if(!b.width) return;
+  var sx=(e.clientX-b.left)*444/b.width, sy=(e.clientY-b.top)*444/b.height;
+  wpMove((sx-PL.o)/PL.s,(PL.o-sy)/PL.s);
+}
+function wpInit(){
+  var svg=document.getElementById('wpSvg');
+  svg.addEventListener('pointerdown',function(e){ wp.drag=true; if(svg.setPointerCapture) try{svg.setPointerCapture(e.pointerId);}catch(_){} wpPointer(e); });
+  svg.addEventListener('pointermove',function(e){ if(wp.drag) wpPointer(e); });
+  svg.addEventListener('pointerup',function(){ wp.drag=false; });
+  svg.addEventListener('pointercancel',function(){ wp.drag=false; });
+  wpDraw();
+}
+
+/* ---------------- REFLECTION (hero): allowed points ---------------- */
+// Each rule lists three candidate boundary lines; the first in "lines" is the right one, shown in the order given by "order".
+var AP=[
+ {rules:[{a:1,b:0,rel:'>',c:2}],lines:[[{a:1,b:0,c:2},{a:0,b:1,c:2},{a:1,b:0,c:3}]],order:[0,1,2]},
+ {rules:[{a:0,b:1,rel:'≤',c:1}],lines:[[{a:0,b:1,c:1},{a:1,b:0,c:1},{a:0,b:1,c:2}]],order:[1,0,2]},
+ {rules:[{a:1,b:1,rel:'<',c:5}],lines:[[{a:1,b:1,c:5},{a:1,b:0,c:5},{a:0,b:1,c:5}]],order:[1,0,2]},
+ {rules:[{a:1,b:0,rel:'≥',c:-1},{a:0,b:1,rel:'<',c:2}],lines:[[{a:1,b:0,c:-1},{a:0,b:1,c:-1},{a:1,b:0,c:1}],[{a:0,b:1,c:2},{a:1,b:0,c:2},{a:0,b:1,c:1}]],order:[0,1,2]},
+ {rules:[{a:1,b:0,rel:'>',c:0},{a:0,b:1,rel:'>',c:0},{a:1,b:1,rel:'≤',c:4}],lines:[[{a:1,b:0,c:0},{a:0,b:1,c:0},{a:1,b:1,c:0}],[{a:0,b:1,c:0},{a:1,b:0,c:0},{a:1,b:0,c:4}],[{a:1,b:1,c:4},{a:1,b:0,c:4},{a:0,b:1,c:4}]],order:[2,0,1],count:6,stretch:true}
+];
+var ap={i:0,tested:{},shown:false,step:'test',r:0,done:[]};
+function apKey(x,y){ return x+','+y; }
+function apDraw(){
+  var t=AP[ap.i], rs=t.rules, h=planeGrid();
+  if(ap.step==='count'||ap.step==='done') h+=regionSvg(rs);
+  ap.done.forEach(function(k){ h+=boundarySvg(rs[k]); });
+  for(var y=-5;y<=5;y++) for(var x=-5;x<=5;x++){
+    var key=apKey(x,y), seen=ap.shown||ap.tested[key], ok=obeysAll(rs,x,y);
+    if(seen) h+=ok?'<circle cx="'+px(x)+'" cy="'+py(y)+'" r="6" fill="#3f8f55"/>':'<circle cx="'+px(x)+'" cy="'+py(y)+'" r="5" fill="#fbf7ef" stroke="#a89a82" stroke-width="2"/>';
+    else h+='<circle cx="'+px(x)+'" cy="'+py(y)+'" r="2.5" fill="#8c9cab"/>';
+    if(ap.tested[key]&&!ap.shown) h+='<circle cx="'+px(x)+'" cy="'+py(y)+'" r="10" fill="none" stroke="#365a68" stroke-width="1.5"/>';
+    h+='<circle cx="'+px(x)+'" cy="'+py(y)+'" r="16" fill="transparent" style="cursor:pointer" onclick="apTap('+x+','+y+')"/>';
+  }
+  h+=planeLabels();
+  document.getElementById('apSvg').innerHTML=h;
+  document.getElementById('apTask').innerHTML=(t.stretch?'<span class="stretch">stretch</span> ':'')+'Rule'+(rs.length>1?'s':'')+': '+rs.map(ruleHtml).join(' &nbsp;and&nbsp; ');
+  var n=Object.keys(ap.tested).length, b=document.getElementById('apShowBtn');
+  b.disabled=ap.shown; b.style.opacity=ap.shown?'.5':'1';
+}
+function apMsg(cls,html){ var fb=document.getElementById('apRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function apTap(x,y){
+  var rs=AP[ap.i].rules; ap.tested[apKey(x,y)]=true; apDraw();
+  document.getElementById('apTest').innerHTML='<b>'+pt(x,y)+'</b>: '+rs.map(function(r){return ruleHtml(r)+' → '+testLine(r,x,y);}).join(' &nbsp;·&nbsp; ')+' &nbsp;<b>'+(obeysAll(rs,x,y)?'Allowed':'Not allowed')+'</b>'+(ap.shown?'':' &nbsp;<span class="small">('+Object.keys(ap.tested).length+' tested)</span>');
+}
+function apShow(){
+  var rs=AP[ap.i].rules, keys=Object.keys(ap.tested), yes=keys.filter(function(k){var p=k.split(',');return obeysAll(rs,+p[0],+p[1]);}).length;
+  if(keys.length<6){ apMsg('warn','Test at least six points first — you have tested '+keys.length+'. Try some in different parts of the grid.'); return; }
+  if(!yes||yes===keys.length){ apMsg('warn','So far every point you tested is '+(yes?'allowed':'not allowed')+'. Test a few in a different part of the grid, to find some of the other kind.'); return; }
+  ap.shown=true; ap.step='line'; ap.r=0; apDraw();
+  apMsg('good','Here is every whole-number point. Look at where the green points stop and the grey points start.');
+  apStepRender();
+}
+function apStepRender(){
+  var t=AP[ap.i], el=document.getElementById('apStep'); el.style.display='block';
+  var lab=t.rules.length>1?' for <b>'+ruleHtml(t.rules[ap.r])+'</b>':'';
+  if(ap.step==='line') el.innerHTML='<p><b>Which line is the boundary'+lab+'?</b></p><div class="buttonrow">'+t.order.map(function(j){return '<button class="chip" onclick="apLine('+j+')">'+lineHtml(t.lines[ap.r][j])+'</button>';}).join('')+'</div>';
+  else if(ap.step==='style') el.innerHTML='<p><b>Are the points <em>on</em> the line '+lineHtml(t.lines[ap.r][0])+' allowed? So should the line be dashed or solid?</b></p><div class="buttonrow"><button class="chip" onclick="apStyle(\'dashed\')">Dashed — points on it are not allowed</button><button class="chip" onclick="apStyle(\'solid\')">Solid — points on it are allowed</button></div>';
+  else if(ap.step==='count') el.innerHTML='<p><b>How many whole-number points are inside the region?</b></p><div class="buttonrow"><input id="apCount" class="numin" aria-label="Number of points"><button onclick="apCountCheck()">Check</button></div>';
+  else el.innerHTML='<p><b>Region drawn.</b> '+(t.rules.length>1?'The region is where every rule is obeyed: the overlap.':'Every green point is on the shaded side.')+' Press <b>Next rule</b> when you are ready.</p>';
+}
+function apLine(j){
+  var t=AP[ap.i], r=t.rules[ap.r], L=t.lines[ap.r][j];
+  if(j===0){ ap.step='style'; apStepRender(); apMsg('good','Yes — the green points stop at '+lineHtml(L)+'.'); return; }
+  var wrongWay=(L.a&&!r.a)||(L.b&&!r.b)||(!L.a&&r.a)||(!L.b&&r.b);
+  apMsg('warn',wrongWay?'Look at the shape of the boundary: is it '+(r.a&&!r.b?'<b>vertical</b> (up and down)':r.b&&!r.a?'<b>horizontal</b> (across)':'<b>sloping</b>')+'? The line '+lineHtml(L)+' is '+(L.a&&!L.b?'vertical':L.b&&!L.a?'horizontal':'sloping')+'.':'Nearly. Check a point on '+lineHtml(L)+': is it green or grey? The boundary is where the colours change.');
+}
+function apStyle(s){
+  var t=AP[ap.i], r=t.rules[ap.r], want=inclusive(r)?'solid':'dashed', p=pointOn(r);
+  var why='Test a point on the line, such as '+pt(p[0],p[1])+': '+testLine(r,p[0],p[1])+'.';
+  if(s!==want){ apMsg('warn',why+' So points on the line '+(inclusive(r)?'<b>are</b>':'are <b>not</b>')+' allowed.'); return; }
+  ap.done.push(ap.r);
+  apMsg('good','Yes. '+why+' '+(inclusive(r)?'A solid line, like a filled circle.':'A dashed line, like an open circle.'));
+  if(ap.r<t.rules.length-1){ ap.r++; ap.step='line'; } else ap.step=t.count?'count':'done';
+  apDraw(); apStepRender();
+}
+function apCountCheck(){
+  var t=AP[ap.i], v=signedNum(document.getElementById('apCount').value);
+  if(!isNaN(v)&&v===t.count){ ap.step='done'; apDraw(); apStepRender(); apMsg('good','Yes — 6 points: (1, 1), (1, 2), (1, 3), (2, 1), (2, 2) and (3, 1). The points on the axes are left out by the dashed lines; (1, 3), (2, 2) and (3, 1) sit on the solid line and are included.'); }
+  else apMsg('warn','Count the green points carefully, row by row. Are points on the axes allowed? Are points on the line '+lineHtml(t.rules[2])+' allowed?');
+}
+function apReset(){ ap.tested={}; ap.shown=false; ap.step='test'; ap.r=0; ap.done=[]; document.getElementById('apStep').style.display='none'; document.getElementById('apRead').style.display='none'; document.getElementById('apTest').innerHTML='Tap any point to test it.'; apDraw(); }
+function apNext(){ ap.i=(ap.i+1)%AP.length; apReset(); }
+function apInit(){ apReset(); }
+
+/* ---------------- CREATIVITY: the region builder ---------------- */
+var RB=[
+ {say:'Trap exactly the 15 whole-number points with '+XU+' = 1, 2 or 3 and '+YU+' = −2, −1, 0, 1 or 2.',set:function(x,y){ return x>=1&&x<=3&&y>=-2&&y<=2; }},
+ {say:'Trap exactly the 10 whole-number points with '+XU+' ≥ 0, '+YU+' ≥ 0 and '+XU+' + '+YU+' ≤ 3 — <b>without using ≥ or ≤ anywhere</b>.',set:function(x,y){ return x>=0&&y>=0&&x+y<=3; },strict:true},
+ {say:'Make a region that contains <b>(2, 1)</b> but not <b>(−1, 1)</b> and not <b>(2, 4)</b>.',pts:{yes:[[2,1]],no:[[-1,1],[2,4]]}},
+ {say:'Free design: make a region holding <b>exactly 4</b> whole-number points, all well inside the grid.',four:true}
+];
+var rb={i:0,rules:[]};
+function rbDraw(){
+  var h=planeGrid(), rs=rb.rules, cols=['#365a68','#b0412f','#6a4f8a','#a0702a'];
+  if(rs.length) h+=regionSvg(rs);
+  rs.forEach(function(r,k){ h+=boundarySvg(r,cols[k]); });
+  if(rs.length) intPoints(rs).forEach(function(p){ h+='<circle cx="'+px(p[0])+'" cy="'+py(p[1])+'" r="4" fill="#3f8f55"/>'; });
+  document.getElementById('rbSvg').innerHTML=h;
+  document.getElementById('rbTask').innerHTML=(rb.i+1)+' of '+RB.length+' · '+RB[rb.i].say;
+  document.getElementById('rbList').innerHTML=rs.length?rs.map(function(r,k){return '<span class="chip" style="border-color:'+cols[k]+'">'+ruleHtml(r)+' <button onclick="rbRemove('+k+')" aria-label="Remove rule" style="padding:0 6px;margin-left:4px">×</button></span>';}).join(''):'<span class="small">No rules yet — the whole grid is allowed.</span>';
+  var ip=rs.length?intPoints(rs):[];
+  document.getElementById('rbSays').innerHTML=!rs.length?'Add a rule to start cutting the plane.':
+    '<b>Your region:</b> '+rs.map(ruleHtml).join(' and ')+' &nbsp;·&nbsp; whole-number points in the grid: <b>'+ip.length+'</b>'+(ip.length&&ip.length<=12?' — '+ip.map(function(p){return pt(p[0],p[1]);}).join(', '):'');
+}
+function rbMsg(cls,html){ var fb=document.getElementById('rbRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function rbAdd(){
+  var v=document.getElementById('rbVar').value, rel=document.getElementById('rbRel').value, n=signedNum(document.getElementById('rbNum').value);
+  if(isNaN(n)){ rbMsg('warn','Type the number for the rule, for example 3.'); return; }
+  if(rb.rules.length>=4){ rbMsg('warn','Four rules is the limit here. Remove one to change it.'); return; }
+  rb.rules.push({a:v==='y'?0:1,b:v==='x'?0:1,rel:rel,c:n}); document.getElementById('rbRead').style.display='none'; rbDraw();
+}
+function rbRemove(k){ rb.rules.splice(k,1); document.getElementById('rbRead').style.display='none'; rbDraw(); }
+function rbClear(){ rb.rules=[]; document.getElementById('rbRead').style.display='none'; rbDraw(); }
+function rbCheck(){
+  var c=RB[rb.i], rs=rb.rules;
+  if(!rs.length){ rbMsg('warn','Add at least one rule first.'); return; }
+  if(c.set){
+    var extra=null, missing=null;
+    for(var y=5;y>=-5;y--) for(var x=-5;x<=5;x++){ var a=obeysAll(rs,x,y), w=c.set(x,y); if(a&&!w&&!extra) extra=[x,y]; if(!a&&w&&!missing) missing=[x,y]; }
+    if(missing){ rbMsg('warn','Your region leaves out '+pt(missing[0],missing[1])+', which should be inside. Which rule cuts it off?'); return; }
+    if(extra){ rbMsg('warn','Your region also holds '+pt(extra[0],extra[1])+', which should be outside. Which rule could cut it off?'); return; }
+    if(c.strict&&rs.some(inclusive)){ rbMsg('warn','The right points — but this challenge asks for no ≥ or ≤. Can you move a boundary half a step, or one whole step, and use &lt; or &gt; instead?'); return; }
+    rbMsg('good','Yes — exactly the right points.'+(c.strict?' Notice that '+XU+' &gt; −1 traps the same whole numbers as '+XU+' ≥ 0: for whole-number points, more than one set of rules can work.':' Other rules could trap the same points — for example using &lt; and &gt; with boundaries half a step further out.')); return;
+  }
+  if(c.pts){
+    var bad=c.pts.yes.filter(function(p){return !obeysAll(rs,p[0],p[1]);}).map(function(p){return pt(p[0],p[1])+' should be inside';})
+      .concat(c.pts.no.filter(function(p){return obeysAll(rs,p[0],p[1]);}).map(function(p){return pt(p[0],p[1])+' should be outside';}));
+    if(bad.length){ rbMsg('warn','Not yet: '+bad.join('; ')+'.'); return; }
+    rbMsg('good','Yes — your region does it. Compare with someone else: there are many different correct regions.'); return;
+  }
+  var ip=intPoints(rs), edge=ip.some(function(p){return Math.abs(p[0])===5||Math.abs(p[1])===5;});
+  if(edge){ rbMsg('warn','Your region reaches the edge of the grid, so it probably carries on beyond it. Add a rule to close it in.'); return; }
+  if(ip.length!==4){ rbMsg('warn','Your region holds '+ip.length+' whole-number points. Adjust a rule to make it exactly 4.'); return; }
+  rbMsg('good','Yes — exactly 4 points: '+ip.map(function(p){return pt(p[0],p[1]);}).join(', ')+'. Could you write a story where these are the only allowed choices?');
+}
+function rbNext(){ rb.i=(rb.i+1)%RB.length; rbClear(); }
+function rbInit(){ rbDraw(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    coords:{title:'Coordinates in four quadrants',prompt:'Write the coordinates of the point 3 to the right of the origin and 2 down.',answer:[3,-2],pt:true,hint:'Across first, then up or down: (across, up). Down is negative.'},
+    ycoord:{title:'Reading a coordinate',prompt:'What is the <i>y</i>-coordinate of the point (−4, 1)?',answer:1,hint:'The second number in the brackets is the <i>y</i>-coordinate.'},
+    circles:{title:'Open and filled circles',prompt:'To draw x ≥ 2 on a number line, is the circle at 2 open or filled?',answer:'filled',hint:'≥ includes 2 itself. An included boundary gets a filled circle.'}
+  };
+  function matches(r,v){ if(r.pt) return ptIs(v,r.answer); if(typeof r.answer==='number'){ var n=signedNum(v); return !isNaN(n)&&Math.abs(n-r.answer)<=0.001; } var s=normText(v); return s===r.answer||s===r.answer+' circle'||s==='closed'||s==='solid'||s==='shaded'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// Inequality text in one canonical form: <= becomes ≤, unicode minus, no spaces.
+function normIneq(v){ return String(v).toLowerCase().replace(/\s+/g,'').replace(/<=|=</g,'≤').replace(/>=|=>/g,'≥').replace(/−|–/g,'-'); }
+// Read an inequality answer as a rule {v,lo,loInc,hi,hiInc}. Accepts x>5, 5<x, <= for ≤, number words and fractions,
+// double-ended forms (−2 < x ≤ 3, 3 ≥ x > −2) and two parts joined by "and" (x > −2 and x ≤ 3).
+function ruleOf(v){
+  var s=String(v).toLowerCase().replace(/<=|=</g,'≤').replace(/>=|=>/g,'≥').replace(/−|–/g,'-').trim();
+  var isVar=function(z){return /^[a-z]$/.test(z);}, up={'>':1,'≥':1}, low={'<':1,'≤':1};
+  var parts=s.split(/\s+and\s+|\s*&\s*|\s*,\s*/);
+  if(parts.length===2){ var p=ruleOf(parts[0]), q=ruleOf(parts[1]); if(!p||!q||p.v!==q.v) return null;
+    var lo=p.lo!=null?p:q.lo!=null?q:null, hi=p.hi!=null?p:q.hi!=null?q:null; if(!lo||!hi||lo===hi) return null;
+    return {v:p.v,lo:lo.lo,loInc:lo.loInc,hi:hi.hi,hiInc:hi.hiInc}; }
+  var m=s.match(/^\s*(.+?)\s*(≤|≥|<|>)\s*(.+?)\s*(≤|≥|<|>)\s*(.+?)\s*$/);
+  if(m&&isVar(m[3].trim())){ var A=signedNum(m[1]), B=signedNum(m[5]); if(isNaN(A)||isNaN(B)) return null;
+    if(low[m[2]]&&low[m[4]]) return {v:m[3].trim(),lo:A,loInc:m[2]==='≤',hi:B,hiInc:m[4]==='≤'};
+    if(up[m[2]]&&up[m[4]]) return {v:m[3].trim(),lo:B,loInc:m[4]==='≥',hi:A,hiInc:m[2]==='≥'};
+    return null; }
+  m=s.match(/^\s*(.+?)\s*(≤|≥|<|>)\s*(.+?)\s*$/); if(!m) return null;
+  var L=m[1].trim(), R=m[3].trim(), r=m[2], n;
+  if(isVar(L)&&!isVar(R)){ n=signedNum(R); if(isNaN(n)) return null; }
+  else if(isVar(R)&&!isVar(L)){ n=signedNum(L); if(isNaN(n)) return null; r={'<':'>','>':'<','≤':'≥','≥':'≤'}[r]; L=R; }
+  else return null;
+  return up[r]?{v:L,lo:n,loInc:r==='≥',hi:null}:{v:L,lo:null,hi:n,hiInc:r==='≤'};
+}
+function ineqIs(v,target){ var a=ruleOf(v), b=ruleOf(target); return !!a&&!!b&&a.v===b.v&&sameRule(a,b); }
+// A list of numbers, in any order: "−1, 0, 1", "-1 0 1", "minus one, zero and one".
+function setOf(v){
+  var chunks=String(v).split(/\s*(?:,|;|\band\b)\s*/).filter(function(c){return c.trim()!=='';}), out=[];
+  chunks.forEach(function(c){ if(/^[\s\d.\-−]+$/.test(c)) c.trim().split(/\s+/).forEach(function(x){out.push(signedNum(x));}); else out.push(signedNum(c)); });
+  if(!out.length||out.some(isNaN)) return null;
+  return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;});
+}
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+// A coordinate pair typed as (2, 1), 2,1 or (minus two, one).
+function ptIs(v,want){ var s=String(v).replace(/[()\[\]]/g,'').trim(), p=s.split(/\s*[,;]\s*/); if(p.length!==2) return false;
+  var x=signedNum(p[0]), y=signedNum(p[1]); return !isNaN(x)&&!isNaN(y)&&Math.abs(x-want[0])<1e-9&&Math.abs(y-want[1])<1e-9; }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+var PRACTICE=[
+ {label:"1 of 8 · Test a point",q:"Does the point <b>(3, 1)</b> satisfy <b>x &gt; 2</b>? Answer yes or no.",a:["yes","yes it does","yes, it does"],eq:function(v){return false;},prompt:"Which coordinate does the rule talk about?",hint:"The x-coordinate of (3, 1) is 3. Is 3 &gt; 2?",sol:"Yes. x = 3, and 3 &gt; 2 is true. The y-coordinate does not matter for this rule."},
+ {label:"2 of 8 · A point on the line",q:"Does the point <b>(2, 5)</b> satisfy <b>x &gt; 2</b>? Answer yes or no.",a:["no","no it does not","no, it does not","no it doesn't"],eq:function(v){return false;},prompt:"Where is (2, 5) compared with the line x = 2?",hint:"x = 2. Is 2 &gt; 2 true?",sol:"No. x = 2, and 2 &gt; 2 is false. The point is on the boundary line, which is dashed because it is not included."},
+ {label:"3 of 8 · Dashed or solid?",q:"To show <b>y ≥ −1</b> on a graph, should the line y = −1 be <b>dashed</b> or <b>solid</b>?",a:["solid","a solid line","solid line","unbroken","continuous","a solid one"],eq:function(v){return false;},prompt:"Are points on the line y = −1 allowed by y ≥ −1?",hint:"Test (0, −1): is −1 ≥ −1 true?",sol:"Solid. −1 ≥ −1 is true, so points on the line are included — like a filled circle."},
+ {label:"4 of 8 · Read the region",q:"Write the inequality for the shaded region."+planeSvg([{a:0,b:1,rel:'<',c:3}]),a:[],eq:function(v){return ineqIs(v,'y<3');},prompt:"Is the boundary vertical or horizontal? Is it dashed or solid?",hint:"A dashed horizontal line at y = 3, with the region below it.",sol:"y &lt; 3. The line y = 3 is dashed (not included), and the region is below it."},
+ {label:"5 of 8 · Which point?",q:"Which of these points obeys <b>x + y &lt; 5</b>: <b>(2, 2)</b> or <b>(3, 2)</b>?",a:[],eq:function(v){return ptIs(v,[2,2]);},prompt:"Add the coordinates of each point. Which total is less than 5?",hint:"2 + 2 = 4 and 3 + 2 = 5. Is 5 &lt; 5?",sol:"(2, 2): 2 + 2 = 4, and 4 &lt; 5. For (3, 2), 3 + 2 = 5, and 5 &lt; 5 is false — it lies on the dashed line."},
+ {label:"6 of 8 · Read a solid boundary",q:"Write the inequality for the shaded region."+planeSvg([{a:1,b:0,rel:'≥',c:-2}]),a:[],eq:function(v){return ineqIs(v,'x>=-2');},prompt:"Which way is the region from the line? Is the line part of it?",hint:"A solid vertical line at x = −2, with the region to the right.",sol:"x ≥ −2. The solid line x = −2 is included, and the region is to its right."},
+ {label:"7 of 8 · Count the points",q:"How many whole-number points satisfy <b>x &gt; 0</b>, <b>y &gt; 0</b> and <b>x + y &lt; 4</b>?",a:[],eq:function(v){var n=signedNum(v);return n===3;},prompt:"Both coordinates must be at least 1. Which pairs add to less than 4?",hint:"Try (1, 1), (1, 2), (2, 1) — and check (1, 3), (2, 2), (3, 1).",sol:"3: (1, 1), (1, 2) and (2, 1). Points like (2, 2) give 4, and 4 &lt; 4 is false."},
+ {label:"8 of 8 · Between two lines (stretch)",q:"The region lies between two solid lines. Write it as one inequality."+planeSvg([{a:0,b:1,rel:'≥',c:-2},{a:0,b:1,rel:'≤',c:1}]),a:[],eq:function(v){return ineqIs(v,'-2<=y<=1');},prompt:"Which two horizontal lines are the boundaries? Are they included?",hint:"Solid lines at y = −2 and y = 1. Write −2 … y … 1.",sol:"−2 ≤ y ≤ 1 (or y ≥ −2 and y ≤ 1)."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Check the boundary line — is it included? — and test a point, or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  cnInit();
+  wpInit();
+  apInit();
+  rbInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>

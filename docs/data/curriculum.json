@@ -350,6 +350,14 @@
           "file": "lessons/inequalities/03-solutions-on-a-number-line.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ineq-04-regions-on-a-graph",
+          "num": "Lesson 04",
+          "title": "Inequalities as regions on a graph",
+          "file": "lessons/inequalities/04-regions-on-a-graph.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
