@@ -399,6 +399,14 @@
           "file": "lessons/formulae/04-deriving-a-formula.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "formulae-05-changing-the-subject",
+          "num": "Lesson 05",
+          "title": "Changing the subject",
+          "file": "lessons/formulae/05-changing-the-subject.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

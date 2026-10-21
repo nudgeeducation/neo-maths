@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Changing the subject</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Formulae and Rearranging &middot; <strong>Lesson 05 &mdash; Changing the subject</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Formulae and Rearranging</h1>
+<h2>Changing the subject</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>How do I turn a formula round to find what I need?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — rearranging a formula so that a different letter stands alone.</p>
+<p><b>Stepping Stone:</b> <b>change the subject</b> of a formula in which the new subject appears once, by undoing operations in <b>reverse order</b> and doing the <b>same to both sides</b>; and use the rearranged formula.</p>
+<p><b>You will need:</b> solving one- and two-step equations, and inverse operations — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 7 · Move 15 · Reflect 9 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Formulae_Lesson_05_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Formulae_Lesson_05_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw y = 3x + 5 as a machine: x → × 3 → + 5 → y. Now draw it backwards.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Reverse the machine</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">The <b>subject</b> of a formula is the letter on its own: in <span class="uk">v</span> = <span class="uk">u</span> + <span class="uk">at</span>, the subject is <span class="uk">v</span>. Sometimes you need a different letter on its own — <span class="uk">t</span>, perhaps. <b>Changing the subject</b> turns the formula round, by undoing what was done to that letter, in reverse order.</p>
+</div>
+<p><b>What to do:</b> each formula is drawn as a machine. Build the machine that runs it <b>backwards</b>: choose the first reverse step, then the next.</p>
+<p><b>What you are trying to notice:</b> each step is undone by its inverse (+ by −, × by ÷), and the last thing done is the first thing undone — like taking off shoes before socks.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔁 Forwards, then backwards</h3>
+<div id="rmCount" class="small" style="text-align:center"></div>
+<div id="rmForward" class="card" style="text-align:center"></div>
+<div id="rmBack" class="card" style="text-align:center"></div>
+<div class="buttonrow" style="justify-content:center" id="rmOpts"></div>
+<div id="rmRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rmReset()">↺ Start again</button><button onclick="rmNext()">Next machine →</button></div>
+<p><b>Carry this forward:</b> inverse operations, in reverse order. Next, do the same thing to a whole formula, keeping it balanced.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT (hero) ================= -->
+<details class="hs">
+<summary>🚶 Movement — The formula balance</summary>
+<p><b>What to do:</b> choose an operation and press <b>Do it to both sides</b>. Keep going until the letter you want stands alone. The numbers underneath show that the formula is still true after every step.</p>
+<p><b>What you are trying to notice:</b> rearranging is the same as solving an equation, but with letters. As long as you do the same to both sides, the balance stays level — and the numbers prove it.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">⚖️ Keep it level</h3>
+<div class="buttonrow" style="justify-content:center" id="fbForms"></div>
+<div id="fbTask" class="clue" style="text-align:center;font-size:1.1em"></div>
+<div class="card" style="text-align:center"><svg id="fbSvg" class="graphsvg" style="max-width:560px" viewBox="0 0 560 170" role="img" aria-label="A level balance with the two sides of the formula"></svg></div>
+<div class="buttonrow" style="justify-content:center">
+<select id="fbOp" aria-label="Operation"><option value="sub">Subtract</option><option value="add">Add</option><option value="div">Divide by</option><option value="mul">Multiply by</option><option value="sqrt">Square root of each side</option></select>
+<select id="fbArg" aria-label="What to use"></select>
+<button onclick="fbApply()">Do it to both sides</button>
+<button onclick="fbUndo()">↶ Undo</button>
+</div>
+<div id="fbRead" class="feedback" aria-live="polite"></div>
+<div id="fbWork" class="card"></div>
+<div id="fbUse" class="card" style="display:none"></div>
+<p><b>Carry this forward:</b> find the letter you want; undo the last thing done to it first; do the same to both sides; stop when it stands alone.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Spot the faulty rearrangement</summary>
+<p><b>What to do:</b> each piece of working rearranges a formula. Find the <b>first line that goes wrong</b>, or decide there is no mistake. If you are unsure, press <b>Test with numbers</b>.</p>
+<p><b>What you are trying to notice:</b> a correct rearrangement stays true for the same numbers on every line. The usual slips are undoing in the wrong order, doing something to only part of a side, or using the wrong inverse.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔬 Check the working</h3>
+<div id="frTask" class="bignum" style="font-size:1.15em"></div>
+<div id="frLines" class="card"></div>
+<div class="buttonrow" style="justify-content:center" id="frChoices"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="frTest()">🔢 Test with numbers</button></div>
+<div id="frRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="frNext()">Next working →</button></div>
+<p><b>Carry this forward:</b> numbers are a quick, honest check of any rearrangement.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Build a converter</summary>
+<p><b>What to do:</b> each formula answers the wrong question. Rearrange it so that it answers the question you need, and the lesson turns your formula into a converter that works for many values at once.</p>
+<p><b>What you are trying to notice:</b> you could substitute and then solve every time — but once a formula is rearranged, it answers the new question for <b>any</b> value straight away.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔄 Rearrange, then use it</h3>
+<div id="cvSay" class="clue" style="font-size:1.1em"></div>
+<div id="cvStep" class="card"></div>
+<div id="cvTable" class="card"></div>
+<div id="cvRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="cvNext()">Next formula →</button></div>
+</div>
+<div class="card" style="border:2px solid #b9a2cf;background:#f7f2fb">
+<h3 style="margin-top:0">✨ Make your own <span class="stretch">stretch</span></h3>
+<p>Choose a formula from earlier in the unit — a taxi fare, a gym plan, a perimeter. Rearrange it to answer a "how many?" or "how long?" question, and make a small table showing it working for three values.</p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>Today you turned formulae round, step by step, without ever letting them tip. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> think of getting dressed, then undressing — the last thing on is the first thing off. You already know reverse order; algebra just writes it down.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>flexibility</b> — taking a tool built for one question and reshaping it for another. Engineers, scientists and programmers rearrange formulae all the time, so one relationship can answer many different questions.</p>
+<p class="small">Carry one idea forward: when a tool answers the wrong question, see if you can turn it round.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Turn it round</summary>
+<p><b>Your task:</b> show that you can change the subject of a formula, check it, and use it.</p>
+<ul>
+<li>Make <span class="uk">x</span> the subject of <b><span class="uk">y</span> = 4<span class="uk">x</span> − 7</b>, and make <span class="uk">u</span> the subject of <b><span class="uk">v</span> = <span class="uk">u</span> + <span class="uk">at</span></b>. Show each step done to both sides.</li>
+<li>Check each rearrangement by choosing numbers and testing both the original and the new formula.</li>
+<li>Rearrange <b><span class="uk">F</span> = 1.8<span class="uk">C</span> + 32</b> to make <span class="uk">C</span> the subject, and use it to convert 50 °F, 86 °F and 212 °F.</li>
+<li>Explain, using a function machine, why the steps must be undone in reverse order.</li>
+<li><span class="stretch">stretch</span> Make <span class="uk">r</span> the subject of <b><span class="uk">A</span> = 3<span class="uk">r</span>²</b>, and find <span class="uk">r</span> when <span class="uk">A</span> = 75.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_FORMULAE_SUBJECT_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows what the subject of a formula is.</td><td>Knows each step is undone by its inverse.</td><td>Undoes steps in reverse order.</td><td>Explains reverse order with a function machine.</td></tr>
+<tr><td><b>Application</b></td><td>Rearranges a one-step formula.</td><td>Rearranges both two-step formulae.</td><td>Also rearranges and uses the temperature formula.</td><td>Also completes the square-root stretch.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes the answer.</td><td>Shows each step.</td><td>Shows each step done to both sides.</td><td>Explains each step so another learner could follow.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one value.</td><td>Checks one rearrangement with numbers.</td><td>Checks every rearrangement with numbers.</td><td>Uses a numerical check to find and fix an error.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Changing the subject — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Write rearranged formulae like <b>x = (y + 3)/2</b>. You can use / or ÷, and √ or sqrt( ) for a square root.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw the formula as a machine, then run it backwards. Check your answer with numbers.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["=","\u2212","/","(",")","\u221a","\u00b2"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Algebra helpers (with square roots) ---------------- */
+function algNorm(s){ return String(s).toLowerCase().replace(/\s+/g,'').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/½/g,'(1/2)').replace(/sqrt/g,'√'); }
+function evalExpr(expr,vars){
+  var s=algNorm(expr); if(!s||!/^[0-9a-z.+\-*/()^√]+$/.test(s)) return NaN;
+  s=s.replace(/(\d|[a-z]|\))(?=[a-z(√])/g,'$1*').replace(/([a-z])(?=\d)/g,'$1*').replace(/\^/g,'**');
+  var v={}; Object.keys(vars).forEach(function(k){ v[k.toLowerCase()]=vars[k]; });
+  var bad=false; s=s.replace(/[a-z]/g,function(c){ if(v[c]==null){ bad=true; return '0'; } return '('+v[c]+')'; });
+  if(bad) return NaN;
+  s=s.replace(/√(\d+(?:\.\d+)?)/g,'√($1)').replace(/√/g,'Math.sqrt');
+  try{ var r=Function('"use strict";return ('+s+');')(); return typeof r==='number'&&isFinite(r)?r:NaN; }catch(e){ return NaN; }
+}
+function nfix(v){ return Math.round(v*1e6)/1e6; }
+function same(a,b){ return !isNaN(a)&&Math.abs(a-b)<1e-9; }
+function valNum(v){ return signedNum(String(v).trim().replace(/[−–]/g,'-').replace(/^£\s*/,'').replace(/\s*(°[cf]|cm|miles?)$/i,'')); }
+function pretty(s){ return String(s).replace(/-/g,'−').replace(/\*/g,' × ').replace(/\^2/g,'²').replace(/([a-zA-Z])/g,'<span class="uk">$1</span>'); }
+// The expression side of a typed formula "x = …" (either way round, either case); null if the subject is missing.
+function formSide(v,subject){
+  var s=String(v).trim(); if(!s) return null; var parts=s.split('='); if(parts.length>2) return null;
+  if(parts.length===1) return s;
+  var L=algNorm(parts[0]), R=algNorm(parts[1]), sub=String(subject).toLowerCase();
+  if(L===sub) return parts[1]; if(R===sub) return parts[0]; return null;
+}
+// Same value as the target at several positive test values (positive, so square roots are defined).
+function formIs(v,target,letters,subject){
+  var e=formSide(v,subject); if(e===null) return false;
+  if(algNorm(e).indexOf(String(subject).toLowerCase())>=0) return false;
+  var ok=true; [2,3,7,11,1.5].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k*1.75;}); var a=evalExpr(e,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; });
+  return ok;
+}
+
+/* ---------------- Building formulae from layers ---------------- */
+// A side is {s, simple}: simple means a single term, so it needs no brackets before × ÷ or a power.
+function isNum(v){ return /^[0-9.]+$/.test(v); }
+function forward(side,L){ var op=L[0], v=L[1], s=side.s;
+  if(op==='mul') return {s:side.simple?v+s:v+'('+s+')',simple:true};
+  if(op==='add') return {s:isNum(v)?s+' + '+v:v+' + '+s,simple:false};
+  if(op==='sub') return {s:s+' − '+v,simple:false};
+  if(op==='div') return {s:(side.simple?s:'('+s+')')+'/'+v,simple:true};
+  return {s:(s.length===1?s:'('+s+')')+'²',simple:true}; }
+function inverse(side,L){ var op=L[0], v=L[1], s=side.s;
+  if(op==='add') return {s:s+' − '+v,simple:false};
+  if(op==='sub') return {s:s+' + '+v,simple:false};
+  if(op==='mul') return {s:(side.simple?s:'('+s+')')+'/'+v,simple:true};
+  if(op==='div') return {s:side.simple?v+s:v+'('+s+')',simple:true};
+  return {s:'√'+(side.simple&&s.length===1?s:'('+s+')'),simple:true}; }
+function build(start,layers,fn){ var side={s:start,simple:true}; layers.forEach(function(L){ side=fn(side,L); }); return side; }
+function stepName(L){ return {add:'+ '+L[1],sub:'− '+L[1],mul:'× '+L[1],div:'÷ '+L[1],sq:'squaring'}[L[0]]; }
+function invName(L){ return {add:'− '+L[1],sub:'+ '+L[1],mul:'÷ '+L[1],div:'× '+L[1],sq:'square root'}[L[0]]; }
+var INV={add:'sub',sub:'add',mul:'div',div:'mul',sq:'sqrt'};
+
+/* ---------------- CONNECTION: reverse the machine ---------------- */
+var RM=[
+ {inV:'x',outV:'y',steps:[['mul','3'],['add','2']],test:4},
+ {inV:'t',outV:'v',steps:[['mul','a'],['add','u']]},
+ {inV:'x',outV:'y',steps:[['sub','4'],['div','2']],test:10},
+ {inV:'s',outV:'P',steps:[['mul','4']],test:5}
+];
+var rm={i:0,picked:[]};
+function box(t,on){ return '<span style="display:inline-block;padding:6px 12px;margin:3px;border-radius:8px;border:2px solid '+(on?'#365a68':'#cdbfa9')+';background:'+(on?'#dce8ef':'#fff')+';font-weight:bold">'+t+'</span>'; }
+function arrow(){ return ' → '; }
+function rmRender(){
+  var m=RM[rm.i], f=build(m.inV,m.steps,forward).s, num=function(v){return evalExpr(String(v),{});};
+  document.getElementById('rmCount').innerHTML='Machine '+(rm.i+1)+' of '+RM.length+': '+pretty(m.outV+' = '+f);
+  var fw='<b>Forwards:</b> '+pretty(m.inV)+arrow()+m.steps.map(function(L){return box(pretty(stepName(L)),true);}).join(arrow())+arrow()+pretty(m.outV);
+  if(m.test!=null){ var x=m.test, vals=[x]; m.steps.forEach(function(L){ x=evalExpr(x+({add:'+',sub:'-',mul:'*',div:'/'}[L[0]])+L[1],{}); vals.push(x); }); fw+='<div class="small">For example: '+vals.map(fmt).join(' → ')+'</div>'; }
+  document.getElementById('rmForward').innerHTML=fw;
+  var n=m.steps.length, back='<b>Backwards:</b> '+pretty(m.outV);
+  for(var k=0;k<n;k++){ var L=rm.picked[k]; back+=arrow()+box(L?pretty(invName(L)):'?',!!L); }
+  back+=arrow()+pretty(m.inV);
+  if(rm.picked.length===n){ var g=build(m.outV,m.steps.slice().reverse(),inverse).s; back+='<div style="font-size:1.2em;margin-top:6px"><b>'+pretty(m.inV+' = '+g)+'</b></div>';
+    if(m.test!=null){ var y=evalExpr(build(m.inV,m.steps,forward).s,(function(){var o={};o[m.inV]=m.test;return o;})()), ys=[y]; m.steps.slice().reverse().forEach(function(L){ y=evalExpr(y+({add:'-',sub:'+',mul:'/',div:'*'}[L[0]])+L[1],{}); ys.push(y); }); back+='<div class="small">Back again: '+ys.map(fmt).join(' → ')+' ✓</div>'; } }
+  document.getElementById('rmBack').innerHTML=back;
+  var opts=[]; m.steps.forEach(function(L){ opts.push({L:L,inv:true}); opts.push({L:L,inv:false}); });
+  opts.sort(function(a,b){ return (invName(a.L)+a.inv).localeCompare(invName(b.L)+b.inv); });
+  document.getElementById('rmOpts').innerHTML=rm.picked.length===n?'':opts.map(function(o,k){ return '<button class="chip" onclick="rmPick('+m.steps.indexOf(o.L)+','+o.inv+')">'+pretty(o.inv?invName(o.L):stepName(o.L))+'</button>'; }).join('');
+}
+function rmPick(si,inv){
+  var m=RM[rm.i], fb=document.getElementById('rmRead'), want=m.steps.length-1-rm.picked.length, L=m.steps[si]; fb.style.display='block';
+  if(!inv){ fb.className='feedback warn'; fb.innerHTML='That is a forward step. Which operation <b>undoes</b> '+pretty(stepName(L))+'?'; return; }
+  if(si!==want){ fb.className='feedback warn'; fb.innerHTML='That undoes '+pretty(stepName(L))+' — but it comes later. Undo the <b>last</b> step first: '+pretty(stepName(m.steps[want]))+'.'; return; }
+  rm.picked.push(L); fb.className='feedback good';
+  fb.innerHTML=rm.picked.length===m.steps.length?'The machine runs backwards. That is the formula with '+pretty(m.inV)+' as its subject.':'Yes: '+pretty(invName(L))+' undoes '+pretty(stepName(L))+'. Now the next one back.';
+  rmRender();
+}
+function rmReset(){ rm.picked=[]; document.getElementById('rmRead').style.display='none'; rmRender(); }
+function rmNext(){ rm.i=(rm.i+1)%RM.length; rmReset(); }
+function rmInit(){ rmRender(); }
+
+/* ---------------- MOVEMENT (hero): the formula balance ---------------- */
+var FB=[
+ {subj:'P',target:'s',layers:[['mul','4']],vals:{s:5},use:{q:'Use it: find <span class="uk">s</span> when <span class="uk">P</span> = 36.',vals:{P:36},ans:9}},
+ {subj:'v',target:'t',layers:[['mul','a'],['add','u']],vals:{t:4,a:3,u:2},use:{q:'Find <span class="uk">t</span> when <span class="uk">v</span> = 30, <span class="uk">u</span> = 10 and <span class="uk">a</span> = 4.',vals:{v:30,u:10,a:4},ans:5}},
+ {subj:'y',target:'x',layers:[['mul','3'],['sub','5']],vals:{x:4},use:{q:'Find <span class="uk">x</span> when <span class="uk">y</span> = 22.',vals:{y:22},ans:9}},
+ {subj:'F',target:'C',layers:[['mul','1.8'],['add','32']],vals:{C:25},use:{q:'Convert 212 °F to °C.',vals:{F:212},ans:100}},
+ {subj:'A',target:'h',layers:[['mul','b'],['div','2']],vals:{h:6,b:5},use:{q:'Find <span class="uk">h</span> when <span class="uk">A</span> = 24 and <span class="uk">b</span> = 8.',vals:{A:24,b:8},ans:6}},
+ {subj:'P',target:'a',layers:[['add','b'],['mul','2']],vals:{a:7,b:3},use:{q:'Find <span class="uk">a</span> when <span class="uk">P</span> = 30 and <span class="uk">b</span> = 4.',vals:{P:30,b:4},ans:11}},
+ {subj:'A',target:'s',layers:[['sq','']],vals:{s:6},stretch:true,use:{q:'Find <span class="uk">s</span> when <span class="uk">A</span> = 49.',vals:{A:49},ans:7}}
+];
+var fb={i:0,other:null,left:[],hist:[],done:false};
+function fbVals(){ var p=FB[fb.i], v=Object.assign({},p.vals); v[p.subj]=evalExpr(build(p.target,p.layers,forward).s,v); return v; }
+function fbTargetSide(){ var p=FB[fb.i]; return build(p.target,fb.left,forward); }
+function fbStart(){ var p=FB[fb.i]; fb.other={s:p.subj,simple:true}; fb.left=p.layers.slice(); fb.hist=[]; fb.done=false;
+  var args=[]; p.layers.forEach(function(L){ if(L[1]&&args.indexOf(L[1])<0) args.push(L[1]); }); ['2','3'].forEach(function(x){ if(args.indexOf(x)<0&&args.length<4) args.push(x); });
+  document.getElementById('fbArg').innerHTML=args.map(function(a){return '<option value="'+a+'">'+a+'</option>';}).join('');
+  document.getElementById('fbRead').style.display='none'; document.getElementById('fbUse').style.display='none'; fbRender(); }
+function fbLine(o,t){ return {o:o.s,t:t.s}; }
+function fbRender(){
+  var p=FB[fb.i], vals=fbVals(), t=fbTargetSide();
+  document.getElementById('fbForms').innerHTML=FB.map(function(q,k){ return '<button class="chip'+(k===fb.i?' active':'')+'" onclick="fbPick('+k+')">'+(q.stretch?'★ ':'')+pretty(q.subj+' = '+build(q.target,q.layers,forward).s)+'</button>'; }).join('');
+  document.getElementById('fbTask').innerHTML='Make <b><span class="uk">'+p.target+'</span></b> the subject of '+pretty(p.subj+' = '+build(p.target,p.layers,forward).s)+'.';
+  var lv=evalExpr(fb.other.s,vals), rv=evalExpr(t.s,vals);
+  var h='<polygon points="280,150 264,168 296,168" fill="#6b4a2f"/><rect x="60" y="146" width="440" height="7" rx="3" fill="#8a6a43"/>'+
+    // two strings per pan, at its edges, so the numbers underneath stay clear
+    '<g stroke="#8a6a43" stroke-width="2"><line x1="60" y1="146" x2="60" y2="112"/><line x1="220" y1="146" x2="220" y2="112"/><line x1="340" y1="146" x2="340" y2="112"/><line x1="500" y1="146" x2="500" y2="112"/></g>'+
+    '<rect x="40" y="70" width="200" height="42" rx="10" fill="#fffaf0" stroke="#8a6a43" stroke-width="2"/><rect x="320" y="70" width="200" height="42" rx="10" fill="#fffaf0" stroke="#8a6a43" stroke-width="2"/>'+
+    '<text x="140" y="97" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="18" fill="#2f3429">'+fb.other.s.replace(/−/g,'−')+'</text>'+
+    '<text x="420" y="97" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="18" fill="#2f3429">'+t.s+'</text>'+
+    '<text x="280" y="97" text-anchor="middle" font-family="Georgia" font-size="26" font-weight="bold" fill="#3f5f45">=</text>'+
+    '<text x="140" y="132" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">= '+fmt(nfix(lv))+'</text><text x="420" y="132" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">= '+fmt(nfix(rv))+'</text>'+
+    '<text x="280" y="30" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">Checking with '+Object.keys(p.vals).map(function(k){return k+' = '+fmt(p.vals[k]);}).join(', ')+' (so '+p.subj+' = '+fmt(nfix(vals[p.subj]))+'): both sides '+fmt(nfix(lv))+' — still level.</text>';
+  document.getElementById('fbSvg').innerHTML=h;
+  var lines=fb.hist.map(function(x){return x;}).concat([fbLine(fb.other,t)]);
+  document.getElementById('fbWork').innerHTML='<b>Your working</b>'+lines.map(function(l,k){ var a=evalExpr(l.o,vals), b=evalExpr(l.t,vals);
+    return '<div style="font-size:1.15em;line-height:1.9">'+pretty(l.o+' = '+l.t)+' <span class="small" style="color:#5c6b4f">&nbsp; check: '+fmt(nfix(a))+' = '+fmt(nfix(b))+' ✓</span></div>'; }).join('')+
+    (fb.done?'<div style="font-size:1.25em;margin-top:4px"><b>'+pretty(p.target+' = '+fb.other.s)+'</b></div>':'');
+}
+function fbMsg(cls,html){ var el=document.getElementById('fbRead'); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function fbApply(){
+  var p=FB[fb.i]; if(fb.done){ fbMsg('good','<span class="uk">'+p.target+'</span> already stands alone. Use the formula below, or choose another one.'); return; }
+  var op=document.getElementById('fbOp').value, arg=op==='sqrt'?'':document.getElementById('fbArg').value, L=fb.left[fb.left.length-1];
+  if(INV[L[0]]===op&&(op==='sqrt'||arg===L[1])){
+    fb.hist.push(fbLine(fb.other,fbTargetSide())); fb.other=inverse(fb.other,L); fb.left.pop();
+    if(!fb.left.length){ fb.done=true; fbRender(); fbMsg('good','<span class="uk">'+p.target+'</span> stands alone: <b>'+pretty(p.target+' = '+fb.other.s)+'</b>. Every line checked true with the same numbers, so the balance never tipped.'); fbUseShow(); return; }
+    fbRender(); fbMsg('good','Done to both sides: '+pretty(invName(L))+' undoes '+pretty(stepName(L))+'. Still level. What is the last thing done to <span class="uk">'+p.target+'</span> now?'); return; }
+  var inner=fb.left.slice(0,-1).filter(function(K){ return INV[K[0]]===op&&(op==='sqrt'||arg===K[1]); })[0];
+  if(inner){ fbMsg('warn','That would undo '+pretty(stepName(inner))+' — but '+pretty(stepName(inner))+' happened <b>before</b> '+pretty(stepName(L))+'. Undo the last step first: '+pretty(stepName(L))+'.'+(op==='div'||op==='mul'?' (Doing it now would '+(op==='div'?'divide':'multiply')+' every term on that side, not just the one you want.)':'')); return; }
+  if(L[0]===op||(op==='sqrt'&&L[0]==='sq')){ fbMsg('warn','That would do '+pretty(stepName(L))+' again, not undo it. Which operation undoes '+pretty(stepName(L))+'?'); return; }
+  fbMsg('warn','Doing that to both sides keeps the balance level, but it does not get <span class="uk">'+p.target+'</span> on its own. What is the last thing done to <span class="uk">'+p.target+'</span>? Undo that.');
+}
+function fbUndo(){ if(!fb.hist.length) return; var p=FB[fb.i], last=fb.hist.length; fb.hist.pop(); fb.left=p.layers.slice(0,p.layers.length-fb.hist.length);
+  fb.other=build(p.subj,p.layers.slice(fb.left.length).reverse(),inverse); fb.done=false; document.getElementById('fbUse').style.display='none'; document.getElementById('fbRead').style.display='none'; fbRender(); }
+function fbUseShow(){ var p=FB[fb.i], el=document.getElementById('fbUse'); el.style.display='block';
+  el.innerHTML='<p><b>'+p.use.q+'</b></p><div class="buttonrow"><input id="fbUseIn" class="numin" aria-label="Your answer" onkeydown="if(event.key===\'Enter\')fbUseCheck()"><button onclick="fbUseCheck()">✅ Check</button></div>'; }
+function fbUseCheck(){ var p=FB[fb.i], v=valNum(document.getElementById('fbUseIn').value), r=evalExpr(fb.other.s,p.use.vals);
+  if(same(v,p.use.ans)&&same(r,p.use.ans)) fbMsg('good','Yes: '+p.use.ans+'. One substitution into the rearranged formula — no equation to solve.');
+  else fbMsg('warn','Substitute into the rearranged formula '+pretty(p.target+' = '+fb.other.s)+', in brackets, and work in order.'); }
+function fbPick(k){ fb.i=k; fbStart(); }
+function fbInit(){ fbStart(); }
+
+/* ---------------- REFLECTION: spot the faulty rearrangement ---------------- */
+var FR=[
+ {task:'Make x the subject of y = 3x + 5.',vals:{x:2,y:11},lines:['y − 5 = 3x','(y − 5)/3 = x'],wrong:null,fix:'Both lines are correct: undo + 5, then undo × 3.'},
+ {task:'Make x the subject of y = 3x + 5.',vals:{x:2,y:11},lines:['y/3 = x + 5','y/3 − 5 = x'],wrong:0,fix:'Dividing by 3 must divide the whole right side, including the 5. Undo the + 5 first: y − 5 = 3x.'},
+ {task:'Make t the subject of v = u + at.',vals:{u:2,a:3,t:4,v:14},lines:['v + u = at','(v + u)/a = t'],wrong:0,fix:'To undo + u, subtract u: v − u = at.'},
+ {task:'Make h the subject of A = bh/2.',vals:{b:5,h:6,A:15},lines:['2A = bh','2A − b = h'],wrong:1,fix:'bh means b × h, so undo it by dividing by b: h = 2A/b.'},
+ {task:'Make a the subject of P = 2(a + b).',vals:{a:7,b:3,P:20},lines:['P/2 = a + b','P/2 − b = a'],wrong:null,fix:'Both lines are correct: undo × 2, then undo + b.'},
+ {task:'Make C the subject of F = 1.8C + 32.',vals:{C:25,F:77},lines:['F − 32 = 1.8C','(F − 32) × 1.8 = C'],wrong:1,fix:'To undo × 1.8, divide by 1.8: C = (F − 32)/1.8.'}
+];
+var fr={i:0,tested:false};
+function frTrue(line,vals){ var p=line.split('='); return same(evalExpr(p[0],vals),evalExpr(p[1],vals)); }
+function vt(s){ return String(s).replace(/(^|[^A-Za-z])([xyvuathbPACF])(?![A-Za-z])/g,'$1<span class="uk">$2</span>'); }
+function frRender(){
+  var q=FR[fr.i]; document.getElementById('frTask').innerHTML=vt(q.task);
+  document.getElementById('frLines').innerHTML=q.lines.map(function(l,j){ return '<div style="font-size:1.2em;line-height:1.9"><span class="small" style="display:inline-block;width:4.5em">Line '+(j+1)+'</span>'+pretty(l)+(fr.tested?' <span class="small">&nbsp; '+(frTrue(l,q.vals)?'✓ true':'✗ false')+'</span>':'')+'</div>'; }).join('')+
+    (fr.tested?'<div class="small">Tested with '+Object.keys(q.vals).map(function(k){return k+' = '+q.vals[k];}).join(', ')+' — numbers that make the original formula true.</div>':'');
+  document.getElementById('frChoices').innerHTML=q.lines.map(function(l,j){return '<button class="chip" onclick="frPick('+j+')">Line '+(j+1)+'</button>';}).join('')+'<button class="chip" onclick="frPick(null)">No mistake</button>';
+}
+function frTest(){ fr.tested=true; frRender(); }
+function frPick(j){ var q=FR[fr.i], el=document.getElementById('frRead'); el.style.display='block';
+  if(j===q.wrong){ el.className='feedback good'; el.innerHTML=(j===null?'Yes — no mistake. ':'Yes — line '+(j+1)+' is where it goes wrong. ')+vt(q.fix); return; }
+  el.className='feedback warn'; el.innerHTML=j===null?'Look again — or test with numbers: is every line still true?':q.wrong===null?'Line '+(j+1)+' is correct. Test with numbers to check.':j<q.wrong?'Line '+(j+1)+' is correct. The slip is further down.':'Line '+(j+1)+' follows from the line before it. The slip is earlier.'; }
+function frNext(){ fr.i=(fr.i+1)%FR.length; fr.tested=false; document.getElementById('frRead').style.display='none'; frRender(); }
+function frInit(){ frRender(); }
+
+/* ---------------- CREATIVITY: build a converter ---------------- */
+var CV=[
+ {say:'Temperature: <b>'+pretty('F = 1.8C + 32')+'</b> turns °C into °F. You need to turn °F into °C.',subj:'C',target:'(F-32)/1.8',letters:['F'],xs:[32,50,68,77,86,212],from:'°F',to:'°C',q:{q:'Use your converter: what is 212 °F in °C?',ans:100}},
+ {say:'Taxi: <b>'+pretty('C = 3 + 2m')+'</b> gives the cost in pounds of <span class="uk">m</span> miles. You need to know how far you can go for a given amount.',subj:'m',target:'(C-3)/2',letters:['C'],xs:[5,9,15,25],from:'£',to:'miles',q:{q:'How many miles can you go for £15?',ans:6}},
+ {say:'Squares: <b>'+pretty('A = s²')+'</b> gives the area of a square with side <span class="uk">s</span>. You need the side from the area.',subj:'s',target:'sqrt(A)',letters:['A'],xs:[4,9,25,49,100],from:'cm²',to:'cm',q:{q:'What is the side of a square with area 49 cm²?',ans:7},stretch:true}
+];
+var cv={i:0,step:0,formula:''};
+function cvRender(){
+  var c=CV[cv.i], el=document.getElementById('cvStep');
+  document.getElementById('cvSay').innerHTML=(c.stretch?'<span class="stretch">stretch</span> ':'')+(cv.i+1)+' of '+CV.length+' · '+c.say;
+  if(cv.step===0) el.innerHTML='<p><b>1. Rearrange to make <span class="uk">'+c.subj+'</span> the subject.</b></p><div class="buttonrow"><span class="uk">'+c.subj+'</span> = <input id="cvAns" style="max-width:200px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your rearranged formula" onkeydown="if(event.key===\'Enter\')cvCheck()"><button onclick="cvCheck()">✅ Check</button></div>';
+  else if(cv.step===1) el.innerHTML='<p>✓ '+pretty(c.subj+' = '+cv.formula)+'</p><p><b>2. '+c.q.q+'</b></p><div class="buttonrow"><input id="cvUse" class="numin" aria-label="Your answer" onkeydown="if(event.key===\'Enter\')cvUseCheck()"><button onclick="cvUseCheck()">✅ Check</button></div>';
+  else el.innerHTML='<p>✓ Rearranged and used. Your converter works for every value in the table.</p>';
+  var t=document.getElementById('cvTable');
+  if(cv.step===0){ t.innerHTML='<span class="small">When your formula is right, it becomes a converter table here.</span>'; return; }
+  t.innerHTML='<b>Your converter</b><table style="margin-top:6px"><tr><th>'+c.from+'</th>'+c.xs.map(function(x){return '<td>'+x+'</td>';}).join('')+'</tr><tr><th>'+c.to+'</th>'+c.xs.map(function(x){ var o={}; o[c.letters[0]]=x; return '<td>'+fmt(nfix(evalExpr(cv.formula,o)))+'</td>'; }).join('')+'</tr></table>';
+}
+function cvMsg(cls,html){ var el=document.getElementById('cvRead'); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function cvCheck(){ var c=CV[cv.i], v=document.getElementById('cvAns').value, full=c.subj+' = '+v;
+  if(formIs(full,c.target,c.letters,c.subj)){ cv.formula=formSide(full,c.subj); cv.step=1; cvRender(); cvMsg('good','Yes. Your formula now works as a converter.'); return; }
+  cvMsg('warn','Not yet. Test it: for '+(cv.i===0?'C = 25 the original gives F = 77, so your formula should give 25 when F = 77':cv.i===1?'m = 6 the original gives C = 15, so your formula should give 6 when C = 15':'s = 7 the original gives A = 49, so your formula should give 7 when A = 49')+'. Undo the steps in reverse order.'); }
+function cvUseCheck(){ var c=CV[cv.i], v=valNum(document.getElementById('cvUse').value);
+  if(same(v,c.q.ans)){ cv.step=2; cvRender(); cvMsg('good','Yes: '+c.q.ans+'. Read straight from your converter.'); } else cvMsg('warn','Look in your converter table, or substitute into your rearranged formula.'); }
+function cvNext(){ cv.i=(cv.i+1)%CV.length; cv.step=0; cv.formula=''; document.getElementById('cvRead').style.display='none'; cvRender(); }
+function cvInit(){ cvRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    solve:{title:'Solving a two-step equation',prompt:'Solve 3<i>x</i> + 5 = 20.',answer:5,hint:'Subtract 5 from both sides, then divide by 3.'},
+    machine:{title:'Running a machine backwards',prompt:'A number is multiplied by 4, then 3 is added. The result is 31. What was the number?',answer:7,hint:'Work backwards: 31 − 3 = 28, then 28 ÷ 4.'},
+    divide:{title:'Undoing a division',prompt:'Solve <i>x</i>/2 = 9.',answer:18,hint:'Multiplying by 2 undoes dividing by 2.'}
+  };
+  function matches(r,v){ if(r.alg) return formIs(v,r.alg,[r.alg.replace(/[^a-z]/g,'').charAt(0)]); var n=valNum(v); return !isNaN(n)&&Math.abs(n-r.answer)<=0.001; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pv(target){ return function(v){ return same(valNum(v),target); }; }
+function ps(target,letters,subject){ return function(v){ return formIs(v,target,letters,subject); }; }
+var PRACTICE=[
+ {label:"1 of 8 · One step",q:"Make <span class=\"uk\">x</span> the subject of <b><span class=\"uk\">y</span> = <span class=\"uk\">x</span> + 7</b>.",a:[],eq:ps('y-7',['y'],'x'),prompt:"What has been done to <span class=\"uk\">x</span>? What undoes it?",hint:"Subtract 7 from both sides.",sol:"<span class=\"uk\">x</span> = <span class=\"uk\">y</span> − 7."},
+ {label:"2 of 8 · One step",q:"Make <span class=\"uk\">x</span> the subject of <b><span class=\"uk\">y</span> = 5<span class=\"uk\">x</span></b>.",a:[],eq:ps('y/5',['y'],'x'),prompt:"5<span class=\"uk\">x</span> means 5 × <span class=\"uk\">x</span>. What undoes × 5?",hint:"Divide both sides by 5.",sol:"<span class=\"uk\">x</span> = <span class=\"uk\">y</span>/5."},
+ {label:"3 of 8 · Two steps",q:"Make <span class=\"uk\">x</span> the subject of <b><span class=\"uk\">y</span> = 2<span class=\"uk\">x</span> − 3</b>.",a:[],eq:ps('(y+3)/2',['y'],'x'),prompt:"What was done to <span class=\"uk\">x</span> last: × 2 or − 3?",hint:"Undo − 3 first (add 3), then divide by 2.",sol:"<span class=\"uk\">y</span> + 3 = 2<span class=\"uk\">x</span>, so <span class=\"uk\">x</span> = (<span class=\"uk\">y</span> + 3)/2."},
+ {label:"4 of 8 · A different letter",q:"Make <span class=\"uk\">u</span> the subject of <b><span class=\"uk\">v</span> = <span class=\"uk\">u</span> + <span class=\"uk\">a</span><span class=\"uk\">t</span></b>.",a:[],eq:ps('v-a*t',['v','a','t'],'u'),prompt:"What is added to <span class=\"uk\">u</span>?",hint:"Subtract <span class=\"uk\">a</span><span class=\"uk\">t</span> from both sides.",sol:"<span class=\"uk\">u</span> = <span class=\"uk\">v</span> − <span class=\"uk\">a</span><span class=\"uk\">t</span>."},
+ {label:"5 of 8 · Rearrange, then use",q:"<b><span class=\"uk\">P</span> = 4<span class=\"uk\">s</span></b> is the perimeter of a square. Find <span class=\"uk\">s</span> when <span class=\"uk\">P</span> = 36.",a:[],eq:pv(9),prompt:"Make <span class=\"uk\">s</span> the subject first, or substitute and solve.",hint:"<span class=\"uk\">s</span> = <span class=\"uk\">P</span>/4.",sol:"<span class=\"uk\">s</span> = 36/4 = 9."},
+ {label:"6 of 8 · A fraction",q:"Make <span class=\"uk\">b</span> the subject of <b><span class=\"uk\">A</span> = <span class=\"uk\">b</span><span class=\"uk\">h</span>/2</b>.",a:[],eq:ps('2*a/h',['a','h'],'b'),prompt:"What was done to <span class=\"uk\">b</span> — and what was done last?",hint:"Multiply both sides by 2, then divide by <span class=\"uk\">h</span>.",sol:"2<span class=\"uk\">A</span> = <span class=\"uk\">b</span><span class=\"uk\">h</span>, so <span class=\"uk\">b</span> = 2<span class=\"uk\">A</span>/<span class=\"uk\">h</span>."},
+ {label:"7 of 8 · Temperature",q:"Make <span class=\"uk\">C</span> the subject of <b><span class=\"uk\">F</span> = 1.8<span class=\"uk\">C</span> + 32</b>.",a:[],eq:ps('(f-32)/1.8',['f'],'c'),prompt:"Undo the steps in reverse order: which came last?",hint:"Subtract 32, then divide by 1.8.",sol:"<span class=\"uk\">C</span> = (<span class=\"uk\">F</span> − 32)/1.8 (the same as 5(<span class=\"uk\">F</span> − 32)/9)."},
+ {label:"8 of 8 · A square (stretch)",q:"Make <span class=\"uk\">s</span> the subject of <b><span class=\"uk\">A</span> = <span class=\"uk\">s</span>²</b>.",a:[],eq:ps('sqrt(a)',['a'],'s'),prompt:"What undoes squaring?",hint:"Take the square root of both sides. (Here <span class=\"uk\">s</span> is a length, so it is positive.)",sol:"<span class=\"uk\">s</span> = √<span class=\"uk\">A</span>."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Undo the steps in reverse order, and test your answer with numbers — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  rmInit();
+  fbInit();
+  frInit();
+  cvInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('formulae-05-changing-the-subject');</script>
+
+<script src="../../assets/fieldkits/formulae-rearranging.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(4);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button"; b.textContent=s; b.addEventListener("click",function(){insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+</body>
+</html>
