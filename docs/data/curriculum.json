@@ -362,6 +362,23 @@
       ]
     },
     {
+      "id": "formulae-rearranging",
+      "title": "Formulae and Rearranging",
+      "stage": "Foundations",
+      "strand": "Algebra",
+      "source": "vault/02_Foundations/01_Lessons/Formulae_and_Rearranging",
+      "lessons": [
+        {
+          "id": "formulae-01-letters-unknowns-variables",
+          "num": "Lesson 01",
+          "title": "Letters as unknowns and variables",
+          "file": "lessons/formulae/01-letters-unknowns-variables.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "straight-lines",
       "title": "Straight Lines and Connected Representations",
       "stage": "Intermediate",

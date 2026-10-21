@@ -86,6 +86,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Inequalities/Lesson_03_Showing_Solutions_on_a_Number_Line/NEO_Maths_Y9_Inequalities_Lesson_03_Showing_Solutions_on_a_Number_Line_v0.1.html",
     "ineq-04-regions-on-a-graph":
         "02_Foundations/01_Lessons/Inequalities/Lesson_04_Inequalities_as_Regions/NEO_Maths_Y9_Inequalities_Lesson_04_Inequalities_as_Regions_v0.1.html",
+    "formulae-01-letters-unknowns-variables":
+        "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_01_Letters_as_Unknowns_and_Variables/NEO_Maths_Y9_Formulae_Lesson_01_Letters_as_Unknowns_and_Variables_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
