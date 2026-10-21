@@ -90,6 +90,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_01_Letters_as_Unknowns_and_Variables/NEO_Maths_Y9_Formulae_Lesson_01_Letters_as_Unknowns_and_Variables_v0.1.html",
     "formulae-02-substituting-values":
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_02_Substituting_Values/NEO_Maths_Y9_Formulae_Lesson_02_Substituting_Values_v0.1.html",
+    "formulae-03-words-and-diagrams":
+        "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_03_Formulae_from_Words_and_Diagrams/NEO_Maths_Y9_Formulae_Lesson_03_Formulae_from_Words_and_Diagrams_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
@@ -555,6 +557,24 @@ def inject_progress(html: str, lesson_id: str, depth: int) -> str:
     return html + snippet
 
 
+# Units whose diagnostic expedition gives a field kit (GreenPrint v2.4). Their lessons get a "Field kit"
+# button; lesson n of the unit opens with tool n first. Data files: docs/assets/fieldkits/<unit-id>.js,
+# made by scripts/fieldkits/make_fieldkits.js. Add a unit here when its expedition is built.
+FIELDKIT_UNITS = {"inequalities", "formulae-rearranging"}
+
+
+def inject_fieldkit(html: str, unit_id: str, index: int, depth: int) -> str:
+    if unit_id not in FIELDKIT_UNITS or "NEOFieldKit.mount" in html:
+        return html
+    rel = "../" * depth
+    snippet = (f'\n<script src="{rel}assets/fieldkits/{unit_id}.js"></script>'
+               f'\n<script src="{rel}assets/fieldkit.js"></script>'
+               f'\n<script>NEOFieldKit.mount({index});</script>\n')
+    if re.search(r"</body>", html, re.IGNORECASE):
+        return re.sub(r"</body>", lambda _m: snippet + "</body>", html, count=1, flags=re.IGNORECASE)
+    return html + snippet
+
+
 def copy_lesson_assets(html: str, src: Path, dest: Path) -> list:
     """Copy a lesson's guidance PDFs into docs/ next to its built page.
 
@@ -633,7 +653,7 @@ def main() -> None:
     missing_guides = []
 
     for unit in data["units"]:
-        for lesson in unit["lessons"]:
+        for index, lesson in enumerate(unit["lessons"]):
             src_rel = SOURCES.get(lesson["id"])
             if not src_rel:
                 continue
@@ -648,6 +668,7 @@ def main() -> None:
             depth = len(Path(lesson["file"]).parents) - 1
             html = inject_practice_card(html)
             html = inject_progress(html, lesson["id"], depth)
+            html = inject_fieldkit(html, unit["id"], index, depth)
             html = inject_chrome(html, unit["title"], lesson["num"], lesson["title"], depth)
             html = ensure_charset(html)
             dest.write_text(html, encoding="utf-8")

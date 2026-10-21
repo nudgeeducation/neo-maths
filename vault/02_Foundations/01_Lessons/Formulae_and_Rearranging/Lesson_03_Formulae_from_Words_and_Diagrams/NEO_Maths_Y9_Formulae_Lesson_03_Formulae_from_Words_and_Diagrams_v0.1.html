@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Formulae from words and diagrams</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Formulae and Rearranging</h1>
+<h2>Formulae from words and diagrams</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>How do I turn a description into a formula?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — turning words and pictures into formulae, and then using them.</p>
+<p><b>Stepping Stone:</b> <b>write a formula</b> from a description in words or from a diagram, choosing letters for the quantities; and <b>use</b> the formula to answer questions.</p>
+<p><b>You will need:</b> writing simple expressions such as 5<span class="uk">b</span> + 30, and substituting values from Lesson 2 — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 14 · Move 9 · Reflect 8 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Formulae_Lesson_03_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Formulae_Lesson_03_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','A taxi costs £3 plus £2 for every mile. Draw a bar for 1 mile, 2 miles and 3 miles. Which part stays the same?')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION (hero) ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Words to bars to formula</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">Many everyday rules have the same shape: a <b>fixed amount</b> you always pay, plus an amount for <b>each</b> mile, month or hour. A <b>bar model</b> shows that shape, and a <b>formula</b> says it in a few symbols: a taxi costing £3 plus £2 a mile becomes <span class="uk">C</span> = 3 + 2<span class="uk">m</span>.</p>
+</div>
+<p><b>What to do:</b> tap each phrase in the description to see what it adds to the bar, and what it will become in the formula. Move the slider to see the bar grow. Then put the pieces together: write the formula yourself, and use it.</p>
+<p><b>What you are trying to notice:</b> the fixed part is drawn once, whatever the slider says. The "for every" part is drawn again for each mile — so it becomes a <b>number × letter</b> term.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧱 Build the formula</h3>
+<div id="wbCount" class="small" style="text-align:center"></div>
+<div id="wbSay" class="clue" style="font-size:1.15em;text-align:center"></div>
+<div class="buttonrow" style="justify-content:center" id="wbPhrases"></div>
+<div class="card" style="text-align:center"><svg id="wbSvg" class="graphsvg" style="max-width:620px" viewBox="0 0 620 150" role="img" aria-label="A bar model of the description"></svg></div>
+<div class="buttonrow" style="justify-content:center"><label for="wbN" id="wbNl"></label><input id="wbN" type="range" min="0" max="6" step="1" value="3" oninput="wbDraw()" style="width:200px"><span id="wbNv" class="bignum" style="min-width:2em"></span></div>
+<div id="wbBuilt" class="bignum" style="font-size:1.4em"></div>
+<div id="wbStep" class="card"></div>
+<div id="wbRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wbNext()">Next description →</button></div>
+<p><b>Carry this forward:</b> find the fixed part and the "for each" part. The fixed part is a number on its own; the "for each" part is a number × the letter.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Walk round the shape</summary>
+<p><b>What to do:</b> each shape has sides labelled with letters and numbers. Write a formula for what is asked — usually the perimeter. If you are unsure, press <b>Walk round the shape</b> to add the sides one at a time.</p>
+<p><b>What you are trying to notice:</b> a perimeter is every side added once. Equal sides collect together: <span class="uk">x</span> + <span class="uk">x</span> is 2<span class="uk">x</span>.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">📐 Formula from a diagram</h3>
+<div id="sdCount" class="small" style="text-align:center"></div>
+<div class="card" style="text-align:center"><svg id="sdSvg" class="graphsvg" style="max-width:360px" viewBox="0 0 360 230" role="img" aria-label="A shape with labelled sides"></svg></div>
+<div id="sdAsk" class="clue" style="text-align:center"></div>
+<div class="buttonrow" style="justify-content:center"><input id="sdAns" style="max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your formula" onkeydown="if(event.key==='Enter')sdCheck()"><button onclick="sdCheck()">✅ Check</button><button onclick="sdWalk()">Walk round the shape</button></div>
+<div id="sdWalkOut" class="small" style="text-align:center" aria-live="polite"></div>
+<div id="sdRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="sdNext()">Next shape →</button></div>
+<p><b>Carry this forward:</b> go round the shape once, write every side, then collect the like terms.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Word-order traps</summary>
+<p><b>What to do:</b> choose the formula that matches each description. Then look at the table: it compares the description with its "twin", which uses the same words in a different order.</p>
+<p><b>What you are trying to notice:</b> the order of the words is the order of the operations. "Double, then add 3" and "add 3, then double" use the same numbers but give different answers.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔀 Same words, different order</h3>
+<div id="woCount" class="small" style="text-align:center"></div>
+<div id="woSay" class="bignum" style="font-size:1.3em"></div>
+<div class="buttonrow" style="justify-content:center" id="woOpts"></div>
+<div id="woRead" class="feedback" aria-live="polite"></div>
+<div id="woTable" class="card"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="woNext()">Next description →</button></div>
+<p><b>Carry this forward:</b> read the description in order, and do the operations in that order. Brackets show what must happen first.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Which plan is cheaper?</summary>
+<p><b>What to do:</b> three gyms describe their prices in words. Write a formula for the cost of <span class="uk">n</span> months at each one. Then use your formulae to decide which gym is cheapest — and when the answer changes.</p>
+<p><b>What you are trying to notice:</b> a formula lets you answer "what if?" questions for any number of months, without working out every case by hand. The cheapest choice depends on how long you stay.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🏋️ Three gyms</h3>
+<div id="plRows"></div>
+<div id="plTable" class="card"></div>
+<div id="plQs" class="card"></div>
+<div id="plRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card" style="border:2px solid #b9a2cf;background:#f7f2fb">
+<h3 style="margin-top:0">✨ Make your own <span class="stretch">stretch</span></h3>
+<p>Design a fourth gym price that is cheapest for exactly <b>6 to 10 months</b>. Write it in words and as a formula, and check it against the other three.</p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A sentence became a picture, and the picture became a few symbols. That is a lot of translating. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> think of something you pay for — a bus pass, a phone, a game. Is there a fixed part and a "for each" part? You may already be using a formula without writing it down.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>modelling</b> — turning a real situation into mathematics, answering a question with it, and turning the answer back into words. Comparing price plans is something adults do all the time, often without the tools to do it well.</p>
+<p class="small">Carry one idea forward: when a choice depends on "how many" or "how long", a formula can show you the whole picture.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — From words to a decision</summary>
+<p><b>Your task:</b> show that you can write formulae from words and diagrams, and use them to make a decision.</p>
+<ul>
+<li>Write a formula for each: a plumber who charges £45 to call out plus £30 an hour; a candle that is 20 cm tall and burns 2 cm each hour; the perimeter of a rectangle that is <span class="uk">x</span> cm long and 5 cm wide.</li>
+<li>Use each formula once: the cost of 2½ hours, the height after 6 hours, the perimeter when <span class="uk">x</span> = 8.</li>
+<li>Two phone plans: Plan A costs £12 a month; Plan B costs £30 to start and then £9 a month. Write a formula for each, and find when Plan B becomes cheaper.</li>
+<li>Explain the difference between "add 4, then multiply by 3" and "multiply by 3, then add 4", using formulae and one example.</li>
+<li><span class="stretch">stretch</span> Find a real price list (a cinema, a taxi, a hire company), write its formula, and say what each letter and number means.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_FORMULAE_WORDS_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Identifies the numbers in a description.</td><td>Identifies the fixed part and the "for each" part.</td><td>Writes all three formulae correctly.</td><td>Explains what each letter and number means in context.</td></tr>
+<tr><td><b>Application</b></td><td>Uses one formula.</td><td>Uses all three formulae.</td><td>Writes both plan formulae and compares them.</td><td>Finds exactly when Plan B becomes cheaper, and justifies it.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes answers.</td><td>States what each letter stands for.</td><td>Explains the word-order difference with formulae.</td><td>Uses a table or bar model to make the comparison clear to someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one answer.</td><td>Checks a formula with one value.</td><td>Checks each formula against the description.</td><td>Spots and corrects a formula that does not match its description.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Formulae from words and diagrams — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Write formulae like <b>C = 4 + 3m</b> (you can leave out "C ="), using ^2 or ² for a square.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Underline the fixed part and circle the for-each part. Then test your formula with one value.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["=","\u2212","\u00d7","\u00f7","(",")","\u00b2","\u00bd"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Algebra and number helpers ---------------- */
+function algNorm(s){ return String(s).toLowerCase().replace(/\s+/g,'').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3').replace(/£/g,''); }
+function evalExpr(expr,vars){
+  var s=algNorm(expr); if(!s||!/^[0-9a-z.+\-*/()^]+$/.test(s)) return NaN;
+  s=s.replace(/(\d|[a-z]|\))(?=[a-z(])/g,'$1*').replace(/([a-z])(?=\d)/g,'$1*').replace(/\^/g,'**');
+  var bad=false; s=s.replace(/[a-z]/g,function(c){ if(vars[c]==null){ bad=true; return '0'; } return '('+vars[c]+')'; });
+  if(bad) return NaN;
+  try{ var r=Function('"use strict";return ('+s+');')(); return typeof r==='number'&&isFinite(r)?r:NaN; }catch(e){ return NaN; }
+}
+function nfix(v){ return Math.round(v*1e6)/1e6; }
+function fr(v){ v=nfix(v); var neg=v<0, a=Math.abs(v), w=Math.floor(a+1e-9), r=nfix(a-w), g={0.25:'¼',0.5:'½',0.75:'¾'}[r]; var s=g?(w?w+g:g):fmt(a).replace('−',''); return (neg?'−':'')+s; }
+function valNum(v){
+  var s=String(v).trim().replace(/[−–]/g,'-').replace(/^£\s*/,'');
+  var m=s.match(/^(-?)(\d+)\s*([½¼¾])$/); if(m){ var x=+m[2]+{'½':.5,'¼':.25,'¾':.75}[m[3]]; return m[1]?-x:x; }
+  m=s.match(/^(-?)(\d+)\s+(\d+)\/(\d+)$/); if(m&&+m[4]){ var y=+m[2]+m[3]/m[4]; return m[1]?-y:y; }
+  return signedNum(s);
+}
+function same(a,b){ return !isNaN(a)&&Math.abs(a-b)<1e-9; }
+function pretty(s){ return String(s).replace(/-/g,'−').replace(/\*/g,' × ').replace(/\^2/g,'²').replace(/([a-zA-Z])/g,'<span class="uk">$1</span>'); }
+// The right-hand side of a typed formula: "C = 3 + 2m", "3 + 2m = C" or just "3 + 2m". Null if another letter stands alone.
+// With subject '?', any single letter that is not one of the formula's own letters may stand on one side (y = x² + 1).
+function formSide(v,subject,letters){
+  var s=String(v).trim(); if(!s) return null; var parts=s.split('='); if(parts.length>2) return null;
+  if(parts.length===1) return s;
+  var L=algNorm(parts[0]), R=algNorm(parts[1]), sub=String(subject||'').toLowerCase();
+  var lone=function(z){ return sub==='?'?(/^[a-z]$/.test(z)&&(letters||[]).indexOf(z)<0):z===sub; };
+  if(lone(L)) return parts[1]; if(lone(R)) return parts[0]; return null;
+}
+// Does a typed formula have the same value as the target at several test values? (QA gate 6a: any equivalent form.)
+function formIs(v,target,letters,subject){
+  var e=formSide(v,subject,letters); if(e===null) return false; var ok=true;
+  [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k*1.25;}); var a=evalExpr(e,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; });
+  return ok;
+}
+function formAt(v,subject,vars){ var e=formSide(v,subject); return e===null?NaN:evalExpr(e,vars); }
+
+/* ---------------- CONNECTION (hero): words to bars to formula ---------------- */
+var WB=[
+ {say:'A taxi costs <b>£3</b>, plus <b>£2 for every mile</b>.',subj:'C',v:'m',vname:'miles',fixed:3,per:2,sign:1,
+  phrases:['£3','plus','£2 for every mile'],use:{q:'Use your formula: how much does a 7-mile journey cost, in pounds?',x:7,ans:17}},
+ {say:'A gym charges a <b>£20 joining fee</b>, then <b>£15 a month</b>.',subj:'C',v:'n',vname:'months',fixed:20,per:15,sign:1,
+  phrases:['a £20 joining fee','then','£15 a month'],use:{q:'How much do 9 months cost, in pounds?',x:9,ans:155}},
+ {say:'A plumber charges <b>£40 to call out</b>, plus <b>£25 an hour</b>.',subj:'C',v:'h',vname:'hours',fixed:40,per:25,sign:1,
+  phrases:['£40 to call out','plus','£25 an hour'],use:{q:'How much for 2½ hours, in pounds?',x:2.5,ans:102.5}},
+ {say:'Sam has <b>£60</b> saved, and spends <b>£4 each week</b>.',subj:'M',v:'w',vname:'weeks',fixed:60,per:4,sign:-1,
+  phrases:['£60 saved','and spends','£4 each week'],use:{q:'How much is left after 8 weeks, in pounds?',x:8,ans:28}},
+ {say:'Cinema tickets cost <b>£8 for each adult</b> and <b>£5 for each child</b>. (<span class="uk">a</span> adults, <span class="uk">c</span> children.)',subj:'T',two:true,v:'a',vname:'adults (with 2 children)',
+  phrases:['£8 for each adult','and','£5 for each child'],use:{q:'What is the total for 2 adults and 3 children, in pounds?',vals:{a:2,c:3},ans:31},stretch:true}
+];
+function wbTarget(t){ return t.two?'8a+5c':(t.fixed+(t.sign>0?'+':'-')+t.per+t.v); }
+function wbLetters(t){ return t.two?['a','c']:[t.v]; }
+var wb={i:0,tapped:{},step:0};
+function wbRender(){
+  var t=WB[wb.i];
+  document.getElementById('wbCount').innerHTML=(t.stretch?'<span class="stretch">stretch</span> ':'')+'Description '+(wb.i+1)+' of '+WB.length;
+  document.getElementById('wbSay').innerHTML=t.say;
+  document.getElementById('wbPhrases').innerHTML=t.phrases.map(function(p,k){ return '<button class="chip'+(wb.tapped[k]?' active':'')+'" onclick="wbTap('+k+')">'+p+'</button>'; }).join('');
+  document.getElementById('wbNl').innerHTML='<b>Number of '+t.vname+':</b>';
+  wbDraw(); wbStepRender();
+}
+function wbTap(k){ wb.tapped[k]=true; var t=WB[wb.i], all=t.phrases.every(function(p,j){return wb.tapped[j];}); if(all&&wb.step===0) wb.step=1; wbRender();
+  var fb=document.getElementById('wbRead'); fb.style.display='block'; fb.className='feedback'; fb.style.background='#e5edf4';
+  fb.innerHTML=k===1?'“'+t.phrases[1]+'” tells you how the parts combine: '+(t.sign<0?'spending takes away, so it is a <b>subtraction</b>.':'they are <b>added</b>.'):
+    k===0?(t.two?'£8 for <b>each</b> adult: that is 8 × <span class="uk">a</span>, written 8<span class="uk">a</span>.':'This amount is there <b>once</b>, however many '+t.vname+'. It is the fixed part: '+t.fixed+'.'):
+    (t.two?'£5 for <b>each</b> child: that is 5 × <span class="uk">c</span>, written 5<span class="uk">c</span>.':'This amount comes <b>again for each</b> one of the '+t.vname+'. For <span class="uk">'+t.v+'</span> '+t.vname+' it is '+t.per+' × <span class="uk">'+t.v+'</span>, written '+t.per+'<span class="uk">'+t.v+'</span>.');
+}
+function wbDraw(){
+  var t=WB[wb.i], n=+document.getElementById('wbN').value, h='', y=36, H=46;
+  document.getElementById('wbNv').textContent=n;
+  if(t.two){ var tot=8*n+5*2, sc=560/(8*6+10), x=30;
+    for(var a=0;a<n;a++){ h+='<rect x="'+x+'" y="'+y+'" width="'+(8*sc)+'" height="'+H+'" fill="'+(wb.tapped[0]?'#dce8ef':'#eee')+'" stroke="#365a68" stroke-width="2"/><text x="'+(x+4*sc)+'" y="'+(y+29)+'" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">£8</text>'; x+=8*sc; }
+    for(var c=0;c<2;c++){ h+='<rect x="'+x+'" y="'+y+'" width="'+(5*sc)+'" height="'+H+'" fill="'+(wb.tapped[2]?'#f3e2c4':'#eee')+'" stroke="#a9802f" stroke-width="2"/><text x="'+(x+2.5*sc)+'" y="'+(y+29)+'" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">£5</text>'; x+=5*sc; }
+    h+='<text x="30" y="'+(y+H+34)+'" font-family="Arial" font-size="15" fill="#2f3429">'+n+' adult'+(n===1?'':'s')+' and 2 children: £'+tot+'</text>';
+    document.getElementById('wbSvg').innerHTML=h; wbBuilt(); return; }
+  var max=t.sign>0?t.fixed+t.per*6:t.fixed, sc=560/max, x0=30;
+  if(t.sign>0){
+    h+='<rect x="'+x0+'" y="'+y+'" width="'+(t.fixed*sc)+'" height="'+H+'" fill="'+(wb.tapped[0]?'#f3e2c4':'#eee')+'" stroke="#a9802f" stroke-width="2"/><text x="'+(x0+t.fixed*sc/2)+'" y="'+(y+29)+'" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold" fill="#2f3429">£'+t.fixed+'</text>';
+    var x=x0+t.fixed*sc;
+    for(var k=0;k<n;k++){ h+='<rect x="'+x+'" y="'+y+'" width="'+(t.per*sc)+'" height="'+H+'" fill="'+(wb.tapped[2]?'#dce8ef':'#eee')+'" stroke="#365a68" stroke-width="2"/>'+(t.per*sc>26?'<text x="'+(x+t.per*sc/2)+'" y="'+(y+29)+'" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">£'+t.per+'</text>':''); x+=t.per*sc; }
+    h+='<text x="'+x0+'" y="'+(y+H+34)+'" font-family="Arial" font-size="15" fill="#2f3429">'+n+' '+t.vname+': £'+t.fixed+' + '+n+' × £'+t.per+' = £'+fr(t.fixed+t.per*n)+'</text>';
+  } else {
+    var keep=t.fixed-t.per*n;
+    h+='<rect x="'+x0+'" y="'+y+'" width="'+(t.fixed*sc)+'" height="'+H+'" fill="'+(wb.tapped[0]?'#f3e2c4':'#eee')+'" stroke="#a9802f" stroke-width="2"/>';
+    for(var j=0;j<n;j++){ var xx=x0+(t.fixed-t.per*(j+1))*sc; h+='<rect x="'+xx+'" y="'+y+'" width="'+(t.per*sc)+'" height="'+H+'" fill="'+(wb.tapped[2]?'#f6dddd':'#e2e2e2')+'" stroke="#b0412f" stroke-width="2" stroke-dasharray="4 3"/><text x="'+(xx+t.per*sc/2)+'" y="'+(y+29)+'" text-anchor="middle" font-family="Arial" font-size="12" fill="#b0412f">−£'+t.per+'</text>'; }
+    h+='<text x="'+x0+'" y="'+(y-10)+'" font-family="Arial" font-size="13" fill="#5c6b4f">£'+t.fixed+' to start</text><text x="'+x0+'" y="'+(y+H+34)+'" font-family="Arial" font-size="15" fill="#2f3429">'+n+' '+t.vname+': £'+t.fixed+' − '+n+' × £'+t.per+' = £'+fr(keep)+' left</text>';
+  }
+  document.getElementById('wbSvg').innerHTML=h; wbBuilt();
+}
+function wbBuilt(){
+  var t=WB[wb.i], parts=[];
+  if(t.two) parts=[wb.tapped[0]?'8a':'…',wb.tapped[1]?'+':'…',wb.tapped[2]?'5c':'…'];
+  else parts=[wb.tapped[0]?String(t.fixed):'…',wb.tapped[1]?(t.sign>0?'+':'−'):'…',wb.tapped[2]?t.per+t.v:'…'];
+  // The assembled formula stays hidden until the learner has written it: tapping explains the pieces, the learner puts them together.
+  var got=parts.filter(function(p){return p!=='…';}).length;
+  document.getElementById('wbBuilt').innerHTML=wb.step>=2?pretty(t.subj+' = '+wbTarget(t).replace(/([+-])/g,' $1 ')):pretty(t.subj)+' = <span style="color:#b9a98f">?</span> <span class="small" style="font-size:.6em;font-weight:normal">('+got+' of 3 phrases explored)</span>';
+}
+function wbStepRender(){
+  var t=WB[wb.i], el=document.getElementById('wbStep');
+  if(wb.step===0) el.innerHTML='<span class="small">Tap each phrase in the description to see what it adds.</span>';
+  else if(wb.step===1) el.innerHTML='<p><b>Now write the formula yourself.</b> <span class="small">Use <span class="uk">'+(t.two?'a</span> and <span class="uk">c':t.v)+'</span>.</span></p><div class="buttonrow">'+pretty(t.subj)+' = <input id="wbAns" style="max-width:200px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your formula" onkeydown="if(event.key===\'Enter\')wbCheck()"><button onclick="wbCheck()">✅ Check</button></div>';
+  else if(wb.step===2) el.innerHTML='<p><b>'+t.use.q+'</b></p><div class="buttonrow">£ <input id="wbUse" class="numin" style="max-width:110px" aria-label="Your answer" onkeydown="if(event.key===\'Enter\')wbUseCheck()"><button onclick="wbUseCheck()">✅ Check</button></div>';
+  else el.innerHTML='<p>✓ Formula written and used. Try the next description.</p>';
+}
+function wbMsg(cls,html){ var fb=document.getElementById('wbRead'); fb.style.display='block'; fb.style.background=''; fb.className='feedback '+cls; fb.innerHTML=html; }
+function wbCheck(){
+  var t=WB[wb.i], v=document.getElementById('wbAns').value, L=wbLetters(t);
+  if(!v.trim()){ wbMsg('warn','Type the formula first.'); return; }
+  if(formIs(v,wbTarget(t),L,t.subj)){ wb.step=2; wbRender(); wbMsg('good','Yes: '+pretty(t.subj+' = '+wbTarget(t).replace(/([+-])/g,' $1 '))+'. Any way of writing it with the same value is right — for example '+(t.two?'5c + 8a':(t.sign>0?t.per+t.v+' + '+t.fixed:t.fixed+' − '+t.per+' × '+t.v))+'.'); return; }
+  var e=formSide(v,t.subj); if(e===null||isNaN(evalExpr(e,(function(){var o={};L.forEach(function(c){o[c]=2;});return o;})()))){ wbMsg('warn','Use only the letter'+(L.length>1?'s ':' ')+L.join(' and ')+', numbers and + − × ÷. For example: 5 + 4'+L[0]+'.'); return; }
+  if(!t.two){
+    var swap=t.per+(t.sign>0?'+':'-')+t.fixed+t.v, both='('+t.fixed+(t.sign>0?'+':'-')+t.per+')*'+t.v;
+    if(formIs(v,swap,L,t.subj)){ wbMsg('warn','The numbers have swapped jobs. Which amount is there only <b>once</b>, and which comes again for <b>each</b> of the '+t.vname+'?'); return; }
+    if(formIs(v,both,L,t.subj)){ wbMsg('warn','Only the £'+t.per+' is for <b>each</b> of the '+t.vname+'. The £'+t.fixed+' is there just once.'); return; }
+  }
+  var rows=[0,1,2,3].map(function(k){ var vars={}; L.forEach(function(c){vars[c]=k;}); if(t.two) vars.c=2; return '<tr><td>'+k+'</td><td>'+fr(evalExpr(e,vars))+'</td><td>'+fr(evalExpr(wbTarget(t),vars))+'</td></tr>'; }).join('');
+  wbMsg('warn','Not yet. Compare your formula with the description:<table style="margin-top:6px;max-width:420px"><tr><th>'+(t.two?'adults (2 children)':t.vname)+'</th><th>your formula</th><th>the description</th></tr>'+rows+'</table>');
+}
+function wbUseCheck(){
+  var t=WB[wb.i], v=valNum(document.getElementById('wbUse').value);
+  if(same(v,t.use.ans)){ wb.step=3; wbRender(); wbMsg('good','Yes: £'+fr(t.use.ans)+'.'+(t.use.x===2.5?' Fractions of an hour work in the formula just like whole hours.':'')); return; }
+  var slip=t.two?null:(same(v,(t.fixed+t.per)*t.use.x)?'Only the £'+t.per+' is multiplied by '+fr(t.use.x)+'.':same(v,t.fixed+t.per*Math.floor(t.use.x))?'Use all of '+fr(t.use.x)+', including the fraction.':null);
+  wbMsg('warn',slip||'Substitute into your formula, in brackets, and work in order: multiply first, then add or subtract.');
+}
+function wbNext(){ wb.i=(wb.i+1)%WB.length; wb.tapped={}; wb.step=0; document.getElementById('wbN').value=3; document.getElementById('wbRead').style.display='none'; wbRender(); }
+function wbInit(){ wbRender(); }
+
+/* ---------------- MOVEMENT: walk round the shape ---------------- */
+function lbl(x,y,t,anchor){ return '<text x="'+x+'" y="'+y+'" text-anchor="'+(anchor||'middle')+'" font-family="Georgia" font-size="18" fill="#2f3429">'+String(t).replace(/([a-z])/g,'<tspan font-style="italic">$1</tspan>')+'</text>'; }
+function tick(x1,y1,x2,y2,n){ var mx=(x1+x2)/2, my=(y1+y2)/2, dx=x2-x1, dy=y2-y1, L=Math.sqrt(dx*dx+dy*dy), ux=-dy/L*7, uy=dx/L*7, h=''; for(var k=0;k<(n||1);k++){ var o=(k-(n-1)/2)*5, ox=dx/L*o, oy=dy/L*o; h+='<line x1="'+(mx+ox-ux)+'" y1="'+(my+oy-uy)+'" x2="'+(mx+ox+ux)+'" y2="'+(my+oy+uy)+'" stroke="#2f3429" stroke-width="2"/>'; } return h; }
+var SD=[
+ {ask:'Write a formula for the perimeter <span class="uk">P</span> of this rectangle.',subj:'P',target:'2x+6',letters:['x'],sides:['x','3','x','3'],
+  draw:function(){ return '<rect x="70" y="50" width="220" height="110" fill="#dce8ef" stroke="#365a68" stroke-width="3"/>'+lbl(180,40,'x')+lbl(180,185,'x')+lbl(300,110,'3','start')+lbl(60,110,'3','end'); }},
+ {ask:'Write a formula for the perimeter <span class="uk">P</span> of this square.',subj:'P',target:'4s',letters:['s'],sides:['s','s','s','s'],
+  draw:function(){ return '<rect x="115" y="40" width="130" height="130" fill="#dce8ef" stroke="#365a68" stroke-width="3"/>'+lbl(180,30,'s')+tick(115,170,245,170,1)+tick(245,40,245,170,1)+tick(115,40,115,170,1)+tick(115,40,245,40,1); }},
+ {ask:'Write a formula for the perimeter <span class="uk">P</span> of this isosceles triangle.',subj:'P',target:'2a+5',letters:['a'],sides:['a','a','5'],
+  draw:function(){ return '<polygon points="180,25 85,190 275,190" fill="#dce8ef" stroke="#365a68" stroke-width="3"/>'+lbl(115,105,'a','end')+lbl(245,105,'a','start')+lbl(180,215,'5')+tick(180,25,85,190,1)+tick(180,25,275,190,1); }},
+ {ask:'Write a formula for the perimeter <span class="uk">P</span> of this rectangle.',subj:'P',target:'4x+4',letters:['x'],sides:['x + 2','x','x + 2','x'],
+  draw:function(){ return '<rect x="60" y="55" width="240" height="100" fill="#dce8ef" stroke="#365a68" stroke-width="3"/>'+lbl(180,45,'x + 2')+lbl(180,180,'x + 2')+lbl(310,110,'x','start')+lbl(50,110,'x','end'); }},
+ {ask:'Write a formula for the perimeter <span class="uk">P</span> of this regular hexagon.',subj:'P',target:'6k',letters:['k'],sides:['k','k','k','k','k','k'],
+  draw:function(){ var pts=[],h='',i; for(i=0;i<6;i++){ var a=Math.PI/3*i; pts.push([180+85*Math.cos(a),112+85*Math.sin(a)]); }
+    h='<polygon points="'+pts.map(function(p){return p.join(',');}).join(' ')+'" fill="#dce8ef" stroke="#365a68" stroke-width="3"/>';
+    for(i=0;i<6;i++){ var p=pts[i], q=pts[(i+1)%6]; h+=tick(p[0],p[1],q[0],q[1],1); } return h+lbl(180,222,'k'); }},
+ {ask:'Write a formula for the <b>area</b> <span class="uk">A</span> of this rectangle.',subj:'A',target:'4x',letters:['x'],area:true,
+  draw:function(){ return '<rect x="70" y="50" width="220" height="110" fill="#e3f0df" stroke="#3f5f45" stroke-width="3"/>'+lbl(180,40,'x')+lbl(300,110,'4','start'); }}
+];
+var sd={i:0};
+function sdRender(){ var s=SD[sd.i]; document.getElementById('sdCount').textContent='Shape '+(sd.i+1)+' of '+SD.length;
+  document.getElementById('sdSvg').innerHTML=s.draw(); document.getElementById('sdAsk').innerHTML=s.ask+' <span class="small">(You can leave out “'+s.subj+' =”.)</span>';
+  document.getElementById('sdAns').value=''; document.getElementById('sdWalkOut').innerHTML=''; document.getElementById('sdRead').style.display='none'; }
+function sdWalk(){ var s=SD[sd.i], out=document.getElementById('sdWalkOut');
+  out.innerHTML=s.area?'Area of a rectangle = length × width, so <span class="uk">A</span> = '+pretty('x')+' × 4. Now write it in the usual notation.':'Going round once: <span class="uk">P</span> = '+s.sides.map(pretty).join(' + ')+'. Now collect the like terms.'; }
+function sdCheck(){
+  var s=SD[sd.i], v=document.getElementById('sdAns').value, fb=document.getElementById('sdRead'); fb.style.display='block';
+  if(!v.trim()){ fb.className='feedback warn'; fb.textContent='Type a formula first, or walk round the shape.'; return; }
+  if(formIs(v,s.target,s.letters,s.subj)){ fb.className='feedback good'; fb.innerHTML='Yes: '+pretty(s.subj+' = '+s.target.replace(/([+-])/g,' $1 '))+'.'+(/\+.*\+/.test(v)&&!s.area?' You can collect the like terms to write it more simply.':''); return; }
+  var vars={}; vars[s.letters[0]]=5; var mine=formAt(v,s.subj,vars), real=evalExpr(s.target,vars);
+  fb.className='feedback warn';
+  if(isNaN(mine)){ fb.innerHTML='Use the letter <span class="uk">'+s.letters[0]+'</span>, numbers and + − ×. For example: 3'+s.letters[0]+' + 2.'; return; }
+  if(!s.area&&same(mine*2,real)) fb.innerHTML='That is only half way round. A perimeter goes all the way round the shape.';
+  else if(s.area&&same(mine,2*5+8)) fb.innerHTML='That is the perimeter. Area is length × width.';
+  else fb.innerHTML='Try it with <span class="uk">'+s.letters[0]+'</span> = 5: your formula gives '+fr(mine)+', but the '+(s.area?'area':'perimeter')+' is '+fr(real)+'. Walk round the shape and add every side.';
+}
+function sdNext(){ sd.i=(sd.i+1)%SD.length; sdRender(); }
+function sdInit(){ sdRender(); }
+
+/* ---------------- REFLECTION: word-order traps ---------------- */
+var WO=[
+ {say:'Double x, then add 3.',v:'x',opts:['2x+3','2(x+3)','x+6'],ans:0},
+ {say:'Add 3 to x, then double.',v:'x',opts:['2x+3','2(x+3)','x+3*2'],ans:1},
+ {say:'5 less than n.',v:'n',opts:['n-5','5-n','5n'],ans:0},
+ {say:'n less than 5.',v:'n',opts:['n-5','5-n','n/5'],ans:1},
+ {say:'Square x, then multiply by 3.',v:'x',opts:['3x^2','(3x)^2','3+x^2'],ans:0},
+ {say:'Multiply x by 3, then square.',v:'x',opts:['3x^2','(3x)^2','3x+2'],ans:1},
+ {say:'Halve y, then add 4.',v:'y',opts:['y/2+4','(y+4)/2','2y+4'],ans:0},
+ {say:'Add 4 to y, then halve.',v:'y',opts:['y/2+4','(y+4)/2','y+2'],ans:1}
+];
+var wo={i:0};
+function woShow(e){ return pretty(e.replace(/([+-])/g,' $1 ').replace(/\*/g,'×')); }
+function woRender(){ var q=WO[wo.i]; document.getElementById('woCount').textContent='Description '+(wo.i+1)+' of '+WO.length;
+  document.getElementById('woSay').innerHTML=q.say.replace(new RegExp('(^|[^A-Za-z])'+q.v+'(?![A-Za-z])'),'$1<span class="uk">'+q.v+'</span>');
+  document.getElementById('woOpts').innerHTML=q.opts.map(function(o,k){return '<button class="chip" onclick="woPick('+k+')">'+woShow(o)+'</button>';}).join('');
+  document.getElementById('woRead').style.display='none'; document.getElementById('woTable').innerHTML=''; }
+function woPick(k){
+  var q=WO[wo.i], fb=document.getElementById('woRead'), twin=q.ans===0?1:0; fb.style.display='block';
+  document.querySelectorAll('#woOpts .chip').forEach(function(b,j){ b.classList.toggle('active',j===k); });
+  if(k===q.ans){ fb.className='feedback good'; fb.innerHTML='Yes: '+woShow(q.opts[q.ans])+'. The table shows how different its twin is.'; }
+  else if(k===twin){ fb.className='feedback warn'; fb.innerHTML='That is its twin — the same words in the other order. Which operation does the description do <b>first</b>?'; }
+  else { fb.className='feedback warn'; fb.innerHTML='Try a value: with '+q.v+' = 2, does that match the description? Read the description one operation at a time.'; }
+  var rows=[1,2,3,4].map(function(x){ var o={}; o[q.v]=x; return '<tr><td>'+x+'</td><td>'+fr(evalExpr(q.opts[q.ans],o))+'</td><td>'+fr(evalExpr(q.opts[twin],o))+'</td></tr>'; }).join('');
+  document.getElementById('woTable').innerHTML='<table><tr><th><span class="uk">'+q.v+'</span></th><th>'+woShow(q.opts[q.ans])+' (this description)</th><th>'+woShow(q.opts[twin])+' (its twin)</th></tr>'+rows+'</table>';
+}
+function woNext(){ wo.i=(wo.i+1)%WO.length; woRender(); }
+function woInit(){ woRender(); }
+
+/* ---------------- CREATIVITY: which plan is cheaper? ---------------- */
+var PL=[{name:'Gym A',say:'£15 a month. No joining fee.',target:'15n'},{name:'Gym B',say:'£40 to join, then £10 a month.',target:'40+10n'},{name:'Gym C',say:'£25 to join, then £12 a month.',target:'25+12n'}];
+var PLQ=[{q:'Which gym is cheapest for <b>3 months</b>?',opts:['Gym A','Gym B','Gym C'],ans:0},{q:'Which gym is cheapest for <b>12 months</b>?',opts:['Gym A','Gym B','Gym C'],ans:1},{q:'From how many months is Gym B cheaper than Gym A?',num:9}];
+var pl={ok:{},q:0};
+function plRender(){
+  document.getElementById('plRows').innerHTML=PL.map(function(p,k){ return '<div class="buttonrow"><b style="min-width:5em">'+p.name+'</b><span style="flex:1 1 220px">'+p.say+'</span><span><span class="uk">C</span> = <input id="pl'+k+'" style="max-width:150px;padding:8px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Formula for '+p.name+'" onkeydown="if(event.key===\'Enter\')plCheck('+k+')"></span><button onclick="plCheck('+k+')">Check</button><span id="plOk'+k+'"></span></div>'; }).join('');
+  plTable(); plQs();
+}
+function plMsg(cls,html){ var fb=document.getElementById('plRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function plCheck(k){
+  var p=PL[k], v=document.getElementById('pl'+k).value;
+  if(formIs(v,p.target,['n'],'C')){ pl.ok[k]=true; document.getElementById('plOk'+k).textContent='✓'; plTable(); plQs(); plMsg('good',p.name+': '+pretty('C = '+p.target.replace(/\+/g,' + '))+'.'+(Object.keys(pl.ok).length===3?' All three written — now use them.':'')); }
+  else plMsg('warn',p.name+': not yet. What do you pay once, and what do you pay for <b>each</b> month? Use <span class="uk">n</span> for the number of months.');
+}
+function plTable(){
+  var el=document.getElementById('plTable'); if(Object.keys(pl.ok).length<3){ el.innerHTML='<span class="small">When all three formulae are right, a table of costs appears here.</span>'; return; }
+  var rows=''; for(var n=1;n<=12;n++){ var c=PL.map(function(p){return evalExpr(p.target,{n:n});}), m=Math.min.apply(null,c);
+    rows+='<tr><td>'+n+'</td>'+c.map(function(x){return '<td'+(x===m?' style="background:#e3f0df;font-weight:bold"':'')+'>£'+x+'</td>';}).join('')+'</tr>'; }
+  el.innerHTML='<b>Cost after <span class="uk">n</span> months</b> <span class="small">(cheapest shaded)</span><table style="margin-top:6px"><tr><th><span class="uk">n</span></th><th>Gym A</th><th>Gym B</th><th>Gym C</th></tr>'+rows+'</table>';
+}
+function plQs(){
+  var el=document.getElementById('plQs'); if(Object.keys(pl.ok).length<3){ el.innerHTML=''; return; }
+  if(pl.q>=PLQ.length){ el.innerHTML='<p>✓ All three questions answered. Did you notice that Gym C is <b>never</b> the cheapest?</p>'; return; }
+  var q=PLQ[pl.q];
+  el.innerHTML='<p><b>'+q.q+'</b></p><div class="buttonrow">'+(q.num?'<input id="plNum" class="numin" aria-label="Number of months" onkeydown="if(event.key===\'Enter\')plAns()"><button onclick="plAns()">Check</button>':q.opts.map(function(o,k){return '<button class="chip" onclick="plAns('+k+')">'+o+'</button>';}).join(''))+'</div>';
+}
+function plAns(k){
+  var q=PLQ[pl.q];
+  if(q.num){ var v=valNum(document.getElementById('plNum').value);
+    if(same(v,q.num)){ pl.q++; plQs(); plMsg('good','Yes: from 9 months. At 8 months both cost £120; at 9 months Gym B costs £130 and Gym A costs £135.'); }
+    else plMsg('warn',same(v,8)?'At 8 months they cost exactly the same (£120). When is Gym B actually cheaper?':'Look down the table: in which row does Gym B first cost less than Gym A?'); return; }
+  if(k===q.ans){ pl.q++; plQs(); plMsg('good','Yes — '+q.opts[q.ans]+'.'); } else plMsg('warn','Look at that row of the table, or work out all three costs with your formulae.');
+}
+function plInit(){ plRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    more:{title:'Writing a simple expression',prompt:'Write an expression for “4 more than <i>n</i>”.',alg:'n+4',hint:'“More than” means add: start with <i>n</i>, then add 4.'},
+    pens:{title:'Cost of several items',prompt:'Pens cost 30p each. Write an expression for the cost, in pence, of <i>k</i> pens.',alg:'30k',hint:'One pen is 30p, two pens are 2 × 30p … so <i>k</i> pens are <i>k</i> × 30.'},
+    sub:{title:'Substituting a value',prompt:'What is 3<i>n</i> + 2 when <i>n</i> = 5?',answer:17,hint:'3 × 5 = 15, then add 2.'}
+  };
+  function matches(r,v){ if(r.alg) return formIs(v,r.alg,[r.alg.replace(/[^a-z]/g,'').charAt(0)],'?'); var n=valNum(v); return !isNaN(n)&&Math.abs(n-r.answer)<=0.001; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pv(target){ return function(v){ return same(valNum(v),target); }; }
+function pf(target,letters,subject){ return function(v){ return formIs(v,target,letters,subject); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Fixed part and “for each” part",q:"A taxi charges <b>£4</b> plus <b>£3 per mile</b>. Write a formula for the cost <b><span class=\"uk\">C</span></b> of a journey of <b><span class=\"uk\">m</span></b> miles.",a:[],eq:pf('4+3m',['m'],'C'),prompt:"Which amount is paid once? Which is paid for each mile?",hint:"£4 once, and £3 × <span class=\"uk\">m</span> for the miles.",sol:"<span class=\"uk\">C</span> = 4 + 3<span class=\"uk\">m</span>."},
+ {label:"2 of 8 · Use the formula",q:"Using <b><span class=\"uk\">C</span> = 4 + 3<span class=\"uk\">m</span></b>, find the cost of a <b>6-mile</b> journey, in pounds.",a:[],eq:pv(22),prompt:"Replace <span class=\"uk\">m</span> with 6. Which comes first, × or +?",hint:"3 × 6 = 18, then add 4.",sol:"<span class=\"uk\">C</span> = 4 + 3 × 6 = 4 + 18 = 22, so £22."},
+ {label:"3 of 8 · No fixed part",q:"Tickets cost <b>£7</b> each. Write a formula for the total cost <b><span class=\"uk\">T</span></b> of <b><span class=\"uk\">n</span></b> tickets.",a:[],eq:pf('7n',['n'],'T'),prompt:"Is there anything you pay once, whatever the number of tickets?",hint:"Only £7 for each ticket: 7 × <span class=\"uk\">n</span>.",sol:"<span class=\"uk\">T</span> = 7<span class=\"uk\">n</span>."},
+ {label:"4 of 8 · “Less than”",q:"<b><span class=\"uk\">y</span></b> is <b>5 less than <span class=\"uk\">x</span></b>. Write a formula for <span class=\"uk\">y</span>.",a:[],eq:pf('x-5',['x'],'y'),prompt:"Start with <span class=\"uk\">x</span>. Is 5 added or taken away?",hint:"5 less than <span class=\"uk\">x</span> means <span class=\"uk\">x</span> − 5, not 5 − <span class=\"uk\">x</span>.",sol:"<span class=\"uk\">y</span> = <span class=\"uk\">x</span> − 5."},
+ {label:"5 of 8 · From a diagram",q:"A rectangle is <b><span class=\"uk\">x</span></b> cm long and <b>4</b> cm wide. Write a formula for its perimeter <b><span class=\"uk\">P</span></b>.",a:[],eq:pf('2x+8',['x'],'P'),prompt:"Go round the rectangle: which sides are <span class=\"uk\">x</span> and which are 4?",hint:"<span class=\"uk\">P</span> = <span class=\"uk\">x</span> + 4 + <span class=\"uk\">x</span> + 4. Collect the like terms.",sol:"<span class=\"uk\">P</span> = 2<span class=\"uk\">x</span> + 8 (or 2(<span class=\"uk\">x</span> + 4))."},
+ {label:"6 of 8 · Word order",q:"Write an expression for: <b>square <span class=\"uk\">x</span>, then add 1</b>.",a:[],eq:pf('x^2+1',['x'],'?'),prompt:"What happens to <span class=\"uk\">x</span> first?",hint:"Square <span class=\"uk\">x</span> to get <span class=\"uk\">x</span>², then add 1.",sol:"<span class=\"uk\">x</span>² + 1."},
+ {label:"7 of 8 · Word order",q:"Write an expression for: <b>add 1 to <span class=\"uk\">x</span>, then square</b>.",a:[],eq:pf('(x+1)^2',['x'],'?'),prompt:"What must be worked out before the squaring? How do you show that?",hint:"Use a bracket: (<span class=\"uk\">x</span> + 1), then square the bracket.",sol:"(<span class=\"uk\">x</span> + 1)²."},
+ {label:"8 of 8 · Two variables (stretch)",q:"A cinema charges <b>£9</b> for each adult and <b>£6</b> for each child. Write a formula for the total cost <b><span class=\"uk\">T</span></b> for <b><span class=\"uk\">a</span></b> adults and <b><span class=\"uk\">c</span></b> children.",a:[],eq:pf('9a+6c',['a','c'],'T'),prompt:"How much do the adults cost? How much do the children cost?",hint:"9 × <span class=\"uk\">a</span> for the adults, 6 × <span class=\"uk\">c</span> for the children. Add them.",sol:"<span class=\"uk\">T</span> = 9a + 6<span class=\"uk\">c</span>."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Find the fixed part and the “for each” part, and test your formula with a number — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  wbInit();
+  sdInit();
+  woInit();
+  plInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>
