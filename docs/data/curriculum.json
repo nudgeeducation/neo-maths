@@ -407,6 +407,14 @@
           "file": "lessons/formulae/05-changing-the-subject.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "formulae-06-using-and-checking",
+          "num": "Lesson 06",
+          "title": "Using and checking formulae in context",
+          "file": "lessons/formulae/06-using-and-checking.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

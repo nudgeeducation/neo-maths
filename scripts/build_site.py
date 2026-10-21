@@ -96,6 +96,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_04_Deriving_a_Formula/NEO_Maths_Y9_Formulae_Lesson_04_Deriving_a_Formula_v0.1.html",
     "formulae-05-changing-the-subject":
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_05_Changing_the_Subject/NEO_Maths_Y9_Formulae_Lesson_05_Changing_the_Subject_v0.1.html",
+    "formulae-06-using-and-checking":
+        "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_06_Using_and_Checking_Formulae/NEO_Maths_Y9_Formulae_Lesson_06_Using_and_Checking_Formulae_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
