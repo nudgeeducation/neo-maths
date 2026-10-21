@@ -375,6 +375,14 @@
           "file": "lessons/formulae/01-letters-unknowns-variables.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "formulae-02-substituting-values",
+          "num": "Lesson 02",
+          "title": "Substituting positive, negative and fractional values",
+          "file": "lessons/formulae/02-substituting-values.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
