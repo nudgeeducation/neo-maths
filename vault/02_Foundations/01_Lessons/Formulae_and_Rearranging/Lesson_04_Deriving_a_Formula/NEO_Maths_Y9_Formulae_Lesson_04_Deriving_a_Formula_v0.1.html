@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Deriving a formula</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Formulae and Rearranging</h1>
+<h2>Deriving a formula</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Can I find the rule myself, and say why it works?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — finding formulae for yourself, from patterns and shapes, and explaining why they are right.</p>
+<p><b>Stepping Stone:</b> <b>derive</b> a formula from a pattern or a shape by finding what stays the same and what grows; <b>test</b> it on a case you have not drawn; and <b>explain</b> why it works, using the structure of the picture.</p>
+<p><b>You will need:</b> linear sequences and the <span class="uk">n</span>th term, and writing formulae from Lesson 3 — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 6 · Move 8 · Reflect 10 · Create 16 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Formulae_Lesson_04_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Formulae_Lesson_04_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('square-grid','Draw steps 1, 2 and 3 of a pattern of squares made from rods. Colour the part that is the same in every step.')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — The rule detective</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">To <b>derive</b> a formula is to find it for yourself and be able to say <b>why</b> it is right. A table of numbers can suggest a rule. A picture of the structure can explain it: this part stays the same in every step, and this part grows by the same amount each time.</p>
+</div>
+<p><b>What to do:</b> each machine hides a formula. Use its table to find the formula, then test your formula on new inputs and see whether the machine agrees.</p>
+<p><b>What you are trying to notice:</b> how much the output goes up each time tells you the number in front of <span class="uk">n</span>. A table tells you <em>what</em> the rule is — but not <em>why</em>. The rest of the lesson is about the why.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔎 Find the hidden formula</h3>
+<div id="rdCount" class="small" style="text-align:center"></div>
+<div id="rdTable" class="card"></div>
+<div class="buttonrow" style="justify-content:center"><b>Output =</b><input id="rdAns" style="max-width:180px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your formula in n" onkeydown="if(event.key==='Enter')rdCheck()"><button onclick="rdCheck()">🔍 Test it on new inputs</button></div>
+<div id="rdRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rdNext()">Next machine →</button></div>
+<p><b>Carry this forward:</b> the step-up tells you the multiplier; then adjust to match the first output. Next, look for the reason inside a picture.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Net to formula</summary>
+<p><b>What to do:</b> a cuboid has edges <span class="uk">a</span>, <span class="uk">b</span> and <span class="uk">c</span>. Tap each face of its net to add its area to the surface area. Then write the formula the short way, and use it on a real box.</p>
+<p><b>What you are trying to notice:</b> the faces come in <b>matching pairs</b> — that is where the 2s in the formula come from.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">📦 Unfold the box</h3>
+<div id="ntCount" class="small" style="text-align:center"></div>
+<div class="card" style="text-align:center"><svg id="ntSvg" class="graphsvg" style="max-width:520px" viewBox="0 0 520 270" role="img" aria-label="The net of a cuboid: tap each face"></svg></div>
+<div id="ntSum" class="bignum" style="font-size:1.15em"></div>
+<div id="ntStep" class="card"></div>
+<div id="ntRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ntReset()">↺ Start again</button><button onclick="ntNext()">Next shape →</button></div>
+<p><b>Carry this forward:</b> a formula from a shape is the sum of its parts, written as simply as possible — and each part can be pointed at.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Two ways to see it (and more)</summary>
+<p><b>What to do:</b> this is a border of tiles round an <span class="uk">n</span> × <span class="uk">n</span> square. Each picture groups the tiles in a different way. Choose the formula that matches each grouping.</p>
+<p><b>What you are trying to notice:</b> different ways of seeing the same pattern give formulae that <b>look</b> different but always give the same answer. They are identities — the same idea as in Lesson 1.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">👀 Four ways of seeing one border</h3>
+<div class="buttonrow" style="justify-content:center" id="twWays"></div>
+<div class="card" style="text-align:center"><svg id="twSvg" class="graphsvg" style="max-width:300px" viewBox="0 0 300 300" role="img" aria-label="A border of tiles, grouped by colour"></svg></div>
+<div id="twSay" class="clue" style="text-align:center"></div>
+<div class="buttonrow" style="justify-content:center" id="twOpts"></div>
+<div id="twRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><label for="twN"><b><span class="uk">n</span> =</b></label><input id="twN" type="range" min="1" max="8" step="1" value="4" oninput="twDraw()" style="width:180px"><span id="twNv" class="bignum" style="min-width:2em"></span></div>
+<div id="twTable" class="card"></div>
+<p><b>Carry this forward:</b> if two formulae come from correct ways of seeing the same thing, they must agree for every <span class="uk">n</span>. That is a powerful way to check your algebra.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY (hero) ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The pattern builder</summary>
+<p><b>What to do:</b> move the slider to build the pattern step by step, and count. Press <b>Colour the structure</b> to see what stays the same and what grows. Write a formula for step <span class="uk">n</span>, test it on step 50, and explain it. Then design a pattern of your own.</p>
+<p><b>What you are trying to notice:</b> the gold part appears <b>once</b> in every step; the blue part is added <b>again</b> with each step. Gold gives the number on its own, blue gives the number × <span class="uk">n</span> — and that is <em>why</em> the formula works for every step, even ones you will never draw.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧩 Build, count, derive</h3>
+<div class="buttonrow" style="justify-content:center" id="pbPats"></div>
+<div class="card" style="text-align:center"><svg id="pbSvg" class="graphsvg" style="max-width:600px" viewBox="0 0 600 230" role="img" aria-label="Step n of the pattern"></svg></div>
+<div class="buttonrow" style="justify-content:center"><label for="pbN"><b>Step <span class="uk">n</span> =</b></label><input id="pbN" type="range" min="1" max="6" step="1" value="1" oninput="pbDraw()" style="width:200px"><span id="pbNv" class="bignum" style="min-width:2em"></span><button id="pbColBtn" onclick="pbColour()">🎨 Colour the structure</button></div>
+<div id="pbCount" class="readout" aria-live="polite"></div>
+<div id="pbStep" class="card"></div>
+<div id="pbRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="toolbox" style="margin-top:12px">
+<h3 style="margin-top:0">✨ Design your own pattern</h3>
+<p class="small">Choose how many gold tiles stay the same, and how many blue tiles are added each step. Steps 1, 2 and 3 are drawn for you. Then derive your pattern's formula.</p>
+<div class="buttonrow" style="justify-content:center"><label for="dyF"><b>Gold (stays the same):</b></label><input id="dyF" type="range" min="0" max="6" step="1" value="2" oninput="dyDraw()" style="width:120px"><span id="dyFv" class="bignum" style="min-width:1.5em"></span><label for="dyG"><b>Blue added each step:</b></label><input id="dyG" type="range" min="1" max="5" step="1" value="3" oninput="dyDraw()" style="width:120px"><span id="dyGv" class="bignum" style="min-width:1.5em"></span></div>
+<div class="card" style="text-align:center"><svg id="dySvg" class="graphsvg" style="max-width:600px" viewBox="0 0 600 220" role="img" aria-label="Steps 1, 2 and 3 of your pattern"></svg></div>
+<div class="buttonrow" style="justify-content:center"><b>Tiles in step <span class="uk">n</span> =</b><input id="dyAns" style="max-width:170px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your formula" onkeydown="if(event.key==='Enter')dyCheck()"><button onclick="dyCheck()">✅ Check</button></div>
+<div id="dyRead" class="feedback" aria-live="polite"></div>
+<p class="small"><span class="stretch">stretch</span> Draw a pattern on the Scratchpad whose formula is 4<span class="uk">n</span> − 1. What must the gold part be?</p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>You found formulae for yourself today, and you can point at every part of them. That is real mathematics. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> step 50 of a pattern is too big to draw, yet you know exactly how many pieces it has. Picture it stretching away — and know that your formula has already counted it.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>proof</b> — knowing that something is always true, not just true for the cases you checked. Seeing <em>why</em> a formula works, from the structure, is the first step towards the proofs mathematicians write.</p>
+<p class="small">Carry one idea forward: when a rule works, ask why. The answer is usually hiding in the picture.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Derive it, test it, explain it</summary>
+<p><b>Your task:</b> show that you can derive formulae from patterns and shapes, and explain why they work.</p>
+<ul>
+<li>A pattern of houses is made from rods: one house uses 5 rods, two joined houses use 9, three use 13. Draw steps 1–3, colour the part that stays the same, and derive a formula for the number of rods in step <span class="uk">n</span>.</li>
+<li>Use your formula to find the rods in step 30, and to find which step uses 81 rods.</li>
+<li>Explain, by pointing at your drawing, what each number in your formula represents.</li>
+<li>Derive a formula for the surface area of a square-based box with base edge <span class="uk">s</span> and height <span class="uk">h</span>, and test it with <span class="uk">s</span> = 3, <span class="uk">h</span> = 5.</li>
+<li><span class="stretch">stretch</span> Find a second way of seeing your house pattern that gives a formula that looks different, and show that the two formulae always agree.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_FORMULAE_DERIVE_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Continues the pattern.</td><td>Sees what stays the same and what grows.</td><td>Derives a correct formula.</td><td>Explains each part of the formula from the drawing.</td></tr>
+<tr><td><b>Application</b></td><td>Finds the rods in step 4.</td><td>Finds the rods in step 30.</td><td>Also finds which step uses 81 rods.</td><td>Also derives and tests the box formula.</td></tr>
+<tr><td><b>Communication</b></td><td>Draws the steps.</td><td>Colours the structure.</td><td>Explains the formula in words.</td><td>Explains clearly enough that someone else could derive it the same way.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one step.</td><td>Checks the formula against steps 1–3.</td><td>Tests it on a step not drawn.</td><td>Shows that two different formulae for the same pattern always agree.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Deriving a formula — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Write formulae using <span class="uk">n</span>, like <b>3n + 1</b> (you can leave out "T ="). Use ^2 or ² for a square.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('square-grid','Draw steps 1, 2 and 3. Colour what stays the same in one colour and what grows in another.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["n","=","\u2212","\u00d7","(",")","\u00b2"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Algebra and number helpers ---------------- */
+function algNorm(s){ return String(s).toLowerCase().replace(/\s+/g,'').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3'); }
+function evalExpr(expr,vars){
+  var s=algNorm(expr); if(!s||!/^[0-9a-z.+\-*/()^]+$/.test(s)) return NaN;
+  s=s.replace(/(\d|[a-z]|\))(?=[a-z(])/g,'$1*').replace(/([a-z])(?=\d)/g,'$1*').replace(/\^/g,'**');
+  var bad=false; s=s.replace(/[a-z]/g,function(c){ if(vars[c]==null){ bad=true; return '0'; } return '('+vars[c]+')'; });
+  if(bad) return NaN;
+  try{ var r=Function('"use strict";return ('+s+');')(); return typeof r==='number'&&isFinite(r)?r:NaN; }catch(e){ return NaN; }
+}
+function nfix(v){ return Math.round(v*1e6)/1e6; }
+function same(a,b){ return !isNaN(a)&&Math.abs(a-b)<1e-9; }
+function valNum(v){ return signedNum(String(v).trim().replace(/[−–]/g,'-')); }
+function pretty(s){ return String(s).replace(/-/g,'−').replace(/\*/g,' × ').replace(/\^2/g,'²').replace(/([+−])/g,' $1 ').replace(/\s+/g,' ').trim().replace(/([a-zA-Z])/g,'<span class="uk">$1</span>'); }
+// The expression side of a typed formula; any single letter not used in the formula may stand alone on one side.
+function formSide(v,letters){
+  var s=String(v).trim(); if(!s) return null; var parts=s.split('='); if(parts.length>2) return null;
+  if(parts.length===1) return s;
+  var L=algNorm(parts[0]), R=algNorm(parts[1]), lone=function(z){ return /^[a-z]$/.test(z)&&letters.indexOf(z)<0; };
+  if(lone(L)) return parts[1]; if(lone(R)) return parts[0]; return null;
+}
+function formIs(v,target,letters){
+  var e=formSide(v,letters); if(e===null) return false; var ok=true;
+  [2,3,-1.5,7,11].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k*1.25;}); var a=evalExpr(e,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; });
+  return ok;
+}
+function formAt(v,letters,vars){ var e=formSide(v,letters); return e===null?NaN:evalExpr(e,vars); }
+
+/* ---------------- CONNECTION: the rule detective ---------------- */
+var RD=[{f:'3n+2'},{f:'5n-1'},{f:'2n+7'},{f:'10-n'}];
+var rd={i:0};
+function rdRender(){
+  var m=RD[rd.i]; document.getElementById('rdCount').textContent='Machine '+(rd.i+1)+' of '+RD.length;
+  document.getElementById('rdTable').innerHTML='<table style="max-width:420px;margin:auto"><tr><th>Input <span class="uk">n</span></th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>Output</th>'+[1,2,3,4].map(function(n){return '<td>'+fmt(evalExpr(m.f,{n:n}))+'</td>';}).join('')+'</tr></table>';
+  document.getElementById('rdAns').value=''; document.getElementById('rdRead').style.display='none';
+}
+function rdCheck(){
+  var m=RD[rd.i], v=document.getElementById('rdAns').value, fb=document.getElementById('rdRead'); fb.style.display='block';
+  if(!v.trim()){ fb.className='feedback warn'; fb.textContent='Type a formula using n, for example 4n + 1.'; return; }
+  if(isNaN(formAt(v,['n'],{n:2}))){ fb.className='feedback warn'; fb.innerHTML='Use the letter <span class="uk">n</span>, numbers and + − ×.'; return; }
+  var rows=[10,100].map(function(n){ var a=formAt(v,['n'],{n:n}), b=evalExpr(m.f,{n:n}); return '<tr><td>'+n+'</td><td>'+fmt(nfix(a))+'</td><td>'+fmt(b)+'</td><td>'+(same(a,b)?'✓':'✗')+'</td></tr>'; }).join('');
+  var tbl='<table style="margin-top:6px;max-width:460px"><tr><th><span class="uk">n</span></th><th>your formula</th><th>the machine</th><th></th></tr>'+rows+'</table>';
+  if(formIs(v,m.f,['n'])){ fb.className='feedback good'; fb.innerHTML='The machine agrees on new inputs too: '+pretty(m.f)+'.'+tbl; return; }
+  var step=evalExpr(m.f,{n:2})-evalExpr(m.f,{n:1}), fits=[1,2,3,4].every(function(n){ return same(formAt(v,['n'],{n:n}),evalExpr(m.f,{n:n})); });
+  fb.className='feedback warn';
+  fb.innerHTML=(same(formAt(v,['n'],{n:2})-formAt(v,['n'],{n:1}),step)?'The step-up is right ('+fmt(step)+' each time). Now adjust the number on its own so the first output matches.':'How much does the output change each time the input goes up by 1? That number goes in front of <span class="uk">n</span>.')+tbl;
+}
+function rdNext(){ rd.i=(rd.i+1)%RD.length; rdRender(); }
+function rdInit(){ rdRender(); }
+
+/* ---------------- MOVEMENT: net to formula ---------------- */
+var NT=[
+ {name:'a cuboid with edges a, b and c',target:'2ab+2ac+2bc',letters:['a','b','c'],test:{vals:{a:5,b:3,c:2},ans:62,say:'A box is 5 cm by 3 cm by 2 cm. What is its surface area in cm²?'},
+  faces:[{x:110,y:20,w:150,h:60,t:'bc'},{x:50,y:80,w:60,h:90,t:'ac'},{x:110,y:80,w:150,h:90,t:'ab'},{x:260,y:80,w:60,h:90,t:'ac'},{x:320,y:80,w:150,h:90,t:'ab'},{x:110,y:170,w:150,h:60,t:'bc'}],
+  labels:[[185,252,'b'],[80,192,'c'],[275,55,'c'],[38,130,'a']]},
+ {name:'a cube with edges s',target:'6s^2',letters:['s'],test:{vals:{s:4},ans:96,say:'A cube has edges of 4 cm. What is its surface area in cm²?'},
+  faces:[{x:180,y:10,w:80,h:80,t:'s²'},{x:100,y:90,w:80,h:80,t:'s²'},{x:180,y:90,w:80,h:80,t:'s²'},{x:260,y:90,w:80,h:80,t:'s²'},{x:340,y:90,w:80,h:80,t:'s²'},{x:180,y:170,w:80,h:80,t:'s²'}],
+  labels:[[220,268,'s'],[90,135,'s']]}
+];
+var nt={i:0,tapped:{},step:0};
+var NT_COL={ab:'#dce8ef',ac:'#f3e2c4',bc:'#e3f0df','s²':'#ece7f2'};
+function ntDraw(){
+  var q=NT[nt.i], h='';
+  q.faces.forEach(function(f,k){ var on=nt.tapped[k];
+    h+='<rect x="'+f.x+'" y="'+f.y+'" width="'+f.w+'" height="'+f.h+'" fill="'+(on?NT_COL[f.t]:'#fbf7ef')+'" stroke="#365a68" stroke-width="2.5" style="cursor:pointer" onclick="ntTap('+k+')"/>'+
+       '<text x="'+(f.x+f.w/2)+'" y="'+(f.y+f.h/2+6)+'" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="17" fill="'+(on?'#2f3429':'#b9a98f')+'" pointer-events="none">'+(on?f.t:'tap')+'</text>'; });
+  q.labels.forEach(function(L){ h+='<text x="'+L[0]+'" y="'+L[1]+'" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="18" fill="#2f3429">'+L[2]+'</text>'; });
+  document.getElementById('ntSvg').innerHTML=h;
+  var got=q.faces.map(function(f,k){return nt.tapped[k]?f.t:null;}).filter(Boolean);
+  document.getElementById('ntSum').innerHTML='Surface area = '+(got.length?got.map(function(t){return pretty(t);}).join(' + '):'…')+(got.length<6?' <span class="small">('+got.length+' of 6 faces)</span>':'');
+  document.getElementById('ntCount').innerHTML='Shape '+(nt.i+1)+' of '+NT.length+': '+q.name.replace(/\b([abcs])\b/g,'<span class="uk">$1</span>');
+}
+function ntStepRender(){
+  var q=NT[nt.i], el=document.getElementById('ntStep');
+  if(nt.step===0) el.innerHTML='<span class="small">Tap all six faces.</span>';
+  else if(nt.step===1) el.innerHTML='<p><b>Now write the surface area formula the short way.</b> <span class="small">Collect the matching faces.</span></p><div class="buttonrow"><b>Surface area =</b><input id="ntAns" style="max-width:200px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your formula" onkeydown="if(event.key===\'Enter\')ntCheck()"><button onclick="ntCheck()">✅ Check</button></div>';
+  else if(nt.step===2) el.innerHTML='<p><b>'+q.test.say+'</b></p><div class="buttonrow"><input id="ntUse" class="numin" aria-label="Surface area" onkeydown="if(event.key===\'Enter\')ntUse()"><button onclick="ntUse()">✅ Check</button></div>';
+  else el.innerHTML='<p>✓ Formula derived and used.</p>';
+}
+function ntMsg(cls,html){ var fb=document.getElementById('ntRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function ntTap(k){ nt.tapped[k]=true; if(Object.keys(nt.tapped).length===6&&nt.step===0){ nt.step=1; ntMsg('good','All six faces. Which faces match? Matching faces can be collected: '+(nt.i?'all six are the same.':'there are three pairs.')); } ntDraw(); ntStepRender(); }
+function ntCheck(){
+  var q=NT[nt.i], v=document.getElementById('ntAns').value;
+  if(formIs(v,q.target,q.letters)){ nt.step=2; ntStepRender(); ntMsg('good','Yes: '+pretty(q.target)+'. '+(nt.i?'The 6 is the six matching faces.':'Each 2 is a pair of matching faces.')); return; }
+  var vars={}; q.letters.forEach(function(L,k){vars[L]=k+2;}); var mine=formAt(v,q.letters,vars), real=evalExpr(q.target,vars);
+  ntMsg('warn',isNaN(mine)?'Use the letters '+q.letters.join(', ')+', numbers, + and ×.':same(mine*2,real)?'That counts one of each pair. A cuboid has two of each face.':'Not yet. Look at the sum of the faces above, and collect the matching ones.');
+}
+function ntUse(){ var q=NT[nt.i], v=valNum(document.getElementById('ntUse').value);
+  if(same(v,q.test.ans)){ nt.step=3; ntStepRender(); ntMsg('good','Yes: '+q.test.ans+' cm².'); return; }
+  ntMsg('warn',(!nt.i&&same(v,31))?'That is half: there are two of each face.':(!nt.i&&same(v,30))?'That is the volume, a × b × c. Surface area adds up the faces.':'Substitute into your formula, one term at a time.'); }
+function ntReset(){ nt.tapped={}; nt.step=0; document.getElementById('ntRead').style.display='none'; ntDraw(); ntStepRender(); }
+function ntNext(){ nt.i=(nt.i+1)%NT.length; ntReset(); }
+function ntInit(){ ntReset(); }
+
+/* ---------------- REFLECTION: four ways of seeing one border ---------------- */
+var TW=[
+ {say:'Gold corners, and blue sides.',f:'4n+4',group:function(r,c,N){ var corner=(r===0||r===N-1)&&(c===0||c===N-1); return corner?'#d8b26e':'#7fb6e0'; }},
+ {say:'Four strips, each starting at a corner and running clockwise.',f:'4(n+1)',group:function(r,c,N){ if(r===0&&c<N-1) return '#7fb6e0'; if(c===N-1&&r<N-1) return '#d8b26e'; if(r===N-1&&c>0) return '#9fc58f'; return '#c9a7d9'; }},
+ {say:'Two long strips across the top and bottom, and two short strips at the sides.',f:'2(n+2)+2n',group:function(r,c,N){ return (r===0||r===N-1)?'#7fb6e0':'#d8b26e'; }},
+ {say:'The whole big square, take away the inner square.',f:'(n+2)^2-n^2',group:function(r,c,N){ return '#9fc58f'; },ghost:true}
+];
+var tw={i:0,done:{}};
+// Shown in a different order from the ways, so the order gives nothing away.
+var TW_OPTS=['4(n+1)','(n+2)^2-n^2','4n+4','2(n+2)+2n'];
+function twDraw(){
+  var w=TW[tw.i], n=+document.getElementById('twN').value, N=n+2, sz=Math.min(34,264/N), x0=150-N*sz/2, y0=150-N*sz/2, h='';
+  document.getElementById('twNv').textContent=n;
+  for(var r=0;r<N;r++) for(var c=0;c<N;c++){ var border=r===0||c===0||r===N-1||c===N-1;
+    if(border) h+='<rect x="'+(x0+c*sz)+'" y="'+(y0+r*sz)+'" width="'+(sz-2)+'" height="'+(sz-2)+'" rx="3" fill="'+w.group(r,c,N)+'" stroke="#2f3429" stroke-width="1"/>';
+    else if(w.ghost) h+='<rect x="'+(x0+c*sz)+'" y="'+(y0+r*sz)+'" width="'+(sz-2)+'" height="'+(sz-2)+'" rx="3" fill="none" stroke="#b0412f" stroke-width="1.5" stroke-dasharray="3 3"/>'; }
+  if(w.ghost) h+='<rect x="'+(x0-3)+'" y="'+(y0-3)+'" width="'+(N*sz+4)+'" height="'+(N*sz+4)+'" fill="none" stroke="#3f5f45" stroke-width="2.5"/>';
+  document.getElementById('twSvg').innerHTML=h;
+  document.getElementById('twWays').innerHTML=TW.map(function(x,k){return '<button class="chip'+(k===tw.i?' active':'')+'" onclick="twPick('+k+')">Way '+(k+1)+(tw.done[k]?' ✓':'')+'</button>';}).join('');
+  document.getElementById('twSay').innerHTML='<b>Way '+(tw.i+1)+':</b> '+w.say;
+  var rows=[1,2,3,4,5,10].map(function(m){ return '<tr><td>'+m+'</td>'+TW_OPTS.map(function(f){return '<td>'+evalExpr(f,{n:m})+'</td>';}).join('')+'</tr>'; }).join('');
+  document.getElementById('twTable').innerHTML=Object.keys(tw.done).length===4?'<b>All four formulae, side by side</b><table style="margin-top:6px"><tr><th><span class="uk">n</span></th>'+TW_OPTS.map(function(f){return '<th>'+pretty(f)+'</th>';}).join('')+'</tr>'+rows+'</table><p class="small">They always agree, because they count the same tiles. Each pair is an <b>identity</b>.</p>':'<span class="small">Match all four ways to see their formulae side by side.</span>';
+}
+function twRender(){ document.getElementById('twOpts').innerHTML=TW_OPTS.map(function(f,k){return '<button class="chip" onclick="twAns('+k+')">'+pretty(f)+'</button>';}).join(''); document.getElementById('twRead').style.display='none'; twDraw(); }
+function twPick(k){ tw.i=k; twRender(); }
+function twAns(k){
+  var w=TW[tw.i], fb=document.getElementById('twRead'); fb.style.display='block';
+  if(TW_OPTS[k]===w.f){ tw.done[tw.i]=true; fb.className='feedback good'; fb.innerHTML='Yes: '+pretty(w.f)+'. '+['4 corners, plus 4 sides of n tiles.','4 strips, each n + 1 tiles long.','2 strips of n + 2, plus 2 strips of n.','(n + 2)² tiles in the big square, minus the n² inside.'][tw.i].replace(/\bn\b/g,'<span class="uk">n</span>')+(Object.keys(tw.done).length<4?' Try another way.':''); twDraw(); }
+  else { fb.className='feedback warn'; fb.innerHTML='Count the tiles in each colour group for <span class="uk">n</span> = '+document.getElementById('twN').value+'. Which formula builds them in that way?'; }
+}
+function twInit(){ twRender(); }
+
+/* ---------------- CREATIVITY (hero): the pattern builder ---------------- */
+var GOLD='#d8b26e', BLUE='#5b9bd5', ROD='#8a6a43';
+function rodLine(x1,y1,x2,y2,col){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="7" stroke-linecap="round"/>'; }
+function tileRect(x,y,s,col){ return '<rect x="'+x+'" y="'+y+'" width="'+(s-2)+'" height="'+(s-2)+'" rx="3" fill="'+col+'" stroke="#2f3429" stroke-width="1"/>'; }
+var PB=[
+ {name:'Squares from rods',unit:'rods',f:'3n+1',fixed:'1 rod: the first one on the left',grow:'3 rods for each square',
+  draw:function(n,col){ var L=Math.min(60,540/n), x0=30, y0=60, h=rodLine(x0,y0,x0,y0+L,col?GOLD:ROD); for(var k=0;k<n;k++){ var x=x0+k*L, c=col?(k%2?'#2f6fb0':BLUE):ROD; h+=rodLine(x,y0,x+L,y0,c)+rodLine(x,y0+L,x+L,y0+L,c)+rodLine(x+L,y0,x+L,y0+L,c); } return h; },
+  why:{q:'Why is there a “+ 1” in your formula?',opts:['It is the first rod on the left, which every step has','Each square has one extra rod','The pattern starts at step 1'],ans:0}},
+ {name:'L-shapes from tiles',unit:'tiles',f:'2n+1',fixed:'1 tile: the corner',grow:'2 tiles each step: one on each arm',
+  draw:function(n,col){ var s=Math.min(30,180/(n+1)), x0=40, y0=200-s, h=tileRect(x0,y0,s,col?GOLD:'#c9a97a'); for(var k=1;k<=n;k++){ h+=tileRect(x0,y0-k*s,s,col?BLUE:'#c9a97a')+tileRect(x0+k*s,y0,s,col?'#2f6fb0':'#c9a97a'); } return h; },
+  why:{q:'Why does the formula have “2n”?',opts:['Each arm has n tiles, and there are two arms','Each step adds n tiles','The corner tile counts twice'],ans:0}},
+ {name:'Borders round a square',unit:'tiles',f:'4n+4',fixed:'4 tiles: the corners',grow:'4 tiles each step: one on each side',
+  draw:function(n,col){ var N=n+2, s=Math.min(30,200/N), x0=300-N*s/2, y0=115-N*s/2, h=''; for(var r=0;r<N;r++) for(var c=0;c<N;c++){ if(r===0||c===0||r===N-1||c===N-1){ var corner=(r===0||r===N-1)&&(c===0||c===N-1); h+=tileRect(x0+c*s,y0+r*s,s,col?(corner?GOLD:BLUE):'#c9a97a'); } } return h; },
+  why:{q:'Why is there a “+ 4” in your formula?',opts:['The 4 corner tiles are in every step','4 tiles are added each step','A square has 4 sides'],ans:0}},
+ {name:'Triangles from rods',unit:'rods',f:'2n+1',fixed:'1 rod: the first one on the left',grow:'2 rods for each triangle',
+  draw:function(n,col){ var L=Math.min(80,520/((n+1)/2+0.5)), x0=30, yb=170, yt=170-L*0.866, b=function(i){return [x0+i*L,yb];}, t=function(i){return [x0+L/2+i*L,yt];};
+    var seg=function(p,q,c){return rodLine(p[0],p[1],q[0],q[1],c);}, h=seg(b(0),t(0),col?GOLD:ROD);
+    for(var k=1;k<=n;k++){ var c=col?(k%2?BLUE:'#2f6fb0'):ROD; if(k%2){ var j=(k-1)/2; h+=seg(t(j),b(j+1),c)+seg(b(j),b(j+1),c); } else { var i=k/2-1; h+=seg(t(i),t(i+1),c)+seg(t(i+1),b(i+1),c); } } return h; },
+  why:{q:'Why is there a “2n” in your formula?',opts:['Each triangle after the first rod needs 2 more rods','Every triangle has 2 sides','There are 2 rows of rods'],ans:0}}
+];
+var pb={i:0,col:false,seen:{},step:0};
+function pbRender(){
+  document.getElementById('pbPats').innerHTML=PB.map(function(p,k){return '<button class="chip'+(k===pb.i?' active':'')+'" onclick="pbPick('+k+')">'+p.name+'</button>';}).join('');
+  pbDraw(); pbStepRender();
+}
+function pbPick(k){ pb.i=k; pb.col=false; pb.seen={}; pb.step=0; document.getElementById('pbN').value=1; document.getElementById('pbRead').style.display='none'; pbRender(); }
+function pbDraw(){
+  var p=PB[pb.i], n=+document.getElementById('pbN').value, cnt=evalExpr(p.f,{n:n});
+  pb.seen[n]=cnt; document.getElementById('pbNv').textContent=n;
+  document.getElementById('pbSvg').innerHTML=p.draw(n,pb.col);
+  document.getElementById('pbColBtn').textContent=pb.col?'Plain colours':'🎨 Colour the structure';
+  var ks=Object.keys(pb.seen).map(Number).sort(function(a,b){return a-b;});
+  document.getElementById('pbCount').innerHTML='Step '+n+' uses <b>'+cnt+' '+p.unit+'</b>.'+(pb.col?' <span style="color:#a57d2c">Gold: '+p.fixed+'.</span> <span style="color:#2f6fb0">Blue: '+p.grow+'.</span>':'')+
+    '<table style="margin-top:6px"><tr><th>Step</th>'+ks.map(function(k){return '<td>'+k+'</td>';}).join('')+'</tr><tr><th>'+p.unit.charAt(0).toUpperCase()+p.unit.slice(1)+'</th>'+ks.map(function(k){return '<td>'+pb.seen[k]+'</td>';}).join('')+'</tr></table>';
+}
+function pbColour(){ pb.col=!pb.col; pbDraw(); }
+function pbStepRender(){
+  var p=PB[pb.i], el=document.getElementById('pbStep');
+  if(pb.step===0) el.innerHTML='<p><b>1. Derive the formula.</b> <span class="small">Build a few steps first. What stays the same? What grows?</span></p><div class="buttonrow"><b>'+p.unit.charAt(0).toUpperCase()+p.unit.slice(1)+' in step <span class="uk">n</span> =</b><input id="pbAns" style="max-width:170px;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="Your formula" onkeydown="if(event.key===\'Enter\')pbCheck()"><button onclick="pbCheck()">✅ Check</button></div>';
+  else if(pb.step===1) el.innerHTML='<p>✓ '+pretty(p.f)+'</p><p><b>2. Test it on a step you will never draw:</b> how many '+p.unit+' are in step 50?</p><div class="buttonrow"><input id="pbFifty" class="numin" aria-label="Step 50" onkeydown="if(event.key===\'Enter\')pbFiftyCheck()"><button onclick="pbFiftyCheck()">✅ Check</button></div>';
+  else if(pb.step===2) el.innerHTML='<p>✓ '+pretty(p.f)+' · step 50: '+evalExpr(p.f,{n:50})+' '+p.unit+'</p><p><b>3. Explain it. '+p.why.q+'</b></p><div class="buttonrow">'+p.why.opts.map(function(o,k){return '<button class="chip" onclick="pbWhy('+k+')">'+o+'</button>';}).join('')+'</div>';
+  else el.innerHTML='<p>✓ Derived, tested and explained: '+pretty(p.f)+'. Try another pattern — or design your own below.</p>';
+}
+function pbMsg(cls,html){ var fb=document.getElementById('pbRead'); fb.style.display='block'; fb.className='feedback '+cls; fb.innerHTML=html; }
+function pbCheck(){
+  var p=PB[pb.i], v=document.getElementById('pbAns').value;
+  if(formIs(v,p.f,['n'])){ pb.step=1; pbStepRender(); pbMsg('good','Yes: '+pretty(p.f)+'. It matches every step you built.'); if(!pb.col){ pb.col=true; pbDraw(); } return; }
+  var m1=formAt(v,['n'],{n:1}), m2=formAt(v,['n'],{n:2}), r1=evalExpr(p.f,{n:1}), r2=evalExpr(p.f,{n:2});
+  if(isNaN(m1)){ pbMsg('warn','Use the letter <span class="uk">n</span>, numbers and + − ×.'); return; }
+  pbMsg('warn',same(m2-m1,r2-r1)?'The growth is right. Check step 1: your formula gives '+fmt(nfix(m1))+', but step 1 has '+r1+'. What stays the same in every step?':'How many '+p.unit+' are added each step? That number goes in front of <span class="uk">n</span>. Try colouring the structure.');
+}
+function pbFiftyCheck(){ var p=PB[pb.i], v=valNum(document.getElementById('pbFifty').value), r=evalExpr(p.f,{n:50});
+  if(same(v,r)){ pb.step=2; pbStepRender(); pbMsg('good','Yes: '+r+'. You did not have to draw 50 steps — the formula counted them.'); return; }
+  pbMsg('warn','Substitute <span class="uk">n</span> = 50 into your formula: multiply first, then add.'); }
+function pbWhy(k){ var p=PB[pb.i];
+  if(k===p.why.ans){ pb.step=3; pbStepRender(); pbMsg('good','Yes. '+p.fixed.charAt(0).toUpperCase()+p.fixed.slice(1)+'; '+p.grow+'. That is why the formula works for every step.'); return; }
+  pbMsg('warn','Colour the structure and look at step 1 and step 2. Which part is the same in both, and which part was added?'); }
+function pbInit(){ pbRender(); }
+
+/* ---------------- CREATIVITY: design your own pattern ---------------- */
+function dyF(){ return +document.getElementById('dyF').value; } function dyG(){ return +document.getElementById('dyG').value; }
+function dyDraw(){
+  var F=dyF(), G=dyG(), s=16, h='';
+  document.getElementById('dyFv').textContent=F; document.getElementById('dyGv').textContent=G;
+  for(var step=1;step<=3;step++){ var x0=20+(step-1)*200, yb=180;
+    for(var k=0;k<F;k++) h+=tileRect(x0,yb-(k+1)*s,s,GOLD);
+    for(var col=0;col<step;col++) for(var r=0;r<G;r++) h+=tileRect(x0+(col+1)*s+4,yb-(r+1)*s,s,BLUE);
+    h+='<text x="'+(x0+40)+'" y="205" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">Step '+step+': '+(F+G*step)+'</text>'; }
+  document.getElementById('dySvg').innerHTML=h; document.getElementById('dyRead').style.display='none';
+}
+function dyCheck(){
+  var F=dyF(), G=dyG(), target=G+'n+'+F, v=document.getElementById('dyAns').value, fb=document.getElementById('dyRead'); fb.style.display='block';
+  if(formIs(v,target,['n'])){ fb.className='feedback good'; fb.innerHTML='Yes: '+pretty(G+'n'+(F?'+'+F:''))+'. The '+F+' gold tile'+(F===1?'':'s')+' stay'+(F===1?'s':'')+' the same; '+G+' blue tile'+(G===1?' is':'s are')+' added each step. Describe your pattern to someone and see if they can derive it too.'; return; }
+  fb.className='feedback warn'; fb.innerHTML='Count step 1, 2 and 3 under the pictures. Which colour is added each step, and which stays the same?';
+}
+function dyInit(){ dyDraw(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    next:{title:'Continuing a sequence',prompt:'What is the next term of 5, 8, 11, 14, …?',answer:17,hint:'The terms go up by 3 each time.'},
+    nth:{title:'The nth term',prompt:'Write the <i>n</i>th term of 2, 4, 6, 8, …',alg:'2n',hint:'Each term is 2 × its position.'},
+    sub:{title:'Substituting into a rule',prompt:'What is 3<i>n</i> + 1 when <i>n</i> = 10?',answer:31,hint:'3 × 10 = 30, then add 1.'}
+  };
+  function matches(r,v){ if(r.alg) return formIs(v,r.alg,[r.alg.replace(/[^a-z]/g,'').charAt(0)]); var n=valNum(v); return !isNaN(n)&&Math.abs(n-r.answer)<=0.001; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pv(target){ return function(v){ return same(valNum(v),target); }; }
+function pf(target,letters){ return function(v){ return formIs(v,target,letters); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Squares from rods",q:"A row of squares is made from rods: 1 square uses 4 rods, 2 squares use 7, 3 squares use 10. Write a formula for the number of rods for <span class=\"uk\">n</span> squares.",a:[],eq:pf('3n+1',['n']),prompt:"How many rods are added for each new square? What is there at the start?",hint:"3 rods are added each time, plus the first rod on the left.",sol:"3<span class=\"uk\">n</span> + 1: one starting rod, then 3 more for each square."},
+ {label:"2 of 8 · Test it far away",q:"Using 3<span class=\"uk\">n</span> + 1, how many rods are needed for <b>20</b> squares?",a:[],eq:pv(61),prompt:"Replace <span class=\"uk\">n</span> with 20.",hint:"3 × 20 = 60, then add 1.",sol:"3 × 20 + 1 = 61 rods."},
+ {label:"3 of 8 · From the numbers",q:"An L-shaped pattern of tiles has 3, 5, 7, 9, … tiles in steps 1, 2, 3, 4. Write a formula for the tiles in step <span class=\"uk\">n</span>.",a:[],eq:pf('2n+1',['n']),prompt:"How much does it go up by each step?",hint:"It goes up by 2, so start with 2<span class=\"uk\">n</span>. Then compare 2<span class=\"uk\">n</span> with 3, 5, 7 …",sol:"2<span class=\"uk\">n</span> + 1: a corner tile, plus <span class=\"uk\">n</span> tiles on each of two arms."},
+ {label:"4 of 8 · Work backwards",q:"A border round an <span class=\"uk\">n</span> × <span class=\"uk\">n</span> square uses 4<span class=\"uk\">n</span> + 4 tiles. Which step uses <b>44</b> tiles?",a:[],eq:pv(10),prompt:"4<span class=\"uk\">n</span> + 4 = 44. What must 4<span class=\"uk\">n</span> be?",hint:"Take away the 4 corners: 4<span class=\"uk\">n</span> = 40.",sol:"4<span class=\"uk\">n</span> + 4 = 44, so 4<span class=\"uk\">n</span> = 40, so <span class=\"uk\">n</span> = 10."},
+ {label:"5 of 8 · From a shape",q:"Write a formula for the surface area <b>A</b> of a cube with edges of length <b><span class=\"uk\">s</span></b>.",a:[],eq:pf('6s^2',['s']),prompt:"How many faces does a cube have? What is the area of one face?",hint:"Each face is <span class=\"uk\">s</span> × <span class=\"uk\">s</span> = <span class=\"uk\">s</span>², and there are 6.",sol:"<span class=\"uk\">A</span> = 6<span class=\"uk\">s</span>²."},
+ {label:"6 of 8 · From a table",q:"Input <span class=\"uk\">n</span>: 1, 2, 3, 4. Output: 5, 9, 13, 17. Write a formula for the output.",a:[],eq:pf('4n+1',['n']),prompt:"How much does the output go up each time?",hint:"Up by 4, so start with 4<span class=\"uk\">n</span>. 4<span class=\"uk\">n</span> gives 4, 8, 12 … — 1 less each time.",sol:"4<span class=\"uk\">n</span> + 1."},
+ {label:"7 of 8 · What does the number mean?",q:"A tile pattern has formula <b><span class=\"uk\">T</span> = 5<span class=\"uk\">n</span> + 2</b>. How many tiles are <b>added</b> each step?",a:[],eq:pv(5),prompt:"Which part of the formula grows with <span class=\"uk\">n</span>?",hint:"The number in front of <span class=\"uk\">n</span> is the amount added each step.",sol:"5 tiles are added each step; the 2 stays the same in every step."},
+ {label:"8 of 8 · Another way to see it (stretch)",q:"The border formula can also be written (<span class=\"uk\">n</span> + 2)² − <span class=\"uk\">n</span>². Use it to find the number of border tiles when <span class=\"uk\">n</span> = 7.",a:[],eq:pv(32),prompt:"Work out the big square, then take away the inner square.",hint:"(7 + 2)² = 81 and 7² = 49.",sol:"81 − 49 = 32. (Check: 4 × 7 + 4 = 32 ✓.)"}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Find what stays the same and what grows, and test your formula on step 1 — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  rdInit();
+  ntInit();
+  twInit();
+  pbInit();
+  dyInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>

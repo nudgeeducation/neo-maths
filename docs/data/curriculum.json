@@ -391,6 +391,14 @@
           "file": "lessons/formulae/03-words-and-diagrams.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "formulae-04-deriving-a-formula",
+          "num": "Lesson 04",
+          "title": "Deriving a formula",
+          "file": "lessons/formulae/04-deriving-a-formula.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

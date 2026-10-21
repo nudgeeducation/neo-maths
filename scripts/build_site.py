@@ -92,6 +92,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_02_Substituting_Values/NEO_Maths_Y9_Formulae_Lesson_02_Substituting_Values_v0.1.html",
     "formulae-03-words-and-diagrams":
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_03_Formulae_from_Words_and_Diagrams/NEO_Maths_Y9_Formulae_Lesson_03_Formulae_from_Words_and_Diagrams_v0.1.html",
+    "formulae-04-deriving-a-formula":
+        "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_04_Deriving_a_Formula/NEO_Maths_Y9_Formulae_Lesson_04_Deriving_a_Formula_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
