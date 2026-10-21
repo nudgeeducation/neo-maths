@@ -378,7 +378,7 @@ var LEARN={ready:'You\'re carrying what this lesson needs.',strength:'You knew m
 function showPlan(){
   var o=ROOMS.map(function(r,i){return outcome(i);}), done=at===DOME;
   var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
-  var h='<h2 id="pt">Your garden map</h2><p class="sub">Inequalities · Year 9 · Spring term</p><p>'+(done?'Gold lamps are gates you unlocked. Blue lanterns mark gardens we\'ll explore together in the unit.':'Your walk so far. You can carry on whenever you like.')+'</p><div class="plan">'+
+  var h='<h2 id="pt">Your garden map</h2><p class="sub">Inequalities · Foundations · Spring term</p><p>'+(done?'Gold lamps are gates you unlocked. Blue lanterns mark gardens we\'ll explore together in the unit.':'Your walk so far. You can carry on whenever you like.')+'</p><div class="plan">'+
     ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side||o[i]==='new'||o[i]==='look'?'blue':o[i]==='unvisited'?'unvisited':'';
       return '<div class="roomcard '+c+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson.replace(/^Lesson (\d) · /,'Lesson $1: ')+'</small><small><b>'+OUT[o[i]]+'</b> · '+LEARN[o[i]]+'</small></div>';}).join('')+
     '<div class="roomcard"><div class="lampdot" style="border-radius:4px;background:#2b4470"></div><b>The Lookout</b><small>'+(done?'Reached':'At the top of the tower')+'</small></div></div>';
@@ -433,7 +433,7 @@ function shareFeeling(){
 /* ---------- Welcome ---------- */
 function welcome(){
   var saved=load();
-  var h='<h2 id="wt">Welcome to the Walled Garden</h2><p class="sub">Inequalities · Year 9 · before you set off</p>'+
+  var h='<h2 id="wt">Welcome to the Walled Garden</h2><p class="sub">Inequalities · Foundations · before you set off</p>'+
    '<div class="info"><p><b>This is an expedition, not a test.</b> There is no clock, no score and nothing to lose. It takes about 15 minutes, and you can stop and come back.</p>'+
    '<p>There are four gardens, one for each lesson in the unit. Each has a locked gate, and the right answer is the key. If a lock looks unfamiliar, every garden also has a <b>gap in the hedge</b> that leads on just the same. Taking it is a good choice: it tells us what to help you with.</p><p>In every garden you will also find a <b>tool for your field kit</b> on the potting bench. It comes with you into the unit, and looking things up in it is never recorded.</p></div>'+
    '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>When you reach the lookout, your garden map is saved to your <b>NEO learner record</b>, in a spreadsheet that NEO keeps in its own Google Drive. Your supporting adult and NEO maths staff can see it, and they see exactly the garden map you see. You can always see it too, in your <b>learner passport</b>.</p><p>Your comment at the end is only saved if you choose to share it.</p></details>'+

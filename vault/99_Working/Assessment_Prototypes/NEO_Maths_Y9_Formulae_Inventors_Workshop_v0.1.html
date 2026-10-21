@@ -439,7 +439,7 @@ var LEARN={ready:'You\'re carrying what this lesson needs.',strength:'You knew m
 function showPlan(){
   var o=ROOMS.map(function(r,i){return outcome(i);}), done=at===DOME;
   var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
-  var h='<h2 id="pt">Your workshop plan</h2><p class="sub">Formulae and Rearranging · Year 9 · Spring term</p><p>'+(done?'Gold lamps are doors you unlocked. Blue lanterns mark rooms we\'ll explore together in the unit.':'Your walk so far. You can carry on whenever you like.')+'</p><div class="plan">'+
+  var h='<h2 id="pt">Your workshop plan</h2><p class="sub">Formulae and Rearranging · Foundations · Spring term</p><p>'+(done?'Gold lamps are doors you unlocked. Blue lanterns mark rooms we\'ll explore together in the unit.':'Your walk so far. You can carry on whenever you like.')+'</p><div class="plan">'+
     ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side||o[i]==='new'||o[i]==='look'?'blue':o[i]==='unvisited'?'unvisited':'';
       return '<div class="roomcard '+c+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson.replace(/^Lesson (\d) · /,'Lesson $1: ')+'</small><small><b>'+OUT[o[i]]+'</b> · '+LEARN[o[i]]+'</small></div>';}).join('')+
     '<div class="roomcard"><div class="lampdot" style="border-radius:4px;background:#2b4470"></div><b>The Showroom</b><small>'+(done?'Reached':'At the end of the workshop')+'</small></div></div>';
@@ -455,7 +455,7 @@ function showPlan(){
     ROOMS.map(function(r,i){var x=o[i];return '<tr><td>'+r.name+'<br><span class="small">'+r.lesson+'</span></td><td>'+feelTxt[st[i].feel]+'</td><td>'+OUT[x]+'</td><td>'+(st[i].signal?esc(st[i].signal):(x==='strength'?'Felt unsure but was right: worth saying out loud.':x==='new'&&st[i].side?'Chose to learn this in the unit.':'—'))+'</td><td>'+(['look','new','refresh'].indexOf(x)>=0?esc(r.route):'—')+'</td></tr>';}).join('')+
     '</table><p class="small"><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) is the most useful signal; it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud. Outcomes use the learner\'s own words and never a score.</p></details>';
   h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the Showroom':'Back to the expedition')+'</button><button class="soft" id="printPlan">Print or save this workshop plan</button>'+(done?'<button class="soft" id="againBtn">Start a new expedition</button>':'')+'</div>';
-  h+='<p class="small" style="margin-top:12px">Prototype v0.1 · Year 9 · 20 October 2026 · for discussion · saved only on this device</p>';
+  h+='<p class="small" style="margin-top:12px">Prototype v0.1 · Foundations · 20 October 2026 · for discussion · saved only on this device</p>';
   $('planPanel').innerHTML=h; $('planModal').classList.add('show');
   $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
   $('printPlan').onclick=function(){$('adultDetails').open=true;window.print();};
@@ -465,7 +465,7 @@ function showPlan(){
 /* ---------- Welcome ---------- */
 function welcome(){
   var saved=load();
-  var h='<h2 id="wt">Welcome to the Inventor\'s Workshop</h2><p class="sub">Formulae and Rearranging · Year 9 · before you set off</p>'+
+  var h='<h2 id="wt">Welcome to the Inventor\'s Workshop</h2><p class="sub">Formulae and Rearranging · Foundations · before you set off</p>'+
    '<div class="info"><p><b>This is an expedition, not a test.</b> There is no clock, no score and nothing to lose. It takes about 15 to 20 minutes, and you can stop and come back.</p>'+
    '<p>There are six rooms, one for each lesson in the unit. Each has a locked door, and the right answer is the key. If a lock looks unfamiliar, every room also has <b>back stairs</b> that lead on just the same. Taking them is a good choice: it tells us what to help you with.</p><p>In every room you will also find a <b>tool for your field kit</b> on the workbench. It comes with you into the unit, and looking things up in it is never recorded.</p></div>'+
    '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>Your supporting adult sees exactly the workshop plan you see. In this prototype, your progress is kept only on this device so you can come back to it, and nothing is sent anywhere.</p></details>'+

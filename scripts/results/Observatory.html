@@ -207,7 +207,7 @@ var ROOMS=[
   hint:'Powers first, then multiplication, then addition.', show:'2² = 4, then 4 × 4 = 16, then 3 + 16 = 19.'},
  {name:'The Orrery', lesson:'Lesson 4 · Negative and fractional indices', prop:'<div class="prop p-orrery"><i></i><i></i><i></i></div>', floor:'',
   arrive:'The Orrery. Model planets hang in their orbits, each one a power further from the Sun.',
-  q:'The orrery turns to <span class="big">5⁶ ÷ 5⁴</span>. You can leave your answer as a power of 5.', speak:'The orrery turns to five to the power six, divided by five to the power four.', route:'Index laws (Year 9 Accuracy, Powers and Scale, Lesson 3)',
+  q:'The orrery turns to <span class="big">5⁶ ÷ 5⁴</span>. You can leave your answer as a power of 5.', speak:'The orrery turns to five to the power six, divided by five to the power four.', route:'Index laws (Foundations: Accuracy, Powers and Scale, Lesson 3)',
   check:function(v){var t=alg(v).replace(/\^/g,''); var n=num(v); if(near(n,25)) return 'right'; if(near(n,Math.pow(5,10))||t==='510') return 'add'; if(near(n,Math.pow(5,1.5))||t==='51.5') return 'div'; if(near(n,1.5)) return 'div'; return 'no';},
   why:{add:'Adding the indices is the rule for multiplying. What happens to the indices when we divide?', div:'The indices were divided. When we divide powers of the same number, what do we do with the indices?'},
   adult:{add:'Added indices when dividing: index laws mixed up.', div:'Divided indices when dividing powers: index laws not yet secure.'},
@@ -231,7 +231,7 @@ var ROOMS=[
  {name:'The Instrument Room', lesson:'Lesson 7 · Estimating and judging reasonableness', prop:'<div class="prop p-dials"><i></i><i></i><i></i></div>', floor:'',
   arrive:'The Instrument Room. Dials and gauges line the wall. Good observers always check that a reading makes sense.',
   q:'Roughly how big is <span class="big">38.7 × 4.92</span>?', speak:'Roughly how big is thirty-eight point seven times four point nine two?',
-  choices:['about 20','about 200','about 2000'], answer:'about 200', route:'Estimate before you calculate (Year 9 Accuracy, Powers and Scale, Lesson 2)',
+  choices:['about 20','about 200','about 2000'], answer:'about 200', route:'Estimate before you calculate (Foundations: Accuracy, Powers and Scale, Lesson 2)',
   why:{'about 20':'Check the size of each number: 38.7 is about 40, and 4.92 is about 5.','about 2000':'Check the size of each number: 38.7 is about 40, and 4.92 is about 5.'},
   adult:{'about 20':'Estimate out by a power of ten: worth checking rounding and place value.','about 2000':'Estimate out by a power of ten: worth checking rounding and place value.'},
   hint:'Round each number to one significant figure first.', show:'38.7 ≈ 40 and 4.92 ≈ 5, so the answer is about 40 × 5 = 200.'}
@@ -430,7 +430,7 @@ var LEARN={ready:'You\'re carrying what this lesson needs.',strength:'You knew m
 function showPlan(){
   var o=ROOMS.map(function(r,i){return outcome(i);}), done=at===DOME;
   var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
-  var h='<h2 id="pt">Your floor plan</h2><p class="sub">Number Systems and Calculator Judgement · Year 10 · Spring term</p><p>'+(done?'Gold lamps are rooms you unlocked. Blue lanterns mark rooms we\'ll explore together in the unit.':'Your expedition so far. You can carry on whenever you like.')+'</p><div class="plan">'+
+  var h='<h2 id="pt">Your floor plan</h2><p class="sub">Number Systems and Calculator Judgement · Intermediate · Spring term</p><p>'+(done?'Gold lamps are rooms you unlocked. Blue lanterns mark rooms we\'ll explore together in the unit.':'Your expedition so far. You can carry on whenever you like.')+'</p><div class="plan">'+
     ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side||o[i]==='new'||o[i]==='look'?'blue':o[i]==='unvisited'?'unvisited':'';
       return '<div class="roomcard '+c+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson.replace(/^Lesson (\d) · /,'Lesson $1: ')+'</small><small><b>'+OUT[o[i]]+'</b> · '+LEARN[o[i]]+'</small></div>';}).join('')+
     '<div class="roomcard"><div class="lampdot" style="border-radius:4px;background:#2b4470"></div><b>The Dome</b><small>'+(done?'Reached':'At the end of the corridor')+'</small></div></div>';
@@ -485,7 +485,7 @@ function shareFeeling(){
 /* ---------- Welcome ---------- */
 function welcome(){
   var saved=load();
-  var h='<h2 id="wt">Welcome to the Observatory</h2><p class="sub">Number Systems and Calculator Judgement · Year 10 · before you set off</p>'+
+  var h='<h2 id="wt">Welcome to the Observatory</h2><p class="sub">Number Systems and Calculator Judgement · Intermediate · before you set off</p>'+
    '<div class="info"><p><b>This is an expedition, not a test.</b> There is no clock, no score and nothing to lose. It takes about 20 minutes, and you can stop and come back.</p>'+
    '<p>There are seven rooms, one for each lesson in the unit. Each has a locked door, and the right answer is the key. If a lock looks unfamiliar, every room also has a <b>side passage</b> that leads on just the same. Taking it is a good choice: it tells us what to help you with.</p><p>In every room you will also find a <b>tool for your field kit</b> on the desk. It comes with you into the unit, and looking things up in it is never recorded.</p></div>'+
    '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>When you reach the dome, your floor plan is saved to your <b>NEO learner record</b>, in a spreadsheet that NEO keeps in its own Google Drive. Your supporting adult and NEO maths staff can see it, and they see exactly the floor plan you see. You can always see it too, in your <b>learner passport</b>.</p><p>Your comment at the end is only saved if you choose to share it.</p></details>'+
