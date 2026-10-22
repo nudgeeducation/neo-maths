@@ -98,6 +98,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_05_Changing_the_Subject/NEO_Maths_Y9_Formulae_Lesson_05_Changing_the_Subject_v0.1.html",
     "formulae-06-using-and-checking":
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_06_Using_and_Checking_Formulae/NEO_Maths_Y9_Formulae_Lesson_06_Using_and_Checking_Formulae_v0.1.html",
+    "ns-01-fdp-fluently":
+        "03_Intermediate/01_Lessons/Number_Systems/Lesson_01_Fractions_Decimals_Percentages/NEO_Maths_Y10_NumberSystems_Lesson_01_Fractions_Decimals_Percentages_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
@@ -566,7 +568,7 @@ def inject_progress(html: str, lesson_id: str, depth: int) -> str:
 # Units whose diagnostic expedition gives a field kit (GreenPrint v2.4). Their lessons get a "Field kit"
 # button; lesson n of the unit opens with tool n first. Data files: docs/assets/fieldkits/<unit-id>.js,
 # made by scripts/fieldkits/make_fieldkits.js. Add a unit here when its expedition is built.
-FIELDKIT_UNITS = {"inequalities", "formulae-rearranging"}
+FIELDKIT_UNITS = {"inequalities", "formulae-rearranging", "number-systems"}
 
 
 def inject_fieldkit(html: str, unit_id: str, index: int, depth: int) -> str:

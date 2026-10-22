@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Fractions, decimals and percentages</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Number Systems and Calculator Judgement</h1>
+<h2>Fractions, decimals and percentages fluently</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>How many ways can one number be written?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — the opening lesson of the unit. One number, many forms.</p>
+<p><b>Stepping Stone:</b> move fluently between <b>fractions, decimals and percentages</b>; <b>order</b> numbers given in different forms; and <b>calculate</b> with fractions and mixed numbers, including fractions of amounts.</p>
+<p><b>You will need:</b> equivalent fractions and adding fractions — and the optional <b>✏️ Scratchpad</b>. No calculator is needed today.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 14 · Move 10 · Reflect 7 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_NumberSystems_Lesson_01_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_NumberSystems_Lesson_01_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw a number line from 0 to 1. Mark 1/4, 0.4 and 45%. Which is furthest right?')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION (hero) ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — The linked number line</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">3/8, 0.375 and 37.5% look different, but they are <b>one number</b> — one point on the number line. A fraction, a decimal and a percentage are three ways of writing the same position. Choosing which to use depends on what you need it for.</p>
+</div>
+<p><b>What to do:</b> choose how many equal parts each whole is cut into (the <b>denominator</b>), then move the point. Its fraction, decimal and percentage change together. Work through the tasks below the line.</p>
+<p><b>What you are trying to notice:</b> every position has all three names at once. Some fractions give decimals that stop; some, like 2/3, give decimals that go on for ever.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">📍 One point, three names</h3>
+<div class="buttonrow" style="justify-content:center"><b>Parts in each whole:</b><span id="lnDens"></span></div>
+<div class="card" style="text-align:center"><svg id="lnSvg" class="graphsvg" style="max-width:640px;touch-action:none" viewBox="0 0 640 150" role="img" aria-label="A number line from 0 to 2 with a point you can move"></svg></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="lnStep(-1)" aria-label="Move left">← One part left</button><button onclick="lnStep(1)" aria-label="Move right">One part right →</button></div>
+<div id="lnRead" class="bignum" style="font-size:1.3em" aria-live="polite"></div>
+<div id="lnTask" class="clue" style="font-size:1.1em"></div>
+<div id="lnStepBox" class="card"></div>
+<div id="lnMsg" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="lnNext()">Next task →</button></div>
+<p><b>Carry this forward:</b> a fraction, a decimal and a percentage are three names for one point. To compare numbers in different forms, picture where they sit on the line.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Fraction pictures</summary>
+<p><b>What to do:</b> each calculation has a picture. Use the buttons to change the picture, then type the answer.</p>
+<p><b>What you are trying to notice:</b> fractions can only be added when the pieces are the <b>same size</b> (a common denominator). Multiplying takes a fraction <b>of</b> a fraction — and the picture shows why you multiply the numerators and multiply the denominators. Dividing asks <b>how many fit</b> — and the picture shows why dividing by a fraction is the same as multiplying by its <b>reciprocal</b> (the fraction turned the other way up: the reciprocal of 3/4 is 4/3).</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧩 See the calculation</h3>
+<div id="fpCount" class="small" style="text-align:center"></div>
+<div id="fpQ" class="bignum" style="font-size:1.5em"></div>
+<div class="card" style="text-align:center"><svg id="fpSvg" class="graphsvg" style="max-width:560px" viewBox="0 0 560 200" role="img" aria-label="A picture of the fraction calculation"></svg></div>
+<div class="buttonrow" style="justify-content:center" id="fpBtns"></div>
+<div class="buttonrow" style="justify-content:center"><input id="fpAns" class="numin" style="max-width:120px" aria-label="Your answer" onkeydown="if(event.key==='Enter')fpCheck()"><button onclick="fpCheck()">✅ Check</button></div>
+<div id="fpRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="fpNext()">Next calculation →</button></div>
+<p><b>Carry this forward:</b> same-size pieces to add; to multiply, multiply the numerators and the denominators; to divide by a fraction, multiply by its reciprocal — because that counts how many fit.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Which form wins?</summary>
+<p><b>What to do:</b> first, tap the cards from <b>smallest to largest</b>. Then, for each situation, choose the form that is clearest.</p>
+<p><b>What you are trying to notice:</b> numbers in different forms can be compared once they are in the same form — or placed on the same line. And in real life, one form is usually clearer than the others for the job.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🃏 Order, then choose</h3>
+<div id="wfCards" class="buttonrow" style="justify-content:center"></div>
+<div id="wfOrder" class="clue" style="text-align:center"></div>
+<div id="wfCtx" class="card"></div>
+<div id="wfRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wfReset()">↺ Start again</button></div>
+<p><b>Carry this forward:</b> to compare, use one form. To communicate, use the form your reader needs.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Fractions of amounts</summary>
+<p><b>What to do:</b> solve each problem. The bar shows the whole split into equal parts. Then write a puzzle of your own.</p>
+<p><b>What you are trying to notice:</b> a fraction of an amount, one amount as a fraction of another, and finding the whole from a part are three views of one bar.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">📊 Parts and wholes</h3>
+<div id="faCount" class="small" style="text-align:center"></div>
+<div id="faQ" class="clue" style="font-size:1.1em"></div>
+<div class="card" style="text-align:center"><svg id="faSvg" class="graphsvg" style="max-width:560px" viewBox="0 0 560 110" role="img" aria-label="A bar split into equal parts"></svg></div>
+<div class="buttonrow" style="justify-content:center"><input id="faAns" class="numin" style="max-width:120px" aria-label="Your answer" onkeydown="if(event.key==='Enter')faCheck()"><button onclick="faCheck()">✅ Check</button><button onclick="faShowBar()">Show the bar</button></div>
+<div id="faRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="faNext()">Next problem →</button></div>
+</div>
+<div class="card" style="border:2px solid #b9a2cf;background:#f7f2fb">
+<h3 style="margin-top:0">✨ Make your own <span class="stretch">stretch</span></h3>
+<p>Write a "find the whole" puzzle like the ticket problem, using a fraction with denominator 5 or 8. Draw its bar on the Scratchpad, and give it to someone to solve.</p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>One point on a line, three names. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> half a pizza, 0.5 of a pizza and 50% of a pizza are exactly the same amount of pizza. Only the words changed.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>number sense</b> — knowing where a number sits and how big it is, whatever form it arrives in. Discounts, interest rates, test results and recipes all arrive in different forms. Seeing past the form to the size is a life skill.</p>
+<p class="small">Carry one idea forward: when a number looks unfamiliar, ask where it sits on the line.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — One number, many forms</summary>
+<p><b>Your task:</b> show that you can move between forms, compare them, and calculate with fractions.</p>
+<ul>
+<li>Complete a table for 3/5, 0.875, 12.5%, 7/4 and 2/3: give each as a fraction in its simplest form, a decimal and a percentage.</li>
+<li>Place all five on one number line from 0 to 2, and list them in order.</li>
+<li>Work out 2/3 + 3/4, 1 1/2 × 2/5 and 2 ÷ 3/8, showing a picture or a method for each.</li>
+<li>Solve: "3/8 of a field is planted. The planted part is 120 m². What is the area of the whole field?"</li>
+<li><span class="stretch">stretch</span> Explain why 2/3 gives a decimal that never ends, but 3/8 does not.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_NUMBER_FDP_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows a fraction, a decimal and a percentage can be equal.</td><td>Converts simple fractions and decimals.</td><td>Completes the table correctly.</td><td>Explains why some fractions recur.</td></tr>
+<tr><td><b>Application</b></td><td>Orders three numbers.</td><td>Orders all five.</td><td>Completes all three calculations.</td><td>Also solves the field problem.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes answers.</td><td>Shows a method for each calculation.</td><td>Uses a picture or number line to explain.</td><td>Explains clearly enough for someone else to follow.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one answer.</td><td>Checks conversions both ways.</td><td>Checks calculations with a picture or estimate.</td><td>Finds and corrects an error in their own work.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Fractions, decimals and percentages — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type fractions like <b>7/12</b> or mixed numbers like <b>1 1/2</b>.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw a bar or a number line for the question.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["/","%","\u00bd","\u00bc","\u00be","\u2212"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Fraction helpers ---------------- */
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a||1; }
+function simp(n,d){ var g=gcd(n,d); return [n/g,d/g]; }
+function fracStr(n,d){ var s=simp(n,d); return s[1]===1?String(s[0]):s[0]+'/'+s[1]; }
+function terminates(n,d){ var s=simp(n,d), q=s[1]; while(q%2===0) q/=2; while(q%5===0) q/=5; return q===1; }
+// Exact for terminating decimals (the shared fmt() rounds to 2 places, which would show 3/8 as 0.38).
+function full(v){ var s=String(Math.round(v*1e6)/1e6); return s.charAt(0)==='-'?'−'+s.slice(1):s; }
+function decStr(n,d){ var v=n/d; if(terminates(n,d)) return full(v); var t=Math.floor(v*1000)/1000; return t.toFixed(3)+'…'; }
+function pctStr(n,d){ var v=n*100/d; if(terminates(n*100,d)) return full(v)+'%'; return (Math.floor(v*10)/10).toFixed(1)+'…%'; }
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+// A typed number: fractions (7/12), mixed numbers (1 1/2, 3⅓), glyphs (⅜), decimals, percentages (37.5% → 0.375), words.
+var GLYPH={'½':1/2,'⅓':1/3,'⅔':2/3,'¼':1/4,'¾':3/4,'⅕':1/5,'⅖':2/5,'⅗':3/5,'⅘':4/5,'⅙':1/6,'⅚':5/6,'⅛':1/8,'⅜':3/8,'⅝':5/8,'⅞':7/8};
+function valF(v){
+  var s=String(v).trim().replace(/[−–]/g,'-').replace(/\s*(kg|tickets?|minutes?|m²|cm²|m|£)$/i,'').replace(/^£\s*/,''), neg=1;
+  if(/^-/.test(s)){ neg=-1; s=s.slice(1).trim(); }
+  var pc=/%$/.test(s); if(pc) s=s.slice(0,-1).trim();
+  var m, r=NaN;
+  if((m=s.match(/^(\d+)\s*([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])$/))) r=+m[1]+GLYPH[m[2]];
+  else if(GLYPH[s]!=null) r=GLYPH[s];
+  else if((m=s.match(/^(\d+)\s+(\d+)\s*\/\s*(\d+)$/))&&+m[3]) r=+m[1]+m[2]/m[3];
+  else if((m=s.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/))&&+m[2]) r=m[1]/m[2];
+  else r=signedNum(s);
+  if(isNaN(r)) return NaN; r*=neg; return pc?r/100:r;
+}
+// A typed fraction in its simplest form? Returns 'simplest', 'unsimplified' (right value, can be simplified), or 'no'.
+function fracForm(v,n,d){ var s=String(v).trim(), m=s.match(/^(\d+)\s*\/\s*(\d+)$/);
+  if(!m) return same(valF(s),n/d,1e-9)?'notfrac':'no';
+  var a=+m[1], b=+m[2]; if(!b||!same(a/b,n/d)) return 'no'; return gcd(a,b)===1?'simplest':'unsimplified'; }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+
+/* ---------------- CONNECTION (hero): the linked number line ---------------- */
+var DENS=[2,3,4,5,8,10,20,100];
+var LN=[
+ {say:'Place <b>3/8</b> on the line.',target:3/8},
+ {say:'Place <b>0.35</b> on the line.',target:0.35,ask:{q:'Write 0.35 as a fraction in its simplest form.',frac:[7,20]}},
+ {say:'Place <b>120%</b> on the line.',target:1.2,ask:{q:'Write 120% as a fraction in its simplest form.',frac:[6,5]}},
+ {say:'Place <b>2/3</b> on the line, and look at its decimal.',target:2/3,ask:{q:'Why does the decimal for 2/3 never end?',mcq:['The denominator 3 does not divide exactly into 10, 100, 1000 …, so the division never finishes','The calculator is not accurate enough','Because 2/3 is bigger than one half'],ans:0}},
+ {say:'Pin each of these on the line, one at a time: <b>3/2, 0.6, 85%, 1/4, 150%, 6/5</b>.',pins:[{t:'3/2',v:1.5},{t:'0.6',v:0.6},{t:'85%',v:0.85},{t:'1/4',v:0.25},{t:'150%',v:1.5},{t:'6/5',v:1.2}]}
+];
+var ln={i:0,den:8,k:3,placed:false,pinI:0,pins:[],done:false};
+var LX0=40, LX1=600, LY=78;
+function lnX(v){ return LX0+v*(LX1-LX0)/2; }
+function lnVal(){ return ln.k/ln.den; }
+function lnDraw(){
+  var h='<line x1="'+(LX0-10)+'" y1="'+LY+'" x2="'+(LX1+10)+'" y2="'+LY+'" stroke="#2f3429" stroke-width="2"/>';
+  for(var k=0;k<=2*ln.den;k++){ var x=lnX(k/ln.den), whole=k%ln.den===0, show=ln.den<=20||whole||k%(ln.den/10)===0;
+    if(show) h+='<line x1="'+x+'" y1="'+(LY-(whole?12:7))+'" x2="'+x+'" y2="'+(LY+(whole?12:7))+'" stroke="#2f3429" stroke-width="'+(whole?2:1)+'"/>';
+    if(whole) h+='<text x="'+x+'" y="'+(LY+32)+'" text-anchor="middle" font-family="Arial" font-size="15" fill="#2f3429">'+(k/ln.den)+'</text>'; }
+  // Each label sits above its own point; labels only move sideways (in order) where two would overlap. Equal values share one stacked label.
+  var groups=[]; ln.pins.slice().sort(function(a,b){return a.v-b.v;}).forEach(function(p){ var g=groups[groups.length-1]; if(g&&same(g.v,p.v)) g.t.push(p.t); else groups.push({v:p.v,t:[p.t]}); });
+  var lx=groups.map(function(g){return lnX(g.v);}), GAP=58; for(var a=1;a<lx.length;a++) if(lx[a]-lx[a-1]<GAP) lx[a]=lx[a-1]+GAP;
+  groups.forEach(function(g,j){ var x=lnX(g.v), tx=Math.min(LX1+20,lx[j]);
+    h+='<line x1="'+x+'" y1="'+(LY-6)+'" x2="'+tx+'" y2="'+(LY-36)+'" stroke="#a9802f" stroke-width="1.5"/><circle cx="'+x+'" cy="'+LY+'" r="4" fill="#a9802f"/>'+
+       '<text x="'+tx+'" y="'+(LY-42)+'" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#6b4a2c">'+g.t.join(' = ')+'</text>'; });
+  var px=lnX(lnVal()); h+='<circle cx="'+px+'" cy="'+LY+'" r="11" fill="#365a68" stroke="#fff" stroke-width="3" style="cursor:grab"/>';
+  document.getElementById('lnSvg').innerHTML=h;
+  document.getElementById('lnDens').innerHTML=DENS.map(function(d){return '<button class="chip'+(d===ln.den?' active':'')+'" onclick="lnDen('+d+')">'+d+'</button>';}).join('');
+  document.getElementById('lnRead').innerHTML=ln.k+'/'+ln.den+(fracStr(ln.k,ln.den)!==ln.k+'/'+ln.den?' = '+fracStr(ln.k,ln.den):'')+' &nbsp;·&nbsp; '+decStr(ln.k,ln.den)+' &nbsp;·&nbsp; '+pctStr(ln.k,ln.den);
+}
+function lnDen(d){ var v=lnVal(); ln.den=d; ln.k=Math.max(0,Math.min(2*d,Math.round(v*d))); lnDraw(); }
+function lnStep(s){ ln.k=Math.max(0,Math.min(2*ln.den,ln.k+s)); lnDraw(); }
+function lnSet(v){ ln.k=Math.max(0,Math.min(2*ln.den,Math.round(v*ln.den))); lnDraw(); }
+function lnRender(){
+  var t=LN[ln.i], el=document.getElementById('lnStepBox');
+  document.getElementById('lnTask').innerHTML='Task '+(ln.i+1)+' of '+LN.length+' · '+t.say;
+  if(t.pins){ if(ln.done){ el.innerHTML='<p><b>Smallest to largest:</b> 1/4 &lt; 0.6 &lt; 85% &lt; 6/5 &lt; 3/2 = 150%. The last two are the same point.</p>'; return; }
+    el.innerHTML='<div class="buttonrow"><b>Now pin:</b> <span class="bignum" style="font-size:1.2em">'+t.pins[ln.pinI].t+'</span><button onclick="lnPin()">📌 Pin it here</button></div>'; return; }
+  if(!ln.placed){ el.innerHTML='<div class="buttonrow"><button onclick="lnPlace()">✅ Check my point</button></div>'; return; }
+  if(!t.ask||ln.done){ el.innerHTML='<p>✓ Placed.</p>'; return; }
+  if(t.ask.mcq){ el.innerHTML='<p><b>'+t.ask.q+'</b></p><div class="buttonrow">'+chipsHtml(t.ask.mcq,'lnMcq')+'</div>'; return; }
+  el.innerHTML='<p><b>'+t.ask.q+'</b></p><div class="buttonrow"><input id="lnAns" class="numin" style="max-width:110px" aria-label="Your fraction" onkeydown="if(event.key===\'Enter\')lnAsk()"><button onclick="lnAsk()">✅ Check</button></div>';
+}
+function lnPlace(){ var t=LN[ln.i];
+  if(same(lnVal(),t.target)){ ln.placed=true; if(!t.ask) ln.done=true; lnRender(); msg('lnMsg','good','Yes: '+fracStr(ln.k,ln.den)+' = '+decStr(ln.k,ln.den)+' = '+pctStr(ln.k,ln.den)+'. One point, three names.'); }
+  else msg('lnMsg','warn',lnVal()<t.target?'A little further right. Which denominator lets you land exactly on it?':'A little further left. Which denominator lets you land exactly on it?'); }
+function lnAsk(){ var t=LN[ln.i], r=fracForm(document.getElementById('lnAns').value,t.ask.frac[0],t.ask.frac[1]);
+  if(r==='simplest'){ ln.done=true; lnRender(); msg('lnMsg','good','Yes: '+t.ask.frac.join('/')+'.'); }
+  else if(r==='unsimplified') msg('lnMsg','warn','The right value — now simplify it: divide the numerator and the denominator by a common factor.');
+  else if(r==='notfrac') msg('lnMsg','warn','The right value — now write it as a fraction, like 3/4.');
+  else msg('lnMsg','warn','Look at the readout under the line: it shows the fraction in its simplest form.'); }
+function lnMcq(k){ var t=LN[ln.i]; if(k===t.ask.ans){ ln.done=true; lnRender(); msg('lnMsg','good','Yes. 2 ÷ 3 = 0.666…: there is always a remainder of 2, so the 6s go on for ever. This is a <b>recurring</b> decimal — Lesson 2 is all about them.'); }
+  else msg('lnMsg','warn','Try dividing 2 by 3 by hand. What remainder keeps coming back?'); }
+function lnPin(){ var t=LN[ln.i], p=t.pins[ln.pinI];
+  if(!same(lnVal(),p.v)){ msg('lnMsg','warn','Not quite where '+p.t+' sits. Choose a denominator that lets you land on it exactly.'); return; }
+  ln.pins.push({t:p.t,v:p.v}); ln.pinI++; if(ln.pinI>=t.pins.length) ln.done=true; lnDraw(); lnRender();
+  msg('lnMsg','good',ln.done?'All six pinned. Read them from left to right: 1/4, 0.6, 85%, 6/5, and 3/2 = 150% on the same spot.':p.t+' pinned.'); }
+function lnNext(){ ln.i=(ln.i+1)%LN.length; ln.placed=false; ln.done=false; ln.pinI=0; ln.pins=[]; document.getElementById('lnMsg').style.display='none'; lnDraw(); lnRender(); }
+function lnPointer(e){ var svg=document.getElementById('lnSvg'), b=svg.getBoundingClientRect(); if(!b.width) return; var x=(e.clientX-b.left)*640/b.width; lnSet((x-LX0)/(LX1-LX0)*2); }
+function lnInit(){ var svg=document.getElementById('lnSvg'), drag=false;
+  svg.addEventListener('pointerdown',function(e){ drag=true; if(svg.setPointerCapture) try{svg.setPointerCapture(e.pointerId);}catch(_){} lnPointer(e); });
+  svg.addEventListener('pointermove',function(e){ if(drag) lnPointer(e); }); svg.addEventListener('pointerup',function(){ drag=false; });
+  lnDraw(); lnRender(); }
+
+/* ---------------- MOVEMENT: fraction pictures ---------------- */
+var FP=[
+ {q:'1/3 + 1/4',ans:7/12,kind:'add',btn:'Cut both into twelfths'},
+ {q:'2/3 × 3/4',ans:1/2,kind:'mul',btn:'Take 2/3 of the 3/4'},
+ {q:'3 ÷ 3/4',ans:4,kind:'div',whole:3,btn:'Fit 3/4 pieces into 3'},
+ {q:'1 2/3 + 2 3/4',ans:4+5/12,kind:'mix',btn:'Re-cut the parts into twelfths'},
+ {q:'2 1/2 ÷ 3/4',ans:10/3,kind:'div',whole:2.5,btn:'Fit 3/4 pieces into 2 1/2',stretch:true}
+];
+var fp={i:0,step:false};
+function fpBar(x,y,w,h,n,shade,col){ var s=''; for(var k=0;k<n;k++) s+='<rect x="'+(x+k*w/n)+'" y="'+y+'" width="'+(w/n)+'" height="'+h+'" fill="'+(k<shade?col:'#fbf7ef')+'" stroke="#2f3429" stroke-width="1.5"/>'; return s; }
+function fpDraw(){
+  var q=FP[fp.i], h='', W=480, X=40;
+  if(q.kind==='add'){ h+=fpBar(X,20,W,36,fp.step?12:3,fp.step?4:1,'#7fb6e0')+fpBar(X,70,W,36,fp.step?12:4,fp.step?3:1,'#d8b26e');
+    h+='<text x="20" y="44" font-family="Arial" font-size="13">1/3</text><text x="20" y="94" font-family="Arial" font-size="13">1/4</text>';
+    if(fp.step){ var s=''; for(var k=0;k<12;k++) s+='<rect x="'+(X+k*W/12)+'" y="130" width="'+(W/12)+'" height="36" fill="'+(k<4?'#7fb6e0':k<7?'#d8b26e':'#fbf7ef')+'" stroke="#2f3429" stroke-width="1.5"/>'; h+=s+'<text x="'+(X+W/2)+'" y="190" text-anchor="middle" font-family="Arial" font-size="13">4 twelfths + 3 twelfths</text>'; } }
+  else if(q.kind==='mul'){ var cw=60, rh=40, x0=160;   // 4 columns (quarters) × 3 rows (thirds)
+    for(var r=0;r<3;r++) for(var c=0;c<4;c++){ var inA=c<3, inB=fp.step&&r<2; h+='<rect x="'+(x0+c*cw)+'" y="'+(20+r*rh)+'" width="'+cw+'" height="'+rh+'" fill="'+(inA&&inB?'#3f8f55':inA?'#cfe6d3':'#fbf7ef')+'" stroke="#2f3429" stroke-width="1.5"/>'; }
+    h+=fp.step?'<text x="280" y="158" text-anchor="middle" font-family="Arial" font-size="13">2/3 of the 3/4: 2 × 3 = 6 of the 3 × 4 = 12 small rectangles.</text><text x="280" y="178" text-anchor="middle" font-family="Arial" font-size="13">So 2/3 × 3/4 = (2 × 3)/(3 × 4) = 6/12: multiply the numerators, multiply the denominators.</text>'
+      :'<text x="280" y="160" text-anchor="middle" font-family="Arial" font-size="13">3/4 of the rectangle is shaded</text>'; }
+  else if(q.kind==='div'){ var U=150, n=Math.ceil(q.whole/0.75);
+    h+='<rect x="'+X+'" y="30" width="'+(q.whole*U)+'" height="36" fill="#fbf7ef" stroke="#2f3429" stroke-width="2"/>';
+    for(var u=1;u<q.whole;u++) h+='<line x1="'+(X+u*U)+'" y1="30" x2="'+(X+u*U)+'" y2="66" stroke="#2f3429" stroke-width="1" stroke-dasharray="3 3"/>';
+    h+='<text x="'+X+'" y="20" font-family="Arial" font-size="13">'+(q.whole===3?'3 wholes':'2 1/2 wholes')+'</text>';
+    if(fp.step){ for(var j=0;j<n;j++){ var x=X+j*0.75*U, w=Math.min(0.75*U,q.whole*U-j*0.75*U); h+='<rect x="'+x+'" y="80" width="'+w+'" height="36" fill="'+(j%2?'#d8b26e':'#7fb6e0')+'" stroke="#2f3429" stroke-width="1.5"/><text x="'+(x+w/2)+'" y="103" text-anchor="middle" font-family="Arial" font-size="12">'+(w<0.75*U-1?'⅓':'3/4')+'</text>'; } }
+    if(fp.step){ h+=q.whole===3?'<text x="280" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">Each whole holds 1 1/3 pieces of 3/4 — that is 4/3 pieces.</text><text x="280" y="160" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">So 3 wholes hold 3 × 4/3 = 4 pieces: dividing by 3/4 is multiplying by 4/3, its reciprocal.</text>'
+      :'<text x="280" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">Each whole holds 4/3 pieces, so 2 1/2 wholes hold 2 1/2 × 4/3 = 5/2 × 4/3 = 20/6 = 3 1/3 pieces.</text><text x="280" y="160" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">The same as counting: 3 whole pieces and 1/3 of another.</text>'; } }
+  else { // 1 2/3 + 2 3/4: whole bars and part-bars; after the button the parts are re-cut into twelfths and combined
+    var BW=90, gx=function(i){ return 30+i*95; }, BL='#7fb6e0', GO='#d8b26e';
+    var whole=function(x,y,col){ return '<rect x="'+x+'" y="'+y+'" width="'+BW+'" height="34" fill="'+col+'" stroke="#2f3429" stroke-width="1.5"/>'; };
+    var part=function(x,y,n,k,col){ var s=''; for(var j=0;j<n;j++) s+='<rect x="'+(x+j*BW/n)+'" y="'+y+'" width="'+(BW/n)+'" height="34" fill="'+(j<k?col:'#fbf7ef')+'" stroke="#2f3429" stroke-width="'+(n>4?0.8:1.5)+'"/>'; return s; };
+    var lab=function(x,y,t){ return '<text x="'+x+'" y="'+y+'" font-family="Arial" font-size="13" fill="#2f3429">'+t+'</text>'; };
+    h+=lab(gx(0),12,'1 2/3')+whole(gx(0),16,BL)+(fp.step?part(gx(1),16,12,8,BL):part(gx(1),16,3,2,BL));
+    h+=lab(gx(0),66,'2 3/4')+whole(gx(0),70,GO)+whole(gx(1),70,GO)+(fp.step?part(gx(2),70,12,9,GO):part(gx(2),70,4,3,GO));
+    if(fp.step){ h+=lab(gx(0),122,'Together')+whole(gx(0),126,BL)+whole(gx(1),126,GO)+whole(gx(2),126,GO);
+      var s2=''; for(var j=0;j<12;j++) s2+='<rect x="'+(gx(3)+j*BW/12)+'" y="126" width="'+(BW/12)+'" height="34" fill="'+(j<8?BL:GO)+'" stroke="#2f3429" stroke-width="0.8"/>';
+      h+=s2+part(gx(4),126,12,5,GO);
+      h+='<text x="280" y="186" text-anchor="middle" font-family="Arial" font-size="13" fill="#2f3429">3 wholes, then 8/12 + 9/12 = 17/12: one more whole and 5/12 left over</text>'; }
+    else h+='<text x="280" y="140" text-anchor="middle" font-family="Arial" font-size="13" fill="#8c9cab">The parts are thirds and quarters — different sizes. Press the button to re-cut them.</text>';
+  }
+  document.getElementById('fpSvg').innerHTML=h;
+}
+function fpRender(){ var q=FP[fp.i]; document.getElementById('fpCount').innerHTML=(q.stretch?'<span class="stretch">stretch</span> ':'')+'Calculation '+(fp.i+1)+' of '+FP.length;
+  document.getElementById('fpQ').textContent=q.q; document.getElementById('fpBtns').innerHTML='<button onclick="fpDo()">'+q.btn+'</button>'; document.getElementById('fpAns').value=''; document.getElementById('fpRead').style.display='none'; fpDraw(); }
+function fpDo(){ fp.step=true; fpDraw(); }
+function fpCheck(){ var q=FP[fp.i], v=valF(document.getElementById('fpAns').value);
+  if(same(v,q.ans,1e-9)||(/\./.test(document.getElementById('fpAns').value)&&same(v,q.ans,1e-3))){ msg('fpRead','good','Yes: '+fpNice(q.ans)+'.'+(q.kind==='div'&&q.whole===2.5?' Three whole pieces of 3/4 fit, and a third of another: 3 1/3.':'')); return; }
+  var hint={add:'Add the twelfths: how many altogether?',mul:'Count the darkest small rectangles out of 12.',div:'Count how many 3/4 pieces fit.',mix:'Add the wholes, then the parts — and the parts make more than a whole.'}[q.kind];
+  if(q.kind==='add'&&same(v,2/7)) hint='Adding numerators and denominators (1 + 1 over 3 + 4) does not work: the pieces are different sizes.';
+  if(q.kind==='div'&&same(v,9/4)) hint='That is 3 × 3/4. Dividing asks how many 3/4 pieces fit into 3.';
+  msg('fpRead','warn',hint+' Use the button to see the picture.'); }
+function fpNice(v){ var w=Math.floor(v+1e-9), r=v-w; if(r<1e-9) return String(w); var d=[2,3,4,5,6,8,12].find(function(d){ return same(r*d,Math.round(r*d)); }); var n=Math.round(r*d), s=simp(n,d); return (w?w+' ':'')+s[0]+'/'+s[1]; }
+function fpNext(){ fp.i=(fp.i+1)%FP.length; fp.step=false; fpRender(); }
+function fpInit(){ fpRender(); }
+
+/* ---------------- REFLECTION: which form wins? ---------------- */
+var WF=[{t:'3/8',v:0.375},{t:'0.4',v:0.4},{t:'35%',v:0.35},{t:'5/12',v:5/12},{t:'0.38',v:0.38}];
+var WFC=[
+ {q:'A shop takes ___ off all prices.',opts:['15%','0.15','3/20'],ans:0,why:'Discounts are usually given as percentages: “15% off” is quick to read and compare.'},
+ {q:'A recipe needs ___ of a cup of milk.',opts:['0.75','3/4','75%'],ans:1,why:'Measuring cups are marked in fractions, so 3/4 of a cup is easiest to measure.'},
+ {q:'A shelf is ___ m long.',opts:['0.75','3/4','75%'],ans:0,why:'Lengths in metres are usually written as decimals: 0.75 m, the same as 75 cm.'}
+];
+var wf={tapped:[],c:0};
+function wfRender(){
+  document.getElementById('wfCards').innerHTML=WF.map(function(c,k){ var used=wf.tapped.indexOf(k)>=0; return '<button class="chip"'+(used?' disabled':'')+' onclick="wfTap('+k+')" style="font-size:1.15em">'+c.t+'</button>'; }).join('');
+  // Equal neighbours are joined with =, never <, so the order shown is always a true statement.
+  document.getElementById('wfOrder').innerHTML=wf.tapped.length?'Your order: '+wf.tapped.map(function(k,j){ return (j?(same(WF[wf.tapped[j-1]].v,WF[k].v)?' = ':' &lt; '):'')+'<b>'+WF[k].t+'</b>'; }).join(''):'Tap the smallest first.';
+  var el=document.getElementById('wfCtx');
+  if(wf.tapped.length<WF.length){ el.innerHTML='<span class="small">When the cards are in order, some real situations appear here.</span>'; return; }
+  if(wf.c>=WFC.length){ el.innerHTML='<p>✓ All three situations chosen.</p>'; return; }
+  var q=WFC[wf.c]; el.innerHTML='<p><b>Which form is clearest here?</b> '+q.q+'</p><div class="buttonrow">'+chipsHtml(q.opts,'wfCtxPick')+'</div>';
+}
+function wfTap(k){ var left=WF.map(function(c,j){return j;}).filter(function(j){return wf.tapped.indexOf(j)<0;}), min=Math.min.apply(null,left.map(function(j){return WF[j].v;}));
+  if(same(WF[k].v,min)){ wf.tapped.push(k); wfRender(); msg('wfRead','good',wf.tapped.length===WF.length?'Ordered. The last two were close: 0.4 = 0.400 and 5/12 = 0.4166…, so 5/12 is larger.':WF[k].t+' = '+(WF[k].t==='5/12'?'0.4166…':full(WF[k].v))+'.'); }
+  else msg('wfRead','warn','Write each card as a decimal: which of the remaining cards is smallest?'); }
+function wfCtxPick(k){ var q=WFC[wf.c]; if(k===q.ans){ wf.c++; wfRender(); msg('wfRead','good',q.why); } else msg('wfRead','warn','All three are the same number. Which would you expect to see written there in real life?'); }
+function wfReset(){ wf.tapped=[]; wf.c=0; document.getElementById('wfRead').style.display='none'; wfRender(); }
+function wfInit(){ wfRender(); }
+
+/* ---------------- CREATIVITY: fractions of amounts ---------------- */
+var FA=[
+ {q:'What is <b>3/5 of 40 kg</b>?',ans:24,parts:5,shade:3,label:function(k){return '8 kg';},whole:'40 kg',slips:{'40':'That is the whole. Find one fifth first: 40 ÷ 5.','8':'That is one fifth. You need three of them.'}},
+ {q:'What fraction of <b>60 minutes</b> is <b>45 minutes</b>? Give it in its simplest form.',frac:[3,4],parts:4,shade:3,label:function(){return '15 min';},whole:'60 minutes'},
+ {q:'<b>3/4</b> of the tickets have been sold. That is <b>90 tickets</b>. How many tickets are there altogether?',ans:120,parts:4,shade:3,label:function(){return '30';},whole:'? tickets',slips:{'67.5':'That is 3/4 of 90. But 90 is the 3/4 — find one quarter first: 90 ÷ 3.','30':'That is one quarter. The whole is four quarters.'}},
+ {q:'A price rises from <b>£40</b> to <b>£50</b>. What is the rise as a fraction of the <b>original</b> price, in its simplest form?',frac:[1,4],parts:4,shade:1,label:function(){return '£10';},whole:'£40 (original)'}
+];
+var fa={i:0,bar:false};
+function faDraw(){ var q=FA[fa.i], W=480, X=40, h='';
+  if(fa.bar){ for(var k=0;k<q.parts;k++) h+='<rect x="'+(X+k*W/q.parts)+'" y="30" width="'+(W/q.parts)+'" height="40" fill="'+(k<q.shade?'#7fb6e0':'#fbf7ef')+'" stroke="#2f3429" stroke-width="1.5"/><text x="'+(X+(k+0.5)*W/q.parts)+'" y="55" text-anchor="middle" font-family="Arial" font-size="13">'+q.label(k)+'</text>';
+    h+='<text x="'+(X+W/2)+'" y="95" text-anchor="middle" font-family="Arial" font-size="13">The whole: '+q.whole+'</text>'; }
+  else h='<text x="280" y="60" text-anchor="middle" font-family="Arial" font-size="14" fill="#8c9cab">Press “Show the bar” if a picture would help.</text>';
+  document.getElementById('faSvg').innerHTML=h; }
+function faRender(){ var q=FA[fa.i]; document.getElementById('faCount').textContent='Problem '+(fa.i+1)+' of '+FA.length; document.getElementById('faQ').innerHTML=q.q; document.getElementById('faAns').value=''; document.getElementById('faRead').style.display='none'; faDraw(); }
+function faShowBar(){ fa.bar=true; faDraw(); }
+function faCheck(){ var q=FA[fa.i], v=document.getElementById('faAns').value;
+  if(q.frac){ var r=fracForm(v,q.frac[0],q.frac[1]);
+    if(r==='simplest'){ msg('faRead','good','Yes: '+q.frac.join('/')+'.'); fa.bar=true; faDraw(); }
+    else if(r==='unsimplified') msg('faRead','warn','The right value — now simplify it.'); else if(r==='notfrac') msg('faRead','warn','The right value — now write it as a fraction.');
+    else msg('faRead','warn',fa.i===3?'Rise ÷ original: (50 − 40) ÷ 40. Compare with the original price, not the new one.':'Write it as part ÷ whole, then simplify.'); return; }
+  var n=valF(v); if(same(n,q.ans)){ msg('faRead','good','Yes: '+q.ans+'.'); fa.bar=true; faDraw(); return; }
+  msg('faRead','warn',(q.slips&&q.slips[String(n)])||'Show the bar: find the size of one part first.'); }
+function faNext(){ fa.i=(fa.i+1)%FA.length; fa.bar=false; faRender(); }
+function faInit(){ faRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    add:{title:'Adding fractions',prompt:'Work out 1/2 + 1/3.',answer:5/6,hint:'Use sixths: 1/2 = 3/6 and 1/3 = 2/6.'},
+    sub:{title:'Subtracting fractions',prompt:'Work out 3/4 − 1/8.',answer:5/8,hint:'Use eighths: 3/4 = 6/8.'},
+    dec:{title:'Fractions to decimals',prompt:'Write 1/5 as a decimal.',answer:0.2,hint:'1/5 = 2/10.'}
+  };
+  function matches(r,v){ var n=valF(v); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pv(target){ return function(v){ return same(valF(v),target); }; }
+function psimp(n,d){ return function(v){ return fracForm(v,n,d)==='simplest'; }; }
+var PRACTICE=[
+ {label:"1 of 8 · Fraction to decimal",q:"Write <b>7/8</b> as a decimal.",a:[],eq:function(v){ return /\./.test(v)&&same(valF(v),0.875); },prompt:"1/8 = 0.125. What is 7 of those?",hint:"7 × 0.125, or divide 7 by 8.",sol:"7/8 = 7 ÷ 8 = 0.875."},
+ {label:"2 of 8 · Decimal to fraction",q:"Write <b>0.36</b> as a fraction in its simplest form.",a:[],eq:psimp(9,25),prompt:"0.36 is 36 hundredths. What common factor do 36 and 100 share?",hint:"36/100. Divide both by 4.",sol:"0.36 = 36/100 = 9/25."},
+ {label:"3 of 8 · Fraction to percentage",q:"Write <b>3/20</b> as a percentage.",a:[],eq:function(v){ var s=String(v).trim(); return /%$/.test(s)?same(valF(s),0.15):same(valF(s),15); },prompt:"What do you multiply 20 by to get 100?",hint:"3/20 = 15/100.",sol:"3/20 = 15/100 = 15%."},
+ {label:"4 of 8 · Compare",q:"Which is largest: <b>0.6</b>, <b>5/8</b> or <b>62%</b>?",a:[],eq:function(v){ var s=String(v).trim().replace(/\s/g,''); return s==='5/8'||s==='0.625'||s==='62.5%'; },prompt:"Write all three as decimals.",hint:"0.6, 0.625 and 0.62.",sol:"5/8 = 0.625 is the largest (0.6 < 0.62 < 0.625)."},
+ {label:"5 of 8 · Add",q:"Work out <b>2/3 + 1/4</b>.",a:[],eq:pv(11/12),prompt:"What size of piece can both thirds and quarters be cut into?",hint:"Twelfths: 8/12 + 3/12.",sol:"8/12 + 3/12 = 11/12."},
+ {label:"6 of 8 · Multiply",q:"Work out <b>1 1/2 × 2/3</b>.",a:[],eq:pv(1),prompt:"Write 1 1/2 as an improper fraction first.",hint:"3/2 × 2/3.",sol:"3/2 × 2/3 = 6/6 = 1."},
+ {label:"7 of 8 · Divide",q:"Work out <b>3 ÷ 3/4</b>.",a:[],eq:pv(4),prompt:"How many pieces of size 3/4 fit into 3?",hint:"3 × 4/3.",sol:"3 ÷ 3/4 = 3 × 4/3 = 4."},
+ {label:"8 of 8 · Find the whole (stretch)",q:"<b>2/5</b> of a number is <b>18</b>. What is the number?",a:[],eq:pv(45),prompt:"If 2 fifths are 18, what is 1 fifth?",hint:"1/5 is 9. The whole is 5 fifths.",sol:"18 ÷ 2 = 9, and 9 × 5 = 45."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Picture it on a number line or a bar — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  lnInit();
+  fpInit();
+  wfInit();
+  faInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>

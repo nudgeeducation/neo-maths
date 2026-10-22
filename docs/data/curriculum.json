@@ -767,6 +767,23 @@
       ]
     },
     {
+      "id": "number-systems",
+      "title": "Number Systems and Calculator Judgement",
+      "stage": "Intermediate",
+      "strand": "Number",
+      "source": "vault/03_Intermediate/01_Lessons/Number_Systems",
+      "lessons": [
+        {
+          "id": "ns-01-fdp-fluently",
+          "num": "Lesson 01",
+          "title": "Fractions, decimals and percentages fluently",
+          "file": "lessons/number-systems/01-fdp-fluently.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "ks3-interactive-library",
       "title": "KS3 Interactive Library",
       "stage": "Key Stage 3",
