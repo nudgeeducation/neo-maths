@@ -780,6 +780,14 @@
           "file": "lessons/number-systems/01-fdp-fluently.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ns-02-recurring-decimals",
+          "num": "Lesson 02",
+          "title": "Recurring decimals as fractions",
+          "file": "lessons/number-systems/02-recurring-decimals.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

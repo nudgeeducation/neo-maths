@@ -100,6 +100,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Formulae_and_Rearranging/Lesson_06_Using_and_Checking_Formulae/NEO_Maths_Y9_Formulae_Lesson_06_Using_and_Checking_Formulae_v0.1.html",
     "ns-01-fdp-fluently":
         "03_Intermediate/01_Lessons/Number_Systems/Lesson_01_Fractions_Decimals_Percentages/NEO_Maths_Y10_NumberSystems_Lesson_01_Fractions_Decimals_Percentages_v0.1.html",
+    "ns-02-recurring-decimals":
+        "03_Intermediate/01_Lessons/Number_Systems/Lesson_02_Recurring_Decimals/NEO_Maths_Y10_NumberSystems_Lesson_02_Recurring_Decimals_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

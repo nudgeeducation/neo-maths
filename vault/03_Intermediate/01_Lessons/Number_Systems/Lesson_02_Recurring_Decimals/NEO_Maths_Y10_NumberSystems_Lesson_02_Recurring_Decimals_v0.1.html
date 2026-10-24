@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Recurring decimals as fractions</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Number Systems and Calculator Judgement</h1>
+<h2>Recurring decimals as fractions</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Can a decimal go on for ever and still be a fraction?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — decimals that never end, why they repeat, and how to turn them back into fractions.</p>
+<p><b>Stepping Stone:</b> decide whether a fraction gives a <b>terminating</b> or a <b>recurring</b> decimal; explain why recurring decimals must repeat; write them with <b>dot notation</b>; and convert a recurring decimal to a <b>fraction</b>.</p>
+<p><b>You will need:</b> changing fractions to decimals by division, and simplifying fractions — and the optional <b>✏️ Scratchpad</b>. No calculator today: it would hide the pattern.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 7 · Move 11 · Reflect 14 · Create 8 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_NumberSystems_Lesson_02_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_NumberSystems_Lesson_02_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Work out 2 ÷ 7 by long division. Write down every remainder. When does a remainder come back?')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Terminate or recur?</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">Some fractions give decimals that stop: 3/8 = 0.375. These are <b>terminating</b> decimals. Others go on for ever, repeating the same digits: 1/3 = 0.333… These are <b>recurring</b> decimals, written with a dot over the repeating digit: 0.3̇. When a block of digits repeats, dots go over its first and last digits: 0.4545… = 0.4̇5̇. Every fraction gives one or the other — and every recurring decimal can be turned back into a fraction.</p>
+</div>
+<p><b>What to do:</b> for each fraction, predict: will its decimal <b>terminate</b> or <b>recur</b>? Then see its decimal, and the prime factors of its denominator.</p>
+<p><b>What you are trying to notice:</b> once the fraction is in its simplest form, its denominator decides. Look at the prime factors.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔮 Predict, then check</h3>
+<div id="trCount" class="small" style="text-align:center"></div>
+<div id="trFrac" class="bignum" style="font-size:2em"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="trGuess(true)">It terminates</button><button onclick="trGuess(false)">It recurs</button></div>
+<div id="trRead" class="feedback" aria-live="polite"></div>
+<div id="trLog" class="card small"></div>
+<div id="trRule" class="card" style="display:none"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="trNext()">Next fraction →</button></div>
+<p><b>Carry this forward:</b> simplify first. If the denominator's only prime factors are 2 and 5, the decimal terminates; otherwise it recurs.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Line up the tails</summary>
+<p><b>What to do:</b> a recurring decimal is called <span class="uk">x</span>. Choose what to multiply it by, so that the two repeating tails <b>line up</b> exactly. Then subtract: the tails cancel, and a fraction appears.</p>
+<p><b>What you are trying to notice:</b> multiply by 10 if one digit repeats, by 100 if two digits repeat, by 1000 if three repeat. When the tails match digit for digit, subtracting removes them completely.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">✂️ Make the tails cancel</h3>
+<div id="ltCount" class="small" style="text-align:center"></div>
+<div id="ltSay" class="bignum" style="font-size:1.4em"></div>
+<div class="buttonrow" style="justify-content:center"><b>Multiply by:</b><span id="ltTop"></span><b style="margin-left:12px">Take away:</b><span id="ltBot"></span></div>
+<div id="ltStrips" class="card" style="font-family:'Courier New',monospace;font-size:1.25em;line-height:1.9;overflow-x:auto"></div>
+<div id="ltStep" class="card"></div>
+<div id="ltRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ltNext()">Next decimal →</button></div>
+<p><b>Carry this forward:</b> multiply so the tails line up, subtract, divide, simplify.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION (hero) ================= -->
+<details class="es">
+<summary>🪞 Reflection — The remainder wheel</summary>
+<p><b>What to do:</b> press <b>Next step</b> to divide, one digit at a time. Each remainder lights up on the wheel. Watch for a remainder that comes round <b>again</b>. Then answer the questions.</p>
+<p><b>What you are trying to notice:</b> dividing by 7, the only possible remainders are 0, 1, 2, 3, 4, 5 and 6. If the remainder is never 0, then within at most 6 steps a remainder must come back — and from then on, every digit repeats. That is <b>why</b> the decimal recurs.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🎡 Watch the remainders</h3>
+<div class="buttonrow" style="justify-content:center" id="rwFracs"></div>
+<div class="card" style="text-align:center"><svg id="rwSvg" class="graphsvg" style="max-width:320px" viewBox="0 0 320 300" role="img" aria-label="A wheel of the possible remainders"></svg></div>
+<div id="rwDigits" class="bignum" style="font-size:1.4em" aria-live="polite"></div>
+<div id="rwWork" class="clue small" style="text-align:center"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rwStep()">Next step ▶</button><button onclick="rwReset()">↺ Start again</button></div>
+<div id="rwQ" class="card"></div>
+<div id="rwRead" class="feedback" aria-live="polite"></div>
+<p><b>Carry this forward:</b> dividing by <span class="uk">d</span>, there are only <span class="uk">d</span> possible remainders. So the digits either stop (remainder 0) or must repeat — and the cycle is at most <span class="uk">d</span> − 1 digits long.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The decimal detective</summary>
+<p><b>What to do:</b> solve each mystery. Then make a recurring decimal of your own and find its fraction.</p>
+<p><b>What you are trying to notice:</b> every recurring decimal is a fraction — including some surprising ones.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🕵️ Mysteries</h3>
+<div id="ddCount" class="small" style="text-align:center"></div>
+<div id="ddQ" class="clue" style="font-size:1.1em"></div>
+<div id="ddStep" class="card"></div>
+<div id="ddRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ddNext()">Next mystery →</button></div>
+</div>
+<div class="toolbox" style="margin-top:12px">
+<h3 style="margin-top:0">✨ Make your own</h3>
+<p class="small">Type a block of digits to repeat (for example 27). The decimal 0.272727… is built for you. Find its fraction in its simplest form.</p>
+<div class="buttonrow" style="justify-content:center"><b>Repeating block:</b><input id="myBlock" class="numin" style="max-width:110px" value="27" aria-label="Repeating block of digits" oninput="myDraw()"></div>
+<div id="myDec" class="bignum" style="font-size:1.3em"></div>
+<div class="buttonrow" style="justify-content:center"><b>As a fraction:</b><input id="myAns" class="numin" style="max-width:120px" aria-label="Your fraction" onkeydown="if(event.key==='Enter')myCheck()"><button onclick="myCheck()">✅ Check</button></div>
+<div id="myRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A decimal that goes on for ever can be captured exactly by two small whole numbers. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> picture the remainders going round the wheel, like the hands of a clock. Sooner or later they must come back to where they have been — and the pattern begins again.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds the joy of <b>certainty about the infinite</b>. You cannot write out every digit of 0.142857142857…, but you can know exactly what it is, and prove why it repeats. That kind of reasoning — about things too big to check one by one — is at the heart of mathematics.</p>
+<p class="small">Carry one idea forward: when something goes on for ever, look for the pattern that makes it predictable.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — From for ever to a fraction</summary>
+<p><b>Your task:</b> show that you can predict, explain and convert recurring decimals.</p>
+<ul>
+<li>Without dividing, predict which of these terminate: 3/16, 4/9, 7/20, 5/14, 9/12. Explain each prediction using prime factors.</li>
+<li>Work out 4/7 by long division. List the remainders, and explain why the decimal must repeat.</li>
+<li>Write 0.5̇, 0.3̇6̇ and 0.1̇4̇5̇ as fractions in their simplest form, showing the multiply-and-subtract method.</li>
+<li>Explain, with the method, why 0.9̇ = 1.</li>
+<li><span class="stretch">stretch</span> Write 0.23̇ (that is 0.2333…) as a fraction. Why do you need two multiplications?</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_NUMBER_RECURRING_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows some decimals recur.</td><td>Predicts terminating or recurring correctly.</td><td>Explains predictions with prime factors.</td><td>Explains why the digits must repeat, using remainders.</td></tr>
+<tr><td><b>Application</b></td><td>Converts 0.5̇.</td><td>Converts 0.5̇ and 0.3̇6̇.</td><td>Converts all three.</td><td>Also converts 0.23̇.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes answers.</td><td>Shows the multiply-and-subtract steps.</td><td>Uses dot notation correctly.</td><td>Explains 0.9̇ = 1 clearly enough to convince someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one answer.</td><td>Checks a fraction by dividing.</td><td>Checks every conversion.</td><td>Spots and explains an error in a conversion.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Recurring decimals — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type fractions like <b>5/9</b>.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write x = …, then 10x, 100x or 1000x underneath, lined up. Subtract.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["/","\u2026","\u2212"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Fraction and decimal helpers ---------------- */
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a||1; }
+function simp(n,d){ var g=gcd(n,d); return [n/g,d/g]; }
+function primeFactors(n){ var out=[], p=2; while(n>1){ while(n%p===0){ out.push(p); n/=p; } p++; } return out; }
+function terminates(n,d){ var q=simp(n,d)[1]; while(q%2===0) q/=2; while(q%5===0) q/=5; return q===1; }
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function full(v){ var s=String(Math.round(v*1e6)/1e6); return s.charAt(0)==='-'?'−'+s.slice(1):s; }
+// Long division of n/d (0 < n/d < 1): returns {pre, rep} digit strings (rep '' if it terminates).
+function expand(n,d){ var r=n%d, seen={}, digits='', k=0; while(r!==0&&seen[r]==null){ seen[r]=k++; r*=10; digits+=Math.floor(r/d); r%=d; }
+  if(r===0) return {pre:digits,rep:''}; var s=seen[r]; return {pre:digits.slice(0,s),rep:digits.slice(s)}; }
+var DOT='̇';
+function dotted(n,d){ var w=Math.floor(n/d), e=expand(n%d,d); if(!e.rep) return w+'.'+e.pre;
+  var rep=e.rep.length===1?e.rep+DOT:e.rep.charAt(0)+DOT+e.rep.slice(1,-1)+e.rep.slice(-1)+DOT; return w+'.'+e.pre+rep; }
+function longDec(n,d,len){ var w=Math.floor(n/d), r=n%d, s=''; for(var i=0;i<len;i++){ r*=10; s+=Math.floor(r/d); r%=d; } return w+'.'+s; }
+var GLYPH={'½':1/2,'⅓':1/3,'⅔':2/3,'¼':1/4,'¾':3/4,'⅛':1/8};
+function valF(v){ var s=String(v).trim().replace(/[−–]/g,'-'), m;
+  if(GLYPH[s]!=null) return GLYPH[s];
+  if((m=s.match(/^(-?\d+)\s+(\d+)\s*\/\s*(\d+)$/))&&+m[3]) return (+m[1])+(m[1].charAt(0)==='-'?-1:1)*m[2]/m[3];
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/))&&+m[2]) return m[1]/m[2];
+  return signedNum(s); }
+// A typed fraction exactly equal to n/d? 'simplest' | 'unsimplified' | 'notfrac' | 'no'. Exact integer check, so recurring values compare safely.
+function fracIs(v,n,d){ var s=String(v).trim(), m=s.match(/^(\d+)\s*\/\s*(\d+)$/);
+  if(!m) return same(valF(s),n/d,1e-12)?'notfrac':'no'; var a=+m[1], b=+m[2]; if(!b||a*d!==b*n) return 'no'; return gcd(a,b)===1?'simplest':'unsimplified'; }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+
+/* ---------------- CONNECTION: terminate or recur? ---------------- */
+var TR=[[7,40],[5,12],[9,24],[3,7],[11,20],[2,15],[6,75],[1,6]];
+var tr={i:0,log:[]};
+function trRender(){ var f=TR[tr.i]; document.getElementById('trCount').textContent='Fraction '+(tr.i+1)+' of '+TR.length; document.getElementById('trFrac').textContent=f[0]+'/'+f[1];
+  document.getElementById('trLog').innerHTML=tr.log.length?'<b>So far</b><table style="margin-top:6px"><tr><th>Fraction</th><th>Simplest form</th><th>Denominator\'s prime factors</th><th>Decimal</th></tr>'+tr.log.join('')+'</table>':'<span class="small">Your results will collect here.</span>';
+  var r=document.getElementById('trRule'); if(tr.log.length>=5){ r.style.display='block'; if(!tr.ruled) r.innerHTML='<p><b>What decides it?</b></p><div class="buttonrow">'+chipsHtml(['Whether the simplest-form denominator has only 2s and 5s as prime factors','Whether the numerator is odd','Whether the denominator is bigger than 10'],'trRuleAns')+'</div>'; } else r.style.display='none'; }
+function trGuess(term){ var f=TR[tr.i], t=terminates(f[0],f[1]), s=simp(f[0],f[1]), pf=primeFactors(s[1]);
+  var row='<tr><td>'+f[0]+'/'+f[1]+'</td><td>'+s[0]+'/'+s[1]+'</td><td>'+pf.join(' × ')+'</td><td>'+dotted(f[0],f[1])+(t?' (terminates)':' (recurs)')+'</td></tr>';
+  if(tr.log.indexOf(row)<0) tr.log.push(row); trRender();
+  var why=(s[1]!==f[1]?'In its simplest form it is '+s[0]+'/'+s[1]+'. ':'')+'The denominator '+s[1]+' = '+pf.join(' × ')+(t?' — only 2s and 5s.':' — it has a prime factor other than 2 and 5.');
+  msg('trRead',term===t?'good':'warn',(term===t?'Yes — it '+(t?'terminates':'recurs')+': '+dotted(f[0],f[1])+'. ':'Not this time — it '+(t?'terminates':'recurs')+': '+dotted(f[0],f[1])+'. ')+why); }
+function trRuleAns(k){ if(k===0){ tr.ruled=true; document.getElementById('trRule').innerHTML='<p>✓ <b>The rule:</b> write the fraction in its simplest form. It terminates if the denominator\'s only prime factors are 2 and 5 — because then it divides exactly into a power of 10.</p>'; msg('trRead','good','Yes. 10 = 2 × 5, so only denominators built from 2s and 5s divide exactly into 10, 100, 1000 …'); }
+  else msg('trRead','warn','Look at the prime factors column for the ones that terminate.'); }
+function trNext(){ tr.i=(tr.i+1)%TR.length; document.getElementById('trRead').style.display='none'; trRender(); }
+function trInit(){ trRender(); }
+
+/* ---------------- MOVEMENT: line up the tails ---------------- */
+var LT=[
+ {n:5,d:11,show:'0.4̇5̇',top:100,bot:1},
+ {n:7,d:9,show:'0.7̇',top:10,bot:1},
+ {n:41,d:333,show:'0.1̇2̇3̇',top:1000,bot:1},
+ {n:1,d:6,show:'0.16̇',top:100,bot:10,stretch:true}
+];
+var lt={i:0,top:10,bot:1,step:0};
+function ltTails(){ var q=LT[lt.i], a=longDec(q.n*lt.top,q.d,14).split('.'), b=longDec(q.n*lt.bot,q.d,14).split('.'); return {a:a,b:b,match:a[1].slice(0,12)===b[1].slice(0,12)}; }
+function ltRender(){
+  var q=LT[lt.i], t=ltTails(), name=function(m){return (m===1?'':m)+'<span class="uk">x</span>';};
+  document.getElementById('ltCount').innerHTML=(q.stretch?'<span class="stretch">stretch</span> ':'')+'Decimal '+(lt.i+1)+' of '+LT.length;
+  document.getElementById('ltSay').innerHTML='<span class="uk">x</span> = '+q.show+' = '+longDec(q.n,q.d,9)+'…';
+  document.getElementById('ltTop').innerHTML=[10,100,1000].map(function(m){return '<button class="chip'+(m===lt.top?' active':'')+'" onclick="ltSet(\'top\','+m+')">'+m+'<span class="uk">x</span></button>';}).join('');
+  document.getElementById('ltBot').innerHTML=[1,10].map(function(m){return '<button class="chip'+(m===lt.bot?' active':'')+'" onclick="ltSet(\'bot\','+m+')">'+(m===1?'':m)+'<span class="uk">x</span></button>';}).join('');
+  var pad=function(s,w){ while(s.length<w) s=' '+s; return s; }, W=Math.max(t.a[0].length,t.b[0].length);
+  var mark=function(s){ return s.split('').map(function(ch,k){ return '<span style="background:'+(t.match&&k<12?'#e3f0df':'transparent')+'">'+ch+'</span>'; }).join(''); };
+  document.getElementById('ltStrips').innerHTML='<div><span style="display:inline-block;min-width:4.5em">'+name(lt.top)+' =</span>'+pad(t.a[0],W)+'.'+mark(t.a[1].slice(0,12))+'…</div>'+
+    '<div><span style="display:inline-block;min-width:4.5em">'+name(lt.bot)+' =</span>'+pad(t.b[0],W)+'.'+mark(t.b[1].slice(0,12))+'…</div>'+
+    '<div class="small" style="font-family:Arial">'+(t.match?'✓ The tails line up exactly — subtracting will cancel them.':'✗ The tails do not line up. Try a different multiplier.')+'</div>';
+  var el=document.getElementById('ltStep'), diff=lt.top-lt.bot, num=Math.round((q.n*lt.top-q.n*lt.bot)/q.d*1e9)/1e9;
+  if(!t.match) el.innerHTML='<span class="small">Choose multipliers that make the tails match.</span>';
+  else if(lt.step===0) el.innerHTML='<p><b>Subtract:</b> '+name(lt.top)+' − '+name(lt.bot)+' = '+diff+'<span class="uk">x</span>. What is '+longDec(q.n*lt.top,q.d,6)+'… − '+longDec(q.n*lt.bot,q.d,6)+'…?</p><div class="buttonrow"><input id="ltSub" class="numin" aria-label="The difference" onkeydown="if(event.key===\'Enter\')ltSubCheck()"><button onclick="ltSubCheck()">✅ Check</button></div>';
+  else if(lt.step===1) el.innerHTML='<p>'+diff+'<span class="uk">x</span> = '+full(num)+'</p><p><b>So <span class="uk">x</span> as a fraction in its simplest form is:</b></p><div class="buttonrow"><input id="ltFrac" class="numin" style="max-width:120px" aria-label="Your fraction" onkeydown="if(event.key===\'Enter\')ltFracCheck()"><button onclick="ltFracCheck()">✅ Check</button></div>';
+  else el.innerHTML='<p>✓ <span class="uk">x</span> = '+q.show+' = '+q.n+'/'+q.d+'</p>';
+}
+function ltSet(which,m){ lt[which]=m; lt.step=0; document.getElementById('ltRead').style.display='none'; ltRender(); }
+function ltSubCheck(){ var q=LT[lt.i], v=valF(document.getElementById('ltSub').value), r=(q.n*lt.top-q.n*lt.bot)/q.d;
+  if(same(v,r,1e-9)){ lt.step=1; ltRender(); msg('ltRead','good','Yes: the tails cancel, leaving '+full(r)+'.'); } else msg('ltRead','warn','Subtract the whole-number parts, and the tails cancel. Line the two numbers up.'); }
+function ltFracCheck(){ var q=LT[lt.i], r=fracIs(document.getElementById('ltFrac').value,q.n,q.d);
+  if(r==='simplest'){ lt.step=2; ltRender(); msg('ltRead','good','Yes: '+q.show+' = '+q.n+'/'+q.d+'. Check: '+q.n+' ÷ '+q.d+' = '+longDec(q.n,q.d,8)+'… ✓'); }
+  else if(r==='unsimplified') msg('ltRead','warn','The right value — now simplify it: divide the numerator and the denominator by a common factor.');
+  else msg('ltRead','warn','Divide both sides by '+(lt.top-lt.bot)+'. If the result has a decimal, multiply the numerator and the denominator by 10 to clear it.'); }
+function ltNext(){ lt.i=(lt.i+1)%LT.length; lt.top=10; lt.bot=1; lt.step=0; document.getElementById('ltRead').style.display='none'; ltRender(); }
+function ltInit(){ ltRender(); }
+
+/* ---------------- REFLECTION (hero): the remainder wheel ---------------- */
+var RW=[{n:3,d:7},{n:1,d:3},{n:5,d:6},{n:2,d:11},{n:3,d:8},{n:1,d:13,stretch:true}];
+var rw={i:0,r:0,digits:'',seen:{},order:[],done:false,q:0};
+function rwRender(){
+  var f=RW[rw.i], R=110, cx=160, cy=140, h='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#cdbfa9" stroke-width="2"/>';
+  for(var k=0;k<f.d;k++){ var a=-Math.PI/2+2*Math.PI*k/f.d, x=cx+R*Math.cos(a), y=cy+R*Math.sin(a), vis=rw.seen[k]!=null, cur=k===rw.r&&!rw.done||(rw.done&&rw.repeatAt===k);
+    h+='<circle cx="'+x+'" cy="'+y+'" r="17" fill="'+(cur?'#d8b26e':vis?'#7fb6e0':'#fbf7ef')+'" stroke="#2f3429" stroke-width="'+(cur?3:1.5)+'"/><text x="'+x+'" y="'+(y+5)+'" text-anchor="middle" font-family="Arial" font-size="14" font-weight="bold">'+k+'</text>'; }
+  for(var j=1;j<rw.order.length;j++){ var p=rw.order[j-1], q=rw.order[j], a1=-Math.PI/2+2*Math.PI*p/f.d, a2=-Math.PI/2+2*Math.PI*q/f.d;
+    h+='<line x1="'+(cx+(R-20)*Math.cos(a1))+'" y1="'+(cy+(R-20)*Math.sin(a1))+'" x2="'+(cx+(R-20)*Math.cos(a2))+'" y2="'+(cy+(R-20)*Math.sin(a2))+'" stroke="#365a68" stroke-width="1.5" opacity=".6"/>'; }
+  h+='<text x="'+cx+'" y="'+(cy+6)+'" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">remainders</text><text x="'+cx+'" y="'+(cy+22)+'" text-anchor="middle" font-family="Arial" font-size="13" fill="#5c6b4f">when ÷ '+f.d+'</text>';
+  document.getElementById('rwSvg').innerHTML=h;
+  document.getElementById('rwFracs').innerHTML=RW.map(function(x,k){return '<button class="chip'+(k===rw.i?' active':'')+'" onclick="rwPick('+k+')">'+(x.stretch?'★ ':'')+x.n+'/'+x.d+'</button>';}).join('');
+  document.getElementById('rwDigits').innerHTML=f.n+'/'+f.d+' = 0.'+rw.digits+(rw.done?'':'<span style="color:#b9a98f">…</span>');
+  rwQ();
+}
+function rwStep(){ var f=RW[rw.i]; if(rw.done){ msg('rwRead','good','The pattern is complete. Answer the question below.'); return; }
+  var r10=rw.r*10, dig=Math.floor(r10/f.d), nr=r10%f.d; rw.digits+=dig;
+  document.getElementById('rwWork').innerHTML='Remainder '+rw.r+' → bring down a 0: '+r10+' ÷ '+f.d+' = '+dig+' remainder '+nr;
+  rw.r=nr;
+  if(nr===0){ rw.done=true; rw.kind='stop'; rw.seen[0]=rw.order.length; rw.order.push(0); }
+  else if(rw.seen[nr]!=null){ rw.done=true; rw.kind='repeat'; rw.repeatAt=nr; rw.order.push(nr); }
+  else { rw.seen[nr]=rw.order.length; rw.order.push(nr); }
+  rwRender();
+  if(rw.done) msg('rwRead','good',rw.kind==='stop'?'The remainder is 0 — the division is finished, so the decimal terminates.':'Remainder '+nr+' has come round again. From here, every step repeats what happened before.');
+  else document.getElementById('rwRead').style.display='none';
+}
+function rwQ(){ var f=RW[rw.i], el=document.getElementById('rwQ'), e=expand(f.n,f.d);
+  if(!rw.done){ el.innerHTML='<span class="small">Keep stepping until the division stops or a remainder comes back.</span>'; return; }
+  if(rw.kind==='stop'){ el.innerHTML=rw.q?'<p>✓ '+f.n+'/'+f.d+' = 0.'+e.pre+' terminates.</p>':'<p><b>Why did it stop?</b></p><div class="buttonrow">'+chipsHtml(['The remainder reached 0, so there is nothing left to divide','It ran out of digits','8 is an even number'],'rwStop')+'</div>'; return; }
+  if(rw.q===0) el.innerHTML='<p><b>Which block of digits repeats for ever?</b></p><div class="buttonrow"><input id="rwRep" class="numin" style="max-width:130px" aria-label="Repeating digits" onkeydown="if(event.key===\'Enter\')rwRepCheck()"><button onclick="rwRepCheck()">✅ Check</button></div>';
+  else if(rw.q===1) el.innerHTML='<p>✓ '+f.n+'/'+f.d+' = '+dotted(f.n,f.d)+'</p><p><b>Dividing by '+f.d+', how many different non-zero remainders are possible?</b></p><div class="buttonrow"><input id="rwMax" class="numin" aria-label="How many" onkeydown="if(event.key===\'Enter\')rwMaxCheck()"><button onclick="rwMaxCheck()">✅ Check</button></div>';
+  else el.innerHTML='<p>✓ '+f.n+'/'+f.d+' = '+dotted(f.n,f.d)+'. There are only '+(f.d-1)+' possible non-zero remainders, so the repeating block can be at most '+(f.d-1)+' digits long. Here it is '+e.rep.length+'.</p>';
+}
+function rwRepCheck(){ var f=RW[rw.i], e=expand(f.n,f.d), v=String(document.getElementById('rwRep').value).replace(/[^\d]/g,'');
+  var ok=v===e.rep;
+  if(ok){ rw.q=1; rwQ(); msg('rwRead','good','Yes: '+e.rep+' repeats'+(e.pre?', after the '+e.pre+' at the start':'')+'. In dot notation: '+dotted(f.n,f.d)+'.'); }
+  else msg('rwRead','warn',e.pre&&v===e.pre+e.rep?'Close — but the '+e.pre+' only appears once, at the start. Which digits repeat after it?':'Find the remainder that came back. The digits from that point on are the repeating block.'); }
+function rwMaxCheck(){ var f=RW[rw.i], v=valF(document.getElementById('rwMax').value);
+  if(same(v,f.d-1)){ rw.q=2; rwQ(); msg('rwRead','good','Yes: '+(f.d-1)+' (1 to '+(f.d-1)+'). So the cycle can never be longer than '+(f.d-1)+' digits.'); }
+  else msg('rwRead','warn','Remainders when dividing by '+f.d+' can be 0, 1, 2, … up to '+(f.d-1)+'. Leave out 0.'); }
+function rwStop(k){ if(k===0){ rw.q=1; rwQ(); msg('rwRead','good','Yes. A remainder of 0 ends the division — that is what “terminating” means.'); } else msg('rwRead','warn','Look at the last remainder on the wheel.'); }
+function rwReset(){ var f=RW[rw.i]; rw.r=f.n; rw.digits=''; rw.seen={}; rw.seen[f.n]=0; rw.order=[f.n]; rw.done=false; rw.kind=null; rw.repeatAt=null; rw.q=0; document.getElementById('rwWork').textContent='Start: '+f.n+' ÷ '+f.d+' = 0 remainder '+f.n+'.'; document.getElementById('rwRead').style.display='none'; rwRender(); }
+function rwPick(k){ rw.i=k; rwReset(); }
+function rwInit(){ rwReset(); }
+
+/* ---------------- CREATIVITY: the decimal detective ---------------- */
+var DD=[
+ {q:'<b>0.1̇42857̇</b> (0.142857142857…) is a fraction with denominator 7. What is the numerator?',num:1,why:'1 ÷ 7 = 0.142857… — try it on the remainder wheel.'},
+ {q:'Write <b>0.0̇9̇</b> (0.090909…) as a fraction in its simplest form.',frac:[1,11],hint:'Two digits repeat: use 100x − x.'},
+ {q:'Use the method on <b>0.9̇</b> (0.999…): <span class="uk">x</span> = 0.999…, so 10<span class="uk">x</span> = 9.999… What is 9<span class="uk">x</span>, and so what is <span class="uk">x</span>?',num:1,then:{q:'So is 0.999… equal to 1?',opts:['Yes — 0.999… and 1 are two ways of writing the same number','No — 0.999… is always a tiny bit less than 1'],ans:0,why:'There is no number between 0.999… and 1, and the algebra gives exactly 1. Two decimals can name the same number.'}}
+];
+var dd={i:0,stage:0};
+function ddRender(){ var q=DD[dd.i], el=document.getElementById('ddStep'); document.getElementById('ddCount').textContent='Mystery '+(dd.i+1)+' of '+DD.length; document.getElementById('ddQ').innerHTML=q.q;
+  if(dd.stage===0) el.innerHTML='<div class="buttonrow"><input id="ddAns" class="numin" style="max-width:120px" aria-label="Your answer" onkeydown="if(event.key===\'Enter\')ddCheck()"><button onclick="ddCheck()">✅ Check</button></div>';
+  else if(dd.stage===1&&q.then) el.innerHTML='<p>✓ <span class="uk">x</span> = 1</p><p><b>'+q.then.q+'</b></p><div class="buttonrow">'+chipsHtml(q.then.opts,'ddThen')+'</div>';
+  else el.innerHTML='<p>✓ Solved.</p>'; }
+function ddCheck(){ var q=DD[dd.i], v=document.getElementById('ddAns').value;
+  if(q.frac){ var r=fracIs(v,q.frac[0],q.frac[1]); if(r==='simplest'){ dd.stage=2; ddRender(); msg('ddRead','good','Yes: 1/11. (9/99 simplifies to 1/11.)'); } else if(r==='unsimplified') msg('ddRead','warn','The right value — now simplify it.'); else msg('ddRead','warn',q.hint); return; }
+  if(same(valF(v),q.num)){ dd.stage=1; if(!q.then) dd.stage=2; ddRender(); msg('ddRead','good',q.then?'Yes: 9x = 9, so x = 1.':'Yes. '+q.why); }
+  else msg('ddRead','warn',q.then?'10x − x = 9.999… − 0.999… = 9. So 9x = 9.':'Try 1 ÷ 7, 2 ÷ 7 … which one starts 0.142…?'); }
+function ddThen(k){ var t=DD[dd.i].then; if(k===t.ans){ dd.stage=2; ddRender(); msg('ddRead','good',t.why); } else msg('ddRead','warn','What number could lie between 0.999… and 1? Look at what the algebra gave.'); }
+function ddNext(){ dd.i=(dd.i+1)%DD.length; dd.stage=0; document.getElementById('ddRead').style.display='none'; ddRender(); }
+function myBlock(){ return String(document.getElementById('myBlock').value).replace(/[^\d]/g,'').slice(0,4); }
+function myDraw(){ var b=myBlock(); document.getElementById('myDec').innerHTML=b&&/[1-9]/.test(b)?'0.'+b+b+b+'… &nbsp;=&nbsp; 0.'+(b.length===1?b+DOT:b.charAt(0)+DOT+b.slice(1,-1)+b.slice(-1)+DOT):'<span class="small">Type a block with at least one non-zero digit.</span>'; document.getElementById('myRead').style.display='none'; }
+function myCheck(){ var b=myBlock(); if(!b||!/[1-9]/.test(b)){ msg('myRead','warn','Type a block of digits first.'); return; }
+  var n=+b, d=Math.pow(10,b.length)-1, s=simp(n,d), r=fracIs(document.getElementById('myAns').value,n,d);
+  if(r==='simplest') msg('myRead','good','Yes: 0.'+b+b+'… = '+n+'/'+d+(s[1]!==d?' = '+s[0]+'/'+s[1]:'')+'. Any repeating block of '+b.length+' digit'+(b.length>1?'s':'')+' sits over '+d+'.');
+  else if(r==='unsimplified') msg('myRead','warn','The right value — now simplify it.');
+  else msg('myRead','warn','Use the method: x = 0.'+b+b+'…, then '+Math.pow(10,b.length)+'x lines the tails up. Subtract.'); }
+function ddInit(){ ddRender(); myDraw(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    dec:{title:'Fractions to decimals',prompt:'Write 3/8 as a decimal.',answer:0.375,hint:'3 ÷ 8. Or: 1/8 = 0.125, so 3/8 = 3 × 0.125.'},
+    simp:{title:'Simplifying fractions',prompt:'Write 45/99 in its simplest form.',answer:5/11,hint:'45 and 99 are both in the 9 times table.'},
+    div:{title:'Short division',prompt:'What is the remainder when 20 is divided by 7?',answer:6,hint:'7 × 2 = 14, and 20 − 14 = 6.'}
+  };
+  function matches(r,v){ var n=valF(v); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pv(target){ return function(v){ return same(valF(v),target); }; }
+function psimp(n,d){ return function(v){ return fracForm(v,n,d)==='simplest'; }; }
+var PRACTICE=[
+ {label:"1 of 8 · Terminate or recur?",q:"Does <b>7/40</b> give a terminating or a recurring decimal?",a:["terminating","it terminates","terminates","a terminating decimal"],eq:function(v){return false;},prompt:"What are the prime factors of 40?",hint:"40 = 2 × 2 × 2 × 5 — only 2s and 5s.",sol:"Terminating: 40 = 2³ × 5, so 7/40 = 0.175."},
+ {label:"2 of 8 · Terminate or recur?",q:"Does <b>4/15</b> give a terminating or a recurring decimal?",a:["recurring","it recurs","recurs","a recurring decimal"],eq:function(v){return false;},prompt:"Is 4/15 in its simplest form? What are the prime factors of 15?",hint:"15 = 3 × 5. The 3 makes it recur.",sol:"Recurring: 15 = 3 × 5, and 4/15 = 0.26̇ = 0.2666…"},
+ {label:"3 of 8 · The repeating block",q:"Which block of digits repeats in the decimal for <b>5/11</b>?",a:[],eq:function(v){return String(v).replace(/[^\d]/g,'')==='45';},prompt:"Divide 5 by 11. Which remainder comes back?",hint:"5/11 = 0.4545…",sol:"45: 5/11 = 0.4̇5̇ = 0.454545…"},
+ {label:"4 of 8 · One digit repeats",q:"Write <b>0.5̇</b> (0.555…) as a fraction.",a:[],eq:pv(5/9),prompt:"One digit repeats. Multiply by what?",hint:"10x = 5.555…, so 10x − x = 5.",sol:"9x = 5, so x = 5/9."},
+ {label:"5 of 8 · Two digits repeat",q:"Write <b>0.2̇7̇</b> (0.272727…) as a fraction in its simplest form.",a:[],eq:function(v){return fracIs(v,3,11)==='simplest';},prompt:"Two digits repeat. Multiply by what?",hint:"100x − x = 27, so x = 27/99. Simplify.",sol:"99x = 27, so x = 27/99 = 3/11."},
+ {label:"6 of 8 · Two digits repeat",q:"Write <b>0.6̇3̇</b> (0.636363…) as a fraction in its simplest form.",a:[],eq:function(v){return fracIs(v,7,11)==='simplest';},prompt:"Which multiplier makes the tails line up?",hint:"100x − x = 63.",sol:"99x = 63, so x = 63/99 = 7/11."},
+ {label:"7 of 8 · A digit before the repeat",q:"Write <b>0.16̇</b> (0.1666…) as a fraction in its simplest form.",a:[],eq:function(v){return fracIs(v,1,6)==='simplest';},prompt:"Only the 6 repeats. Which two multiples of x have matching tails?",hint:"100x = 16.666… and 10x = 1.666…",sol:"100x − 10x = 15, so 90x = 15 and x = 15/90 = 1/6."},
+ {label:"8 of 8 · Three digits repeat (stretch)",q:"Write <b>0.1̇2̇3̇</b> (0.123123…) as a fraction in its simplest form.",a:[],eq:function(v){return fracIs(v,41,333)==='simplest';},prompt:"Three digits repeat. Multiply by what?",hint:"1000x − x = 123, so x = 123/999. Both are divisible by 3.",sol:"999x = 123, so x = 123/999 = 41/333."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Line up the tails and subtract — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  trInit();
+  ltInit();
+  rwInit();
+  ddInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>
