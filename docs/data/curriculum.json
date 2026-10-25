@@ -820,6 +820,14 @@
           "file": "lessons/number-systems/06-rationalising.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ns-07-estimating",
+          "num": "Lesson 07",
+          "title": "Estimating and judging reasonableness",
+          "file": "lessons/number-systems/07-estimating.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
