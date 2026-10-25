@@ -22,7 +22,7 @@
 
 The unit's diagnostic, *The Observatory*, checks exactly these.
 **Relationship to Year 9:** Foundations met rounding, estimation, integer index laws and standard form (Accuracy, Powers and Scale), and substitution with negatives and fractions (Formulae and Rearranging). This unit is distinctly Higher: it covers recurring decimals, negative and fractional indices, surds and rationalising, and judging calculator output. Where Year 9 ideas reappear (estimation, order of operations), they are used at Higher level rather than retaught.
-**Status (v0.1):** blueprint framed. The diagnostic (*The Observatory* v0.3) is built and live in the NEO results service. Lessons are built and reviewed one at a time.
+**Status (v0.1):** all seven lessons built, reviewed and live (25 Oct 2026). The diagnostic (*The Observatory* v0.3) is live in the NEO results service. The end-of-unit assessment is still to be agreed.
 
 ## Unit Driving Question
 How do numbers really behave, and when can I trust my calculator?
@@ -36,7 +36,7 @@ Next comes **order and judgement**. A calculator follows the order of operations
 
 **Powers** then stretch beyond whole numbers. Continuing the pattern 2³, 2², 2¹, 2⁰ shows what 2⁻¹ must mean. Asking which number multiplied by itself gives 9 shows what 9^½ must mean. The index laws already known make these meanings unavoidable rather than arbitrary.
 
-**Surds** follow. √2 cannot be written exactly as a decimal, so mathematicians keep it as √2. Learners simplify surds by finding square factors (√72 = 6√2), seen as squares on a grid. They then calculate with them, expanding brackets and **rationalising** a denominator so that no surd is left on the bottom.
+**Surds** follow. √2 cannot be written exactly as a decimal, so mathematicians keep it as √2. Learners simplify surds by finding square factors (√72 = 6√2), seen as squares on a grid. They then calculate with them, expanding brackets and **rationalising** a denominator so that no surd is left in the denominator.
 
 The unit ends with **judging reasonableness**: estimating before calculating, checking the size and sign of an answer, and catching the slips a calculator cannot.
 
@@ -61,7 +61,7 @@ The unit ends with **judging reasonableness**: estimating before calculating, ch
 | 3 | NS-03 | Core | Order of operations and calculator judgement | When does the calculator get it wrong — and when do I? | Movement | Adapted from Formulae L2 (substitution machine stages), plus an on-screen calculator showing exactly what it was asked | Order of operations |
 | 4 | NS-04 | Core | Negative and fractional indices | What can a power of −2 or ½ possibly mean? | Creativity | Adapted from Y9 Accuracy L3 (index laws): continue the power pattern downwards and sideways | Index laws |
 | 5 | NS-05 | Core | Surds: meaning and simplifying | Why keep √2 instead of writing 1.414…? | Reflection | New: square-factor finder on a grid (√72 = √36 × √2 = 6√2); links to Y9 Pythagoras | Square numbers and factors |
-| 6 | NS-06 | Core | Surds: manipulating and rationalising | How do I tidy a surd out of the bottom of a fraction? | Movement | Adapted from Quadratics L4 (expansion grid) for (*a* + √*b*)(*a* − √*b*) | Expanding brackets |
+| 6 | NS-06 | Core | Surds: manipulating and rationalising | How do I tidy a surd out of the denominator of a fraction? | Movement | Adapted from Quadratics L4 (expansion grid) for (*a* + √*b*)(*a* − √*b*) | Expanding brackets |
 | 7 | NS-07 | Core | Estimating and judging reasonableness | Is my answer about right? | Reflection | Adapted from Y9 Accuracy L2 (estimation) and Formulae L6 (sense detector, decision trail), at Higher level | Estimate before you calculate |
 
 **The Observatory's rooms**, with one lock for each lesson's prerequisite:
