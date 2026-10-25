@@ -796,6 +796,14 @@
           "file": "lessons/number-systems/03-calculator-judgement.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ns-04-negative-fractional-indices",
+          "num": "Lesson 04",
+          "title": "Negative and fractional indices",
+          "file": "lessons/number-systems/04-negative-fractional-indices.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
