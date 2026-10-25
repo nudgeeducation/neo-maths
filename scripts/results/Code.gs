@@ -27,7 +27,8 @@ const CONFIG = {
   DIAGNOSTICS: {
     'observatory': { file: 'Observatory', title: 'The Observatory · Number Systems', short: 'The Observatory' },
     'garden': { file: 'WalledGarden', title: 'The Walled Garden · Inequalities', short: 'The Walled Garden' },
-    'workshop': { file: 'Workshop', title: 'The Inventor\u2019s Workshop · Formulae and Rearranging', short: 'The Inventor\u2019s Workshop' }
+    'workshop': { file: 'Workshop', title: 'The Inventor\u2019s Workshop · Formulae and Rearranging', short: 'The Inventor\u2019s Workshop' },
+    'lighthouse': { file: 'Lighthouse', title: 'The Lighthouse · Algebraic Expressions', short: 'The Lighthouse' }
   }
 };
 
