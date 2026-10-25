@@ -812,6 +812,14 @@
           "file": "lessons/number-systems/05-surds.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ns-06-rationalising",
+          "num": "Lesson 06",
+          "title": "Surds: manipulating and rationalising",
+          "file": "lessons/number-systems/06-rationalising.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
