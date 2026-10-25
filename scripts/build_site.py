@@ -106,6 +106,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Number_Systems/Lesson_03_Calculator_Judgement/NEO_Maths_Y10_NumberSystems_Lesson_03_Calculator_Judgement_v0.1.html",
     "ns-04-negative-fractional-indices":
         "03_Intermediate/01_Lessons/Number_Systems/Lesson_04_Negative_Fractional_Indices/NEO_Maths_Y10_NumberSystems_Lesson_04_Negative_Fractional_Indices_v0.1.html",
+    "ns-05-surds":
+        "03_Intermediate/01_Lessons/Number_Systems/Lesson_05_Surds/NEO_Maths_Y10_NumberSystems_Lesson_05_Surds_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

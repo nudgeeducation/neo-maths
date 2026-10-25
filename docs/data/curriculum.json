@@ -804,6 +804,14 @@
           "file": "lessons/number-systems/04-negative-fractional-indices.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ns-05-surds",
+          "num": "Lesson 05",
+          "title": "Surds: meaning and simplifying",
+          "file": "lessons/number-systems/05-surds.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
