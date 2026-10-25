@@ -788,6 +788,14 @@
           "file": "lessons/number-systems/02-recurring-decimals.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ns-03-calculator-judgement",
+          "num": "Lesson 03",
+          "title": "Order of operations and calculator judgement",
+          "file": "lessons/number-systems/03-calculator-judgement.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

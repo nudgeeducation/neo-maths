@@ -102,6 +102,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Number_Systems/Lesson_01_Fractions_Decimals_Percentages/NEO_Maths_Y10_NumberSystems_Lesson_01_Fractions_Decimals_Percentages_v0.1.html",
     "ns-02-recurring-decimals":
         "03_Intermediate/01_Lessons/Number_Systems/Lesson_02_Recurring_Decimals/NEO_Maths_Y10_NumberSystems_Lesson_02_Recurring_Decimals_v0.1.html",
+    "ns-03-calculator-judgement":
+        "03_Intermediate/01_Lessons/Number_Systems/Lesson_03_Calculator_Judgement/NEO_Maths_Y10_NumberSystems_Lesson_03_Calculator_Judgement_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

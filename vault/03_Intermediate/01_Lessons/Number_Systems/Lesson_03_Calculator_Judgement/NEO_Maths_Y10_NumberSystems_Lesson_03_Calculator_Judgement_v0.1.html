@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Order of operations and calculator judgement</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<style>
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.25}
+.fr>span{padding:1px 4px}
+.fr>.fn{border-bottom:2px solid currentColor}
+.rt{white-space:nowrap}
+.rad{border-top:2px solid currentColor;padding:0 2px;margin-left:1px}
+.calc{max-width:340px;margin:10px auto;background:#2f3b45;border-radius:14px;padding:12px}
+.cdisp{background:#e8efe0;border-radius:8px;padding:8px 10px;font-family:'Courier New',monospace;min-height:56px;color:#1f2a33}
+.cdisp .ckeys{font-size:1.15em;word-break:break-all;min-height:1.4em}
+.cdisp .cval{text-align:right;font-size:1.5em;font-weight:bold;min-height:1.3em}
+.cpad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.cpad button{padding:10px 0;font-size:1.05em;margin:0;min-width:0}
+.cpad .eq{grid-column:span 2;background:#d9b46a}
+.heard{font-size:1.35em;text-align:center;padding:6px 0}
+.written{font-size:1.6em;text-align:center;padding:8px 0}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Number Systems and Calculator Judgement</h1>
+<h2>Order of operations and calculator judgement</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>When does the calculator get it wrong — and when do I?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — the order of operations with powers, roots, negative numbers and fraction bars, and keying calculations so a calculator does what you mean.</p>
+<p><b>Stepping Stone:</b> apply the order of operations to calculations with <b>powers</b>, <b>roots</b>, <b>negative numbers</b> and <b>fraction bars</b>; explain why −3² = −9 but (−3)² = 9; use <b>brackets</b> so a calculator works out what was written; and judge whether a calculator's answer is sensible.</p>
+<p><b>You will need:</b> the order of operations, squares and square roots — and any calculator, if you have one. Today the calculator is part of the lesson. The optional <b>✏️ Scratchpad</b> is there too.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 7 · Move 15 · Reflect 8 · Create 10 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_NumberSystems_Lesson_03_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_NumberSystems_Lesson_03_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write the calculation. Circle what the fraction bar or the √ sign groups together. Then write the keys, with brackets round each group.')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — First things first</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">The <b>order of operations</b> tells everyone — people and calculators — which part of a calculation to do first: <b>brackets</b>, then <b>powers and roots</b>, then <b>× and ÷</b> (left to right), then <b>+ and −</b> (left to right). A <b>fraction bar</b> and a <b>√ sign</b> group things too, just like brackets. A calculator follows these rules exactly. It does what it is <em>asked</em> — which is not always what was <em>meant</em>.</p>
+</div>
+<p><b>What to do:</b> for each calculation, choose the value. Then see the order it is worked out in.</p>
+<p><b>What you are trying to notice:</b> where a calculation is written with a power, a √ sign or a fraction bar, something is grouped without brackets being written.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔢 Which value is right?</h3>
+<div id="ffCount" class="small" style="text-align:center"></div>
+<div id="ffQ" class="written"></div>
+<div id="ffOpts" class="buttonrow" style="justify-content:center"></div>
+<div id="ffRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ffNext()">Next calculation →</button></div>
+<p><b>Carry this forward:</b> brackets first; then powers and roots; then × and ÷ from left to right; then + and − from left to right. A fraction bar and a √ sign group like brackets.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT (hero) ================= -->
+<details class="hs">
+<summary>🚶 Movement — What the calculator heard</summary>
+<p><b>What to do:</b> each calculation below has already been keyed in, exactly as it looks. Press <b>=</b> to see what the calculator <b>heard</b> — drawn as it would be written — and the order it worked in. If it heard something different, change the keys (use <b>DEL</b> or <b>AC</b>) and add brackets until it hears what is written.</p>
+<p><b>What you are trying to notice:</b> a fraction bar groups the whole numerator and the whole denominator; a √ sign reaches over everything under it; a power belongs only to what is just before it. When you key a calculation in a line, those groups must be typed as brackets.</p>
+<p class="small">This on-screen calculator's √ applies only to the number or bracket straight after it, and any missing ) at the end is added for you. Real calculators differ a little — many have a fraction key, or open a bracket after √. Whatever yours does, check that the display shows what you meant.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧮 Make it hear what is written</h3>
+<div id="chCount" class="small" style="text-align:center"></div>
+<p style="text-align:center;margin:4px 0"><b>Written:</b></p>
+<div id="chWritten" class="written"></div>
+<div class="calc">
+<div class="cdisp"><div id="chKeys" class="ckeys" aria-live="polite"></div><div id="chVal" class="cval"></div></div>
+<div class="cpad" id="chPad"></div>
+</div>
+<div class="buttonrow" style="justify-content:center"><span class="small">Or type the keys:</span><input id="chTypeIn" class="numin" style="max-width:190px" aria-label="Type the keys" placeholder="e.g. (6+9)/(2+3)" onkeydown="if(event.key==='Enter')chTypeGo()"><button onclick="chTypeGo()">=</button></div>
+<div id="chOut" class="card" style="display:none"></div>
+<div id="chRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="chNext()">Next calculation →</button></div>
+<p><b>Carry this forward:</b> before you key, look for the hidden groups — a fraction bar, a √ sign, a negative number being squared — and put each one in brackets.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Can I trust it?</summary>
+<p><b>What to do:</b> each calculation has been put into a calculator. Before you believe the display, estimate. Is the answer sensible — or was something keyed in wrongly? If so, which group was missing its brackets?</p>
+<p><b>What you are trying to notice:</b> a quick estimate, or a simple fact (a square is never negative; √ means the positive square root), is often enough to catch an entry slip.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔍 Sensible, or a slip?</h3>
+<div id="rjCount" class="small" style="text-align:center"></div>
+<div id="rjWritten" class="written"></div>
+<div class="calc" style="max-width:260px"><div class="cdisp"><div class="ckeys small">Display</div><div id="rjShown" class="cval"></div></div></div>
+<div id="rjOpts" class="buttonrow" style="justify-content:center"></div>
+<div id="rjRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="rjNext()">Next calculation →</button></div>
+<p><b>Carry this forward:</b> estimate before you trust. A display is only as good as the keys that went in.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Bracket puzzles</summary>
+<p><b>What to do:</b> use exactly these keys, in this order. You may only <b>add brackets</b>. Hit every target value.</p>
+<p><b>What you are trying to notice:</b> the same numbers and operations can give many different answers. Brackets decide which.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧩 Hit the targets</h3>
+<div id="bpCount" class="small" style="text-align:center"></div>
+<div id="bpBase" class="written"></div>
+<div id="bpTargets" class="buttonrow" style="justify-content:center"></div>
+<div class="buttonrow" style="justify-content:center"><b>Your keys:</b><input id="bpIn" class="numin" style="max-width:200px" aria-label="Your keys with brackets" onkeydown="if(event.key==='Enter')bpCheck()"><button onclick="bpCheck()">✅ Check</button></div>
+<p class="small" style="text-align:center">Type × as * or x, ÷ as /, a square as ^2 or ².</p>
+<div id="bpRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="bpNext()">Next puzzle →</button></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A calculator never gets tired and never guesses. It simply does what it is told. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> the order of operations is an agreement — a shared language that lets everyone, and every machine, read the same calculation in the same way.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>trust in your own judgement</b>. A tool is powerful when you know what it is doing — and when you can tell, with a quick estimate, that something has gone wrong. That is true of calculators, spreadsheets and every machine that gives you an answer.</p>
+<p class="small">Carry one idea forward: you are in charge of the calculator, not the other way round.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Keys that say what you mean</summary>
+<p><b>Your task:</b> show that you can apply the order of operations, key calculations correctly, and judge a calculator's answer.</p>
+<ul>
+<li>Without a calculator, work out −2⁴, (−2)⁴ and 30 − 12 ÷ 3 × 2. Explain the order you used for each.</li>
+<li>Write the keys you would press for <span class="fr"><span class="fn">5.4 + 2.6</span><span class="fd">1.2 × 0.5</span></span> and for <span class="rt">√<span class="rad">13² − 5²</span></span>. Check both with a calculator.</li>
+<li>Someone gets 57.5 for <span class="fr"><span class="fn">45 + 5</span><span class="fd">2 × 5</span></span>. Estimate the answer, explain the slip, and give the correct answer.</li>
+<li>Write a calculation of your own where leaving out the brackets changes the answer. Show both answers.</li>
+<li><span class="stretch">stretch</span> Find a calculation where leaving out the brackets does <em>not</em> change the answer. Explain why.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_NUMBER_CALCULATOR_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Emerging</th><th>Developing</th><th>Secure</th><th>Mastering</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows that the order of operations matters.</td><td>Applies it with powers and negative numbers.</td><td>Explains why −2⁴ and (−2)⁴ differ.</td><td>Explains how fraction bars and √ signs act as brackets.</td></tr>
+<tr><td><b>Application</b></td><td>Keys a simple calculation correctly.</td><td>Keys one of the two calculations correctly.</td><td>Keys both correctly, with brackets.</td><td>Also finds and fixes the 57.5 slip.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes answers.</td><td>Writes the keys pressed.</td><td>Explains the slip clearly.</td><td>Explains clearly enough to help someone else avoid it.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one answer.</td><td>Estimates before calculating.</td><td>Uses estimates to judge every answer.</td><td>Explains when brackets are and are not needed.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Order of operations and calculator judgement — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">A calculator is welcome — but estimate first. Type negative numbers like <b>-16</b>.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Circle the groups: brackets, fraction bars, √ signs. Work out each group first.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["(",")","²","√","−","×","÷"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Calculator engine: what was keyed, and what it means ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+// Typed keys to calculator symbols: * x → ×, / → ÷, - → −, sqrt → √, ^2 → ².
+function calcNorm(s){ return String(s).replace(/\s+/g,'').replace(/sqrt/gi,'√').replace(/[*xX]/g,'×').replace(/\//g,'÷').replace(/[-–]/g,'−').replace(/\^2(?![\d.])/g,'²'); }
+function calcTok(s){ var t=[],i=0,c,j,str; while(i<s.length){ c=s.charAt(i);
+  if(/[\d.]/.test(c)){ j=i; while(j<s.length&&/[\d.]/.test(s.charAt(j))) j++; str=s.slice(i,j); if(!/^(\d+\.?\d*|\.\d+)$/.test(str)) return null; t.push({k:'n',s:str,v:parseFloat(str)}); i=j; }
+  else if('+−×÷()²^√'.indexOf(c)>=0){ t.push({k:c}); i++; } else return null; } return t; }
+// Calculator grammar: powers bind tighter than a leading minus (−3² = −9); × ÷ and + − left to right;
+// √ applies to the number or bracket straight after it; a missing ) at the end is closed for you.
+function calcParse(str){ var toks=calcTok(calcNorm(str)); if(!toks||!toks.length) return null; var p=0;
+  function peek(){ return toks[p]&&toks[p].k; }
+  function expr(){ var a=term(); while(peek()==='+'||peek()==='−'){ var op=toks[p++].k; a={t:'bin',op:op,a:a,b:term()}; } return a; }
+  function term(){ var a=unary(); while(peek()==='×'||peek()==='÷'||peek()==='('||peek()==='√'){ var op=peek(); if(op==='×'||op==='÷') p++; else op='×'; a={t:'bin',op:op,a:a,b:unary()}; } return a; }
+  function unary(){ if(peek()==='−'){ p++; return {t:'neg',a:unary()}; } return power(); }
+  function power(){ var a=postfix(); if(peek()==='^'){ p++; return {t:'pow',a:a,b:unary()}; } return a; }
+  function postfix(){ var a=primary(); while(peek()==='²'){ p++; a={t:'sq',a:a}; } return a; }
+  function primary(){ var k=peek(); if(k==='n'){ var tk=toks[p++]; return {t:'num',v:tk.v,s:tk.s}; }
+    if(k==='('){ p++; var e=expr(); if(peek()===')') p++; else if(p<toks.length) throw 0; return {t:'par',a:e}; }
+    if(k==='√'){ p++; return {t:'sqrt',a:primary()}; } throw 0; }
+  try{ var e=expr(); return p<toks.length?null:e; }catch(x){ return null; } }
+function calcVal(e){ var x,y; switch(e.t){ case 'num': return e.v; case 'par': return calcVal(e.a); case 'neg': return -calcVal(e.a);
+  case 'sq': x=calcVal(e.a); return x*x; case 'pow': return Math.pow(calcVal(e.a),calcVal(e.b));
+  case 'sqrt': x=calcVal(e.a); return x<0?NaN:Math.sqrt(x);
+  default: x=calcVal(e.a); y=calcVal(e.b); return e.op==='+'?x+y:e.op==='−'?x-y:e.op==='×'?x*y:(y===0?NaN:x/y); } }
+function evalKeys(s){ var e=calcParse(s); return e?calcVal(e):NaN; }
+// A value as a calculator shows it (10 significant figures, true minus sign).
+function sv(v){ if(!isFinite(v)) return 'error'; var s=String(+v.toPrecision(10)); return s.charAt(0)==='-'?'−'+s.slice(1):s; }
+function so(v){ return v<0?'('+sv(v)+')':sv(v); }
+// The calculation drawn as it would be written: ÷ as a fraction bar (unless inline), √ with its bar, powers raised.
+// Brackets that a fraction bar, a √ bar or a raised power already groups are not drawn.
+function calcHtml(e,o,drop){ o=o||{}; switch(e.t){
+  case 'num': return e.s;
+  case 'par': return drop?calcHtml(e.a,o):'('+calcHtml(e.a,o)+')';
+  case 'neg': return '−'+calcHtml(e.a,o);
+  case 'sq': return calcHtml(e.a,o)+'<sup>2</sup>';
+  case 'pow': return calcHtml(e.a,o)+'<sup>'+calcHtml(e.b,o,true)+'</sup>';
+  case 'sqrt': return '<span class="rt">√<span class="rad">'+calcHtml(e.a,o,true)+'</span></span>';
+  default: if(e.op==='÷'&&!o.inl) return '<span class="fr"><span class="fn">'+calcHtml(e.a,o,true)+'</span><span class="fd">'+calcHtml(e.b,o,true)+'</span></span>';
+    return calcHtml(e.a,o)+' '+e.op+' '+calcHtml(e.b,o); } }
+function keysHtml(s,o){ var e=calcParse(s); return e?calcHtml(e,o):s; }
+// The order the calculator worked in, one operation per step.
+function calcSteps(e,out){ out=out||[]; var x,y,r; switch(e.t){
+  case 'num': return out; case 'par': calcSteps(e.a,out); return out;
+  case 'neg': calcSteps(e.a,out); if(e.a.t!=='num') out.push('apply the minus sign: '+sv(-calcVal(e.a))); return out;
+  case 'sq': calcSteps(e.a,out); x=calcVal(e.a); out.push(so(x)+'<sup>2</sup> = '+sv(x*x)); return out;
+  case 'pow': calcSteps(e.a,out); calcSteps(e.b,out); out.push(so(calcVal(e.a))+'<sup>'+sv(calcVal(e.b))+'</sup> = '+sv(calcVal(e))); return out;
+  case 'sqrt': calcSteps(e.a,out); out.push('√'+so(calcVal(e.a))+' = '+sv(calcVal(e))); return out;
+  default: calcSteps(e.a,out); calcSteps(e.b,out); x=calcVal(e.a); y=calcVal(e.b); r=calcVal(e); out.push(so(x)+' '+e.op+' '+so(y)+' = '+sv(r)); return out; } }
+function stepsHtml(e){ return '<ol style="margin:4px 0 0 18px">'+calcSteps(e).map(function(s){return '<li>'+s+'</li>';}).join('')+'</ol>'; }
+function keyNums(s){ var t=calcTok(calcNorm(s)); return t?t.filter(function(k){return k.k==='n';}).map(function(k){return k.v;}):[]; }
+
+/* ---------------- CONNECTION: which value is right? ---------------- */
+var FF=[
+ {k:'2×3²',opts:[18,36],why:'Powers come before multiplication: 3² = 9 first, then 2 × 9.'},
+ {k:'−3²',opts:[9,-9],why:'The square belongs to the 3 only. Square first, then apply the minus sign. This is the agreement mathematicians and calculators use. To square −3, write (−3)², which is 9.'},
+ {k:'20−8−2',opts:[14,10],why:'+ and − have equal priority, so work from left to right: 20 − 8 first.'},
+ {k:'24÷4×2',opts:[12,3],inl:true,why:'× and ÷ have equal priority, so work from left to right: 24 ÷ 4 first.'},
+ {k:'10−2^3',opts:[512,2],why:'Powers first: 2³ = 8, then 10 − 8.'},
+ {k:'√(16+9)',opts:[5,7],why:'The √ sign reaches over all of 16 + 9, so add first: √25 = 5. √16 + √9 = 7 is a different calculation.'},
+ {k:'(6+9)÷(2+3)',opts:[13.5,3],why:'The fraction bar groups the whole numerator and the whole denominator: 15 ÷ 5.'}
+];
+var ff={i:0};
+function ffRender(){ var q=FF[ff.i]; document.getElementById('ffCount').textContent='Calculation '+(ff.i+1)+' of '+FF.length;
+  document.getElementById('ffQ').innerHTML=keysHtml(q.k,{inl:q.inl});
+  document.getElementById('ffOpts').innerHTML=chipsHtml(q.opts.map(sv),'ffPick'); }
+function ffPick(k){ var q=FF[ff.i], v=evalKeys(q.k);
+  if(same(q.opts[k],v)) msg('ffRead','good','Yes: '+sv(v)+'. '+q.why+'<br><b>The order:</b>'+stepsHtml(calcParse(q.k)));
+  else msg('ffRead','warn','Not this one. Which part has to be worked out first? Look for a power, a √ sign, a fraction bar — or work from left to right.'); }
+function ffNext(){ ff.i=(ff.i+1)%FF.length; document.getElementById('ffRead').style.display='none'; ffRender(); }
+function ffInit(){ ffRender(); }
+
+/* ---------------- MOVEMENT (hero): what the calculator heard ---------------- */
+var CH=[
+ {w:'(6+9)÷(2+3)',naive:'6+9÷2+3',learn:'A fraction bar groups the whole numerator and the whole denominator. Key each one in brackets.'},
+ {w:'12÷(2×3)',naive:'12÷2×3',learn:'× and ÷ are worked from left to right, so 12 ÷ 2 × 3 means 6 × 3. Brackets keep the whole denominator, 2 × 3, together.'},
+ {w:'(−4)²',naive:'−4²',learn:'The square is worked out before the minus sign. To square −4, it must be in brackets.'},
+ {w:'√(16+9)',naive:'√16+9',learn:'The √ bar reaches over 16 + 9. Brackets make the calculator take the root of all of it.'},
+ {w:'√(3²+4²)',naive:'√3²+4²',learn:'Everything under the √ bar goes in one pair of brackets. (Pythagoras: a 3, 4, 5 triangle.)'},
+ {w:'(1+5)²÷(7−3)',naive:'1+5²÷7−3',stretch:true,learn:'Three hidden groups: the bracket being squared, and the whole numerator and denominator. 36 ÷ 4 = 9.'}
+];
+var ch={i:0,keys:'',fails:0,done:CH.map(function(){return false;})};
+var PAD=['7','8','9','(',')','4','5','6','×','÷','1','2','3','+','−','0','.','²','^','√','DEL','AC','='];
+function chPad(){ document.getElementById('chPad').innerHTML=PAD.map(function(k){ var lab=k==='²'?'x²':k==='^'?'xⁿ':k; return '<button'+(k==='='?' class="eq"':'')+' onclick="chKey(\''+k+'\')" aria-label="'+(k==='DEL'?'delete':k==='AC'?'clear':k==='²'?'square':k==='^'?'power':k==='√'?'square root':k)+'">'+lab+'</button>'; }).join(''); }
+function chShow(){ document.getElementById('chKeys').textContent=ch.keys||' '; }
+function chCount(){ var q=CH[ch.i]; document.getElementById('chCount').innerHTML='Calculation '+(ch.i+1)+' of '+CH.length+(q.stretch?' <span class="stretch">stretch</span>':'')+(ch.done[ch.i]?' ✓':''); }
+function chRender(){ var q=CH[ch.i]; chCount();
+  document.getElementById('chWritten').innerHTML=keysHtml(q.w); chShow(); document.getElementById('chVal').textContent=''; document.getElementById('chOut').style.display='none'; }
+function chKey(k){ if(k==='='){ chEq(); return; }
+  if(k==='AC') ch.keys=''; else if(k==='DEL') ch.keys=ch.keys.slice(0,-1); else ch.keys+=k;
+  chShow(); document.getElementById('chVal').textContent=''; document.getElementById('chOut').style.display='none'; }
+function chTypeGo(){ ch.keys=calcNorm(document.getElementById('chTypeIn').value); chShow(); chEq(); }
+function chEq(){ var q=CH[ch.i], e=calcParse(ch.keys), out=document.getElementById('chOut');
+  if(!e){ document.getElementById('chVal').textContent='Syntax ERROR'; out.style.display='none'; msg('chRead','warn','The calculator cannot read those keys. Check for a missing number, or a bracket in the wrong place.'); return; }
+  var hv=calcVal(e), wv=evalKeys(q.w); document.getElementById('chVal').textContent=isFinite(hv)?sv(hv):'Math ERROR';
+  out.style.display='block'; out.innerHTML='<p style="margin:0"><b>The calculator heard:</b></p><div class="heard">'+calcHtml(e)+'</div><p style="margin:4px 0 0"><b>The order it worked in:</b></p>'+stepsHtml(e);
+  var kn=keyNums(ch.keys), wn=keyNums(q.w), sameNums=kn.length===wn.length&&kn.every(function(v,j){return v===wn[j];});
+  if(!sameNums){ msg('chRead','warn','Key in the calculation as it is written, using the numbers '+wn.map(sv).join(', ')+' in that order. You can add brackets.'); return; }
+  if(same(hv,wv)){ ch.done[ch.i]=true; ch.fails=0; chCount();
+    msg('chRead','good','✓ The calculator heard what is written: '+sv(wv)+'. '+q.learn); return; }
+  ch.fails++;
+  msg('chRead','warn','The calculator heard something different from what is written, so it gave '+sv(hv)+'. Compare what it heard with what is written. Which group is missing its brackets?'+(ch.fails>1?'<br><b>💡 Hint:</b> '+q.learn:'')); }
+function chNext(){ ch.i=(ch.i+1)%CH.length; ch.keys=CH[ch.i].naive; ch.fails=0; document.getElementById('chTypeIn').value=''; document.getElementById('chRead').style.display='none'; chRender(); }
+function chInit(){ chPad(); ch.keys=CH[0].naive; chRender(); }
+
+/* ---------------- REFLECTION: can I trust it? ---------------- */
+var SLIPS=['The numerator needed brackets','The denominator needed brackets','The negative number needed brackets','Everything under the √ needed brackets','Nothing — the answer is sensible'];
+var RJ=[
+ {w:'(48.6+21.4)÷7',naive:'48.6+21.4÷7',slip:0,nudge:'Roughly, what is the numerator? Then divide by 7.',est:'The numerator is 48.6 + 21.4 = 70, and 70 ÷ 7 = 10. The display is far too big.'},
+ {w:'√(36+64)',naive:'√(36+64)',slip:4,nudge:'Work out 36 + 64 first. What is its square root?',est:'36 + 64 = 100, and √100 = 10. The display is right.'},
+ {w:'(−5)²',naive:'−5²',slip:2,nudge:'Can a square ever be negative?',est:'A square is never negative: (−5)² = −5 × −5 = 25.'},
+ {w:'360÷(4×9)',naive:'360÷4×9',slip:1,nudge:'Work out the denominator, 4 × 9, first. Then divide.',est:'4 × 9 = 36, and 360 ÷ 36 = 10. The display is far too big.'},
+ {w:'(7.2−1.2)÷0.5',naive:'(7.2−1.2)÷0.5',slip:4,nudge:'Work out the numerator. Then: how many halves are in it?',est:'7.2 − 1.2 = 6, and 6 ÷ 0.5 = 12 — dividing by a half doubles. The display is right.'},
+ {w:'√(81−17)',naive:'√81−17',slip:3,nudge:'The √ sign means the positive square root. Can the answer be negative?',est:'The √ sign means the positive square root, so the answer cannot be negative. 81 − 17 = 64, and √64 = 8.'}
+];
+var rj={i:0};
+function rjRender(){ var q=RJ[rj.i]; document.getElementById('rjCount').textContent='Calculation '+(rj.i+1)+' of '+RJ.length;
+  document.getElementById('rjWritten').innerHTML=keysHtml(q.w); document.getElementById('rjShown').textContent=sv(evalKeys(q.naive));
+  document.getElementById('rjOpts').innerHTML=chipsHtml(SLIPS,'rjPick'); }
+function rjPick(k){ var q=RJ[rj.i];
+  if(k!==q.slip){ msg('rjRead','warn','Not quite. Estimate first: '+q.nudge); return; }
+  msg('rjRead','good','Yes. '+q.est+(q.slip!==4?' It was keyed as <b>'+q.naive+'</b>, so the calculator heard '+keysHtml(q.naive)+'. The right answer is '+sv(evalKeys(q.w))+'.':'')); }
+function rjNext(){ rj.i=(rj.i+1)%RJ.length; document.getElementById('rjRead').style.display='none'; rjRender(); }
+function rjInit(){ rjRender(); }
+
+/* ---------------- CREATIVITY: bracket puzzles ---------------- */
+var BP=[
+ {base:'2+3×4²',targets:[50,80,146,196]},
+ {base:'24−6÷3+1',targets:[23,7,22.5,4.5]}
+];
+var bp={i:0,found:BP.map(function(b){return b.targets.map(function(){return false;});})};
+function bpRender(){ var b=BP[bp.i], f=bp.found[bp.i]; document.getElementById('bpCount').textContent='Puzzle '+(bp.i+1)+' of '+BP.length;
+  document.getElementById('bpBase').innerHTML='Keys: <b>'+b.base+'</b>';
+  document.getElementById('bpTargets').innerHTML='<b>Targets:</b> '+b.targets.map(function(t,j){ return '<span class="chip" style="cursor:default'+(f[j]?';background:#d8ead2':'')+'">'+(f[j]?'✓ ':'')+sv(t)+'</span>'; }).join(' '); }
+function bpCheck(){ var b=BP[bp.i], v=document.getElementById('bpIn').value, n=calcNorm(v);
+  if(n.replace(/[()]/g,'')!==calcNorm(b.base)){ msg('bpRead','warn','Use exactly these keys, in this order: '+b.base+'. You may only add brackets.'); return; }
+  var e=calcParse(n); if(!e){ msg('bpRead','warn','Check your brackets: each ( needs a ) after it.'); return; }
+  var val=calcVal(e), j=-1; b.targets.forEach(function(t,k){ if(same(val,t)) j=k; });
+  if(j<0){ msg('bpRead','warn','That gives '+sv(val)+' — not one of the targets. The calculator heard '+calcHtml(e)+'. Try moving the brackets.'); return; }
+  bp.found[bp.i][j]=true; bpRender(); var all=bp.found[bp.i].every(Boolean);
+  msg('bpRead','good','Yes: '+calcHtml(e)+' = '+sv(val)+'.'+(all?' All targets found — the same keys gave '+b.targets.length+' different answers, and only the brackets changed.':' Which target next?')); }
+function bpNext(){ bp.i=(bp.i+1)%BP.length; document.getElementById('bpIn').value=''; document.getElementById('bpRead').style.display='none'; bpRender(); }
+function bpInit(){ bpRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    ops:{title:'Order of operations',prompt:'Work out 3 + 4 × 5.',answer:23,hint:'Multiply before you add: 4 × 5 = 20 first.'},
+    sq:{title:'Squares and square roots',prompt:'What is √49 + 3²?',answer:16,hint:'√49 = 7 and 3² = 9.'},
+    bar:{title:'The fraction bar',prompt:'Work out (10 + 2) ÷ 4 — the whole numerator divided by 4.',answer:3,hint:'Add first: 10 + 2 = 12. Then 12 ÷ 4.'}
+  };
+  function matches(r,v){ var n=valF(v); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+// A typed value: fractions, mixed numbers, decimals, "minus 16", number words (QA gate 6a).
+function valF(v){ var s=String(v).trim().replace(/[−–]/g,'-'), m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/))&&+m[2]) return m[1]/m[2];
+  return signedNum(s); }
+function pv(target){ return function(v){ return same(valF(v),target); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Powers first",q:"Work out <b>2 × 5²</b>.",a:[],eq:pv(50),prompt:"Which comes first: the square or the multiplication?",hint:"5² = 25 first.",sol:"5² = 25, then 2 × 25 = 50."},
+ {label:"2 of 8 · A minus sign and a square",q:"Work out <b>−4²</b>.",a:[],eq:pv(-16),prompt:"Does the square belong to the 4, or to −4?",hint:"Square the 4 first, then apply the minus sign.",sol:"4² = 16, then apply the minus sign: −4² = −16."},
+ {label:"3 of 8 · Squaring a negative number",q:"Work out <b>(−4)²</b>.",a:[],eq:pv(16),prompt:"What do the brackets tell you to square?",hint:"(−4)² = −4 × −4.",sol:"(−4)² = −4 × −4 = 16."},
+ {label:"4 of 8 · Left to right",q:"Work out <b>20 − 12 ÷ 4 × 2</b>.",a:[],eq:pv(14),prompt:"Which operations come before the subtraction? In which order?",hint:"12 ÷ 4 = 3, then 3 × 2 = 6.",sol:"12 ÷ 4 = 3, then 3 × 2 = 6, then 20 − 6 = 14."},
+ {label:"5 of 8 · A fraction bar",q:"Work out <span class=\"fr\"><span class=\"fn\">15 + 9</span><span class=\"fd\">6 + 2</span></span>.",a:[],eq:pv(3),prompt:"What does the fraction bar group together?",hint:"Numerator: 15 + 9 = 24. Denominator: 6 + 2 = 8.",sol:"24 ÷ 8 = 3. On a calculator: (15 + 9) ÷ (6 + 2)."},
+ {label:"6 of 8 · A root over a calculation",q:"Work out <span class=\"rt\">√<span class=\"rad\">7² − 13</span></span>.",a:[],eq:pv(6),prompt:"What is under the √ bar? Work that out first.",hint:"7² − 13 = 49 − 13 = 36.",sol:"7² − 13 = 36, and √36 = 6. On a calculator: √(7² − 13)."},
+ {label:"7 of 8 · Judge the display",q:"Someone works out <span class=\"fr\"><span class=\"fn\">400</span><span class=\"fd\">5 × 2</span></span> on a calculator and gets 160. What should the answer be?",a:[],eq:pv(40),prompt:"What is the denominator? Divide 400 by it.",hint:"5 × 2 = 10. They keyed 400 ÷ 5 × 2, which is 80 × 2.",sol:"400 ÷ 10 = 40. The keys should be 400 ÷ (5 × 2)."},
+ {label:"8 of 8 · Everything together (stretch)",q:"Work out <span class=\"fr\"><span class=\"fn\"><span class=\"rt\">√<span class=\"rad\">6² + 8²</span></span></span><span class=\"fd\">(−2)²</span></span>.",a:[],eq:pv(2.5),prompt:"Work out the numerator and the denominator separately.",hint:"Numerator: √(36 + 64) = √100. Denominator: (−2)² = 4.",sol:"√100 = 10 and (−2)² = 4, so 10 ÷ 4 = 2.5 (or 5/2)."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Find the groups and work them out first — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  ffInit();
+  chInit();
+  rjInit();
+  bpInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>
