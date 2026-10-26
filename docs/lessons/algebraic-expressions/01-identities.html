@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Expressions, equations, formulae and identities</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Algebraic Expressions and Identities &middot; <strong>Lesson 01 &mdash; Expressions, equations, formulae and identities</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.sides{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:8px 0}
+.sides>div{background:#fffdf7;border:2px solid #c9b48a;border-radius:10px;padding:8px 14px;font-size:1.2em;text-align:center;min-width:170px}
+.sides .same{border-color:#8fb388;background:#eef6ea}
+.sides .diff{border-color:#d08a74;background:#fbece6}
+.claim{font-size:1.5em;text-align:center;padding:6px 0;font-family:Georgia,'Times New Roman',serif}
+.vlog{font-size:.9em;text-align:center;line-height:1.7}
+.vlog span{display:inline-block;padding:1px 6px;margin:2px;border-radius:6px;background:#eef6ea}
+.vlog span.x{background:#fbece6}
+.kinds .chip{min-width:110px}
+.ibrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.ibrow input{width:70px}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Algebraic Expressions and Identities</h1>
+<h2>Expressions, equations, formulae and identities</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Is it true for some values, or for every value?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — telling statements apart, and proving that two expressions are always equal.</p>
+<p><b>Stepping Stone:</b> distinguish an <b>expression</b>, an <b>equation</b>, a <b>formula</b> and an <b>identity</b>, and use the symbol <b>≡</b>; explain why testing values can <b>suggest</b> an identity but only algebra can <b>prove</b> one; use a <b>counterexample</b> to show a statement is not an identity; and find missing numbers in an identity.</p>
+<p><b>You will need:</b> substitution, including negative numbers, and expanding a bracket — and the optional <b>✏️ Scratchpad</b>. No calculator needed.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 16 · Move 6 · Reflect 9 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_AlgebraicExpressions_Lesson_01_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_AlgebraicExpressions_Lesson_01_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write 2(x + 3) and 2x + 6. Work out both when x = 1, 5 and −2. Then expand 2(x + 3). What do you notice?')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION (hero) ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — The identity tester</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">Some statements are true only for particular values: 3<span class="uk">x</span> + 2 = 14 is true only when <span class="uk">x</span> = 4. That is an <b>equation</b>. Others are true for <b>every</b> value: 2(<span class="uk">x</span> + 3) and 2<span class="uk">x</span> + 6 are always equal. That is an <b>identity</b>, written with <b>≡</b>: 2(<span class="uk">x</span> + 3) ≡ 2<span class="uk">x</span> + 6. Testing values can make us suspect an identity. Only algebra can prove it.</p>
+</div>
+<p><b>What to do:</b> move the slider to try different values of <span class="uk">x</span>, or test 21 values at once. Watch both sides and the graph. Then decide: identity or equation? Prove it, or find a counterexample.</p>
+<p><b>What you are trying to notice:</b> for an identity, the two graphs are exactly the same line, one drawn over the other. For an equation, they meet only where the statement is true.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔬 Test, then decide</h3>
+<div id="itCount" class="small" style="text-align:center"></div>
+<div id="itClaim" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><b><span class="uk">x</span> =</b><input id="itX" type="range" min="-5" max="5" step="0.5" value="1" aria-label="Value of x" oninput="itRender()" style="width:220px"><b id="itXv"></b><button onclick="itMany()">🔁 Test 21 values</button></div>
+<div id="itSides" class="sides"></div>
+<div id="itLog" class="vlog"></div>
+<div class="card" style="text-align:center"><svg id="itSvg" class="graphsvg" style="max-width:420px;width:100%" viewBox="0 0 420 320" role="img" aria-label="Graphs of the two sides"></svg><p class="small" style="margin:2px 0">Left side: solid line · Right side: dashed line</p></div>
+<div id="itDecide" class="buttonrow" style="justify-content:center"></div>
+<div id="itProofRow" class="buttonrow" style="justify-content:center;display:none"><b id="itProofQ"></b><input id="itProof" class="numin neo-mathfield" style="max-width:170px" aria-label="Your expanded expression" onkeydown="if(event.key==='Enter')itProofCheck()"><button onclick="itProofCheck()">✅ Check</button></div>
+<div id="itCounterRow" class="buttonrow" style="justify-content:center;display:none"><b>A counterexample: <span class="uk">x</span> =</b><input id="itCounter" class="numin" style="max-width:90px" aria-label="A value of x where the sides differ" onkeydown="if(event.key==='Enter')itCounterCheck()"><button onclick="itCounterCheck()">✅ Check</button></div>
+<div id="itRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="itNext()">Next statement →</button></div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why can't testing values prove an identity?</b></p>
+<div id="ptBody"></div>
+<div id="ptRead" class="feedback" aria-live="polite"></div>
+</div>
+<p><b>Carry this forward:</b> testing suggests; one counterexample disproves; algebra proves.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Four kinds of statement</summary>
+<p><b>What to do:</b> decide what each one is. Then read why.</p>
+<p><b>What you are trying to notice:</b> an expression has no = sign; an equation is true for particular values; a formula links quantities that vary; an identity is true for every value.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🗂️ What is it?</h3>
+<div id="ksCount" class="small" style="text-align:center"></div>
+<div id="ksQ" class="claim"></div>
+<div class="buttonrow kinds" style="justify-content:center" id="ksOpts"></div>
+<div id="ksRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ksNext()">Next →</button></div>
+<p><b>Carry this forward:</b> if it is true for every value, it is an identity — write ≡.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — The counterexample hunt</summary>
+<p><b>What to do:</b> each claim says two expressions are always equal. Try to break it: type a value of <span class="uk">x</span> where the two sides are different. If you think it can't be broken, say so.</p>
+<p><b>What you are trying to notice:</b> one counterexample is enough to show a claim is false. But a value where the sides agree proves nothing on its own.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔨 Break it — if you can</h3>
+<div id="chCount" class="small" style="text-align:center"></div>
+<div id="chQ" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><b>Try <span class="uk">x</span> =</b><input id="chX" class="numin" style="max-width:90px" aria-label="A value of x" onkeydown="if(event.key==='Enter')chTry()"><button onclick="chTry()">Try it</button><button class="soft" onclick="chAlways()">I think it is always true</button></div>
+<div id="chSides" class="sides"></div>
+<div id="chRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="chNext()">Next claim →</button></div>
+<p><b>Carry this forward:</b> (<span class="uk">x</span> + 3)² is not <span class="uk">x</span>² + 9 — and one value of <span class="uk">x</span> is enough to show it.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The identity builder</summary>
+<p><b>What to do:</b> find the missing numbers so that the two sides are identical — equal for every value of <span class="uk">x</span>.</p>
+<p><b>What you are trying to notice:</b> expand the side with brackets, then match the <span class="uk">x</span> terms and the number terms on both sides.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧱 Make it an identity</h3>
+<div id="ibCount" class="small" style="text-align:center"></div>
+<div id="ibQ" class="claim"></div>
+<div id="ibIn" class="ibrow"></div>
+<div id="ibRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ibNext()">Next identity →</button></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>Two different-looking expressions, and one line on the graph. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> there are infinitely many numbers, and you can only ever test a few. Yet a few lines of algebra can tell you about all of them at once.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>healthy scepticism</b>. “It worked every time I tried it” is not the same as “it is always true”. Knowing the difference — and knowing that a single counterexample can sink a confident claim — is useful far beyond mathematics.</p>
+<p class="small">Carry one idea forward: when someone says “always”, ask how they know.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Always, sometimes, never</summary>
+<p><b>Your task:</b> show that you can tell statements apart, prove an identity and disprove a false one.</p>
+<ul>
+<li>Say whether each is an expression, an equation, a formula or an identity, and why: 3(<span class="uk">x</span> + 4) = 3<span class="uk">x</span> + 12; 3<span class="uk">x</span> + 4 = 19; <span class="uk">P</span> = 2(<span class="uk">l</span> + <span class="uk">w</span>); 3<span class="uk">x</span> + 4.</li>
+<li>Prove that (<span class="uk">x</span> + 4)² − 16 ≡ <span class="uk">x</span>(<span class="uk">x</span> + 8).</li>
+<li>Find a counterexample to show that (<span class="uk">x</span> − 3)² = <span class="uk">x</span>² − 9 is not an identity. Explain why one counterexample is enough.</li>
+<li>Find <span class="uk">a</span> and <span class="uk">b</span> so that <span class="uk">a</span>(<span class="uk">x</span> + <span class="uk">b</span>) ≡ 6<span class="uk">x</span> − 18.</li>
+<li><span class="stretch">stretch</span> Explain why checking that two expressions agree at <span class="uk">x</span> = 0, 1, 2 and 3 does not prove they are identical. Use an example.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_ALGEBRA_IDENTITIES_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows an equation has an = sign.</td><td>Tells equations from identities.</td><td>Explains all four kinds of statement.</td><td>Explains why testing cannot prove an identity.</td></tr>
+<tr><td><b>Application</b></td><td>Substitutes values into both sides.</td><td>Finds a counterexample.</td><td>Proves the identity by expanding.</td><td>Also finds <span class="uk">a</span> and <span class="uk">b</span> by matching terms.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes answers.</td><td>Uses = and ≡ correctly.</td><td>Sets out the proof clearly.</td><td>Explains clearly enough to convince someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one value.</td><td>Tests several values.</td><td>Knows when testing is enough to disprove.</td><td>Gives an example where testing a few values misleads.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Expressions, equations and identities — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type words like <b>identity</b>, or a number. No calculator needed.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Expand the side with brackets. Then compare the two sides term by term.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["x","²","≡","(",")","−","×"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function valF(v){ var s=String(v).trim().replace(/[−–]/g,'-'), m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/))&&+m[2]) return m[1]/m[2];
+  return signedNum(s); }
+function sv(v){ if(!isFinite(v)) return '—'; var s=String(+(+v).toFixed(4)); return s.charAt(0)==='-'?'−'+s.slice(1):s; }
+// Letters in italics, as everywhere in NEO lessons.
+function hx(s){ return String(s).replace(/([a-z])/g,'<span class="uk">$1</span>'); }
+
+/* ---------------- The algebra reader: compare expressions by value, never by surface form ---------------- */
+function evalAt(expr,letter,v){
+  var s=String(expr).toLowerCase().replace(/\s+/g,'').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3');
+  if(!s||!new RegExp('^[0-9.+\\-*/()^'+letter+']+$').test(s)) return NaN;
+  s=s.replace(/(\d|\))(?=[a-z(])/g,'$1*').replace(new RegExp('('+letter+')(?=[\\d(])','g'),'$1*');
+  s=s.replace(new RegExp(letter,'g'),'('+v+')').replace(/\^/g,'**').replace(/(^|[(+\-*\/])-(\([^()]*\)|\d+(?:\.\d+)?)\*\*/g,'$1-1*$2**');
+  try{ var r=Function('"use strict";return ('+s+');')(); return typeof r==='number'&&isFinite(r)?r:NaN; }catch(e){ return NaN; } }
+function sameExpr(a,b,letter){ var t=[2,3,7,10.5,-4,-0.5], ok=true; t.forEach(function(v){ var x=evalAt(a,letter,v), y=evalAt(b,letter,v); if(isNaN(x)||isNaN(y)||Math.abs(x-y)>1e-9) ok=false; }); return ok; }
+function expanded(v){ return !/[()]/.test(String(v)); }
+
+/* ---------------- Proof (stretch): what testing can and cannot do ---------------- */
+var PROOFS={
+ pt:{steps:[
+  {q:'You test 2(<span class="uk">x</span> + 3) and 2<span class="uk">x</span> + 6 at <span class="uk">x</span> = 1, 2, 3, …, 100. They always agree. Have you checked every number?',chips:['No — there are infinitely many numbers, including negatives and decimals','Yes — 100 values is all of them'],ans:0,ok:'100 values is not every value: infinitely many are left',hint:'What about −7, or 2.5, or a million?'},
+  {q:'Compare <span class="uk">x</span>(<span class="uk">x</span> − 1)(<span class="uk">x</span> − 2)(<span class="uk">x</span> − 3) + 2<span class="uk">x</span> with 2<span class="uk">x</span>. At <span class="uk">x</span> = 0, 1, 2 and 3 they agree. What about <span class="uk">x</span> = 4?',chips:['They differ: 4 × 3 × 2 × 1 + 8 = 32, but 2 × 4 = 8','They agree again'],ans:0,ok:'Two expressions can agree at several values and still not be identical',hint:'Work out 4 × 3 × 2 × 1 + 2 × 4.'},
+  {q:'So agreeing at several values …',chips:['can suggest an identity, but cannot prove one','proves an identity'],ans:0,ok:'Testing suggests; it does not prove',hint:'Think about the example in step 2.'},
+  {q:'Expanding 2(<span class="uk">x</span> + 3) to get 2<span class="uk">x</span> + 6 proves the identity for every <span class="uk">x</span>, because …',chips:['each step uses the rules of arithmetic, which hold for every number','we were lucky with the values we chose'],ans:0,ok:'Algebra works for every value at once',hint:'Does 2 × (a + 3) = 2 × a + 2 × 3 depend on what a is?'}],
+  done:'✓ <b>That is the heart of proof.</b> Testing can <b>suggest</b> an identity. One counterexample can <b>disprove</b> a claim. Only algebra, step by step, <b>proves</b> that something is true for every value.'}
+};
+var pr={pt:0};
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CONNECTION (hero): the identity tester ---------------- */
+var IT=[
+ {L:'2(x + 3)',R:'2x + 6',id:true},
+ {L:'3x + 2',R:'14',id:false,sol:'<span class="uk">x</span> = 4'},
+ {L:'(x + 1)²',R:'x² + 1',id:false,sol:'<span class="uk">x</span> = 0'},
+ {L:'x(x + 4)',R:'x² + 4x',id:true},
+ {L:'2x²',R:'(2x)²',id:false,sol:'<span class="uk">x</span> = 0'},
+ {L:'(x + 3)(x − 3)',R:'x² − 9',id:true},
+ {L:'(x + 2)² − (x − 2)²',R:'8x',id:true,stretch:true}
+];
+var it={i:0,decided:null,done:IT.map(function(){return false;}),tried:{}};
+function itL(v){ return evalAt(IT[it.i].L,'x',v); } function itR(v){ return evalAt(IT[it.i].R,'x',v); }
+function itRange(){ var lo=Infinity, hi=-Infinity; for(var x=-5;x<=5;x+=0.1){ [itL(x),itR(x)].forEach(function(y){ if(isFinite(y)){ lo=Math.min(lo,y); hi=Math.max(hi,y); } }); } lo=Math.min(lo,0); hi=Math.max(hi,0); if(hi-lo<4){ hi+=2; lo-=2; } return [lo,hi]; }
+function niceStep(span){ var raw=span/8, p=Math.pow(10,Math.floor(Math.log10(raw))); return [1,2,5,10].map(function(m){return m*p;}).find(function(s){return s>=raw;}); }
+function itGraph(){ var W=420,H=320,ml=40,mr=14,mt=14,mb=34, rg=itRange(), st=niceStep(rg[1]-rg[0]); var y0=Math.floor(rg[0]/st)*st, y1=Math.ceil(rg[1]/st)*st;
+  var X=function(x){ return ml+(x+5)/10*(W-ml-mr); }, Y=function(y){ return mt+(y1-y)/(y1-y0)*(H-mt-mb); }, h='';
+  for(var x=-5;x<=5;x++){ h+='<line x1="'+X(x)+'" y1="'+mt+'" x2="'+X(x)+'" y2="'+(H-mb)+'" stroke="#eee4d2"/>'; if(x!==0) h+='<text x="'+X(x)+'" y="'+(Y(0)+14>H-mb+12?H-mb+14:Y(0)+14)+'" font-size="11" text-anchor="middle" fill="#5c6b4f">'+(x<0?'−'+(-x):x)+'</text>'; }
+  for(var y=y0;y<=y1+1e-9;y+=st){ h+='<line x1="'+ml+'" y1="'+Y(y)+'" x2="'+(W-mr)+'" y2="'+Y(y)+'" stroke="#eee4d2"/>'; if(Math.abs(y)>1e-9) h+='<text x="'+(X(0)-5)+'" y="'+(Y(y)+4)+'" font-size="11" text-anchor="end" fill="#5c6b4f">'+(y<0?'−'+sv(-y):sv(y))+'</text>'; }
+  h+='<line x1="'+ml+'" y1="'+Y(0)+'" x2="'+(W-mr)+'" y2="'+Y(0)+'" stroke="#5a4e3c" stroke-width="1.5"/><line x1="'+X(0)+'" y1="'+mt+'" x2="'+X(0)+'" y2="'+(H-mb)+'" stroke="#5a4e3c" stroke-width="1.5"/>';
+  h+='<text x="'+(W-mr-2)+'" y="'+(Y(0)-6)+'" font-size="14" font-style="italic" text-anchor="end" fill="#1f2a33">x</text><text x="'+(X(0)+8)+'" y="'+(mt+10)+'" font-size="14" font-style="italic" fill="#1f2a33">y</text><text x="'+(X(0)-5)+'" y="'+(Y(0)+14)+'" font-size="11" text-anchor="end" fill="#5c6b4f">O</text>';
+  var pl=function(f){ var p=[]; for(var x=-5;x<=5.0001;x+=0.05){ var y=f(x); if(isFinite(y)&&y>=y0-st&&y<=y1+st) p.push(X(x).toFixed(1)+','+Y(y).toFixed(1)); } return p.join(' '); };
+  h+='<clipPath id="itClip"><rect x="'+ml+'" y="'+mt+'" width="'+(W-ml-mr)+'" height="'+(H-mt-mb)+'"/></clipPath><g clip-path="url(#itClip)"><polyline points="'+pl(itL)+'" fill="none" stroke="#2f6d8f" stroke-width="4"/><polyline points="'+pl(itR)+'" fill="none" stroke="#d9a441" stroke-width="3" stroke-dasharray="9 7"/></g>';
+  var xv=+document.getElementById('itX').value; h+='<line x1="'+X(xv)+'" y1="'+mt+'" x2="'+X(xv)+'" y2="'+(H-mb)+'" stroke="#9a7fc1" stroke-dasharray="4 4"/><circle cx="'+X(xv)+'" cy="'+Y(itL(xv))+'" r="5" fill="#2f6d8f"/><circle cx="'+X(xv)+'" cy="'+Y(itR(xv))+'" r="4" fill="#d9a441"/>';
+  document.getElementById('itSvg').innerHTML=h; }
+function itClaimHtml(){ var q=IT[it.i], sym=it.decided===null?'<span style="color:#9a7fc1">?</span>':it.decided?'≡':'='; return hx(q.L)+' &nbsp;'+sym+'&nbsp; '+hx(q.R); }
+function itRender(){ var q=IT[it.i], xv=+document.getElementById('itX').value, l=itL(xv), r=itR(xv), eq=same(l,r);
+  it.tried[xv]=eq;
+  document.getElementById('itCount').innerHTML='Statement '+(it.i+1)+' of '+IT.length+(q.stretch?' <span class="stretch">stretch</span>':'')+(it.done[it.i]?' ✓':'');
+  document.getElementById('itClaim').innerHTML=itClaimHtml(); document.getElementById('itXv').textContent=sv(xv);
+  document.getElementById('itSides').innerHTML='<div class="'+(eq?'same':'diff')+'"><b>Left</b><br>'+hx(q.L)+'<br>= '+sv(l)+'</div><div class="'+(eq?'same':'diff')+'"><b>Right</b><br>'+hx(q.R)+'<br>= '+sv(r)+'</div>';
+  if(it.decided===null) document.getElementById('itDecide').innerHTML='<b>Decide:</b>&nbsp;'+chipsHtml(['An identity: true for every <span class="uk">x</span>','An equation: true only for some <span class="uk">x</span>'],'itPick');
+  itGraph(); }
+function itMany(){ var agree=0, h=[]; for(var x=-5;x<=5;x+=0.5){ var e=same(itL(x),itR(x)); if(e) agree++; it.tried[x]=e; h.push('<span'+(e?'':' class="x"')+'>'+sv(x)+(e?' ✓':' ✗')+'</span>'); }
+  document.getElementById('itLog').innerHTML='<b>Agreed at '+agree+' of 21 values tested.</b><br>'+h.join(''); }
+function itPick(k){ var q=IT[it.i], sayId=k===0;
+  if(sayId!==q.id){ msg('itRead','warn',sayId?'Look for a value where the two sides are different. Try the 21-value test, or watch where the graphs separate.':'Can you find any value where the two sides differ? If not, perhaps it is true for every <span class="uk">x</span>. Look at the graphs.'); return; }
+  it.decided=q.id; document.getElementById('itDecide').innerHTML=''; itRender();
+  if(q.id){ document.getElementById('itProofRow').style.display='flex'; document.getElementById('itProofQ').innerHTML='Prove it: expand and simplify '+hx(q.L)+' ='; document.getElementById('itProof').value='';
+    msg('itRead','good','The evidence suggests an identity: the two graphs are the same line. But testing cannot check every number. Now <b>prove</b> it with algebra.'); }
+  else { document.getElementById('itCounterRow').style.display='flex'; document.getElementById('itCounter').value='';
+    msg('itRead','good','Yes: the graphs meet only where the statement is true. Now give a <b>counterexample</b>: one value where the two sides are different.'); } }
+function itProofCheck(){ var q=IT[it.i], v=document.getElementById('itProof').value;
+  if(String(v).trim()&&sameExpr(v,q.R,'x')&&expanded(v)){ it.done[it.i]=true; document.getElementById('itProofRow').style.display='none'; itRender();
+    msg('itRead','good','✓ <b>Proved:</b> '+hx(q.L)+' ≡ '+hx(q.R)+'. Expanding works for every value of <span class="uk">x</span> at once — no testing needed.'); return; }
+  if(sameExpr(v,q.R,'x')) msg('itRead','warn','That is equal, but it still has brackets. Expand them fully.');
+  else msg('itRead','warn','Not yet. Multiply out every bracket, then collect like terms. '+(/²/.test(q.L)?'Remember: a squared bracket is the bracket times itself.':'')); }
+function itCounterCheck(){ var q=IT[it.i], v=valF(document.getElementById('itCounter').value);
+  if(isNaN(v)){ msg('itRead','warn','Type a number for <span class="uk">x</span>.'); return; }
+  var l=itL(v), r=itR(v);
+  if(same(l,r)){ msg('itRead','warn','At <span class="uk">x</span> = '+sv(v)+' both sides are '+sv(l)+' — they agree, so that is not a counterexample. Try another value.'); return; }
+  it.done[it.i]=true; document.getElementById('itCounterRow').style.display='none'; itRender();
+  msg('itRead','good','✓ <b>Counterexample:</b> at <span class="uk">x</span> = '+sv(v)+', the left side is '+sv(l)+' and the right side is '+sv(r)+'. One value is enough: it is <b>not</b> an identity. It is an equation, true only when '+q.sol+'.'); }
+function itNext(){ it.i=(it.i+1)%IT.length; it.decided=null; it.tried={}; ['itProofRow','itCounterRow'].forEach(function(id){ document.getElementById(id).style.display='none'; });
+  document.getElementById('itRead').style.display='none'; document.getElementById('itLog').innerHTML=''; document.getElementById('itX').value=1; itRender(); }
+function itInit(){ itRender(); prRender('pt'); }
+
+/* ---------------- MOVEMENT: four kinds of statement ---------------- */
+var KINDS=['Expression','Equation','Formula','Identity'];
+var KS=[
+ ['5(x − 2) = 5x − 10',3,'True for every <span class="uk">x</span>: expanding the left side gives the right side. Write it with ≡.'],
+ ['4x − 3 = 9',1,'True only when <span class="uk">x</span> = 3.'],
+ ['A = πr²',2,'It links two quantities that vary together: the area and the radius of a circle.'],
+ ['3a + 2b',0,'There is no = sign. It stands for a value; it does not claim anything.'],
+ ['x/2 + x/2 = x',3,'Two halves make a whole, whatever <span class="uk">x</span> is.'],
+ ['v = u + at',2,'It links speed, starting speed, acceleration and time.'],
+ ['x² = 16',1,'True only when <span class="uk">x</span> = 4 or <span class="uk">x</span> = −4.'],
+ ['x² + 3x',0,'No = sign: it is a value, not a statement.']
+];
+var ks={i:0};
+function ksRender(){ document.getElementById('ksCount').textContent=(ks.i+1)+' of '+KS.length; document.getElementById('ksQ').innerHTML=hx(KS[ks.i][0]).replace('<span class="uk">π</span>','π'); document.getElementById('ksOpts').innerHTML=chipsHtml(KINDS,'ksPick'); }
+function ksPick(k){ var q=KS[ks.i]; if(k===q[1]) msg('ksRead','good','Yes: '+KINDS[k].toLowerCase()+'. '+q[2]);
+  else msg('ksRead','warn',k===0?'Is there an = sign? Then it says something, so it is not just an expression.':k===3?'Is it true for <b>every</b> value? Try a value that might break it.':k===1?'Could this be true for every value, or link quantities that vary?':'Is it a rule linking quantities, or a statement about one unknown?'); }
+function ksNext(){ ks.i=(ks.i+1)%KS.length; document.getElementById('ksRead').style.display='none'; ksRender(); }
+function ksInit(){ ksRender(); }
+
+/* ---------------- REFLECTION: the counterexample hunt ---------------- */
+var CH=[
+ {L:'(x + 3)²',R:'x² + 9',id:false,why:'(<span class="uk">x</span> + 3)² = <span class="uk">x</span>² + 6<span class="uk">x</span> + 9: the middle term 6<span class="uk">x</span> is missing.'},
+ {L:'2x²',R:'(2x)²',id:false,why:'(2<span class="uk">x</span>)² = 4<span class="uk">x</span>². The square belongs only to what is in front of it.'},
+ {L:'(x − 1)(x + 1)',R:'x² − 1',id:true,why:'Expanding: <span class="uk">x</span>² + <span class="uk">x</span> − <span class="uk">x</span> − 1 = <span class="uk">x</span>² − 1, for every <span class="uk">x</span>.'},
+ {L:'x + x',R:'x²',id:false,why:'<span class="uk">x</span> + <span class="uk">x</span> = 2<span class="uk">x</span>, not <span class="uk">x</span>². They happen to agree at 0 and 2 — which is why testing a few values can mislead.'},
+ {L:'(x + 2)/2',R:'x + 1',id:false,why:'(<span class="uk">x</span> + 2)/2 = <span class="uk">x</span>/2 + 1. The 2 divides <b>both</b> terms. (You will meet this again in Lesson 4.)'},
+ {L:'3(x − 2) + 6',R:'3x',id:true,why:'Expanding: 3<span class="uk">x</span> − 6 + 6 = 3<span class="uk">x</span>, for every <span class="uk">x</span>.'},
+ {L:'x² − x',R:'x(x − 1)',id:true,why:'Expanding the right side: <span class="uk">x</span>² − <span class="uk">x</span>. Always equal.',stretch:true}
+];
+var ch={i:0,agree:0,solved:false};
+function chRender(){ var q=CH[ch.i]; document.getElementById('chCount').innerHTML='Claim '+(ch.i+1)+' of '+CH.length+(q.stretch?' <span class="stretch">stretch</span>':'')+(ch.solved?' ✓':'');
+  document.getElementById('chQ').innerHTML='Claim: '+hx(q.L)+' = '+hx(q.R)+' for every <span class="uk">x</span>'; }
+function chTry(){ var q=CH[ch.i], v=valF(document.getElementById('chX').value);
+  if(isNaN(v)){ msg('chRead','warn','Type a number for <span class="uk">x</span>.'); return; }
+  var l=evalAt(q.L,'x',v), r=evalAt(q.R,'x',v), eq=same(l,r);
+  document.getElementById('chSides').innerHTML='<div class="'+(eq?'same':'diff')+'">'+hx(q.L)+'<br>= '+sv(l)+'</div><div class="'+(eq?'same':'diff')+'">'+hx(q.R)+'<br>= '+sv(r)+'</div>';
+  if(!eq){ ch.solved=true; chRender(); msg('chRead','good','✓ <b>Broken!</b> At <span class="uk">x</span> = '+sv(v)+' the sides differ, so the claim is false. '+q.why); return; }
+  ch.agree++; msg('chRead','warn','They agree at <span class="uk">x</span> = '+sv(v)+'. That does not prove the claim — and it does not break it. '+(ch.agree>=2?'Try a negative number, or a bigger one. Or, if you are convinced, say it is always true.':'Try another value.')); }
+function chAlways(){ var q=CH[ch.i];
+  if(q.id){ ch.solved=true; chRender(); msg('chRead','good','✓ Yes — no counterexample exists. But your tests alone could not show that. The <b>proof</b>: '+q.why); }
+  else msg('chRead','warn','Not so fast: this claim can be broken. Try a value such as 1, 3 or −2.'); }
+function chNext(){ ch.i=(ch.i+1)%CH.length; ch.agree=0; ch.solved=false; document.getElementById('chX').value=''; document.getElementById('chSides').innerHTML=''; document.getElementById('chRead').style.display='none'; chRender(); }
+function chInit(){ chRender(); }
+
+/* ---------------- CREATIVITY: the identity builder ---------------- */
+var IB=[
+ {show:'a(x + b) ≡ 3x + 12',vars:['a','b'],L:'a(x+b)',R:'3x+12',hint:'Expand the left side: <span class="uk">ax</span> + <span class="uk">ab</span>. Match the <span class="uk">x</span> terms first: <span class="uk">a</span> = 3. Then 3<span class="uk">b</span> = 12.'},
+ {show:'a(x + 2) + b ≡ 5x + 13',vars:['a','b'],L:'a(x+2)+b',R:'5x+13',hint:'Match the <span class="uk">x</span> terms: <span class="uk">a</span> = 5. Then 5 × 2 + <span class="uk">b</span> = 13.'},
+ {show:'(x + p)² ≡ x² + 10x + q',vars:['p','q'],L:'(x+p)^2',R:'x^2+10x+q',hint:'(<span class="uk">x</span> + <span class="uk">p</span>)² = <span class="uk">x</span>² + 2<span class="uk">px</span> + <span class="uk">p</span>². So 2<span class="uk">p</span> = 10.'},
+ {show:'(x + p)(x + q) ≡ x² + 7x + 12',vars:['p','q'],L:'(x+p)(x+q)',R:'x^2+7x+12',hint:'Expanding gives <span class="uk">x</span>² + (<span class="uk">p</span> + <span class="uk">q</span>)<span class="uk">x</span> + <span class="uk">pq</span>. Two numbers that add to 7 and multiply to 12.',stretch:true}
+];
+var ib={i:0};
+function ibSub(t,vals){ return t.replace(/[abpq]/g,function(m){ return '('+vals[m]+')'; }); }
+function ibRender(){ var q=IB[ib.i]; document.getElementById('ibCount').innerHTML='Identity '+(ib.i+1)+' of '+IB.length+(q.stretch?' <span class="stretch">stretch</span>':'');
+  document.getElementById('ibQ').innerHTML=hx(q.show);
+  document.getElementById('ibIn').innerHTML=q.vars.map(function(v){ return '<b><span class="uk">'+v+'</span> =</b><input id="ib_'+v+'" class="numin" aria-label="Value of '+v+'" onkeydown="if(event.key===\'Enter\')ibCheck()">'; }).join('')+'<button onclick="ibCheck()">✅ Check</button>'; }
+function ibCheck(){ var q=IB[ib.i], vals={}, bad=false;
+  q.vars.forEach(function(v){ var n=valF(document.getElementById('ib_'+v).value); if(isNaN(n)) bad=true; vals[v]=n; });
+  if(bad){ msg('ibRead','warn','Type a number for each letter.'); return; }
+  var l=ibSub(q.L,vals), r=ibSub(q.R,vals);
+  if(sameExpr(l,r,'x')){ msg('ibRead','good','✓ Identical for every <span class="uk">x</span>: '+hx(q.show).replace(/<span class="uk">([abpq])<\/span>/g,function(m,c){ return '<b>'+sv(vals[c])+'</b>'; })+'.'); return; }
+  var x1=evalAt(l,'x',1), y1=evalAt(r,'x',1); msg('ibRead','warn','Not yet: at <span class="uk">x</span> = 1 the left side is '+sv(x1)+' and the right side is '+sv(y1)+'. '+q.hint); }
+function ibNext(){ ib.i=(ib.i+1)%IB.length; document.getElementById('ibRead').style.display='none'; ibRender(); }
+function ibInit(){ ibRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    sub:{title:'Substitution with negative numbers',prompt:'Work out 2<i>x</i>² when <i>x</i> = −3.',answer:18,hint:'(−3)² = 9 first, then multiply by 2.'},
+    neg:{title:'Squaring a negative number',prompt:'What is (−4)²?',answer:16,hint:'(−4) × (−4): a negative times a negative is positive.'},
+    exp:{title:'Expanding a bracket',prompt:'Expand 5(<i>x</i> + 3) = 5<i>x</i> + ?. What is the missing number?',answer:15,hint:'Multiply the 3 by 5 too.'}
+  };
+  function matches(r,v){ var n=valF(v); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pv(target){ return function(v){ return same(valF(v),target,1e-9); }; }
+var ID_WORDS=["identity","an identity","it is an identity","it's an identity","its an identity","≡"], EQ_WORDS=["equation","an equation","it is an equation","it's an equation","its an equation"];
+var PRACTICE=[
+ {label:"1 of 8 · Identity or equation?",q:"Is <b>4(<i>x</i> − 2) = 4<i>x</i> − 8</b> an identity or an equation?",a:ID_WORDS,eq:function(v){return false;},prompt:"Expand the left side. Is it the same as the right side, for every <i>x</i>?",hint:"4 × <i>x</i> − 4 × 2 = 4<i>x</i> − 8.",sol:"An identity: expanding 4(<i>x</i> − 2) gives 4<i>x</i> − 8 for every <i>x</i>. Write 4(<i>x</i> − 2) ≡ 4<i>x</i> − 8."},
+ {label:"2 of 8 · Identity or equation?",q:"Is <b>5<i>x</i> − 1 = 19</b> an identity or an equation?",a:EQ_WORDS,eq:function(v){return false;},prompt:"Is it true when <i>x</i> = 0? When <i>x</i> = 4?",hint:"It is true only when 5<i>x</i> = 20.",sol:"An equation: it is true only when <i>x</i> = 4."},
+ {label:"3 of 8 · A counterexample",q:"Give a value of <i>x</i> that shows <b>(<i>x</i> + 2)² = <i>x</i>² + 4</b> is not an identity.",a:[],eq:function(v){ var n=valF(v); return !isNaN(n)&&Math.abs((n+2)*(n+2)-(n*n+4))>1e-9; },prompt:"Try <i>x</i> = 1. Work out both sides.",hint:"At <i>x</i> = 1: (1 + 2)² = 9, but 1² + 4 = 5.",sol:"Any value except 0 works. For example, <i>x</i> = 1 gives 9 on the left and 5 on the right."},
+ {label:"4 of 8 · Complete the identity",q:"3(2<i>x</i> + 5) ≡ 6<i>x</i> + □. What is the missing number?",a:[],eq:pv(15),prompt:"Expand the bracket.",hint:"3 × 5 = ?",sol:"3(2<i>x</i> + 5) = 6<i>x</i> + 15."},
+ {label:"5 of 8 · Complete the identity",q:"<i>x</i>(<i>x</i> − 3) ≡ <i>x</i>² − □<i>x</i>. What is the missing number?",a:[],eq:pv(3),prompt:"Multiply each term in the bracket by <i>x</i>.",hint:"<i>x</i> × (−3) = −3<i>x</i>.",sol:"<i>x</i>(<i>x</i> − 3) = <i>x</i>² − 3<i>x</i>, so the missing number is 3."},
+ {label:"6 of 8 · Find the letter",q:"4(<i>x</i> + <i>b</i>) ≡ 4<i>x</i> + 20. What is <i>b</i>?",a:[],eq:pv(5),prompt:"Expand the left side. Which term must match 20?",hint:"4<i>b</i> = 20.",sol:"4(<i>x</i> + <i>b</i>) = 4<i>x</i> + 4<i>b</i>, so 4<i>b</i> = 20 and <i>b</i> = 5."},
+ {label:"7 of 8 · A squared bracket",q:"(<i>x</i> + 5)² ≡ <i>x</i>² + 10<i>x</i> + □. What is the missing number?",a:[],eq:pv(25),prompt:"(<i>x</i> + 5)² = (<i>x</i> + 5)(<i>x</i> + 5). What is the last cell of the grid?",hint:"5 × 5.",sol:"(<i>x</i> + 5)² = <i>x</i>² + 5<i>x</i> + 5<i>x</i> + 25 = <i>x</i>² + 10<i>x</i> + 25."},
+ {label:"8 of 8 · Matching terms (stretch)",q:"(<i>x</i> + <i>p</i>)² ≡ <i>x</i>² − 6<i>x</i> + <i>q</i>. What is <i>q</i>?",a:[],eq:pv(9),prompt:"Expanding gives <i>x</i>² + 2<i>px</i> + <i>p</i>². What must <i>p</i> be?",hint:"2<i>p</i> = −6, so <i>p</i> = −3.",sol:"2<i>p</i> = −6 gives <i>p</i> = −3, so <i>q</i> = <i>p</i>² = 9."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Expand, then compare the two sides — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  itInit();
+  ksInit();
+  chInit();
+  ibInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('ae-01-identities');</script>
+
+<script src="../../assets/fieldkits/algebraic-expressions.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(0);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button"; b.textContent=s; b.addEventListener("click",function(){insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+</body>
+</html>

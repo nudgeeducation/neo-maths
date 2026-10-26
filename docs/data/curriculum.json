@@ -832,6 +832,23 @@
       ]
     },
     {
+      "id": "algebraic-expressions",
+      "title": "Algebraic Expressions and Identities",
+      "stage": "Intermediate",
+      "strand": "Algebra",
+      "source": "vault/03_Intermediate/01_Lessons/Algebraic_Expressions",
+      "lessons": [
+        {
+          "id": "ae-01-identities",
+          "num": "Lesson 01",
+          "title": "Expressions, equations, formulae and identities",
+          "file": "lessons/algebraic-expressions/01-identities.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "ks3-interactive-library",
       "title": "KS3 Interactive Library",
       "stage": "Key Stage 3",

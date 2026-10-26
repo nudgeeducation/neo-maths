@@ -9,7 +9,8 @@ const PROTO = path.join(ROOT, 'vault/99_Working/Assessment_Prototypes');
 const KITS = [
   { unit: 'inequalities', file: 'NEO_Maths_Y9_Inequalities_Walled_Garden_v0.3.html', expedition: 'The Walled Garden' },
   { unit: 'formulae-rearranging', file: 'NEO_Maths_Y9_Formulae_Inventors_Workshop_v0.1.html', expedition: 'The Inventor’s Workshop' },
-  { unit: 'number-systems', file: 'NEO_Maths_Y10_Number_Systems_Observatory_v0.3.html', expedition: 'The Observatory' }
+  { unit: 'number-systems', file: 'NEO_Maths_Y10_Number_Systems_Observatory_v0.3.html', expedition: 'The Observatory' },
+  { unit: 'algebraic-expressions', file: 'NEO_Maths_Y10_Algebraic_Expressions_Lighthouse_v0.1.html', expedition: 'The Lighthouse' }
 ];
 const outDir = path.join(ROOT, 'docs/assets/fieldkits');
 fs.mkdirSync(outDir, { recursive: true });
