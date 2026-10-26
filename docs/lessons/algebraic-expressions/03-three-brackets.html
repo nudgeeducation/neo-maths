@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Expanding three brackets</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Algebraic Expressions and Identities &middot; <strong>Lesson 03 &mdash; Expanding three brackets</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.claim{font-size:1.5em;text-align:center;padding:6px 0;font-family:Georgia,'Times New Roman',serif}
+.agrid{border-collapse:collapse;margin:10px auto}
+.agrid th,.agrid td{border:2px solid #c9b48a;padding:8px;text-align:center;min-width:86px;font-size:1.15em}
+.agrid th{background:#f3ead8}
+.agrid td{background:#fffdf7}
+.agrid td input{width:86px;font-size:1em;text-align:center;padding:6px;border:1px solid #bcae98;border-radius:6px}
+.agrid td.ok{background:#e3f0dc}.agrid td.bad{background:#fbe3dc}
+.stagehead{text-align:center;font-weight:bold;margin:10px 0 2px}
+.tree .chip{min-width:70px}
+.tree .chip.on{background:#d9b46a}
+.found span{display:inline-block;margin:3px;padding:2px 8px;border-radius:8px;background:#eef6ea}
+.boxkey span{display:inline-block;margin:2px 6px}
+.boxkey i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
+@media (max-width:520px){.agrid th,.agrid td{min-width:0;padding:4px;font-size:1em}.agrid td input{width:62px;padding:5px 2px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Algebraic Expressions and Identities</h1>
+<h2>Expanding three brackets</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>What happens when three brackets multiply?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — three brackets, two stages, eight products.</p>
+<p><b>Stepping Stone:</b> <b>expand three brackets</b> in two stages, including negative terms, coefficients and the cube of a bracket; explain why there are <b>8 products</b> before collecting; and use the structure of (<span class="uk">x</span> + <span class="uk">a</span>)(<span class="uk">x</span> + <span class="uk">b</span>)(<span class="uk">x</span> + <span class="uk">c</span>) to check an expansion quickly.</p>
+<p><b>You will need:</b> expanding two brackets with the grid, and multiplying negative numbers — and the optional <b>✏️ Scratchpad</b>. No calculator needed.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 5 · Move 7 · Reflect 18 · Create 10 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_AlgebraicExpressions_Lesson_03_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_AlgebraicExpressions_Lesson_03_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('square-grid','Expand (x + 1)(x + 2) with a 2 by 2 grid. Then draw a 3 by 2 grid to multiply your answer by (x + 3).')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Powers meet brackets</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">To expand three brackets, expand two of them first, then multiply the result by the third. Along the way, powers of <span class="uk">x</span> add: <span class="uk">x</span> × <span class="uk">x</span>² = <span class="uk">x</span>³. The answer is a <b>cubic</b> expression, with an <span class="uk">x</span>³ term.</p>
+</div>
+<p><b>What to do:</b> work out each product or expansion. Use the <b>√ Symbols</b> button for ² and ³.</p>
+<p><b>What you are trying to notice:</b> multiply the numbers, and add the powers of <span class="uk">x</span>.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">✖️ Warm up</h3>
+<div id="wuCount" class="small" style="text-align:center"></div>
+<div id="wuQ" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><input id="wuIn" class="numin neo-mathfield" style="max-width:170px" aria-label="Your answer" onkeydown="if(event.key==='Enter')wuCheck()"><button onclick="wuCheck()">✅ Check</button></div>
+<div id="wuRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wuNext()">Next →</button></div>
+<p><b>Carry this forward:</b> <span class="uk">x</span> × <span class="uk">x</span>² = <span class="uk">x</span>³, and 2<span class="uk">x</span> × 3<span class="uk">x</span>² = 6<span class="uk">x</span>³.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Pick one from each</summary>
+<p><b>What to do:</b> every product in the expansion takes <b>one term from each bracket</b>. Pick a term from each of the three brackets and see the product. Find all the different ways.</p>
+<p><b>What you are trying to notice:</b> each bracket gives 2 choices, so there are 2 × 2 × 2 = 8 products before collecting.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🌳 (<span class="uk">x</span> + 1)(<span class="uk">x</span> + 2)(<span class="uk">x</span> + 3)</h3>
+<div id="trRows" class="tree"></div>
+<div id="trProd" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="trKeep()">➕ Add this product</button><button class="soft" onclick="trReset()">↺ Start again</button></div>
+<div id="trRead" class="feedback" aria-live="polite"></div>
+<div id="trFound" class="card found"></div>
+<p><b>Carry this forward:</b> 8 products: <span class="uk">x</span>³, three <span class="uk">x</span>² terms, three <span class="uk">x</span> terms and one number. Then collect.</p>
+</div>
+</details>
+
+<!-- ================= REFLECTION (hero) ================= -->
+<details class="es">
+<summary>🪞 Reflection — The two-stage grid</summary>
+<p><b>What to do:</b> <b>Stage 1</b>: expand the first two brackets with a 2 by 2 grid, and collect. <b>Stage 2</b>: your answer goes down the side of a new grid, with the third bracket as the column headings. Fill the cells and collect again. For all-positive brackets, open the box to see the expansion as a volume.</p>
+<p><b>What you are trying to notice:</b> stage 2 is just a bigger grid. Like terms sit on the diagonals, so collecting is quick.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔲🔲 Two stages</h3>
+<div id="tgCount" class="small" style="text-align:center"></div>
+<div id="tgQ" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><span class="small">Insert into the selected cell:</span><button onclick="tgIns('x')"><span class="uk">x</span></button><button onclick="tgIns('²')">²</button><button onclick="tgIns('³')">³</button><button onclick="tgIns('−')">−</button></div>
+<div id="tgStage" class="stagehead"></div>
+<div id="tgGrid" style="overflow-x:auto"></div>
+<div class="buttonrow" style="justify-content:center" id="tgCellBtn"><button onclick="tgCells()">✅ Check cells</button></div>
+<div id="tgTotRow" class="buttonrow" style="justify-content:center;display:none"><b id="tgTotQ">Collected:</b><input id="tgSum" class="numin neo-mathfield" style="max-width:190px" aria-label="Collected answer" onkeydown="if(event.key==='Enter')tgSumCheck()"><button onclick="tgSumCheck()">✅ Check</button></div>
+<div id="tgRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="tgNext()">Next expansion →</button><button class="soft" id="boxBtn" onclick="boxToggle()">📦 Show the box</button></div>
+<div id="boxCard" class="card" style="display:none;text-align:center">
+<p class="small" style="margin-top:0">A box with edges (<span class="uk">x</span> + <span class="uk">a</span>), (<span class="uk">x</span> + <span class="uk">b</span>) and (<span class="uk">x</span> + <span class="uk">c</span>) is cut into 8 pieces — one for each product.</p>
+<svg id="boxSvg" class="graphsvg" style="max-width:460px;width:100%" viewBox="0 0 460 380" role="img" aria-label="A box cut into eight pieces"></svg>
+<div class="boxkey small"><span><i style="background:#9a7fc1"></i><span class="uk">x</span>³ cube</span><span><i style="background:#6fa8dc"></i><span class="uk">x</span>² slabs</span><span><i style="background:#e0b552"></i><span class="uk">x</span> rods</span><span><i style="background:#8fc08a"></i>number block</span></div>
+<div class="buttonrow" style="justify-content:center"><button class="soft" onclick="boxApart()">↔ Pull the pieces apart</button></div>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why is the number term <span class="uk">abc</span>, and the <span class="uk">x</span>² coefficient <span class="uk">a</span> + <span class="uk">b</span> + <span class="uk">c</span>?</b> A pattern suggests — a proof convinces.</p>
+<div id="psBody"></div>
+<div id="psRead" class="feedback" aria-live="polite"></div>
+</div>
+<p><b>Carry this forward:</b> two brackets first, then the third. Check: the number term is the product of the numbers.</p>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The coefficient detective</summary>
+<p><b>What to do:</b> choose three numbers <span class="uk">a</span>, <span class="uk">b</span> and <span class="uk">c</span>. Before expanding, <b>predict</b> the number term and the <span class="uk">x</span>² coefficient of (<span class="uk">x</span> + <span class="uk">a</span>)(<span class="uk">x</span> + <span class="uk">b</span>)(<span class="uk">x</span> + <span class="uk">c</span>). Then solve the mystery.</p>
+<p><b>What you are trying to notice:</b> you can read parts of the answer without expanding at all.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔍 Predict, then check</h3>
+<div class="buttonrow" style="justify-content:center"><b><span class="uk">a</span>:</b><span id="cdA"></span></div>
+<div class="buttonrow" style="justify-content:center"><b><span class="uk">b</span>:</b><span id="cdB"></span></div>
+<div class="buttonrow" style="justify-content:center"><b><span class="uk">c</span>:</b><span id="cdC"></span></div>
+<div id="cdQ" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><b>Number term:</b><input id="cdN" class="numin" style="max-width:80px" aria-label="Number term"><b><span class="uk">x</span>² coefficient:</b><input id="cdX" class="numin" style="max-width:80px" aria-label="Coefficient of x squared"><button onclick="cdCheck()">✅ Check</button></div>
+<div id="cdRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="toolbox" style="margin-top:12px">
+<h3 style="margin-top:0">🕵️ The mystery brackets</h3>
+<p class="small">Find whole numbers <span class="uk">a</span>, <span class="uk">b</span> and <span class="uk">c</span> so that (<span class="uk">x</span> + <span class="uk">a</span>)(<span class="uk">x</span> + <span class="uk">b</span>)(<span class="uk">x</span> + <span class="uk">c</span>) expands to the expression shown. Use the clues: <span class="uk">abc</span> is the number term, and <span class="uk">a</span> + <span class="uk">b</span> + <span class="uk">c</span> is the <span class="uk">x</span>² coefficient.</p>
+<div id="myCount" class="small" style="text-align:center"></div>
+<div id="myQ" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><b><span class="uk">a</span> =</b><input id="myA" class="numin" style="max-width:64px" aria-label="a"><b><span class="uk">b</span> =</b><input id="myB" class="numin" style="max-width:64px" aria-label="b"><b><span class="uk">c</span> =</b><input id="myC" class="numin" style="max-width:64px" aria-label="c"><button onclick="myCheck()">✅ Check</button></div>
+<div id="myRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="myNext()">Next mystery →</button></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>Three brackets, eight pieces, four kinds of piece. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> 1, 3, 3, 1 — the numbers in (<span class="uk">x</span> + 1)³ = <span class="uk">x</span>³ + 3<span class="uk">x</span>² + 3<span class="uk">x</span> + 1 count the pieces of each kind in the box.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds the satisfaction of <b>scaling up a method you already trust</b>. You did not need a new rule for three brackets — just the grid, used twice. Building big things from small, reliable steps is how most hard problems are solved.</p>
+<p class="small">Carry one idea forward: when something looks new, ask which old method it is really made of.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Eight pieces</summary>
+<p><b>Your task:</b> show that you can expand three brackets and check your answer.</p>
+<ul>
+<li>Expand and simplify (<span class="uk">x</span> + 2)(<span class="uk">x</span> + 3)(<span class="uk">x</span> + 4), showing both stages.</li>
+<li>Expand and simplify (<span class="uk">x</span> − 1)(<span class="uk">x</span> + 2)(<span class="uk">x</span> − 3) and (<span class="uk">x</span> + 3)³.</li>
+<li>Explain why there are 8 products before collecting.</li>
+<li>Check each answer using the number term and the <span class="uk">x</span>² coefficient.</li>
+<li><span class="stretch">stretch</span> Expand (2<span class="uk">x</span> − 1)(<span class="uk">x</span> + 3)(<span class="uk">x</span> − 2), and explain how the check changes when one bracket starts with 2<span class="uk">x</span>.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken/video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_ALGEBRA_THREE_BRACKETS_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows that every term must be multiplied.</td><td>Explains the two stages.</td><td>Explains why there are 8 products.</td><td>Explains why the number term is <span class="uk">abc</span> and the <span class="uk">x</span>² coefficient is <span class="uk">a</span> + <span class="uk">b</span> + <span class="uk">c</span>.</td></tr>
+<tr><td><b>Application</b></td><td>Expands the first two brackets.</td><td>Expands the all-positive case fully.</td><td>Expands all three cases correctly.</td><td>Also expands the stretch case.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes answers.</td><td>Shows both grids.</td><td>Sets out each stage clearly.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one answer.</td><td>Checks the number term.</td><td>Checks every answer two ways.</td><td>Adapts the check for a bracket starting 2<span class="uk">x</span>.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Expanding three brackets — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type answers like <b>x^3 + 6x^2 + 11x + 6</b>. Use the <b>√ Symbols</b> button for ² and ³. No calculator needed.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('square-grid','Stage 1: a 2 by 2 grid. Stage 2: a 3 by 2 grid. Collect like terms.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["x","²","³","(",")","−","+"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function valF(v){ var s=String(v).trim().replace(/[−–]/g,'-'), m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/))&&+m[2]) return m[1]/m[2];
+  return signedNum(s); }
+function sv(v){ var s=String(+(+v).toFixed(4)); return s.charAt(0)==='-'?'−'+s.slice(1):s; }
+function hx(s){ return String(s).replace(/([a-z])/g,'<span class="uk">$1</span>'); }
+function gcd(a,b){ a=Math.abs(Math.round(a)); b=Math.abs(Math.round(b)); while(b){ var t=b; b=a%b; a=t; } return a; }
+
+/* ---------------- The algebra reader (by value, never by surface form) ---------------- */
+function evalAt(expr,letter,v){
+  var s=String(expr).toLowerCase().replace(/\s+/g,'').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3');
+  if(!s||!new RegExp('^[0-9.+\\-*/()^'+letter+']+$').test(s)) return NaN;
+  s=s.replace(/(\d|\))(?=[a-z(])/g,'$1*').replace(new RegExp('('+letter+')(?=[\\d(])','g'),'$1*');
+  s=s.replace(new RegExp(letter,'g'),'('+v+')').replace(/\^/g,'**').replace(/(^|[(+\-*\/])-(\([^()]*\)|\d+(?:\.\d+)?)\*\*/g,'$1-1*$2**');
+  try{ var r=Function('"use strict";return ('+s+');')(); return typeof r==='number'&&isFinite(r)?r:NaN; }catch(e){ return NaN; } }
+function sameExpr(a,b,letter){ var t=[2,3,7,10.5,-4,-0.5], ok=true; t.forEach(function(v){ var x=evalAt(a,letter,v), y=evalAt(b,letter,v); if(isNaN(x)||isNaN(y)||Math.abs(x-y)>1e-9) ok=false; }); return ok; }
+function expanded(v){ return !/[()]/.test(String(v)); }
+function norm(v){ return String(v).replace(/\s+/g,'').replace(/[−–]/g,'-'); }
+function termCount(v){ var s=norm(v).replace(/^[+-]/,''); return s?s.split(/[+-]/).length:0; }
+// Coefficients [c0, c1, c2] of an expression of degree at most 2.
+// Coefficients [c0, c1, c2, c3] of an expression of degree at most 3.
+function coeffs(e){ var f=function(x){ return evalAt(e,'x',x); }, c0=f(0), c2=(f(1)+f(-1))/2-c0, B=(f(1)-f(-1))/2, c3=(f(2)-c0-4*c2-2*B)/6; return [c0,B-c3,c2,c3]; }
+function polyStr(c){ return '('+(c[3]||0)+')*x^3+('+(c[2]||0)+')*x^2+('+(c[1]||0)+')*x+('+c[0]+')'; }
+function polyTxt(c){ var parts=[]; [[3,'x³'],[2,'x²'],[1,'x'],[0,'']].forEach(function(t){ var k=c[t[0]]||0; if(same(k,0)) return; var a=Math.abs(k), body=(t[1]&&a===1?'':sv(a))+t[1]; parts.push((k<0?'−':'+')+body); });
+  if(!parts.length) return '0'; var s=parts.join(' ').replace(/ ([+−])/g,' $1 '); return s.charAt(0)==='+'?s.slice(1):s.charAt(0)==='−'?'−'+s.slice(1):s; }
+function nz(c){ return c.filter(function(k){return !same(k||0,0);}).length; }
+// A term c·x^p, and its text.
+function T(c,p){ return {c:c,p:p||0}; }
+function tTxt(t,lead){ var a=Math.abs(t.c), v=t.p===3?'x³':t.p===2?'x²':t.p===1?'x':'', body=(v&&a===1?'':sv(a))+v; return (t.c<0?'−':(lead?'':'+'))+body; }
+function tStr(t){ return '('+t.c+')'+(t.p===3?'*x^3':t.p===2?'*x^2':t.p===1?'*x':''); }
+function brk(ts){ return ts.length===1?tTxt(ts[0],true):'('+ts.map(function(t,i){ return i?' '+tTxt(t).replace(/^([+−])/,'$1 '):tTxt(t,true); }).join('')+')'; }
+function pqBr(p){ return p===0?'x':'(x '+(p<0?'− '+(-p):'+ '+p)+')'; }
+// Fully factorised? 'yes' | 'partial' | 'notfact' | 'no'.
+function factIs(v,target){ var s=norm(v); if(!s||!sameExpr(s,target,'x')) return 'no';
+  var d=0; for(var i=0;i<s.length;i++){ var ch=s.charAt(i); if(ch==='(') d++; else if(ch===')') d--; else if(d===0&&i>0&&(ch==='+'||(ch==='-'&&s.charAt(i-1)!=='('&&s.charAt(i-1)!=='*'))) return expanded(s)?'notfact':'partial'; }
+  var br=s.match(/\(([^()]*)\)/g); if(!br) return 'notfact';
+  for(var j=0;j<br.length;j++){ var c=coeffs(br[j]); if(same(c[0],0)) return 'partial'; var g=gcd(gcd(c[0],c[1]),c[2]); if(g>1) return 'partial';
+    if(!same(c[2],0)){ var disc=c[1]*c[1]-4*c[2]*c[0], r=Math.round(Math.sqrt(Math.max(disc,0))); if(disc>=0&&r*r===Math.round(disc)) return 'partial'; } }
+  return 'yes'; }
+
+var U=function(x){ return '<span class="uk">'+x+'</span>'; };
+function collectedOk(v,c){ return sameExpr(v,polyStr(c),'x')&&expanded(v)&&termCount(v)<=nz(c); }
+function polyOfTerms(ts){ var c=[0,0,0,0]; ts.forEach(function(t){ c[t.p]+=t.c; }); return c; }
+function termsOfPoly(c){ var out=[]; for(var p=3;p>=0;p--) if(!same(c[p]||0,0)) out.push(T(c[p],p)); return out; }
+
+/* ---------------- Proof (stretch) ---------------- */
+var PROOFS={
+ ps:{steps:[
+  {q:'Each of the 8 products takes one term from each bracket of ('+U('x')+' + '+U('a')+')('+U('x')+' + '+U('b')+')('+U('x')+' + '+U('c')+'). The number term takes the number from every bracket, so it is …',chips:[U('abc'),U('a')+' + '+U('b')+' + '+U('c'),'3'+U('abc')],ans:0,ok:'The number term is '+U('abc'),hint:'Which product has no '+U('x')+' in it at all?'},
+  {q:'An '+U('x')+'² term takes '+U('x')+' from two brackets and the number from the third. There are three ways, giving …',chips:[U('a')+U('x')+'², '+U('b')+U('x')+'² and '+U('c')+U('x')+'²: together ('+U('a')+' + '+U('b')+' + '+U('c')+')'+U('x')+'²',U('abc')+U('x')+'²','3'+U('x')+'²'],ans:0,ok:'The '+U('x')+'² coefficient is '+U('a')+' + '+U('b')+' + '+U('c'),hint:'Which bracket gives its number? It could be the first, the second or the third.'},
+  {q:'An '+U('x')+' term takes '+U('x')+' from one bracket and the numbers from the other two. That gives …',chips:[U('ab')+U('x')+' + '+U('bc')+U('x')+' + '+U('ca')+U('x'),'('+U('a')+' + '+U('b')+' + '+U('c')+')'+U('x'),U('abc')+U('x')],ans:0,ok:'The '+U('x')+' coefficient is '+U('ab')+' + '+U('bc')+' + '+U('ca'),hint:'Two numbers multiply in each of these products.'},
+  {q:'So ('+U('x')+' + '+U('a')+')('+U('x')+' + '+U('b')+')('+U('x')+' + '+U('c')+') ≡ …',chips:[U('x')+'³ + ('+U('a')+' + '+U('b')+' + '+U('c')+')'+U('x')+'² + ('+U('ab')+' + '+U('bc')+' + '+U('ca')+')'+U('x')+' + '+U('abc'),U('x')+'³ + '+U('abc'),U('x')+'³ + ('+U('a')+' + '+U('b')+' + '+U('c')+')'+U('x')+' + '+U('abc')],ans:0,ok:'All 8 products accounted for',hint:'Put the four kinds of product together: one '+U('x')+'³, then the '+U('x')+'², '+U('x')+' and number terms.'}],
+  done:'✓ <b>Proved.</b> Two quick checks for any expansion of three brackets of this kind: the number term is '+U('abc')+', and the '+U('x')+'² coefficient is '+U('a')+' + '+U('b')+' + '+U('c')+'. For ('+U('x')+' + 1)('+U('x')+' + 2)('+U('x')+' + 3): 1 × 2 × 3 = 6 and 1 + 2 + 3 = 6 ✓. (If a bracket starts with 2'+U('x')+', the '+U('x')+'³ coefficient becomes 2 and the other checks change too.)'}
+};
+var pr={ps:0};
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CONNECTION: powers meet brackets ---------------- */
+var WU=[
+ {q:'x × x²',c:[0,0,0,1],traps:[[[0,0,1,0],'Powers of '+U('x')+' add when you multiply: '+U('x')+'¹ × '+U('x')+'² = '+U('x')+'^(1 + 2).']]},
+ {q:'2x × 3x²',c:[0,0,0,6],traps:[[[0,0,0,5],'Multiply the numbers: 2 × 3, not 2 + 3.'],[[0,0,6,0],'Add the powers: '+U('x')+' × '+U('x')+'² = '+U('x')+'³.']]},
+ {q:'−4 × x²',c:[0,0,-4,0],traps:[[[0,0,4,0],'A negative number times a positive term is negative.']]},
+ {q:'(x + 3)(x + 2)',c:[6,5,1,0],traps:[[[6,0,1,0],'There are two more cells in the grid: 2'+U('x')+' and 3'+U('x')+'.']]}
+];
+var wu={i:0};
+function wuRender(){ document.getElementById('wuCount').textContent=(wu.i+1)+' of '+WU.length; document.getElementById('wuQ').innerHTML=hx(WU[wu.i].q)+' = ?'; document.getElementById('wuIn').value=''; }
+function wuCheck(){ var q=WU[wu.i], v=document.getElementById('wuIn').value;
+  if(collectedOk(v,q.c)){ msg('wuRead','good','Yes: '+hx(q.q)+' = '+hx(polyTxt(q.c))+'.'); return; }
+  if(sameExpr(v,polyStr(q.c),'x')){ msg('wuRead','warn','Right value — now collect the like terms.'); return; }
+  for(var k=0;k<q.traps.length;k++) if(sameExpr(v,polyStr(q.traps[k][0]),'x')){ msg('wuRead','warn',q.traps[k][1]); return; }
+  msg('wuRead','warn','Not yet. Multiply the numbers, and add the powers of '+U('x')+'.'); }
+function wuNext(){ wu.i=(wu.i+1)%WU.length; document.getElementById('wuRead').style.display='none'; wuRender(); }
+function wuInit(){ wuRender(); }
+
+/* ---------------- MOVEMENT: pick one from each ---------------- */
+var TB=[[T(1,1),T(1)],[T(1,1),T(2)],[T(1,1),T(3)]];
+var tr={pick:[null,null,null],found:{}};
+function trTerm(){ var c=1,p=0; for(var i=0;i<3;i++){ var t=TB[i][tr.pick[i]]; c*=t.c; p+=t.p; } return T(c,p); }
+function trRender(){ document.getElementById('trRows').innerHTML=TB.map(function(b,i){ return '<div class="buttonrow" style="justify-content:center"><b>Bracket '+(i+1)+':</b>'+b.map(function(t,k){ return '<button class="chip'+(tr.pick[i]===k?' on':'')+'" onclick="trPick('+i+','+k+')">'+hx(tTxt(t,true))+'</button>'; }).join('')+'</div>'; }).join('');
+  var full=tr.pick.every(function(x){return x!==null;});
+  document.getElementById('trProd').innerHTML=full?tr.pick.map(function(k,i){ return hx(tTxt(TB[i][k],true)); }).join(' × ')+' = '+hx(tTxt(trTerm(),true)):'<span class="small">Pick one term from each bracket.</span>';
+  var keys=Object.keys(tr.found).sort(); document.getElementById('trFound').innerHTML='<b>Products found: '+keys.length+' of 8</b><br>'+keys.map(function(k){ return '<span>'+tr.found[k]+'</span>'; }).join(''); }
+function trPick(i,k){ tr.pick[i]=k; document.getElementById('trRead').style.display='none'; trRender(); }
+function trKeep(){ if(!tr.pick.every(function(x){return x!==null;})){ msg('trRead','warn','Pick one term from every bracket first.'); return; }
+  var key=tr.pick.join(''); if(tr.found[key]){ msg('trRead','warn','You already have that one. Change one of your choices.'); return; }
+  tr.found[key]=tr.pick.map(function(k,i){ return hx(tTxt(TB[i][k],true)); }).join(' × ')+' = '+hx(tTxt(trTerm(),true)); trRender();
+  var n=Object.keys(tr.found).length;
+  if(n===8) msg('trRead','good','✓ All 8 products: 2 × 2 × 2 choices. Collecting: '+U('x')+'³ + (1 + 2 + 3)'+U('x')+'² + (2 + 3 + 6)'+U('x')+' + 6 = '+hx('x³ + 6x² + 11x + 6')+'.');
+  else msg('trRead','good','Added. '+(8-n)+' more to find.'); }
+function trReset(){ tr.pick=[null,null,null]; tr.found={}; document.getElementById('trRead').style.display='none'; trRender(); }
+function trInit(){ trRender(); }
+
+/* ---------------- REFLECTION (hero): the two-stage grid ---------------- */
+function B(a1,a0){ return [T(a1,1),T(a0)]; }
+var TG=[
+ {br:[B(1,1),B(1,2),B(1,3)]},
+ {br:[B(1,1),B(1,1),B(1,1)],cube:true},
+ {br:[B(1,-2),B(1,3),B(1,1)]},
+ {br:[B(1,-2),B(1,-2),B(1,-2)],cube:true},
+ {br:[B(2,1),B(1,-3),B(1,4)],stretch:true}
+];
+var tg={i:0,stage:0,last:0,mid:null,done:TG.map(function(){return false;}),box:false,apart:false};
+function tgQ(){ var q=TG[tg.i]; return q.cube?brk(q.br[0])+'³':q.br.map(brk).join(''); }
+function tgFinal(){ var q=TG[tg.i], c=[0,0,0,0]; var mid=[]; q.br[0].forEach(function(s){ q.br[1].forEach(function(t){ mid.push(T(s.c*t.c,s.p+t.p)); }); }); var m=polyOfTerms(mid); termsOfPoly(m).forEach(function(s){ q.br[2].forEach(function(t){ c[s.p+t.p]+=s.c*t.c; }); }); return {mid:m,final:c}; }
+function tgRows(){ var q=TG[tg.i]; return tg.stage===0?q.br[0]:termsOfPoly(tg.mid); }
+function tgCols(){ var q=TG[tg.i]; return tg.stage===0?q.br[1]:q.br[2]; }
+function tgCount(){ var q=TG[tg.i]; document.getElementById('tgCount').innerHTML='Expansion '+(tg.i+1)+' of '+TG.length+(q.stretch?' <span class="stretch">stretch</span>':'')+(tg.done[tg.i]?' ✓':''); }
+function tgRender(){ var q=TG[tg.i], rows=tgRows(), cols=tgCols(); tgCount();
+  document.getElementById('tgQ').innerHTML='Expand '+hx(tgQ());
+  document.getElementById('tgStage').innerHTML=tg.stage===0?'Stage 1: '+hx(brk(q.br[0])+brk(q.br[1])):'Stage 2: ('+hx(polyTxt(tg.mid))+')'+hx(brk(q.br[2]));
+  var h='<table class="agrid"><tr><th>×</th>'+cols.map(function(c){return '<th>'+hx(tTxt(c,true))+'</th>';}).join('')+'</tr>';
+  rows.forEach(function(r,i){ h+='<tr><th>'+hx(tTxt(r,true))+'</th>'+cols.map(function(c,j){ var k=i*cols.length+j; return '<td id="tgc'+k+'"><input id="tg'+k+'" aria-label="Cell '+(k+1)+'" onfocus="tg.last='+k+'" onkeydown="if(event.key===\'Enter\')tgCells()"></td>'; }).join('')+'</tr>'; });
+  document.getElementById('tgGrid').innerHTML=h+'</table>';
+  document.getElementById('tgTotRow').style.display='none'; document.getElementById('tgCellBtn').style.display='flex';
+  var pos=q.br.every(function(b){ return b[0].c===1&&b[1].c>0; }); var bb=document.getElementById('boxBtn'); bb.disabled=!pos; bb.title=pos?'':'The box only works when every term is positive. The grid works for everything.';
+  if(!pos&&tg.box) boxToggle(); else if(tg.box) boxDraw(); }
+function tgIns(ch){ var f=document.getElementById('tg'+tg.last); if(!f) return; f.focus(); var a=f.selectionStart, b=f.selectionEnd; if(a==null){ a=b=f.value.length; } f.value=f.value.slice(0,a)+ch+f.value.slice(b); try{ f.selectionStart=f.selectionEnd=a+ch.length; }catch(e){} }
+function tgCells(){ var rows=tgRows(), cols=tgCols(), wrong=0, slip='';
+  rows.forEach(function(r,i){ cols.forEach(function(c,j){ var k=i*cols.length+j, t=T(r.c*c.c,r.p+c.p), v=document.getElementById('tg'+k).value, ok=String(v).trim()&&sameExpr(v,tStr(t),'x');
+    if(!ok&&String(v).trim()&&sameExpr(v,tStr(T(-t.c,t.p)),'x')) slip='Check the signs.';
+    if(!ok&&String(v).trim()&&t.p>=2&&sameExpr(v,tStr(T(t.c,t.p-1)),'x')) slip='Add the powers: '+U('x')+'² × '+U('x')+' = '+U('x')+'³.';
+    document.getElementById('tgc'+k).className=ok?'ok':'bad'; if(!ok) wrong++; }); });
+  if(wrong){ msg('tgRead','warn',wrong+' cell'+(wrong>1?'s':'')+' not right yet (in red). '+(slip||'Each cell is its row term times its column term.')); return; }
+  document.getElementById('tgTotRow').style.display='flex'; document.getElementById('tgCellBtn').style.display='none'; document.getElementById('tgSum').value='';
+  document.getElementById('tgTotQ').textContent=tg.stage===0?'Stage 1, collected:':'Stage 2, collected:';
+  msg('tgRead','good','All the cells are right. Now collect like terms.'+(tg.stage===1?' Like terms sit on the diagonals of the grid.':'')); }
+function tgSumCheck(){ var q=TG[tg.i], r=tgFinal(), want=tg.stage===0?r.mid:r.final, v=document.getElementById('tgSum').value;
+  if(!sameExpr(v,polyStr(want),'x')){ msg('tgRead','warn','Not yet. Add the cells together, collecting like terms.'); return; }
+  if(!collectedOk(v,want)){ msg('tgRead','warn','Right value — now collect the like terms, so each power of '+U('x')+' appears once.'); return; }
+  if(tg.stage===0){ tg.stage=1; tg.mid=r.mid; tgRender(); msg('tgRead','good','Stage 1 done: '+hx(brk(q.br[0])+brk(q.br[1]))+' = '+hx(polyTxt(r.mid))+'. Now multiply that by '+hx(brk(q.br[2]))+'.'); return; }
+  tg.done[tg.i]=true; tgCount(); var a=q.br.map(function(b){return b[1].c;}), lead=q.br[0][0].c*q.br[1][0].c*q.br[2][0].c;
+  msg('tgRead','good','✓ '+hx(tgQ())+' = '+hx(polyTxt(r.final))+'.'+(lead===1?' Check: number term '+a.map(sv).join(' × ')+' = '+sv(a[0]*a[1]*a[2])+', and '+U('x')+'² coefficient '+a.map(sv).join(' + ').replace(/\+ −/g,'− ')+' = '+sv(a[0]+a[1]+a[2])+'.':' The '+U('x')+'³ coefficient is '+lead+', because the first bracket starts with '+lead+U('x')+'.')); }
+function tgNext(){ tg.i=(tg.i+1)%TG.length; tg.stage=0; tg.mid=null; tg.last=0; tg.apart=false; document.getElementById('tgRead').style.display='none'; tgRender(); }
+function tgInit(){ tgRender(); prRender('ps'); }
+// The box: an isometric drawing of (x + a)(x + b)(x + c), cut into 8 pieces.
+function boxToggle(){ tg.box=!tg.box; document.getElementById('boxCard').style.display=tg.box?'block':'none'; document.getElementById('boxBtn').textContent=tg.box?'📦 Hide the box':'📦 Show the box'; if(tg.box) boxDraw(); }
+function boxApart(){ tg.apart=!tg.apart; boxDraw(); }
+function boxDraw(){ var q=TG[tg.i], X=5, ab=q.br.map(function(b){return b[1].c;}), s=20, g=tg.apart?1.6:0, cs=Math.cos(Math.PI/6);
+  var P=function(x,y,z){ return [(x-y)*cs*s,(x+y)*0.5*s-z*s]; };
+  var cols={3:['#b9a3d6','#9a7fc1','#7d63a6'],2:['#9cc4e8','#6fa8dc','#4f86b8'],1:['#f0cf7f','#e0b552','#b98f2f'],0:['#b5dbb0','#8fc08a','#6b9c66']};
+  var pieces=[], pts=[];
+  for(var i=0;i<2;i++) for(var j=0;j<2;j++) for(var k=0;k<2;k++){ var d=[i?ab[0]:X,j?ab[1]:X,k?ab[2]:X], o=[(i?X:0)+i*g,(j?X:0)+j*g,(k?X:0)+k*g], n=(i?0:1)+(j?0:1)+(k?0:1);
+    var coef=(i?ab[0]:1)*(j?ab[1]:1)*(k?ab[2]:1); pieces.push({d:d,o:o,n:n,label:tTxt(T(coef,n),true),key:o[0]+o[1]+o[2]}); }
+  pieces.sort(function(a,b){ return a.key-b.key; });
+  var faces=function(p){ var x0=p.o[0],y0=p.o[1],z0=p.o[2],x1=x0+p.d[0],y1=y0+p.d[1],z1=z0+p.d[2];
+    return [[[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]],[[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]],[[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]]]; };
+  pieces.forEach(function(p){ faces(p).forEach(function(f){ f.forEach(function(v){ pts.push(P(v[0],v[1],v[2])); }); }); });
+  var minx=Math.min.apply(null,pts.map(function(p){return p[0];}))-10, maxx=Math.max.apply(null,pts.map(function(p){return p[0];}))+10, miny=Math.min.apply(null,pts.map(function(p){return p[1];}))-10, maxy=Math.max.apply(null,pts.map(function(p){return p[1];}))+10;
+  var h='';
+  pieces.forEach(function(p){ faces(p).forEach(function(f,fi){ h+='<polygon points="'+f.map(function(v){ var q2=P(v[0],v[1],v[2]); return q2[0].toFixed(1)+','+q2[1].toFixed(1); }).join(' ')+'" fill="'+cols[p.n][fi]+'" stroke="#3a2a10" stroke-width="1"/>'; });
+    var c=P(p.o[0]+p.d[0]/2,p.o[1]+p.d[1]/2,p.o[2]+p.d[2]); h+='<text x="'+c[0].toFixed(1)+'" y="'+(c[1]+5).toFixed(1)+'" text-anchor="middle" font-size="'+(p.n>=2?15:12)+'" font-family="Georgia" font-style="italic" fill="#1f2a33" stroke="#fff" stroke-width="3" paint-order="stroke">'+p.label.replace('x³','x³')+'</text>'; });
+  var svg=document.getElementById('boxSvg'); svg.setAttribute('viewBox',minx.toFixed(0)+' '+miny.toFixed(0)+' '+(maxx-minx).toFixed(0)+' '+(maxy-miny).toFixed(0)); svg.innerHTML=h; }
+
+/* ---------------- CREATIVITY: the coefficient detective ---------------- */
+var CDV=[-3,-2,-1,1,2,3,4];
+var cd={a:1,b:2,c:3};
+function cdRender(){ ['a','b','c'].forEach(function(k){ document.getElementById('cd'+k.toUpperCase()).innerHTML=CDV.map(function(v){ return '<button class="chip"'+(cd[k]===v?' style="background:#d9b46a"':'')+' onclick="cdSet(\''+k+'\','+v+')">'+sv(v)+'</button>'; }).join(''); });
+  document.getElementById('cdQ').innerHTML=hx([B(1,cd.a),B(1,cd.b),B(1,cd.c)].map(brk).join('')); document.getElementById('cdN').value=''; document.getElementById('cdX').value=''; }
+function cdSet(k,v){ cd[k]=v; document.getElementById('cdRead').style.display='none'; cdRender(); }
+function cdCheck(){ var n=valF(document.getElementById('cdN').value), x=valF(document.getElementById('cdX').value), pn=cd.a*cd.b*cd.c, px=cd.a+cd.b+cd.c;
+  var full=coeffs('(x+('+cd.a+'))*(x+('+cd.b+'))*(x+('+cd.c+'))'), okN=same(n,pn), okX=same(x,px);
+  if(okN&&okX){ msg('cdRead','good','✓ Both right, without expanding. The full expansion is '+hx(polyTxt(full))+'.'); return; }
+  msg('cdRead','warn',(okN?'The number term is right. ':'Number term: multiply the three numbers. ')+(okX?'The '+U('x')+'² coefficient is right.':U('x')+'² coefficient: add the three numbers.')); }
+var MY=[{c:[-6,-5,2,1]},{c:[-6,-7,0,1]},{c:[24,26,9,1]},{c:[0,-1,0,1],stretch:true}];
+var my={i:0};
+function myRender(){ var q=MY[my.i]; document.getElementById('myCount').innerHTML='Mystery '+(my.i+1)+' of '+MY.length+(q.stretch?' <span class="stretch">stretch</span>':''); document.getElementById('myQ').innerHTML=hx(polyTxt(q.c)); ['myA','myB','myC'].forEach(function(id){ document.getElementById(id).value=''; }); }
+function myCheck(){ var q=MY[my.i], a=valF(document.getElementById('myA').value), b=valF(document.getElementById('myB').value), c=valF(document.getElementById('myC').value);
+  if([a,b,c].some(isNaN)){ msg('myRead','warn','Type a whole number for each of '+U('a')+', '+U('b')+' and '+U('c')+'.'); return; }
+  var e='(x+('+a+'))*(x+('+b+'))*(x+('+c+'))';
+  if(sameExpr(e,polyStr(q.c),'x')){ msg('myRead','good','✓ '+hx([B(1,a),B(1,b),B(1,c)].map(function(t){ return t[1].c===0?'x':brk(t); }).join(''))+' = '+hx(polyTxt(q.c))+'.'); return; }
+  msg('myRead','warn',(same(a*b*c,q.c[0])?'The product '+U('abc')+' is right. ':'You need '+U('abc')+' = '+sv(q.c[0])+'. ')+(same(a+b+c,q.c[2])?'The sum is right too — so check the '+U('x')+' coefficient: '+U('ab')+' + '+U('bc')+' + '+U('ca')+' = '+sv(q.c[1])+'.':'You need '+U('a')+' + '+U('b')+' + '+U('c')+' = '+sv(q.c[2])+'.')); }
+function myNext(){ my.i=(my.i+1)%MY.length; document.getElementById('myRead').style.display='none'; myRender(); }
+function cdInit(){ cdRender(); myRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    two:{title:'Expanding two brackets',prompt:'(<i>x</i> + 3)(<i>x</i> + 4) = <i>x</i>² + 7<i>x</i> + ?. What is the missing number?',answer:12,hint:'The last cell of the grid is 3 × 4.'},
+    neg:{title:'Multiplying negative numbers',prompt:'What is −2 × −3 × −1?',answer:-6,hint:'−2 × −3 = 6, then 6 × −1.'},
+    pow:{title:'Multiplying powers',prompt:'<i>x</i> × <i>x</i>² = <i>x</i> to the power of what?',answer:3,hint:'<i>x</i> × <i>x</i> × <i>x</i>: count the <i>x</i>s.'}
+  };
+  function matches(r,v){ var n=valF(v); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A classification answer: "an equation", "Equation", "it is an identity".
+function kindIs(v,k){ var s=normText(v).replace(/^(it is|it's|its)\s+/,'').replace(/^(an?|the)\s+/,''); return s===k||s===k+'s'; }
+// Algebra typed by the learner, equal in value to the target at several test values (QA gate 6a).
+function algIs(v,target,letters){ var ok=true; [2,3,-1.5,7].forEach(function(t){ var vars={}; letters.forEach(function(L,k){vars[L]=t+k;}); var a=evalExpr(v,vars), b=evalExpr(target,vars); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok; }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pExp(c){ return function(v){ return collectedOk(v,c); }; }
+function pv(target){ return function(v){ return same(valF(v),target,1e-9); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Multiplying powers",q:"Simplify <b>3<i>x</i> × 2<i>x</i>²</b>.",a:[],eq:pExp([0,0,0,6]),prompt:"Multiply the numbers. What happens to the powers?",hint:"3 × 2 = 6, and <i>x</i> × <i>x</i>² = <i>x</i>³.",sol:"3<i>x</i> × 2<i>x</i>² = 6<i>x</i>³."},
+ {label:"2 of 8 · Stage 1",q:"Expand and simplify <b>(<i>x</i> + 2)(<i>x</i> + 3)</b>.",a:[],eq:pExp([6,5,1,0]),prompt:"Draw the 2 by 2 grid.",hint:"Cells: <i>x</i>², 3<i>x</i>, 2<i>x</i>, 6.",sol:"<i>x</i>² + 5<i>x</i> + 6."},
+ {label:"3 of 8 · Stage 2",q:"Expand and simplify <b>(<i>x</i>² + 5<i>x</i> + 6)(<i>x</i> + 1)</b>.",a:[],eq:pExp([6,11,6,1]),prompt:"Draw a 3 by 2 grid: <i>x</i>², 5<i>x</i>, 6 down the side; <i>x</i>, 1 as the column headings.",hint:"Cells: <i>x</i>³, <i>x</i>², 5<i>x</i>², 5<i>x</i>, 6<i>x</i>, 6.",sol:"<i>x</i>³ + 6<i>x</i>² + 11<i>x</i> + 6."},
+ {label:"4 of 8 · Three brackets",q:"Expand and simplify <b>(<i>x</i> + 1)(<i>x</i> + 2)(<i>x</i> + 4)</b>.",a:[],eq:pExp([8,14,7,1]),prompt:"Expand two brackets first.",hint:"(<i>x</i> + 1)(<i>x</i> + 2) = <i>x</i>² + 3<i>x</i> + 2. Then multiply by (<i>x</i> + 4).",sol:"(<i>x</i>² + 3<i>x</i> + 2)(<i>x</i> + 4) = <i>x</i>³ + 7<i>x</i>² + 14<i>x</i> + 8. Check: 1 × 2 × 4 = 8, and 1 + 2 + 4 = 7."},
+ {label:"5 of 8 · A negative",q:"Expand and simplify <b>(<i>x</i> − 1)(<i>x</i> + 2)(<i>x</i> + 3)</b>.",a:[],eq:pExp([-6,1,4,1]),prompt:"Expand two brackets first. Watch the signs.",hint:"(<i>x</i> − 1)(<i>x</i> + 2) = <i>x</i>² + <i>x</i> − 2.",sol:"(<i>x</i>² + <i>x</i> − 2)(<i>x</i> + 3) = <i>x</i>³ + 4<i>x</i>² + <i>x</i> − 6."},
+ {label:"6 of 8 · The number term",q:"Without expanding, what is the number term of <b>(<i>x</i> + 2)(<i>x</i> − 5)(<i>x</i> + 3)</b>?",a:[],eq:pv(-30),prompt:"Which product has no <i>x</i> in it?",hint:"2 × (−5) × 3.",sol:"2 × (−5) × 3 = −30."},
+ {label:"7 of 8 · A cube",q:"Expand and simplify <b>(<i>x</i> + 2)³</b>.",a:[],eq:pExp([8,12,6,1]),prompt:"(<i>x</i> + 2)³ = (<i>x</i> + 2)(<i>x</i> + 2)(<i>x</i> + 2).",hint:"(<i>x</i> + 2)² = <i>x</i>² + 4<i>x</i> + 4. Then multiply by (<i>x</i> + 2).",sol:"(<i>x</i>² + 4<i>x</i> + 4)(<i>x</i> + 2) = <i>x</i>³ + 6<i>x</i>² + 12<i>x</i> + 8."},
+ {label:"8 of 8 · A coefficient (stretch)",q:"Expand and simplify <b>(2<i>x</i> − 1)(<i>x</i> + 1)(<i>x</i> − 3)</b>.",a:[],eq:pExp([3,-4,-5,2]),prompt:"Expand two brackets first. What is 2<i>x</i> × <i>x</i>?",hint:"(2<i>x</i> − 1)(<i>x</i> + 1) = 2<i>x</i>² + <i>x</i> − 1.",sol:"(2<i>x</i>² + <i>x</i> − 1)(<i>x</i> − 3) = 2<i>x</i>³ − 5<i>x</i>² − 4<i>x</i> + 3."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Two brackets first, then the third — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  wuInit();
+  trInit();
+  tgInit();
+  cdInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('ae-03-three-brackets');</script>
+
+<script src="../../assets/fieldkits/algebraic-expressions.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(2);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button"; b.textContent=s; b.addEventListener("click",function(){insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+</body>
+</html>

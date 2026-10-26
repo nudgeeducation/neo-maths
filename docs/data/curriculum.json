@@ -853,6 +853,14 @@
           "file": "lessons/algebraic-expressions/02-expanding-factorising.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-03-three-brackets",
+          "num": "Lesson 03",
+          "title": "Expanding three brackets",
+          "file": "lessons/algebraic-expressions/03-three-brackets.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
