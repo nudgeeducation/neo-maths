@@ -845,6 +845,14 @@
           "file": "lessons/algebraic-expressions/01-identities.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-02-expanding-factorising",
+          "num": "Lesson 02",
+          "title": "Expanding and factorising",
+          "file": "lessons/algebraic-expressions/02-expanding-factorising.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
