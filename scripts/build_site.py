@@ -120,6 +120,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_03_Three_Brackets/NEO_Maths_Y10_AlgebraicExpressions_Lesson_03_Three_Brackets_v0.1.html",
     "ae-04-algebraic-fractions":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_04_Algebraic_Fractions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_04_Algebraic_Fractions_v0.1.html",
+    "ae-05-adding-fractions":
+        "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_05_Adding_Fractions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_05_Adding_Fractions_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

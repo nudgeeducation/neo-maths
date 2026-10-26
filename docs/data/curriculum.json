@@ -869,6 +869,14 @@
           "file": "lessons/algebraic-expressions/04-algebraic-fractions.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-05-adding-fractions",
+          "num": "Lesson 05",
+          "title": "Adding and subtracting algebraic fractions",
+          "file": "lessons/algebraic-expressions/05-adding-fractions.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
