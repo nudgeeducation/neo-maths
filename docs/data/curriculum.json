@@ -893,6 +893,14 @@
           "file": "lessons/algebraic-expressions/07-algebraic-proof.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-08-functions",
+          "num": "Lesson 08",
+          "title": "Function notation, domain and range",
+          "file": "lessons/algebraic-expressions/08-functions.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

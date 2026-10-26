@@ -126,6 +126,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_06_Changing_Subject/NEO_Maths_Y10_AlgebraicExpressions_Lesson_06_Changing_Subject_v0.1.html",
     "ae-07-algebraic-proof":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_07_Algebraic_Proof/NEO_Maths_Y10_AlgebraicExpressions_Lesson_07_Algebraic_Proof_v0.1.html",
+    "ae-08-functions":
+        "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
