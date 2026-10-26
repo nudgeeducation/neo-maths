@@ -885,6 +885,14 @@
           "file": "lessons/algebraic-expressions/06-changing-subject.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-07-algebraic-proof",
+          "num": "Lesson 07",
+          "title": "Algebraic proof",
+          "file": "lessons/algebraic-expressions/07-algebraic-proof.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
