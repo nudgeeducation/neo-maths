@@ -861,6 +861,14 @@
           "file": "lessons/algebraic-expressions/03-three-brackets.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-04-algebraic-fractions",
+          "num": "Lesson 04",
+          "title": "Simplifying algebraic fractions",
+          "file": "lessons/algebraic-expressions/04-algebraic-fractions.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
