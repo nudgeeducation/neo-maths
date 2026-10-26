@@ -877,6 +877,14 @@
           "file": "lessons/algebraic-expressions/05-adding-fractions.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ae-06-changing-subject",
+          "num": "Lesson 06",
+          "title": "Changing the subject, harder cases",
+          "file": "lessons/algebraic-expressions/06-changing-subject.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
