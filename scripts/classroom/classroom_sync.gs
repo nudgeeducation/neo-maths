@@ -4,6 +4,9 @@
  * Reads docs/data/curriculum.json from the neo-maths repo and mirrors it into
  * the Google Classroom master courses, one per stage: one Topic per unit, one
  * Material per lesson, each Material a link to the lesson page on the published site.
+ * A unit with a `diagnostic` ({id, title}) also gets a "Start here" Material at the
+ * top of its topic, linking to that diagnostic expedition on the NEO Maths results
+ * service (GreenPrint v2.4: one diagnostic per unit, taken before Lesson 01).
  *
  * Git is canonical; Classroom is derived. Re-run after any curriculum change —
  * the script is idempotent (lessons are matched on the marker `neo-maths:<lesson id>`
@@ -24,6 +27,8 @@
 const CONFIG = {
   MANIFEST_URL: 'https://raw.githubusercontent.com/nudgeeducation/neo-maths/main/docs/data/curriculum.json',
   SITE_BASE: 'https://nudgeeducation.github.io/neo-maths/',
+  // The NEO Maths results service (Apps Script web app). A diagnostic opens at RESULTS_URL?page=<id>.
+  RESULTS_URL: 'https://script.google.com/a/macros/nudgeeducation.online/s/AKfycbzZ4_uhLDHULyz8DDRtxjGh9DX0e3ETZqE_i08mv00jUfz2OtowM2giqSnWqx3FiyU/exec',
   // One entry per Classroom. `stages` lists the manifest stage labels that
   // belong in that course; units with any other stage are removed from it.
   TARGETS: [
@@ -78,29 +83,15 @@ function syncCourse_(manifest, target) {
         marker,
       ].join('\n');
 
-      const found = existing[marker];
-      if (found) {
-        const sameLink = found.materials && found.materials[0] && found.materials[0].link &&
-                         found.materials[0].link.url === url;
-        if (found.title === title && found.topicId === topic.topicId && sameLink && found.description === description) {
-          log.unchanged++;
-          return;
-        }
-        if (!sameLink) {
-          // materials are not patchable — replace the post
-          Classroom.Courses.CourseWorkMaterials.remove(courseId, found.id);
-          Classroom.Courses.CourseWorkMaterials.create(material_(title, description, url, topic.topicId), courseId);
-        } else {
-          Classroom.Courses.CourseWorkMaterials.patch(
-            { title: title, description: description, topicId: topic.topicId },
-            courseId, found.id, { updateMask: 'title,description,topicId' });
-        }
-        log.updated++;
-      } else {
-        Classroom.Courses.CourseWorkMaterials.create(material_(title, description, url, topic.topicId), courseId);
-        log.created++;
-      }
+      upsert_(courseId, existing, log, marker, title, description, url, topic.topicId);
     });
+
+    // The diagnostic goes in last, so it sits above Lesson 01 (newest first).
+    if (unit.diagnostic) {
+      const marker = CONFIG.MARKER + 'diagnostic-' + unit.id;
+      wanted[marker] = true;
+      upsert_(courseId, existing, log, marker, startTitle_(unit), startDescription_(unit, marker), diagnosticUrl_(unit), topic.topicId);
+    }
   });
 
   // Remove materials this script created that no longer belong in this course
@@ -128,6 +119,42 @@ function syncCourse_(manifest, target) {
   });
 
   return log;
+}
+
+// Create the post, or bring an existing one (found by its marker) up to date.
+function upsert_(courseId, existing, log, marker, title, description, url, topicId) {
+  const found = existing[marker];
+  if (found) {
+    const sameLink = found.materials && found.materials[0] && found.materials[0].link &&
+                     found.materials[0].link.url === url;
+    if (found.title === title && found.topicId === topicId && sameLink && found.description === description) {
+      log.unchanged++;
+      return;
+    }
+    if (!sameLink) {
+      // materials are not patchable — replace the post
+      Classroom.Courses.CourseWorkMaterials.remove(courseId, found.id);
+      Classroom.Courses.CourseWorkMaterials.create(material_(title, description, url, topicId), courseId);
+    } else {
+      Classroom.Courses.CourseWorkMaterials.patch(
+        { title: title, description: description, topicId: topicId },
+        courseId, found.id, { updateMask: 'title,description,topicId' });
+    }
+    log.updated++;
+  } else {
+    Classroom.Courses.CourseWorkMaterials.create(material_(title, description, url, topicId), courseId);
+    log.created++;
+  }
+}
+
+function startTitle_(unit) { return 'Start here · ' + unit.diagnostic.title; }
+function diagnosticUrl_(unit) { return CONFIG.RESULTS_URL + '?page=' + unit.diagnostic.id; }
+function startDescription_(unit, marker) {
+  return [
+    'Begin ' + unit.title + ' here, before Lesson 01.',
+    unit.diagnostic.title + ' is a short expedition with no scores. It suggests where to start in this unit and which Reconnection Routes may help. Sign in with your NEO account.',
+    marker,
+  ].join('\n');
 }
 
 function material_(title, description, url, topicId) {
@@ -173,6 +200,7 @@ function previewSync() {
     Logger.log('COURSE ' + target.name + ' (' + target.courseId + ')');
     manifest.units.filter(function (u) { return target.stages.indexOf(u.stage) !== -1; }).forEach(function (u) {
       Logger.log('  TOPIC ' + u.title + ' · ' + u.stage + ' (' + u.lessons.length + ' lessons)');
+      if (u.diagnostic) Logger.log('     ' + startTitle_(u) + ' → ' + diagnosticUrl_(u));
       u.lessons.forEach(function (l) { Logger.log('     ' + l.num + ' · ' + l.title + ' → ' + CONFIG.SITE_BASE + l.file); });
     });
   });

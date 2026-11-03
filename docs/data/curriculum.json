@@ -326,6 +326,10 @@
       "stage": "Foundations",
       "strand": "Algebra",
       "source": "vault/02_Foundations/01_Lessons/Inequalities",
+      "diagnostic": {
+        "id": "garden",
+        "title": "The Walled Garden"
+      },
       "lessons": [
         {
           "id": "ineq-01-inequality-symbols",
@@ -367,6 +371,10 @@
       "stage": "Foundations",
       "strand": "Algebra",
       "source": "vault/02_Foundations/01_Lessons/Formulae_and_Rearranging",
+      "diagnostic": {
+        "id": "workshop",
+        "title": "The Inventor’s Workshop"
+      },
       "lessons": [
         {
           "id": "formulae-01-letters-unknowns-variables",
@@ -772,6 +780,10 @@
       "stage": "Intermediate",
       "strand": "Number",
       "source": "vault/03_Intermediate/01_Lessons/Number_Systems",
+      "diagnostic": {
+        "id": "observatory",
+        "title": "The Observatory"
+      },
       "lessons": [
         {
           "id": "ns-01-fdp-fluently",
@@ -837,6 +849,10 @@
       "stage": "Intermediate",
       "strand": "Algebra",
       "source": "vault/03_Intermediate/01_Lessons/Algebraic_Expressions",
+      "diagnostic": {
+        "id": "lighthouse",
+        "title": "The Lighthouse"
+      },
       "lessons": [
         {
           "id": "ae-01-identities",
