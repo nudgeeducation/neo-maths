@@ -23,7 +23,7 @@ Each unit already opens with a diagnostic expedition that records where every le
 5. **The Exam Corner (Intermediate):** optional exam-style practice at the end, never recorded, to build exam familiarity gradually.
 
 ## What is in this pack
-- **Prototype:** Return to the Lighthouse, the check-in for Algebraic Expressions. It works end to end on any computer and saves only on that device. Open it, step inside, and try a few floors, including a wrong answer and the side passage. Then see the floor plan, the adult view, the confirmation and the Exam Corner.
+- **Prototype:** Return to the Lighthouse, the check-in for Algebraic Expressions. It works end to end on any computer and saves only on that device. Open it, step inside, and try a few floors, including a wrong answer and the side passage. The √ Symbols palette from the lessons is under every answer box. Then see the floor plan, the adult view, the confirmation and the Exam Corner.
 - **Exemplars** (using Alex, a fictional learner): the Unit Summary, the family summary, the maths conversation cards and the termly commissioner summary.
 - **Draft GreenPrint entry v2.5**, which would record the decision once agreed.
 
@@ -40,4 +40,4 @@ Each unit already opens with a diagnostic expedition that records where every le
 - From then on, every new unit is planned with both its diagnostic and its check-in.
 - Add a "Finish here" post to each Classroom unit, alongside the "Start here" post.
 
-*Prototype v0.1, for discussion only.*
+*Prototype v0.2, for discussion only.*

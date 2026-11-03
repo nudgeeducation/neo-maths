@@ -132,13 +132,21 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 .didyou{background:#fffaf0;border-left:6px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:1.05em}
 @media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
 @media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
-.f.item{visibility:hidden!important}
+
+.mathpalette{margin:8px 0 0;flex-basis:100%}
+.palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px}
+.palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.palette-keys[hidden]{display:none}
+.palette-keys button{min-width:44px;padding:8px 10px;font-size:1.1em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+.palette-keys button:focus-visible,.palette-toggle:focus-visible{outline:3px solid #f2c14e;outline-offset:2px}
 .fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;line-height:1.2}
 .fr>span{display:block;padding:0 .25em}
 .fr>span:first-child{border-bottom:2px solid currentColor}
 .readas{flex-basis:100%;margin-top:6px;font-size:1.05em}
 .readas:empty{display:none}
 .ralabel{font-size:.8em;opacity:.75;margin-right:4px}
+.f.item{visibility:hidden!important}
+
 .journey{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;justify-content:center;margin-top:4px}
 .chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:rgba(0,0,0,.08)}
 .chip.now{background:#2f5f7a;color:#fff}
@@ -173,6 +181,45 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 <div class="modal" id="lockModal" role="dialog" aria-modal="true" aria-labelledby="lt"><div class="panel" id="lockPanel"></div></div>
 <div class="modal" id="kitModal" role="dialog" aria-modal="true" aria-labelledby="kt"><div class="panel" id="kitPanel"></div></div>
 <div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
+
+<script>window.NEO_PALETTE_SYMBOLS=["x", "y", "n", "²", "³", "−", "+", "(", ")", "="];</script>
+<script id="neoPalette">
+/* NEO symbols palette for expeditions (same keys and preview as the lessons). Symbols: window.NEO_PALETTE_SYMBOLS */
+var NEOPalette=(function(){
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+  // How a typed answer is read: everything after "/" up to the next + or - is the denominator.
+  function readAs(v){
+    var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
+    s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/').replace(/\^2/g,'²').replace(/\^3/g,'³');
+    var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
+    function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
+    function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
+    var terms=[], cur='', d=0;
+    for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
+    terms.push(cur);
+    var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
+      var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
+      return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
+    return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function attach(f){ if(!f||f.dataset.paletteReady) return; f.dataset.paletteReady='1';
+    var w=document.createElement('div'); w.className='mathpalette';
+    var t=document.createElement('button'); t.type='button'; t.className='palette-toggle'; t.textContent='√ Symbols'; t.setAttribute('aria-expanded','false');
+    var k=document.createElement('div'); k.className='palette-keys'; k.hidden=true;
+    var pv=document.createElement('div'); pv.className='readas'; pv.setAttribute('aria-live','polite');
+    function upd(){ pv.innerHTML=readAs(f.value); }
+    (window.NEO_PALETTE_SYMBOLS||[]).forEach(function(s){ var b=document.createElement('button'); b.type='button'; b.textContent=s; b.setAttribute('aria-label','Insert '+s); b.onclick=function(){ insert(f,s); upd(); }; k.appendChild(b); });
+    var fr=document.createElement('button'); fr.type='button'; fr.title='Insert a fraction bar (numerator / denominator)'; fr.setAttribute('aria-label','Insert a fraction bar');
+    fr.innerHTML=F('a','b'); fr.onclick=function(){ insert(f,'/'); upd(); }; k.appendChild(fr);
+    t.onclick=function(){ k.hidden=!k.hidden; t.setAttribute('aria-expanded',String(!k.hidden)); };
+    f.addEventListener('input',upd);
+    w.appendChild(t); w.appendChild(k);
+    var row=f.parentNode; row.parentNode.insertBefore(pv,row.nextSibling); row.parentNode.insertBefore(w,pv);
+  }
+  return {attach:attach,readAs:readAs,F:F};
+})();
+</script>
 
 <script>
 /* ---------- Answer reading: equivalent forms always accepted ---------- */
@@ -215,20 +262,6 @@ function wrapDen(s){ var out='', i=0;
 function tidy(v){ return wrapDen(String(v).toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/')); }
 // A stacked fraction with a horizontal bar.
 function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
-// "Reads as": show how a typed answer is read, with fractions stacked.
-function readAs(v){
-  var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
-  s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/\^2/g,'²').replace(/\^3/g,'³');
-  var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
-  function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
-  function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
-  var terms=[], cur='', d=0;
-  for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
-  terms.push(cur);
-  var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
-    var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
-    return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
-  return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
 var ROOMS=[
  {name:'The Door', lesson:'Lesson 1 · Expressions, equations, formulae and identities', prop:'<div class="prop p-port"></div>', floor:'tiles',
   arrive:'You are back at the foot of the lighthouse. The round window still looks out over the sea, and the blue door has a new lock.',
@@ -457,15 +490,15 @@ function openLock(){
   var h='<h2 id="lt">'+r.name+'</h2><p class="sub">'+r.lesson+'</p><div class="q">'+r.q+'</div>';
   if('speechSynthesis' in window) h+='<div class="row"><button class="soft" id="readBtn">🔊 Read aloud</button></div>';
   h+='<div class="label">First, how does this idea feel to you now?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Getting there'],['new','Not yet sure']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
-  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button><div class="readas" id="readas" aria-live="polite"></div>')+'</div></div>';
+  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
   var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
   if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
   h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
-  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show');
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show'); if($('ans')) NEOPalette.attach($('ans'));
   if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
   [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
   if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
-  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; $('ans').oninput=function(){$('readas').innerHTML=readAs(this.value);}; }
+  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; }
   $('sideFromLock').onclick=function(){closeLock();takeSide();}; $('closeLock').onclick=closeLock;
   setTimeout(function(){var f=document.querySelector('[data-feel]');if(f)f.focus();},0);
 }
@@ -553,10 +586,10 @@ function examCorner(){
   $('planModal').classList.remove('show');
   kitModal('<h2 id="kt">The Exam Corner</h2><p class="sub">Optional practice for later. These questions are written like the ones in the International GCSE exam.</p>'+
     '<div class="info"><p>There is no clock, and <b>nothing here is recorded</b>. Try one, all of them, or none. You can look at a model answer whenever you like.</p></div>'+
-    EXAM.map(function(e,k){ return '<div class="exam"><p>'+(k+1)+'. '+e.q+' <span class="marks">(in the exam: '+e.marks+' marks)</span></p><div class="row"><input class="ans" id="ex'+k+'" autocomplete="off" aria-label="Your answer to question '+(k+1)+'"><button class="go" data-ex="'+k+'">Check</button><button class="soft" data-model="'+k+'">See a model answer</button><div class="readas" id="exra'+k+'"></div></div><div class="fb" id="exfb'+k+'" role="status"></div></div>'; }).join(''));
+    EXAM.map(function(e,k){ return '<div class="exam"><p>'+(k+1)+'. '+e.q+' <span class="marks">(in the exam: '+e.marks+' marks)</span></p><div class="row"><input class="ans" id="ex'+k+'" autocomplete="off" aria-label="Your answer to question '+(k+1)+'"><button class="go" data-ex="'+k+'">Check</button><button class="soft" data-model="'+k+'">See a model answer</button></div><div class="fb" id="exfb'+k+'" role="status"></div></div>'; }).join(''));
   [].forEach.call(document.querySelectorAll('[data-ex]'),function(b){ b.onclick=function(){ var k=+b.dataset.ex, v=$('ex'+k).value, f=$('exfb'+k); if(!v.trim()) return;
     var ok=EXAM[k].check(v); f.className='fb show '+(ok?'good':'try'); f.innerHTML=ok?'<b>Yes, that\'s right.</b> In the exam, show each step to earn every mark.':'Not quite yet. Have another go, or look at the model answer.'; }; });
-  EXAM.forEach(function(e,k){ $('ex'+k).oninput=function(){ $('exra'+k).innerHTML=readAs(this.value); }; });
+  EXAM.forEach(function(e,k){ NEOPalette.attach($('ex'+k)); });
   [].forEach.call(document.querySelectorAll('[data-model]'),function(b){ b.onclick=function(){ var k=+b.dataset.model, f=$('exfb'+k); f.className='fb show calm'; f.innerHTML='<b>Model answer</b><br>'+EXAM[k].model; }; });
 }
 

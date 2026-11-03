@@ -132,6 +132,19 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 .didyou{background:#fffaf0;border-left:6px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:1.05em}
 @media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
 @media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
+
+.mathpalette{margin:8px 0 0;flex-basis:100%}
+.palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px}
+.palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.palette-keys[hidden]{display:none}
+.palette-keys button{min-width:44px;padding:8px 10px;font-size:1.1em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+.palette-keys button:focus-visible,.palette-toggle:focus-visible{outline:3px solid #f2c14e;outline-offset:2px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;line-height:1.2}
+.fr>span{display:block;padding:0 .25em}
+.fr>span:first-child{border-bottom:2px solid currentColor}
+.readas{flex-basis:100%;margin-top:6px;font-size:1.05em}
+.readas:empty{display:none}
+.ralabel{font-size:.8em;opacity:.75;margin-right:4px}
 </style>
 </head>
 <body>
@@ -156,6 +169,45 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 <div class="modal" id="lockModal" role="dialog" aria-modal="true" aria-labelledby="lt"><div class="panel" id="lockPanel"></div></div>
 <div class="modal" id="kitModal" role="dialog" aria-modal="true" aria-labelledby="kt"><div class="panel" id="kitPanel"></div></div>
 <div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
+
+<script>window.NEO_PALETTE_SYMBOLS=["x", "y", "²", "−", "+", "(", ")", "="];</script>
+<script id="neoPalette">
+/* NEO symbols palette for expeditions (same keys and preview as the lessons). Symbols: window.NEO_PALETTE_SYMBOLS */
+var NEOPalette=(function(){
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+  // How a typed answer is read: everything after "/" up to the next + or - is the denominator.
+  function readAs(v){
+    var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
+    s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/').replace(/\^2/g,'²').replace(/\^3/g,'³');
+    var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
+    function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
+    function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
+    var terms=[], cur='', d=0;
+    for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
+    terms.push(cur);
+    var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
+      var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
+      return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
+    return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function attach(f){ if(!f||f.dataset.paletteReady) return; f.dataset.paletteReady='1';
+    var w=document.createElement('div'); w.className='mathpalette';
+    var t=document.createElement('button'); t.type='button'; t.className='palette-toggle'; t.textContent='√ Symbols'; t.setAttribute('aria-expanded','false');
+    var k=document.createElement('div'); k.className='palette-keys'; k.hidden=true;
+    var pv=document.createElement('div'); pv.className='readas'; pv.setAttribute('aria-live','polite');
+    function upd(){ pv.innerHTML=readAs(f.value); }
+    (window.NEO_PALETTE_SYMBOLS||[]).forEach(function(s){ var b=document.createElement('button'); b.type='button'; b.textContent=s; b.setAttribute('aria-label','Insert '+s); b.onclick=function(){ insert(f,s); upd(); }; k.appendChild(b); });
+    var fr=document.createElement('button'); fr.type='button'; fr.title='Insert a fraction bar (numerator / denominator)'; fr.setAttribute('aria-label','Insert a fraction bar');
+    fr.innerHTML=F('a','b'); fr.onclick=function(){ insert(f,'/'); upd(); }; k.appendChild(fr);
+    t.onclick=function(){ k.hidden=!k.hidden; t.setAttribute('aria-expanded',String(!k.hidden)); };
+    f.addEventListener('input',upd);
+    w.appendChild(t); w.appendChild(k);
+    var row=f.parentNode; row.parentNode.insertBefore(pv,row.nextSibling); row.parentNode.insertBefore(w,pv);
+  }
+  return {attach:attach,readAs:readAs,F:F};
+})();
+</script>
 
 <script>var NEO_APP_URL=<?= appUrl ?>;</script>
 <script>
@@ -221,12 +273,12 @@ var ROOMS=[
   show:'2 × 3 = 6 and 2 + 3 = 5, so <i>x</i>² + 5<i>x</i> + 6 = (<i>x</i> + 2)(<i>x</i> + 3). Expanding checks it.'},
  {name:'The Watch Room', lesson:'Lesson 5 · Adding and subtracting algebraic fractions', prop:'<div class="prop p-dials"><i></i><i></i><i></i></div>', floor:'tiles',
   arrive:'The Watch Room. The keeper\'s clocks and barometer line the wall, and a logbook lies open for the night\'s watch.',
-  q:'The logbook asks for <span class="big">2/5 + 1/3</span>.', speak:'The logbook asks for two fifths plus one third.', route:'Adding fractions (Number Systems, Lesson 1)',
+  q:'The logbook asks for <span class="big"><span class="fr"><span>2</span><span>5</span></span> + <span class="fr"><span>1</span><span>3</span></span></span>.', speak:'The logbook asks for two fifths plus one third.', route:'Adding fractions (Number Systems, Lesson 1)',
   check:function(v){var n=num(v); if(near(n,11/15,6e-4)) return 'right'; if(near(n,3/8,6e-4)) return 'tops'; if(near(n,3/15,6e-4)) return 'num'; return 'no';},
-  why:{tops:'The numerators and the denominators were added separately. Fractions need a common denominator before they can be added.', num:'The common denominator, 15, is right. Now change each numerator too: 2/5 = 6/15.'},
+  why:{tops:'The numerators and the denominators were added separately. Fractions need a common denominator before they can be added.', num:'The common denominator, 15, is right. Now change each numerator too: <span class="fr"><span>2</span><span>5</span></span> = 6/15.'},
   adult:{tops:'Added numerators and denominators separately (3/8): common denominators not yet secure.', num:'Found the common denominator but did not scale the numerators.'},
   hint:'Give both fractions the same denominator first. What number do 5 and 3 both go into?',
-  show:'Both go into 15: 2/5 = 6/15 and 1/3 = 5/15, so the total is 11/15.'},
+  show:'Both go into 15: <span class="fr"><span>2</span><span>5</span></span> = <span class="fr"><span>6</span><span>15</span></span> and <span class="fr"><span>1</span><span>3</span></span> = <span class="fr"><span>5</span><span>15</span></span>, so the total is 11/15.'},
  {name:'The Lens Room', lesson:'Lesson 6 · Changing the subject, harder cases', prop:'<div class="prop p-lens"></div>', floor:'',
   arrive:'The Lens Room. The great glass lens is kept here between nights, its rings bending light into one strong beam.',
   q:'Make <i>x</i> the subject of <span class="big"><i>y</i> = 3<i>x</i> + 2</span>. Type <i>x</i> = …', speak:'Make x the subject of y equals three x plus two.', route:'Changing the subject (Foundations: Formulae and Rearranging, Lesson 5)',
@@ -394,7 +446,7 @@ function openLock(){
   var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
   if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
   h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
-  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show');
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show'); if($('ans')) NEOPalette.attach($('ans'));
   if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
   [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
   if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
@@ -461,7 +513,7 @@ function showPlan(){
     '</table><p class="small"><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) is the most useful signal; it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud. Outcomes use the learner\'s own words and never a score.</p></details>';
   h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the beacon':'Back to the expedition')+'</button><button class="soft" id="printPlan">Print or save this floor plan</button>'+(done?'<button class="soft" id="againBtn">Start a new expedition</button>':'')+'</div>';
   h+='<div id="saveStatus" class="pack noprint" style="margin-top:12px">'+(done?'Saving your floor plan to your learner record…':'Your floor plan is saved when you reach the beacon.')+'</div>';
-  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Lighthouse v0.1</p>';
+  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Lighthouse v0.2</p>';
   $('planPanel').innerHTML=h; $('planModal').classList.add('show');
   $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
   $('printPlan').onclick=function(){$('adultDetails').open=true;window.print();};

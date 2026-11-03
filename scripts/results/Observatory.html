@@ -138,6 +138,19 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 .didyou{background:#fffaf0;border-left:6px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:1.05em}
 @media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
 @media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
+
+.mathpalette{margin:8px 0 0;flex-basis:100%}
+.palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px}
+.palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.palette-keys[hidden]{display:none}
+.palette-keys button{min-width:44px;padding:8px 10px;font-size:1.1em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+.palette-keys button:focus-visible,.palette-toggle:focus-visible{outline:3px solid #f2c14e;outline-offset:2px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;line-height:1.2}
+.fr>span{display:block;padding:0 .25em}
+.fr>span:first-child{border-bottom:2px solid currentColor}
+.readas{flex-basis:100%;margin-top:6px;font-size:1.05em}
+.readas:empty{display:none}
+.ralabel{font-size:.8em;opacity:.75;margin-right:4px}
 </style>
 </head>
 <body>
@@ -163,6 +176,45 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 <div class="modal" id="kitModal" role="dialog" aria-modal="true" aria-labelledby="kt"><div class="panel" id="kitPanel"></div></div>
 <div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
 
+<script>window.NEO_PALETTE_SYMBOLS=["²", "−", "×", "÷", "(", ")", "x"];</script>
+<script id="neoPalette">
+/* NEO symbols palette for expeditions (same keys and preview as the lessons). Symbols: window.NEO_PALETTE_SYMBOLS */
+var NEOPalette=(function(){
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+  // How a typed answer is read: everything after "/" up to the next + or - is the denominator.
+  function readAs(v){
+    var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
+    s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/').replace(/\^2/g,'²').replace(/\^3/g,'³');
+    var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
+    function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
+    function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
+    var terms=[], cur='', d=0;
+    for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
+    terms.push(cur);
+    var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
+      var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
+      return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
+    return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function attach(f){ if(!f||f.dataset.paletteReady) return; f.dataset.paletteReady='1';
+    var w=document.createElement('div'); w.className='mathpalette';
+    var t=document.createElement('button'); t.type='button'; t.className='palette-toggle'; t.textContent='√ Symbols'; t.setAttribute('aria-expanded','false');
+    var k=document.createElement('div'); k.className='palette-keys'; k.hidden=true;
+    var pv=document.createElement('div'); pv.className='readas'; pv.setAttribute('aria-live','polite');
+    function upd(){ pv.innerHTML=readAs(f.value); }
+    (window.NEO_PALETTE_SYMBOLS||[]).forEach(function(s){ var b=document.createElement('button'); b.type='button'; b.textContent=s; b.setAttribute('aria-label','Insert '+s); b.onclick=function(){ insert(f,s); upd(); }; k.appendChild(b); });
+    var fr=document.createElement('button'); fr.type='button'; fr.title='Insert a fraction bar (numerator / denominator)'; fr.setAttribute('aria-label','Insert a fraction bar');
+    fr.innerHTML=F('a','b'); fr.onclick=function(){ insert(f,'/'); upd(); }; k.appendChild(fr);
+    t.onclick=function(){ k.hidden=!k.hidden; t.setAttribute('aria-expanded',String(!k.hidden)); };
+    f.addEventListener('input',upd);
+    w.appendChild(t); w.appendChild(k);
+    var row=f.parentNode; row.parentNode.insertBefore(pv,row.nextSibling); row.parentNode.insertBefore(w,pv);
+  }
+  return {attach:attach,readAs:readAs,F:F};
+})();
+</script>
+
 <script>var NEO_APP_URL=<?= appUrl ?>;</script>
 <script>
 /* ---------- Answer reading: equivalent forms always accepted ---------- */
@@ -184,17 +236,17 @@ function $(id){return document.getElementById(id);}
 var ROOMS=[
  {name:'The Entrance Hall', lesson:'Lesson 1 · Fractions, decimals and percentages fluently', prop:'<div class="prop p-window"></div>', floor:'',
   arrive:'You step into the Entrance Hall. Starlight comes through the tall window. Ahead, a heavy door with a brass lock.',
-  q:'The lock asks for <span class="big">2/3 + 1/4</span>.', speak:'The lock asks for two thirds plus one quarter.', route:'Adding fractions',
+  q:'The lock asks for <span class="big"><span class="fr"><span>2</span><span>3</span></span> + <span class="fr"><span>1</span><span>4</span></span></span>.', speak:'The lock asks for two thirds plus one quarter.', route:'Adding fractions',
   check:function(v){var n=num(v); if(near(n,11/12,6e-4)) return 'right'; if(near(n,3/7,6e-4)) return 'tops'; return 'no';},
   why:{tops:'The tops and bottoms were added separately. Fractions need a common denominator before they can be added.'},
   adult:{tops:'Added numerators and denominators separately (3/7): worth revisiting why a common denominator is needed.'},
   hint:'Give both fractions the same denominator first. What number do 3 and 4 both go into?',
-  show:'Both go into 12: 2/3 = 8/12 and 1/4 = 3/12, so the total is 11/12.'},
+  show:'Both go into 12: <span class="fr"><span>2</span><span>3</span></span> = <span class="fr"><span>8</span><span>12</span></span> and <span class="fr"><span>1</span><span>4</span></span> = <span class="fr"><span>3</span><span>12</span></span>, so the total is 11/12.'},
  {name:'The Map Room', lesson:'Lesson 2 · Recurring decimals as fractions', prop:'<div class="prop p-charts"><svg viewBox="0 0 175 235" role="img" aria-label="Star chart: The Plough"><circle cx="14" cy="20" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="160" cy="30" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="30" cy="150" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="140" cy="190" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="70" cy="12" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="165" cy="120" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="12" cy="205" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="95" cy="160" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="150" cy="70" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="40" cy="95" r="0.9" fill="#c9d6ea" opacity=".7"/><polyline points="20,48 48,60 74,78 100,92 106,132 150,136 148,98 100,92" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="20" cy="48" r="3" fill="#fff6d8"/><circle cx="48" cy="60" r="3" fill="#fff6d8"/><circle cx="74" cy="78" r="3" fill="#fff6d8"/><circle cx="100" cy="92" r="3.5" fill="#fff6d8"/><circle cx="106" cy="132" r="3.5" fill="#fff6d8"/><circle cx="150" cy="136" r="3.5" fill="#fff6d8"/><circle cx="148" cy="98" r="3.5" fill="#fff6d8"/><rect x="6" y="196" width="163" height="32" rx="4" fill="#e9d7a8"/><text x="87.5" y="218" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#3a2a10">The Plough</text><text x="160" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#e9d7a8">N</text><path d="M160 26 l-3 8 h6z" fill="#e9d7a8"/></svg><svg viewBox="0 0 175 235" role="img" aria-label="Star chart: Orion"><circle cx="14" cy="20" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="160" cy="30" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="30" cy="150" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="140" cy="190" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="70" cy="12" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="165" cy="120" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="12" cy="205" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="95" cy="160" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="150" cy="70" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="40" cy="95" r="0.9" fill="#c9d6ea" opacity=".7"/><polyline points="87,26 52,48 74,108 56,172" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><polyline points="87,26 122,44 100,116 124,168" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><polyline points="52,48 122,44" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><polyline points="74,108 87,112 100,116" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="87" cy="26" r="2.5" fill="#fff6d8"/><circle cx="52" cy="48" r="4" fill="#fff6d8"/><circle cx="122" cy="44" r="3.5" fill="#fff6d8"/><circle cx="74" cy="108" r="3" fill="#fff6d8"/><circle cx="87" cy="112" r="3" fill="#fff6d8"/><circle cx="100" cy="116" r="3" fill="#fff6d8"/><circle cx="56" cy="172" r="3.5" fill="#fff6d8"/><circle cx="124" cy="168" r="4" fill="#fff6d8"/><rect x="6" y="196" width="163" height="32" rx="4" fill="#e9d7a8"/><text x="87.5" y="218" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#3a2a10">Orion</text><text x="160" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#e9d7a8">N</text><path d="M160 26 l-3 8 h6z" fill="#e9d7a8"/></svg><svg viewBox="0 0 175 235" role="img" aria-label="Star chart: Cassiopeia"><circle cx="14" cy="20" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="160" cy="30" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="30" cy="150" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="140" cy="190" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="70" cy="12" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="165" cy="120" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="12" cy="205" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="95" cy="160" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="150" cy="70" r="0.9" fill="#c9d6ea" opacity=".7"/><circle cx="40" cy="95" r="0.9" fill="#c9d6ea" opacity=".7"/><polyline points="20,84 54,124 86,88 118,128 152,92" fill="none" stroke="#9fc2ea" stroke-width="1.6" stroke-dasharray="3 3"/><circle cx="20" cy="84" r="3.5" fill="#fff6d8"/><circle cx="54" cy="124" r="3.5" fill="#fff6d8"/><circle cx="86" cy="88" r="4" fill="#fff6d8"/><circle cx="118" cy="128" r="3.5" fill="#fff6d8"/><circle cx="152" cy="92" r="3.5" fill="#fff6d8"/><rect x="6" y="196" width="163" height="32" rx="4" fill="#e9d7a8"/><text x="87.5" y="218" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#3a2a10">Cassiopeia</text><text x="160" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#e9d7a8">N</text><path d="M160 26 l-3 8 h6z" fill="#e9d7a8"/></svg></div>', floor:'',
   arrive:'The Map Room. Star charts of the Plough, Orion and Cassiopeia hang on the wall, each star carefully placed.',
   q:'One of these fractions makes a decimal that <b>goes on for ever</b>. Which one opens the lock?', speak:'One of these fractions makes a decimal that goes on for ever. Which one opens the lock?',
   choices:['3/8','1/3','1/4','7/10'], answer:'1/3', route:'Fractions to decimals',
-  why:{'3/8':'3/8 = 0.375. It stops after three digits.','1/4':'1/4 = 0.25. It stops after two digits.','7/10':'7/10 = 0.7. It stops after one digit.'},
+  why:{'3/8':'<span class="fr"><span>3</span><span>8</span></span> = 0.375. It stops after three digits.','1/4':'<span class="fr"><span>1</span><span>4</span></span> = 0.25. It stops after two digits.','7/10':'<span class="fr"><span>7</span><span>10</span></span> = 0.7. It stops after one digit.'},
   adult:{'3/8':'Chose a terminating fraction: may not yet connect fractions with their decimal forms.','1/4':'Chose a terminating fraction: may not yet connect fractions with their decimal forms.','7/10':'Chose a terminating fraction: may not yet connect fractions with their decimal forms.'},
   hint:'Try dividing: which top number divided by its bottom number never comes out exactly?',
   show:'1 ÷ 3 = 0.3333… and the 3s never stop. That is a recurring decimal, written 0.3̇.'},
@@ -380,7 +432,7 @@ function openLock(){
   var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
   if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
   h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
-  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show');
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show'); if($('ans')) NEOPalette.attach($('ans'));
   if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
   [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
   if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
@@ -447,7 +499,7 @@ function showPlan(){
     '</table><p class="small"><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) is the most useful signal; it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud. Outcomes use the learner\'s own words and never a score.</p></details>';
   h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the dome':'Back to the expedition')+'</button><button class="soft" id="printPlan">Print or save this floor plan</button>'+(done?'<button class="soft" id="againBtn">Start a new expedition</button>':'')+'</div>';
   h+='<div id="saveStatus" class="pack noprint" style="margin-top:12px">'+(done?'Saving your floor plan to your learner record…':'Your floor plan is saved when you reach the dome.')+'</div>';
-  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Observatory v0.3</p>';
+  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Observatory v0.4</p>';
   $('planPanel').innerHTML=h; $('planModal').classList.add('show');
   $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
   $('printPlan').onclick=function(){$('adultDetails').open=true;window.print();};

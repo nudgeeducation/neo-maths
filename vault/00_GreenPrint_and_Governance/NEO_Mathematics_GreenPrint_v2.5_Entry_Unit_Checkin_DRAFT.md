@@ -25,8 +25,9 @@ The November milestone asks for end-of-unit assessments. Learners, supporting ad
 
 ## What has been done (3 November 2026)
 
-1. **Prototype:** Return to the Lighthouse (Intermediate, Algebraic Expressions and Identities): eight floors, start-to-now floor plan, adult view and confirmation, Exam Corner. In `vault/99_Working/Assessment_Prototypes`, made by `make_return.py` from the Lighthouse; QA harness `qa_lighthouse_return.js` (99 checks).
-2. **Exemplars** using a fictional learner, in `Assessment_Prototypes/Unit_Checkin_Pack`: the Unit Summary, the family summary, the maths conversation cards and the termly commissioner summary.
+1. **Prototype:** Return to the Lighthouse (Intermediate, Algebraic Expressions and Identities): eight floors, start-to-now floor plan, adult view and confirmation, Exam Corner. In `vault/99_Working/Assessment_Prototypes`, made by `make_return.py` from the Lighthouse; QA harness `qa_lighthouse_return.js` (120 checks). v0.2 adds the symbols palette.
+2. **The symbols palette in every expedition.** The four diagnostics (Observatory v0.4, Walled Garden v0.4, Inventor's Workshop v0.2, Lighthouse v0.2) and the check-in now have the lessons' √ Symbols palette on every typed answer, with a fraction key and a "Reads as" preview, and their fractions are shown with a horizontal bar. Typed denominators such as x(x + 1) are read the usual way. Added by `expedition_palette.py`; QA `qa_expedition_palette.js` (159 checks).
+3. **Exemplars** using a fictional learner, in `Assessment_Prototypes/Unit_Checkin_Pack`: the Unit Summary, the family summary, the maths conversation cards and the termly commissioner summary.
 
 ## Consequences, if agreed
 
