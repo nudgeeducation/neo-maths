@@ -103,7 +103,7 @@ A look back across the year, chosen by the learner, ending with a portfolio cele
 
 ## Points to confirm
 1. **Rhythm.** Drafted at 2 lessons a week (76 a year), as Year 9. At 3 a week (114), each unit could grow by about half, with more room for Reconnection.
-2. **Timing.** This overview is for Year 7 learners in 2026–27, but the milestone schedule builds Year 7 Autumn lessons in January–February 2027. If Year 7 learners are already enrolled, either the build starts sooner, or this year's Year 7 begins the sequence in January using the KS3 Interactive Library and Reconnection Routes until then. Agree which with the Director.
+2. **Timing.** A learner of Year 7 age enrolled in November 2026 and is unlikely to begin subject-specific work before January 2027; no start date is confirmed. To be ready, Unit 1 (with its diagnostic) and Unit 2 are built first, by early January, which matches the milestone schedule. That covers the first 16 lessons, about eight weeks at two a week. Until a start date is set, the learner can use the KS3 Interactive Library and Reconnection Routes. The unit diagnostics show where to begin, so the learner does not have to start at Unit 1.
 3. **Algebra.** The KS3 programme expects algebraic notation and simple equations early. The Vault Map places them in Year 8 (Algebra as a Language of Structure; Equations), with Year 7's pattern rules in Unit 3 as the bridge. Confirm, or add a short Year 7 algebra unit in Summer HT2 in place of part of the review.
 4. **Diagnostics and check-ins.** Confirm whether each unit's diagnostic and check-in sessions sit inside its lesson count or alongside it.
 5. **Year 8.** The Year 8 overview (December milestone) will follow the same format, so that Years 7, 8 and 9 read as one route.
