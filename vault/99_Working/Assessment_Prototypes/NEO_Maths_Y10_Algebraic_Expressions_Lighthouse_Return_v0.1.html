@@ -133,6 +133,12 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 @media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
 @media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
 .f.item{visibility:hidden!important}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;line-height:1.2}
+.fr>span{display:block;padding:0 .25em}
+.fr>span:first-child{border-bottom:2px solid currentColor}
+.readas{flex-basis:100%;margin-top:6px;font-size:1.05em}
+.readas:empty{display:none}
+.ralabel{font-size:.8em;opacity:.75;margin-right:4px}
 .journey{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;justify-content:center;margin-top:4px}
 .chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:rgba(0,0,0,.08)}
 .chip.now{background:#2f5f7a;color:#fff}
@@ -197,7 +203,32 @@ function evalAt(expr,letter,v){
 }
 function sameExpr(a,b,letter){ var t=[2.5,3,7,10.5,-4], ok=true; t.forEach(function(v){ var x=evalAt(a,letter,v), y=evalAt(b,letter,v); if(isNaN(x)||isNaN(y)||Math.abs(x-y)>1e-9) ok=false; }); return ok; }
 function expanded(v){ return !/[()]/.test(String(v)); }
-function tidy(v){ return String(v).toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,''); }
+// A typed fraction is read the usual way: everything after "/" up to the next + or − is the denominator,
+// so (3x+1)/x(x+1) means (3x+1) ÷ [x(x+1)], not [(3x+1) ÷ x] × (x+1).
+function wrapDen(s){ var out='', i=0;
+  while(i<s.length){ var c=s.charAt(i); out+=c; i++;
+    if(c!=='/') continue;
+    var j=i, d=0; if(s.charAt(j)==='-'||s.charAt(j)==='+') j++;
+    for(;j<s.length;j++){ var ch=s.charAt(j); if(ch==='(') d++; else if(ch===')'){ if(d===0) break; d--; } else if(d===0&&(ch==='+'||ch==='-'||ch==='/'||ch==='=')) break; }
+    out+='('+s.slice(i,j)+')'; i=j; }
+  return out; }
+function tidy(v){ return wrapDen(String(v).toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/')); }
+// A stacked fraction with a horizontal bar.
+function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+// "Reads as": show how a typed answer is read, with fractions stacked.
+function readAs(v){
+  var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
+  s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/\^2/g,'²').replace(/\^3/g,'³');
+  var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
+  function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
+  function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
+  var terms=[], cur='', d=0;
+  for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
+  terms.push(cur);
+  var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
+    var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
+    return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
+  return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
 var ROOMS=[
  {name:'The Door', lesson:'Lesson 1 · Expressions, equations, formulae and identities', prop:'<div class="prop p-port"></div>', floor:'tiles',
   arrive:'You are back at the foot of the lighthouse. The round window still looks out over the sea, and the blue door has a new lock.',
@@ -226,7 +257,7 @@ var ROOMS=[
   show:'(<i>x</i> + 1)(<i>x</i> + 2) = <i>x</i>² + 3<i>x</i> + 2. Times (<i>x</i> − 3): <i>x</i>³ + 3<i>x</i>² + 2<i>x</i> − 3<i>x</i>² − 9<i>x</i> − 6 = <i>x</i>³ − 7<i>x</i> − 6.'},
  {name:'The Chart Room', lesson:'Lesson 4 · Simplifying algebraic fractions', prop:'<div class="prop p-chart">'+CHART+'</div>', floor:'',
   arrive:'The Chart Room. A new chart is pinned to the wall, with a shorter channel marked between the rocks.',
-  q:'Simplify <span class="big">(<i>x</i>² + 5<i>x</i> + 6) / (<i>x</i> + 3)</span>.', speak:'Simplify: x squared plus five x plus six, all over x plus three.', route:'Lesson 4 Practice Companion: factorise, then cancel common factors',
+  q:'Simplify <span class="big">'+F('<i>x</i>² + 5<i>x</i> + 6','<i>x</i> + 3')+'</span>.', speak:'Simplify: x squared plus five x plus six, all over x plus three.', route:'Lesson 4 Practice Companion: factorise, then cancel common factors',
   check:function(v){ var s=tidy(v); if(sameExpr(s,'x+2','x')) return /\//.test(s)?'notyet':'right'; if(sameExpr(s,'x^2+5x+2','x')) return 'terms'; if(sameExpr(s,'x+3','x')) return 'other'; if(sameExpr(s,'x^2+4x+2','x')||sameExpr(s,'x^2+5x','x')) return 'terms'; return 'no'; },
   why:{notyet:'That is equal, but it can still be simplified: cancel the common factor.', terms:'It looks as if separate terms were cancelled. Only <b>factors</b> can cancel: factorise the numerator first.', other:'Factorise the numerator and see which bracket matches the denominator.'},
   adult:{notyet:'Did not finish cancelling.', terms:'Cancelled terms rather than factors: the key misconception for algebraic fractions.', other:'Factorised but cancelled the wrong bracket.'},
@@ -234,20 +265,20 @@ var ROOMS=[
   show:'<i>x</i>² + 5<i>x</i> + 6 = (<i>x</i> + 2)(<i>x</i> + 3). The factor (<i>x</i> + 3) cancels, leaving <i>x</i> + 2 (for <i>x</i> ≠ −3).'},
  {name:'The Watch Room', lesson:'Lesson 5 · Adding and subtracting algebraic fractions', prop:'<div class="prop p-dials"><i></i><i></i><i></i></div>', floor:'tiles',
   arrive:'The Watch Room. The logbook is open at a fresh page for tonight\'s watch.',
-  q:'Write as a single fraction: <span class="big">1/<i>x</i> + 2/(<i>x</i> + 1)</span>', speak:'Write as a single fraction: one over x, plus two over x plus one.', route:'Lesson 5 Practice Companion: a common denominator for algebraic fractions',
+  q:'Write as a single fraction: <span class="big">'+F('1','<i>x</i>')+' + '+F('2','<i>x</i> + 1')+'</span>', speak:'Write as a single fraction: one over x, plus two over x plus one.', route:'Lesson 5 Practice Companion: a common denominator for algebraic fractions',
   check:function(v){ var s=tidy(v); if(sameExpr(s,'(3x+1)/(x*(x+1))','x')) return (s.split('/').length===2)?'right':'single'; if(sameExpr(s,'3/(2x+1)','x')) return 'tops'; if(sameExpr(s,'3/(x*(x+1))','x')) return 'num'; return 'no'; },
-  why:{single:'That has the right value, but it is not yet one fraction. Combine everything over one common denominator.', tops:'The numerators and the denominators were added separately. Algebraic fractions need a common denominator, just like number fractions.', num:'The common denominator <i>x</i>(<i>x</i> + 1) is right. Now change each numerator too: 1/<i>x</i> becomes (<i>x</i> + 1)/<i>x</i>(<i>x</i> + 1).'},
+  why:{single:'That has the right value, but it is not yet one fraction. Combine everything over one common denominator.', tops:'The numerators and the denominators were added separately. Algebraic fractions need a common denominator, just like number fractions.', num:'The common denominator <i>x</i>(<i>x</i> + 1) is right. Now change each numerator too: '+F('1','<i>x</i>')+' becomes '+F('<i>x</i> + 1','<i>x</i>(<i>x</i> + 1)')+'.'},
   adult:{tops:'Added numerators and denominators: common denominators not yet transferred to algebra.', num:'Found the common denominator but did not scale the numerators.', single:'Value correct but not combined into one fraction.'},
   hint:'Use the common denominator <i>x</i>(<i>x</i> + 1). What does each numerator become?',
-  show:'1/<i>x</i> = (<i>x</i> + 1)/<i>x</i>(<i>x</i> + 1) and 2/(<i>x</i> + 1) = 2<i>x</i>/<i>x</i>(<i>x</i> + 1). Adding the numerators: (3<i>x</i> + 1)/<i>x</i>(<i>x</i> + 1).'},
+  show:''+F('1','<i>x</i>')+' = '+F('<i>x</i> + 1','<i>x</i>(<i>x</i> + 1)')+' and '+F('2','<i>x</i> + 1')+' = '+F('2<i>x</i>','<i>x</i>(<i>x</i> + 1)')+'. Adding the numerators: '+F('3<i>x</i> + 1','<i>x</i>(<i>x</i> + 1)')+'.'},
  {name:'The Lens Room', lesson:'Lesson 6 · Changing the subject, harder cases', prop:'<div class="prop p-lens"></div>', floor:'',
   arrive:'The Lens Room. The great lens is back on its stand, its rings catching the light.',
-  q:'Make <i>x</i> the subject of <span class="big"><i>y</i> = (<i>x</i> + 2)/(<i>x</i> − 1)</span>. Type <i>x</i> = …', speak:'Make x the subject of y equals x plus two, over x minus one.', route:'Lesson 6 Practice Companion: when the subject appears twice',
+  q:'Make <i>x</i> the subject of <span class="big"><i>y</i> = '+F('<i>x</i> + 2','<i>x</i> − 1')+'</span>. Type <i>x</i> = …', speak:'Make x the subject of y equals x plus two, over x minus one.', route:'Lesson 6 Practice Companion: when the subject appears twice',
   check:function(v){ var t=tidy(v).replace(/^x=/,''); if(/x/.test(t)) return 'stillx'; if(sameExpr(t,'(y+2)/(y-1)','y')) return 'right'; if(sameExpr(t,'(y-2)/(y+1)','y')||sameExpr(t,'(y-2)/(y-1)','y')||sameExpr(t,'(y+2)/(y+1)','y')) return 'sign'; return 'no'; },
   why:{stillx:'There is still an <i>x</i> on the right-hand side. Collect every <i>x</i> term on one side, then factorise.', sign:'Nearly: check the signs as you collect the terms.'},
   adult:{stillx:'Left x on both sides: collecting and factorising the subject not yet secure.', sign:'Method right, sign slip when collecting terms.'},
   hint:'Multiply both sides by (<i>x</i> − 1). Collect the <i>x</i> terms on one side, then take <i>x</i> out as a factor.',
-  show:'<i>y</i>(<i>x</i> − 1) = <i>x</i> + 2, so <i>xy</i> − <i>y</i> = <i>x</i> + 2. Then <i>xy</i> − <i>x</i> = <i>y</i> + 2, so <i>x</i>(<i>y</i> − 1) = <i>y</i> + 2 and <i>x</i> = (<i>y</i> + 2)/(<i>y</i> − 1).'},
+  show:'<i>y</i>(<i>x</i> − 1) = <i>x</i> + 2, so <i>xy</i> − <i>y</i> = <i>x</i> + 2. Then <i>xy</i> − <i>x</i> = <i>y</i> + 2, so <i>x</i>(<i>y</i> − 1) = <i>y</i> + 2 and <i>x</i> = '+F('<i>y</i> + 2','<i>y</i> − 1')+'.'},
  {name:'The Gallery', lesson:'Lesson 7 · Algebraic proof', prop:'<div class="prop p-gallery"></div>', floor:'tiles',
   arrive:'The Gallery. From the balcony you can see the whole coastline you have travelled.',
   q:'Prove that the sum of three consecutive whole numbers is a multiple of 3.<br><i>n</i> + (<i>n</i> + 1) + (<i>n</i> + 2) = 3<i>n</i> + 3 = … Which line finishes the proof?', speak:'Prove that the sum of three consecutive whole numbers is a multiple of three. n plus n plus one plus n plus two equals three n plus three, equals what? Which line finishes the proof?',
@@ -258,9 +289,9 @@ var ROOMS=[
   show:'3<i>n</i> + 3 = 3(<i>n</i> + 1). Since <i>n</i> + 1 is a whole number, the sum is 3 × a whole number: always a multiple of 3. ∎'},
  {name:'The Lantern', lesson:'Lesson 8 · Function notation, domain and range', prop:'<div class="prop p-lamp"></div>', floor:'',
   arrive:'The Lantern. The great lamp is lit now, turning slowly above you.',
-  q:'f(<i>x</i>) = 1/(<i>x</i> − 4). Which value must be <b>excluded</b> from the domain?', speak:'f of x equals one over x minus four. Which value must be excluded from the domain?', route:'Lesson 8 Practice Companion: domain and excluded values',
+  q:'f(<i>x</i>) = '+F('1','<i>x</i> − 4')+'. Which value must be <b>excluded</b> from the domain?', speak:'f of x equals one over x minus four. Which value must be excluded from the domain?', route:'Lesson 8 Practice Companion: domain and excluded values',
   check:function(v){var n=num(String(v).replace(/^\s*x\s*=\s*/i,'')); if(near(n,4)) return 'right'; if(near(n,-4)) return 'sign'; if(near(n,0)) return 'zero'; if(near(n,1)) return 'num'; return 'no';},
-  why:{sign:'Put −4 into the denominator: −4 − 4 = −8, which is fine. Which input makes <i>x</i> − 4 zero?', zero:'f(0) = 1/(0 − 4) = −1/4, which is fine. The denominator is <i>x</i> − 4, not <i>x</i>.', num:'The numerator can be anything. It is the <b>denominator</b> that can never be zero.'},
+  why:{sign:'Put −4 into the denominator: −4 − 4 = −8, which is fine. Which input makes <i>x</i> − 4 zero?', zero:'f(0) = '+F('1','0 − 4')+' = −'+F('1','4')+', which is fine. The denominator is <i>x</i> − 4, not <i>x</i>.', num:'The numerator can be anything. It is the <b>denominator</b> that can never be zero.'},
   adult:{sign:'Sign error finding the excluded value.', zero:'Excluded 0 by habit: may be thinking of 1/x.', num:'Looked at the numerator: which part cannot be zero not yet secure.'},
   hint:'Which input would make the machine jam? When is <i>x</i> − 4 equal to zero?',
   show:'<i>x</i> − 4 = 0 when <i>x</i> = 4, and you cannot divide by zero. So 4 is excluded: the domain is all numbers except 4.'}
@@ -283,9 +314,9 @@ var EXAM=[
  {q:'Expand and simplify (<i>x</i> + 4)(<i>x</i> − 3)(2<i>x</i> + 1).', marks:3,
   check:function(v){ var s=tidy(v); return sameExpr(s,'2x^3+3x^2-23x-12','x')&&expanded(s); },
   model:'(<i>x</i> + 4)(<i>x</i> − 3) = <i>x</i>² + <i>x</i> − 12.<br>(<i>x</i>² + <i>x</i> − 12)(2<i>x</i> + 1) = 2<i>x</i>³ + <i>x</i>² + 2<i>x</i>² + <i>x</i> − 24<i>x</i> − 12<br>= 2<i>x</i>³ + 3<i>x</i>² − 23<i>x</i> − 12'},
- {q:'Simplify fully (<i>x</i>² − 9)/(<i>x</i>² + <i>x</i> − 6).', marks:3,
+ {q:'Simplify fully '+F('<i>x</i>² − 9','<i>x</i>² + <i>x</i> − 6')+'.', marks:3,
   check:function(v){ var s=tidy(v), ok=true; [4,5,7,-1.5,10].forEach(function(t){ var a=evalAt(s,'x',t), b=(t-3)/(t-2); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok&&!/\^2|²/.test(s); },
-  model:'<i>x</i>² − 9 = (<i>x</i> + 3)(<i>x</i> − 3) and <i>x</i>² + <i>x</i> − 6 = (<i>x</i> + 3)(<i>x</i> − 2).<br>Cancel (<i>x</i> + 3): the answer is (<i>x</i> − 3)/(<i>x</i> − 2).'},
+  model:'<i>x</i>² − 9 = (<i>x</i> + 3)(<i>x</i> − 3) and <i>x</i>² + <i>x</i> − 6 = (<i>x</i> + 3)(<i>x</i> − 2).<br>Cancel (<i>x</i> + 3): the answer is '+F('<i>x</i> − 3','<i>x</i> − 2')+'.'},
  {q:'f(<i>x</i>) = 3<i>x</i> − 5. Solve f(<i>x</i>) = 13.', marks:2,
   check:function(v){ return near(num(String(v).replace(/^\s*x\s*=\s*/i,'')),6); },
   model:'3<i>x</i> − 5 = 13, so 3<i>x</i> = 18 and <i>x</i> = 6. Check: f(6) = 18 − 5 = 13.'}
@@ -426,7 +457,7 @@ function openLock(){
   var h='<h2 id="lt">'+r.name+'</h2><p class="sub">'+r.lesson+'</p><div class="q">'+r.q+'</div>';
   if('speechSynthesis' in window) h+='<div class="row"><button class="soft" id="readBtn">🔊 Read aloud</button></div>';
   h+='<div class="label">First, how does this idea feel to you now?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Getting there'],['new','Not yet sure']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
-  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
+  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button><div class="readas" id="readas" aria-live="polite"></div>')+'</div></div>';
   var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
   if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
   h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
@@ -434,7 +465,7 @@ function openLock(){
   if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
   [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
   if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
-  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; }
+  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; $('ans').oninput=function(){$('readas').innerHTML=readAs(this.value);}; }
   $('sideFromLock').onclick=function(){closeLock();takeSide();}; $('closeLock').onclick=closeLock;
   setTimeout(function(){var f=document.querySelector('[data-feel]');if(f)f.focus();},0);
 }
@@ -522,9 +553,10 @@ function examCorner(){
   $('planModal').classList.remove('show');
   kitModal('<h2 id="kt">The Exam Corner</h2><p class="sub">Optional practice for later. These questions are written like the ones in the International GCSE exam.</p>'+
     '<div class="info"><p>There is no clock, and <b>nothing here is recorded</b>. Try one, all of them, or none. You can look at a model answer whenever you like.</p></div>'+
-    EXAM.map(function(e,k){ return '<div class="exam"><p>'+(k+1)+'. '+e.q+' <span class="marks">(in the exam: '+e.marks+' marks)</span></p><div class="row"><input class="ans" id="ex'+k+'" autocomplete="off" aria-label="Your answer to question '+(k+1)+'"><button class="go" data-ex="'+k+'">Check</button><button class="soft" data-model="'+k+'">See a model answer</button></div><div class="fb" id="exfb'+k+'" role="status"></div></div>'; }).join(''));
+    EXAM.map(function(e,k){ return '<div class="exam"><p>'+(k+1)+'. '+e.q+' <span class="marks">(in the exam: '+e.marks+' marks)</span></p><div class="row"><input class="ans" id="ex'+k+'" autocomplete="off" aria-label="Your answer to question '+(k+1)+'"><button class="go" data-ex="'+k+'">Check</button><button class="soft" data-model="'+k+'">See a model answer</button><div class="readas" id="exra'+k+'"></div></div><div class="fb" id="exfb'+k+'" role="status"></div></div>'; }).join(''));
   [].forEach.call(document.querySelectorAll('[data-ex]'),function(b){ b.onclick=function(){ var k=+b.dataset.ex, v=$('ex'+k).value, f=$('exfb'+k); if(!v.trim()) return;
     var ok=EXAM[k].check(v); f.className='fb show '+(ok?'good':'try'); f.innerHTML=ok?'<b>Yes, that\'s right.</b> In the exam, show each step to earn every mark.':'Not quite yet. Have another go, or look at the model answer.'; }; });
+  EXAM.forEach(function(e,k){ $('ex'+k).oninput=function(){ $('exra'+k).innerHTML=readAs(this.value); }; });
   [].forEach.call(document.querySelectorAll('[data-model]'),function(b){ b.onclick=function(){ var k=+b.dataset.model, f=$('exfb'+k); f.className='fb show calm'; f.innerHTML='<b>Model answer</b><br>'+EXAM[k].model; }; });
 }
 
