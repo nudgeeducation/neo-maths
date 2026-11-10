@@ -140,6 +140,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Place_Value/Lesson_06_Which_Is_Larger/NEO_Maths_Y7_PlaceValue_Lesson_06_Which_Is_Larger_v0.1.html",
     "pv-07-rounding":
         "02_Foundations/01_Lessons/Place_Value/Lesson_07_Rounding/NEO_Maths_Y7_PlaceValue_Lesson_07_Rounding_v0.1.html",
+    "pv-08-representations":
+        "02_Foundations/01_Lessons/Place_Value/Lesson_08_Representations/NEO_Maths_Y7_PlaceValue_Lesson_08_Representations_v0.1.html",
     "ae-08-functions":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "shapes-06-platonic-solids":

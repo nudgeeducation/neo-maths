@@ -492,6 +492,14 @@
           "file": "lessons/place-value/07-rounding.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-08-representations",
+          "num": "Lesson 08",
+          "title": "One number, many representations",
+          "file": "lessons/place-value/08-one-number-many-representations.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
