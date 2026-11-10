@@ -484,6 +484,14 @@
           "file": "lessons/place-value/06-which-is-larger.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-07-rounding",
+          "num": "Lesson 07",
+          "title": "Rounding: which is nearest?",
+          "file": "lessons/place-value/07-rounding.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
