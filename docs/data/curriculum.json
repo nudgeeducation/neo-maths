@@ -444,6 +444,14 @@
           "file": "lessons/place-value/01-what-is-a-digit-worth.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-02-ten-times",
+          "num": "Lesson 02",
+          "title": "Ten times bigger, ten times smaller",
+          "file": "lessons/place-value/02-ten-times-bigger-smaller.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
