@@ -468,6 +468,14 @@
           "file": "lessons/place-value/04-beyond-the-point.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-05-partitioning",
+          "num": "Lesson 05",
+          "title": "Partitioning in more than one way",
+          "file": "lessons/place-value/05-partitioning.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

@@ -134,6 +134,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Place_Value/Lesson_03_Zero_Placeholder/NEO_Maths_Y7_PlaceValue_Lesson_03_Zero_Placeholder_v0.1.html",
     "pv-04-beyond-the-point":
         "02_Foundations/01_Lessons/Place_Value/Lesson_04_Beyond_the_Point/NEO_Maths_Y7_PlaceValue_Lesson_04_Beyond_the_Point_v0.1.html",
+    "pv-05-partitioning":
+        "02_Foundations/01_Lessons/Place_Value/Lesson_05_Partitioning/NEO_Maths_Y7_PlaceValue_Lesson_05_Partitioning_v0.1.html",
     "ae-08-functions":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "shapes-06-platonic-solids":
