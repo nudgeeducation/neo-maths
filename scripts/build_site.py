@@ -130,6 +130,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Place_Value/Lesson_01_What_Is_a_Digit_Worth/NEO_Maths_Y7_PlaceValue_Lesson_01_Digit_Worth_v0.1.html",
     "pv-02-ten-times":
         "02_Foundations/01_Lessons/Place_Value/Lesson_02_Ten_Times/NEO_Maths_Y7_PlaceValue_Lesson_02_Ten_Times_v0.1.html",
+    "pv-03-zero-placeholder":
+        "02_Foundations/01_Lessons/Place_Value/Lesson_03_Zero_Placeholder/NEO_Maths_Y7_PlaceValue_Lesson_03_Zero_Placeholder_v0.1.html",
     "ae-08-functions":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "shapes-06-platonic-solids":

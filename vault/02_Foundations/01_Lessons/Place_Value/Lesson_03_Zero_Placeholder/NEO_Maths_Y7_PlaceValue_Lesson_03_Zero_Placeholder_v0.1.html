@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Place Value: Zero as a placeholder</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<style>
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.claim{font-size:1.4em;text-align:center;padding:6px 0;font-family:Georgia,'Times New Roman',serif}
+.mq{border-left:4px solid #c9b48a;background:#fffdf7;border-radius:8px;padding:8px 12px;margin:8px 0}
+.pvwrap{overflow-x:auto;padding-bottom:4px}
+.pvchart{border-collapse:collapse;margin:8px auto;min-width:420px}
+.pvchart th{font-size:.78em;font-weight:600;color:#3f4d42;background:#eef4e8;border:1px solid #c9d6bf;padding:6px 4px;width:13%;line-height:1.2}
+.pvchart th.gm{background:#f6ecd4;border-color:#dccaa0}
+.pvchart th.gt{background:#e3eef5;border-color:#bdd2e0}
+.pvchart td{border:1px solid #c9d6bf;text-align:center;padding:0;height:58px}
+.pvchart button.dg{width:100%;height:58px;border:0;background:#fff;font-family:Georgia,'Times New Roman',serif;font-size:1.9em;cursor:pointer;color:#1f2a33}
+.pvchart button.dg:hover,.pvchart button.dg:focus-visible{background:#fff6d8;outline:3px solid #f2c14e;outline-offset:-3px}
+.pvchart button.dg.on{background:#f2c14e}
+.pvchart td.empty{background:#f7f5ef}
+.mag{max-width:460px;margin:10px auto;border:3px solid #8f6a26;border-radius:999px;background:radial-gradient(circle at 30% 30%,#fffdf3,#f6ecd4);padding:14px 22px;text-align:center;min-height:84px}
+.mag .big{font-family:Georgia,'Times New Roman',serif;font-size:1.6em}
+.mag .words{color:#5c6b60}
+.ctx{text-align:center;color:#5c6b60;margin:4px 0}
+.numline{text-align:center;font-family:Georgia,'Times New Roman',serif;font-size:1.6em;letter-spacing:.04em}
+.grp{display:inline-block;padding:0 6px;border-radius:6px;margin:0 2px}
+.grp.m{background:#f6ecd4}.grp.t{background:#e3eef5}.grp.o{background:#e5efe6}
+.stepnote{font-weight:700;color:#8f6a26;min-height:1.4em;text-align:center}
+.claim .small,.numline .small{font-size:15px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:0;color:#5c6b60;margin-top:4px}
+.pvchart .abbr{display:none}
+@media (max-width:640px){.pvchart{min-width:0;width:100%}.pvchart .full{display:none}.pvchart .abbr{display:inline}.pvchart button.dg{font-size:1.5em;height:50px}.pvchart td{height:50px}}
+.pvkey{display:none;font-size:.85em;color:#5c6b60;text-align:center}
+@media (max-width:640px){.pvkey{display:block}}
+.pvchart{width:100%;max-width:640px}
+.pvchart th{width:10.6%}
+.pvchart th.pt,.pvchart td.pt{width:16px}
+.pvchart th.gd{background:#f3eef8;border-color:#d5c8e6}
+.pvchart td.pt,.pvchart th.pt{width:14px;min-width:14px;padding:0;border-left:0;border-right:0;background:transparent;font-size:1.6em;font-weight:700;color:#3f4d42}
+.pvchart td.dec{background:#faf8fc}
+.pvchart .dg.ph{color:#9aa39c}
+.pvchart .dg.slide{transition:transform .8s ease}
+.pvchart .dg.appear{animation:pvfade .8s ease}
+@keyframes pvfade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.pvchart .dg.slide{transition:none}.pvchart .dg.appear{animation:none}}
+.eqn{text-align:center;font-family:Georgia,'Times New Roman',serif;font-size:1.35em;min-height:1.5em}
+.trail{font-size:.9em;color:#5c6b60;text-align:center}
+.myth{border:1px dashed #b98a2e;border-radius:8px;background:#fffaf0;padding:10px 14px;font-size:1.15em;text-align:center}
+.pvchart button.zt{width:100%;height:58px;border:0;padding:0;min-width:0;background:#fff7e0;font-family:Georgia,serif;font-size:1.9em;cursor:pointer;color:#8f6a26;text-decoration:underline dotted}
+.pvchart .dgs{display:block;line-height:58px;font-family:Georgia,serif;font-size:1.9em}
+@media (max-width:640px){.pvchart button.zt{font-size:1.5em;height:50px}.pvchart .dgs{font-size:1.5em;line-height:50px}}
+.pvchart button.zt:hover,.pvchart button.zt:focus-visible{background:#f2c14e;color:#1f2a33;outline:3px solid #f2c14e;outline-offset:-3px}
+.pvchart .dg.moved{color:#b0412f}
+.verdict{text-align:center;font-weight:700;font-size:1.15em;min-height:1.4em}
+.verdict.chg{color:#b0412f}.verdict.same{color:#2f7a45}
+.fix{border:1px dashed #b98a2e;border-radius:8px;background:#fffaf0;padding:10px 14px;text-align:center;font-size:1.1em}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Place Value</h1>
+<h2>Zero as a placeholder</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>When does a zero change a number?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — a zero is worth nothing, but it can hold a column open.</p>
+<p><b>Stepping Stone:</b> use <b>zero as a placeholder</b>, explain when a zero <b>changes</b> a number and when it does <b>not</b>, and read and write numbers that contain zeros.</p>
+<p><b>You will need:</b> what each column is worth (Lesson 1), and the optional <b>✏️ Scratchpad</b>. No calculator needed.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 15 · Move 7 · Reflect 8 · Create 10 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y7_PlaceValue_Lesson_03_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y7_PlaceValue_Lesson_03_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write 4,050 in a place-value chart. Cross out the first 0 and slide the 4 into the empty column. What number is left?')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION (main activity) ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — The Zero Detective</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">A <b>zero</b> is worth nothing, but it can <b>hold a column open</b>. In 4,050 the first 0 holds the hundreds column: without it, the 4 slides into the hundreds and the number becomes 450. A zero <b>at the front</b> of a whole number, like 0450, or <b>at the end</b> of a decimal, like 3.50, holds nothing and can go.</p>
+</div>
+<p><b>What to do:</b> choose a number. Tap any zero to take it away, and see what is left.</p>
+<p><b>What you are trying to notice:</b> when a zero goes, do any other digits have to slide into a new column? If they do, the number changes.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🕵️ Tap a zero</h3>
+<div id="zdPick" class="buttonrow" style="justify-content:center"></div>
+<div class="pvwrap"><table class="pvchart" aria-label="The number in a place-value chart"><thead id="zdHead"></thead><tbody><tr id="zdRow"></tr></tbody></table></div>
+<p class="pvkey">M millions · HTh hundred thousands · TTh ten thousands · Th thousands · H hundreds · T tens · O ones · t tenths · h hundredths</p>
+<div id="zdVerdict" class="verdict" aria-live="polite"></div>
+<div class="pvwrap"><table class="pvchart" aria-label="The number with that zero taken away"><thead id="zaHead"></thead><tbody><tr id="zaRow"></tr></tbody></table></div>
+<p id="zdNote" class="stepnote" aria-live="polite"></p>
+<div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div><div id="zqIn" class="buttonrow"><input id="zqA" class="numin" style="max-width:190px" aria-label="Your answer" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div></div>
+<div id="zqRead" class="feedback" aria-live="polite"></div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why can some zeros go and not others?</b> A pattern suggests; a reason convinces.</p>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+<p><b>Carry this forward:</b> a zero matters when it has digits beyond it (further from the decimal point) that would slide into new columns without it.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Words to figures</summary>
+<p><b>What to do:</b> write each number in figures. Every one needs at least one placeholder zero.</p>
+<p><b>What you are trying to notice:</b> work out how many columns the number needs first, then fill the empty ones with zeros.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">✍️ Write it in figures</h3>
+<div id="wfCount" class="small" style="text-align:center"></div>
+<div id="wfQ" class="claim"></div>
+<div class="buttonrow" style="justify-content:center"><input id="wfIn" class="numin" style="max-width:190px" aria-label="Your answer" onkeydown="if(event.key==='Enter')wfCheck()"><button onclick="wfCheck()">✅ Check</button></div>
+<div id="wfRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wfNext()">Next →</button></div>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Find and fix</summary>
+<p><b>What to do:</b> each answer below has a zero slip. Decide what went wrong.</p>
+<p><b>What you are trying to notice:</b> most zero slips come from losing a column or putting a digit in the wrong one.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🔧 What went wrong?</h3>
+<div id="ffCount" class="small" style="text-align:center"></div>
+<div id="ffQ" class="fix"></div>
+<div id="ffOpts" class="buttonrow" style="justify-content:center"></div>
+<div id="ffRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ffNext()">Next answer →</button></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Zero builder</summary>
+<p><b>What to do:</b> put zeros where they are needed, and take them away where they are not.</p>
+<p><b>What you are trying to notice:</b> in a whole number, every zero after the first digit holds a column. In a decimal, zeros at the end hold nothing.</p>
+<div class="toolbox">
+<h3 style="margin-top:0">🧱 Build it</h3>
+<div id="zbCount" class="small" style="text-align:center"></div>
+<div id="zbQ" class="mq"></div>
+<div class="buttonrow" style="justify-content:center"><input id="zbIn" class="numin" style="max-width:190px" aria-label="Your number" onkeydown="if(event.key==='Enter')zbCheck()"><button onclick="zbCheck()">✅ Check</button></div>
+<div id="zbRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="zbNext()">Next case →</button></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>Nothing, holding a place. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> zero is the only digit that is worth nothing in every column, yet it is the one that makes large numbers possible.</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: intellectual.</b> The mathematics is the nourishment, so we name honestly what the <em>learning</em> feeds.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>care with detail</b>. One missing zero turns £4,050 into £450. Noticing small things that matter is a skill for maths and for life.</p>
+<p class="small">Carry one idea forward: when you write a number, count its columns.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — The zero guide</summary>
+<p><b>Your task:</b> make a short guide that helps someone decide when a zero matters.</p>
+<ul>
+<li>Show two numbers where taking away a zero changes the number, and explain why using a place-value chart.</li>
+<li>Show two numbers where taking away a zero changes nothing, and explain why.</li>
+<li>Write three numbers with zeros in words and in figures.</li>
+<li><span class="stretch">stretch</span> Write a rule, in your own words, for when a zero can safely be left out, and test it on a number of your own.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_PLACE_VALUE_ZERO_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows a zero can matter.</td><td>Shows a zero that matters and one that does not.</td><td>Explains each case using columns.</td><td>States a rule that covers every case.</td></tr>
+<tr><td><b>Application</b></td><td>Writes one number with a zero.</td><td>Writes most numbers correctly.</td><td>Writes every number correctly, in words and figures.</td><td>Also completes the stretch.</td></tr>
+<tr><td><b>Communication</b></td><td>Shows examples.</td><td>Uses a place-value chart.</td><td>Uses <i>placeholder</i> and <i>column</i> precisely.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one number.</td><td>Checks words against figures.</td><td>Checks every number by reading it back.</td><td>Tests the rule on a tricky number.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Zero as a placeholder — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type numbers with or without commas, or in words. No calculator needed.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw a place-value chart. Which columns are empty? Fill them with zeros.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=[","];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+
+/* ---------------- Reading a number, in any form (QA gate 6a) ---------------- */
+// Figures with commas or spaces (70,000 · 70 000 · 70000), number words up to the millions
+// ("four million, seventy-three thousand, two hundred and fifty"), and column counts ("7 ten thousands").
+var ONES={zero:0,nought:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+var TENS={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+function wordsNum(str){
+  var s=String(str).toLowerCase().replace(/[,]/g,' ').replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  var parts=s.split(' '), total=0, cur=0, used=false;
+  for(var i=0;i<parts.length;i++){ var w=parts[i];
+    if(w==='a') continue;
+    if(/^\d+$/.test(w)){ if(!/^(hundred|thousand|million)s?$/.test(parts[i+1]||'')) return NaN; cur+=+w; used=true; }
+    else if(ONES[w]!=null){ cur+=ONES[w]; used=true; }
+    else if(TENS[w]!=null){ cur+=TENS[w]; used=true; }
+    else if(w==='hundred'||w==='hundreds'){ cur=(cur||1)*100; used=true; }
+    else if(w==='thousand'||w==='thousands'){ total+=(cur||1)*1000; cur=0; used=true; }
+    else if(w==='million'||w==='millions'){ total+=(cur||1)*1000000; cur=0; used=true; }
+    else if(w==='point'){ var dec='', j; for(j=i+1;j<parts.length;j++){ if(ONES[parts[j]]!=null&&ONES[parts[j]]<10) dec+=ONES[parts[j]]; else if(/^\d$/.test(parts[j])) dec+=parts[j]; else return NaN; } return dec&&used?total+cur+parseFloat('0.'+dec):NaN; }
+    else return NaN; }
+  return used?total+cur:NaN;
+}
+// "7 ten thousands", "seven hundred thousands", "40 thousands": a count of one column.
+var COLS={'ones':1,'units':1,'tens':10,'hundreds':100,'thousands':1000,'ten thousands':10000,'hundred thousands':100000,'millions':1000000};
+function columnNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\s+/g,' ').trim(), m;
+  m=s.match(/^(.+?)\s+(ten thousands?|hundred thousands?|millions?|thousands?|hundreds?|tens?|ones?|units?)$/); if(!m) return NaN;
+  // only a plain count before a column name: "7 hundreds", "seven ten thousands", not "sixty thousand, four hundred"
+  if(/hundred|thousand|million|,/.test(m[1])) return NaN;
+  var plural=/s$/.test(m[2]), digits=/^\d+$/.test(m[1]); if(!plural&&!digits) return NaN;
+  var c=m[2].replace(/s?$/,'s'); if(!COLS[c]) return NaN;
+  var n=digits?+m[1]:wordsNum(m[1]);
+  return isNaN(n)?NaN:n*COLS[c];
+}
+function pvNum(v){
+  var s=String(v).trim().replace(/[−–]/g,'-');
+  if(!s) return NaN;
+  s=s.replace(/(\d)\s*½$/,'$1.5').replace(/^½$/,'0.5');
+  if(/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)||/^-?\d{1,3}( \d{3})+(\.\d+)?$/.test(s)||/^-?\d+(\.\d+)?$/.test(s)||/^-?\.\d+$/.test(s)) return +s.replace(/[, ]/g,'');
+  var f=s.match(/^(\d+)\s+(\d+)\s*\/\s*(\d+)$/); if(f&&+f[3]) return +f[1]+f[2]/f[3];
+  f=s.match(/^(\d+)\s*\/\s*(\d+)$/); if(f&&+f[2]) return f[1]/f[2];
+  var c=columnNum(s); if(!isNaN(c)) return c;
+  return wordsNum(s);
+}
+// 4073250 → "4,073,250"
+function fmt(n){ var p=String(n).split('.'); return p[0].replace(/\B(?=(\d{3})+(?!\d))/g,',')+(p[1]?'.'+p[1]:''); }
+// 70000 → "seventy thousand"
+function say(n){
+  if(n===0) return 'zero';
+  var small=['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  var tens=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+  function under100(x){ return x<20?small[x]:tens[Math.floor(x/10)]+(x%10?'-'+small[x%10]:''); }
+  function under1000(x){ var h=Math.floor(x/100), r=x%100; return (h?small[h]+' hundred':'')+(h&&r?' and ':'')+(r?under100(r):''); }
+  var m=Math.floor(n/1e6), t=Math.floor(n/1000)%1000, o=n%1000, out=[];
+  if(m) out.push(under1000(m)+' million');
+  if(t) out.push(under1000(t)+' thousand');
+  if(o) out.push((out.length&&o<100?'and ':'')+under1000(o));
+  return out.join(', ').replace(/, and /,' and ');
+}
+
+/* ---------------- The chart, for numbers written as text (so 0450 and 3.50 keep their zeros) ---------------- */
+var COLNAMES=['Millions','Hundred thousands','Ten thousands','Thousands','Hundreds','Tens','Ones','Tenths','Hundredths'];
+var COLABBR=['M','HTh','TTh','Th','H','T','O','t','h'];
+function head9(){ var h='<tr>'; COLNAMES.forEach(function(c,k){ if(k===7) h+='<th class="pt" aria-hidden="true"></th>'; h+='<th scope="col" class="'+(k===0?'gm':k<4?'gt':k>6?'gd':'')+'" title="'+c+'"><span class="full">'+c+'</span><span class="abbr" aria-hidden="true">'+COLABBR[k]+'</span></th>'; }); return h+'</tr>'; }
+// "4050" → column index of each character: whole digits end at the ones (6), decimals start at the tenths (7).
+function layout(str){ var p=str.split('.'), w=p[0], dd=p[1]||'', out=[];
+  for(var i=0;i<w.length;i++) out.push({ch:w.charAt(i),k:7-w.length+i,idx:i});
+  for(var j=0;j<dd.length;j++) out.push({ch:dd.charAt(j),k:7+j,idx:w.length+1+j});
+  return out; }
+function rowFor(str,opts){ opts=opts||{}; var cells=[], L=layout(str), i;
+  for(i=0;i<9;i++) cells.push(null); L.forEach(function(c){ if(c.k>=0&&c.k<9) cells[c.k]=c; });
+  var h=''; cells.forEach(function(c,k){ if(k===7) h+='<td class="pt" aria-label="decimal point">'+(str.indexOf('.')>=0?'•':'')+'</td>';
+    if(!c){ h+='<td class="empty'+(k>6?' dec':'')+'"></td>'; return; }
+    if(opts.tap&&c.ch==='0') h+='<td'+(k>6?' class="dec"':'')+'><button class="zt" onclick="zdTap('+c.idx+')" aria-label="Take away the zero in the '+COLNAMES[k].toLowerCase()+' column">0</button></td>';
+    else h+='<td'+(k>6?' class="dec"':'')+'><span class="dg dgs'+(opts.moved&&opts.moved.indexOf(c.idx)>=0?' moved':'')+'">'+c.ch+'</span></td>'; });
+  return h; }
+function show(str){ return str.indexOf('.')>=0?fmt(str.split('.')[0].replace(/^0+(?=\d)/,''))+'.'+str.split('.')[1]:fmt(str.replace(/^0+(?=\d)/,'')); }
+function asTyped(str){ var p=str.split('.'); if(p[0].length>1&&p[0].charAt(0)==='0') return str; return p[0].replace(/\B(?=(\d{3})+(?!\d))/g,',')+(p.length>1?'.'+p[1]:''); }
+
+/* ---------------- CONNECTION: the Zero Detective ---------------- */
+var ZD=['4050','0450','3.50','7006','20.04','100'];
+var zd={i:0,taps:0};
+function zdPickRender(){ document.getElementById('zdPick').innerHTML=ZD.map(function(z,k){ return '<button class="chip'+(k===zd.i?' used':'')+'" onclick="zdChoose('+k+')">'+asTyped(z)+'</button>'; }).join(''); }
+function zdChoose(k){ zd.i=k; zdRender(); }
+function zdRender(){ var z=ZD[zd.i]; zdPickRender();
+  document.getElementById('zdHead').innerHTML=head9(); document.getElementById('zdRow').innerHTML=rowFor(z,{tap:true});
+  document.getElementById('zaHead').innerHTML=''; document.getElementById('zaRow').innerHTML='';
+  document.getElementById('zdVerdict').textContent='Tap a zero to take it away.'; document.getElementById('zdVerdict').className='verdict'; document.getElementById('zdNote').textContent=''; }
+function zdTap(idx){ var z=ZD[zd.i], left=z.slice(0,idx)+z.slice(idx+1); if(left==='.'||left===''||left.charAt(0)==='.') left='0'+left;
+  var before=parseFloat(z), after=parseFloat(left), changed=Math.abs(before-after)>1e-9;
+  // which digits had to slide into a new column?
+  var Lb=layout(z), La=layout(left), moved=[];
+  La.forEach(function(c){ var srcIdx=(c.idx>=idx)?c.idx+1:c.idx; var src=Lb.filter(function(b){return b.idx===srcIdx;})[0]; if(src&&src.k!==c.k) moved.push(c.idx); });
+  document.getElementById('zaHead').innerHTML=head9(); document.getElementById('zaRow').innerHTML=rowFor(left,{moved:moved});
+  var v=document.getElementById('zdVerdict');
+  if(changed){ v.className='verdict chg'; v.textContent='Changed: '+show(z)+' became '+show(left)+'.'; document.getElementById('zdNote').textContent='Without that zero, '+(moved.length===1?'a digit had':moved.length+' digits had')+' to slide into a new column (shown in red). That zero was holding a column open.'; }
+  else { v.className='verdict same'; v.textContent='No change: '+asTyped(z)+' and '+show(left)+' are the same number.'; document.getElementById('zdNote').textContent='No other digit had to move. That zero was not holding anything.'; }
+  zd.taps++;
+}
+
+var ZQ=[
+ {q:'Choose 4,050 and tap its <b>first</b> 0. What number is left?',kind:'num',ans:450,hint:'Tap the zero in the hundreds column and read the second chart.',slips:{405:'That is the other zero. Tap the first one, in the hundreds column.',4050:'That is the number before the zero was taken away.'}},
+ {q:'Does taking away the front 0 of <b>0450</b> change the number?',kind:'chip',chips:['Yes','No'],ans:1,hint:'Choose 0450, tap the first 0, and compare.'},
+ {q:'Does taking away the last 0 of <b>3.50</b> change the number?',kind:'chip',chips:['Yes','No'],ans:1,hint:'Choose 3.50, tap the last 0. Did any other digit move?'},
+ {q:'Does taking away the last 0 of <b>100</b> change the number?',kind:'chip',chips:['Yes','No'],ans:0,hint:'Choose 100 and tap the last 0. What happens to the 1?'},
+ {q:'Write <b>seven thousand and six</b> in figures.',kind:'num',ans:7006,hint:'Seven thousand needs four columns. Which are empty?',slips:{76:'Seven thousand needs four columns: 7 thousands, 0 hundreds, 0 tens, 6 ones.',706:'That is seven hundred and six. Thousands need four columns.',7600:'The 6 is ones, not hundreds.'}},
+ {q:'Which zeros in <b>20.04</b> hold a column?',kind:'chip',chips:['Both','Only the first','Only the second','Neither'],ans:0,hint:'Tap each zero in turn. Does the number change?'}
+];
+var zq={q:0};
+function zqRender(){ var n=ZQ.length;
+  if(zq.q>=n){ document.getElementById('zqQn').textContent='✓ All six questions done.'; document.getElementById('zqQ').innerHTML='A zero holds a column when other digits would have to slide without it.'; document.getElementById('zqAns').innerHTML=''; document.getElementById('zqIn').style.display='none'; return; }
+  var Q=ZQ[zq.q]; document.getElementById('zqQn').textContent='Question '+(zq.q+1)+' of '+n; document.getElementById('zqQ').innerHTML=Q.q;
+  document.getElementById('zqAns').innerHTML=Q.kind==='chip'?chipsHtml(Q.chips,'zqChip'):'';
+  document.getElementById('zqIn').style.display=Q.kind==='chip'?'none':''; document.getElementById('zqA').value=''; }
+function zqRight(){ zq.q++; msg('zqRead','good','✓ Yes.'+(zq.q>=ZQ.length?' That\'s all of them.':'')); zqRender(); }
+function zqChip(k){ var Q=ZQ[zq.q]; if(k===Q.ans) zqRight(); else msg('zqRead','warn','Not yet. '+Q.hint); }
+function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value;
+  if(!v.trim()){ msg('zqRead','warn','Type an answer, with or without commas.'); return; }
+  var n=pvNum(v); if(same(n,Q.ans)) zqRight(); else msg('zqRead','warn','Not yet. '+((Q.slips&&Q.slips[n])||Q.hint)); }
+function zdInit(){ zdRender(); zqRender(); }
+
+/* ---------------- Proof (stretch): why some zeros can go ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'In 0450, the first 0 is in the thousands column. It means …',chips:['0 thousands: nothing at all','forty'],ans:0,ok:'The front 0 means 0 thousands: nothing',hint:'What is 0 × 1,000?'},
+  {q:'Take that 0 away. Does any other digit change column?',chips:['No: there are no digits to its left to slide','Yes: they all move'],ans:0,ok:'Taking it away moves no other digit, so 450 is unchanged',hint:'Which digits are to the left of the front 0?'},
+  {q:'Now take the hundreds 0 out of 4,050. The 4 slides from the thousands column into …',chips:['the hundreds column','the tens column'],ans:0,ok:'The 4 slides into the hundreds column, so 4,050 becomes 450',hint:'The 4 moves one column to fill the gap.'}],
+  done:'✓ <b>That is why.</b> Every zero is worth nothing. A zero matters only when there are digits beyond it, further from the decimal point, that would slide into new columns without it. A zero at the front of a whole number, or at the end of a decimal, has nothing beyond it, so it can go.'}
+};
+var pr={pr:0};
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- MOVEMENT: words to figures ---------------- */
+var WF=[
+ {q:'four thousand and fifty',ans:4050,hint:'4 thousands, 0 hundreds, 5 tens, 0 ones.'},
+ {q:'three hundred and six thousand',ans:306000,hint:'306 thousands: then the hundreds, tens and ones are all empty.'},
+ {q:'two million and twenty',ans:2000020,hint:'Seven columns: 2, then four zeros, then 2 tens and 0 ones.'},
+ {q:'five thousand and five',ans:5005,hint:'5 thousands, 0 hundreds, 0 tens, 5 ones.'},
+ {q:'ninety thousand and nine',ans:90009,hint:'9 ten thousands, then zeros, then 9 ones.'},
+ {q:'one hundred and one thousand, one hundred and one',ans:101101,hint:'Split it: 101 thousand, then 101.'},
+ {q:'ten thousand and ten',ans:10010,hint:'1 ten thousand, 0 thousands, 0 hundreds, 1 ten, 0 ones.'},
+ {q:'six hundred thousand and sixty',ans:600060,hint:'600 thousands, then 0 hundreds, 6 tens, 0 ones.'}
+];
+var wf={i:0};
+function wfRender(){ document.getElementById('wfCount').textContent=(wf.i+1)+' of '+WF.length; document.getElementById('wfQ').innerHTML='“'+WF[wf.i].q+'”'; document.getElementById('wfIn').value=''; }
+function wfCheck(){ var Q=WF[wf.i], v=document.getElementById('wfIn').value;
+  if(!v.trim()){ msg('wfRead','warn','Type the number in figures.'); return; }
+  if(!/\d/.test(v)){ msg('wfRead','warn','Write it in figures: digits such as 4 and 0.'); return; }
+  if(same(pvNum(v),Q.ans)) msg('wfRead','good','✓ Yes: '+fmt(Q.ans)+'.'); else msg('wfRead','warn','Not yet. '+Q.hint); }
+function wfNext(){ wf.i=(wf.i+1)%WF.length; document.getElementById('wfRead').style.display='none'; wfRender(); }
+function wfInit(){ wfRender(); }
+
+/* ---------------- REFLECTION: find and fix ---------------- */
+var FF=[
+ {said:'“Four thousand and fifty” written as <b>450</b>',opts:['The 0 holding the hundreds column was lost','Fifty was written wrongly','Nothing is wrong'],ans:0,fix:'4,050: four columns for the thousands, with a 0 holding the hundreds.'},
+ {said:'“Three thousand and six” written as <b>3,600</b>',opts:['A zero was lost','The 6 went in the hundreds column instead of the ones','Nothing is wrong'],ans:1,fix:'3,006: the 6 is 6 ones, so zeros hold the hundreds and tens.'},
+ {said:'“Twelve thousand and twenty” written as <b>12,200</b>',opts:['The 2 tens went in the hundreds column','Twelve thousand was written wrongly','Nothing is wrong'],ans:0,fix:'12,020: the 2 is 2 tens, so a 0 holds the hundreds.'},
+ {said:'“0.50 is bigger than 0.5, because it has more digits.”',opts:['Right: more digits means bigger','Wrong: the end 0 holds nothing, so they are equal','Wrong: 0.5 is bigger'],ans:1,fix:'0.50 = 0.5: both are 5 tenths. The end 0 has no digits beyond it to hold in place.'},
+ {said:'“6,000 with its zeros taken away is still 6,000.”',opts:['Right: zeros are worth nothing','Wrong: without them the 6 slides into the ones column','Wrong: it becomes 600'],ans:1,fix:'Without its zeros, 6,000 becomes 6. Those zeros hold the hundreds, tens and ones open.'}
+];
+var ff={i:0};
+function ffRender(){ var Q=FF[ff.i]; document.getElementById('ffCount').textContent=(ff.i+1)+' of '+FF.length; document.getElementById('ffQ').innerHTML=Q.said; document.getElementById('ffOpts').innerHTML=chipsHtml(Q.opts,'ffPick'); }
+function ffPick(k){ var Q=FF[ff.i]; if(k===Q.ans) msg('ffRead','good','✓ Yes. The fix: '+Q.fix); else msg('ffRead','warn','Look again. Put the number in a chart: which column is each digit in?'); }
+function ffNext(){ ff.i=(ff.i+1)%FF.length; document.getElementById('ffRead').style.display='none'; ffRender(); }
+function ffInit(){ ffRender(); }
+
+/* ---------------- CREATIVITY: zero builder ---------------- */
+var ZB=[
+ {q:'Use the digits 3 and 5, and as many zeros as you need, to make <b>three thousand and five</b>.',check:function(s,n){ return n===3005?'':'Three thousand needs four columns. Where do the 3 and the 5 go?'; },ok:'3,005: two zeros hold the hundreds and the tens.'},
+ {q:'Make <b>fifty thousand, three hundred</b>.',check:function(s,n){ return n===50300?'':'Fifty thousand is 5 ten thousands. Then 3 hundreds.'; },ok:'50,300: zeros hold the thousands, tens and ones.'},
+ {q:'Write <b>7.40</b> without the zero that is not needed.',check:function(s,n){ return n!==7.4?'That is a different number. Take away only the zero that holds nothing.':s.replace(/\s/g,'')==='7.4'?'':'Same number, but there is still a zero you could leave out.'; },ok:'7.4: the end zero of a decimal holds nothing.'},
+ {q:'Write <b>0060</b> without the zeros that are not needed.',check:function(s,n){ return n!==60?'That is a different number. Which zeros hold a column?':s.replace(/[\s,]/g,'')==='60'?'':'Same number, but there is still a zero you could leave out.'; },ok:'60: the front zeros held nothing, but the last 0 holds the ones column.'},
+ {q:'Using 1, 2 and three zeros, make the <b>smallest</b> five-digit number.',check:function(s,n){ var d=s.replace(/[\s,]/g,''); if(!/^\d{5}$/.test(d)||d.split('').sort().join('')!=='00012') return 'Use 1, 2 and three zeros, all five digits.'; if(d.charAt(0)==='0') return 'A five-digit number cannot start with 0.'; return n===10002?'':'Is there a smaller one? Put the smaller of 1 and 2 first.'; },ok:'10,002: the 1 must go first, then the zeros, then the 2.'},
+ {q:'Using 1, 2 and three zeros, make the <b>largest</b> five-digit number.',check:function(s,n){ var d=s.replace(/[\s,]/g,''); if(!/^\d{5}$/.test(d)||d.split('').sort().join('')!=='00012') return 'Use 1, 2 and three zeros, all five digits.'; return n===21000?'':'Is there a larger one? Put the largest digits in the largest columns.'; },ok:'21,000: the 2 and 1 in the largest columns, and three zeros holding the rest.'}
+];
+var zb={i:0,done:ZB.map(function(){return false;})};
+function zbRender(){ document.getElementById('zbCount').innerHTML='Case '+(zb.i+1)+' of '+ZB.length+(zb.done[zb.i]?' ✓':''); document.getElementById('zbQ').innerHTML=ZB[zb.i].q; document.getElementById('zbIn').value=''; }
+function zbCheck(){ var C=ZB[zb.i], v=document.getElementById('zbIn').value;
+  if(!v.trim()){ msg('zbRead','warn','Type a number.'); return; }
+  var n=pvNum(v); if(isNaN(n)){ msg('zbRead','warn','Type it in figures.'); return; }
+  var why=C.check(String(v).trim(),n);
+  if(why) msg('zbRead','warn','Not yet. '+why); else { zb.done[zb.i]=true; msg('zbRead','good','✓ '+C.ok); document.getElementById('zbCount').innerHTML='Case '+(zb.i+1)+' of '+ZB.length+' ✓'; } }
+function zbNext(){ zb.i=(zb.i+1)%ZB.length; document.getElementById('zbRead').style.display='none'; zbRender(); }
+function zbInit(){ zbRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    read:{title:'Reading numbers with zeros',prompt:'Write six hundred and four in figures.',answer:604,hint:'6 hundreds, 0 tens, 4 ones.'},
+    worth:{title:'What a digit is worth (Lesson 1)',prompt:'What is the 3 worth in 30,215?',answer:30000,hint:'Which column is the 3 in?'},
+    hundreds:{title:'Hundreds in a thousand',prompt:'How many hundreds make one thousand?',answer:10,hint:'Count in hundreds: 100, 200, … 1,000.'}
+  };
+  function matches(r,v){ var n=pvNum(v); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+function signedNum(v){ var s=String(v).trim().toLowerCase(), m=s.match(/^(minus|negative)\s+(.+)$/); if(m){ var w=num(m[2]); return isNaN(w)?NaN:-w; } return num(v); }
+// A list of numbers in any order.
+function setOf(v){ var out=String(v).split(/\s*(?:,|;|\band\b|\bor\b)\s*/).filter(function(c){return c.trim()!=='';}).map(signedNum); if(!out.length||out.some(isNaN)) return null; return out.filter(function(x,i){return out.indexOf(x)===i;}).sort(function(a,b){return a-b;}); }
+function setIs(v,want){ var s=setOf(v); return !!s&&s.join(',')===want.slice().sort(function(a,b){return a-b;}).join(','); }
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pNum(n){ return function(v){ return same(pvNum(v),n); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Words to figures",q:"Write <b>four thousand and fifty</b> in figures.",a:[],eq:pNum(4050),prompt:"How many columns does four thousand need?",hint:"4 thousands, 0 hundreds, 5 tens, 0 ones.",sol:"4,050: a 0 holds the hundreds column and a 0 holds the ones."},
+ {label:"2 of 8 · Millions",q:"Write <b>two million and three</b> in figures.",a:[],eq:pNum(2000003),prompt:"How many columns does a million need?",hint:"Seven columns: 2, then five zeros, then 3.",sol:"2,000,003: five zeros hold the columns between."},
+ {label:"3 of 8 · Take a zero away",q:"Take the <b>0</b> out of 7,082. What number is left?",a:[],eq:pNum(782),prompt:"Which digits have to slide when the 0 goes?",hint:"The 7 slides from the thousands into the hundreds.",sol:"782: the 7 slides into the hundreds column, so the number changes completely."},
+ {label:"4 of 8 · Same or different?",q:"Is <b>05,300</b> the same number as 5,300? Answer yes or no.",a:["yes","yes it is","the same","same"],eq:function(v){return false;},prompt:"What does the front 0 hold?",hint:"Are there any digits to the left of the front 0?",sol:"Yes. The front 0 means 0 ten thousands, and taking it away moves no other digit."},
+ {label:"5 of 8 · Unneeded zeros",q:"Write <b>6.70</b> with no zero that is not needed.",a:[],eq:function(v){ return same(pvNum(v),6.7)&&String(v).replace(/\s/g,'')==='6.7'; },prompt:"Which zero has no digit beyond it?",hint:"The end zero of a decimal holds nothing.",sol:"6.7: the end 0 can go. 6.70 and 6.7 are the same number."},
+ {label:"6 of 8 · What a zero holds",q:"In 305, which column is the <b>0</b> holding?",a:["tens","the tens","the tens column","tens column","ten","10s"],eq:function(v){return false;},prompt:"Name the columns from the right.",hint:"Ones, tens, hundreds: the 0 is in the middle.",sol:"The tens column. Without it, 305 would become 35."},
+ {label:"7 of 8 · Counting zeros",q:"How many zeros are needed to write <b>nine hundred thousand and nine</b> in figures?",a:[],eq:pNum(4),prompt:"Write the number first.",hint:"900,009.",sol:"900,009 has four zeros, each holding a column."},
+ {label:"8 of 8 · A decimal with zeros (stretch)",q:"Write <b>20.050</b> with no zero that is not needed.",a:[],eq:function(v){ return same(pvNum(v),20.05)&&String(v).replace(/[\s,]/g,'')==='20.05'; },prompt:"Which zeros hold a column, and which hold nothing?",hint:"The 0 in 20 holds the ones. The first decimal 0 holds the tenths. The last 0 holds nothing.",sol:"20.05: only the final 0 can go."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Check which columns each zero is holding — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  zdInit();
+  prRender('pr');
+  wfInit();
+  ffInit();
+  zbInit();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>

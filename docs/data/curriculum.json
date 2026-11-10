@@ -452,6 +452,14 @@
           "file": "lessons/place-value/02-ten-times-bigger-smaller.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-03-zero-placeholder",
+          "num": "Lesson 03",
+          "title": "Zero as a placeholder",
+          "file": "lessons/place-value/03-zero-as-a-placeholder.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
