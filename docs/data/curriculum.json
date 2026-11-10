@@ -427,6 +427,27 @@
       ]
     },
     {
+      "id": "place-value",
+      "title": "Place Value",
+      "stage": "Foundations",
+      "strand": "Number",
+      "source": "vault/02_Foundations/01_Lessons/Place_Value",
+      "diagnostic": {
+        "id": "countinghouse",
+        "title": "The Counting House"
+      },
+      "lessons": [
+        {
+          "id": "pv-01-digit-worth",
+          "num": "Lesson 01",
+          "title": "What is a digit worth?",
+          "file": "lessons/place-value/01-what-is-a-digit-worth.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "straight-lines",
       "title": "Straight Lines and Connected Representations",
       "stage": "Intermediate",
