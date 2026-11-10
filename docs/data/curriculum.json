@@ -460,6 +460,14 @@
           "file": "lessons/place-value/03-zero-as-a-placeholder.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-04-beyond-the-point",
+          "num": "Lesson 04",
+          "title": "Beyond the point: tenths, hundredths, thousandths",
+          "file": "lessons/place-value/04-beyond-the-point.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
