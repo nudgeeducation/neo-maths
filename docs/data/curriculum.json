@@ -476,6 +476,14 @@
           "file": "lessons/place-value/05-partitioning.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pv-06-which-is-larger",
+          "num": "Lesson 06",
+          "title": "Which is larger?",
+          "file": "lessons/place-value/06-which-is-larger.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
