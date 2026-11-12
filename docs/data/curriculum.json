@@ -504,6 +504,27 @@
       ]
     },
     {
+      "id": "angles",
+      "title": "Angles",
+      "stage": "Foundations",
+      "strand": "Geometry and measures",
+      "source": "vault/02_Foundations/01_Lessons/Angles",
+      "diagnostic": {
+        "id": "studio",
+        "title": "The Architect's Studio"
+      },
+      "lessons": [
+        {
+          "id": "an-01-measuring-angles",
+          "num": "Lesson 01",
+          "title": "Measuring and drawing angles",
+          "file": "lessons/angles/01-measuring-and-drawing-angles.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "straight-lines",
       "title": "Straight Lines and Connected Representations",
       "stage": "Intermediate",

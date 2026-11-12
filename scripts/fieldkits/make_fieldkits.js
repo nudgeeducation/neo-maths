@@ -11,7 +11,8 @@ const KITS = [
   { unit: 'formulae-rearranging', file: 'NEO_Maths_Y9_Formulae_Inventors_Workshop_v0.1.html', expedition: 'The Inventor’s Workshop' },
   { unit: 'number-systems', file: 'NEO_Maths_Y10_Number_Systems_Observatory_v0.3.html', expedition: 'The Observatory' },
   { unit: 'algebraic-expressions', file: 'NEO_Maths_Y10_Algebraic_Expressions_Lighthouse_v0.1.html', expedition: 'The Lighthouse' },
-  { unit: 'place-value', file: 'NEO_Maths_Y7_Place_Value_Counting_House_v0.1.html', expedition: 'The Counting House' }
+  { unit: 'place-value', file: 'NEO_Maths_Y7_Place_Value_Counting_House_v0.1.html', expedition: 'The Counting House' },
+  { unit: 'angles', file: 'NEO_Maths_Y7_Angles_and_Area_Architects_Studio_v0.1.html', expedition: 'The Architect’s Studio' }
 ];
 const outDir = path.join(ROOT, 'docs/assets/fieldkits');
 fs.mkdirSync(outDir, { recursive: true });
