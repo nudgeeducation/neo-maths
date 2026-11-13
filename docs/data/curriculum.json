@@ -582,6 +582,14 @@
           "file": "lessons/perimeter-area/03-area-of-parallelograms-and-trapezia.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pa-04-composite-shapes",
+          "num": "Lesson 04",
+          "title": "Composite shapes and design choices",
+          "file": "lessons/perimeter-area/04-composite-shapes-and-design-choices.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
