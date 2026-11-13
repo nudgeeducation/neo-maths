@@ -30,7 +30,8 @@ const CONFIG = {
     'workshop': { file: 'Workshop', title: 'The Inventor\u2019s Workshop · Formulae and Rearranging', short: 'The Inventor\u2019s Workshop' },
     'lighthouse': { file: 'Lighthouse', title: 'The Lighthouse · Algebraic Expressions', short: 'The Lighthouse' },
     'countinghouse': { file: 'CountingHouse', title: 'The Counting House · Place Value', short: 'The Counting House' },
-    'studio': { file: 'Studio', title: 'The Architect\u2019s Studio · Angles and Area', short: 'The Architect\u2019s Studio' }
+    'studio': { file: 'Studio', title: 'The Architect\u2019s Studio · Angles and Area', short: 'The Architect\u2019s Studio' },
+    'markethall': { file: 'MarketHall', title: 'The Market Hall · Percentages, Ratio, Growth and Bounds', short: 'The Market Hall' }
   }
 };
 
