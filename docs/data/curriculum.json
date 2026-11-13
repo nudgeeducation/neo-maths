@@ -549,6 +549,27 @@
       ]
     },
     {
+      "id": "perimeter-area",
+      "title": "Perimeter and Area",
+      "stage": "Foundations",
+      "strand": "Geometry and measures",
+      "source": "vault/02_Foundations/01_Lessons/Perimeter_Area",
+      "diagnostic": {
+        "id": "studio",
+        "title": "The Architect's Studio"
+      },
+      "lessons": [
+        {
+          "id": "pa-01-perimeter-or-area",
+          "num": "Lesson 01",
+          "title": "Perimeter or area?",
+          "file": "lessons/perimeter-area/01-perimeter-or-area.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "straight-lines",
       "title": "Straight Lines and Connected Representations",
       "stage": "Intermediate",
