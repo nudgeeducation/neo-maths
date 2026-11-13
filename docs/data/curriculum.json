@@ -1088,6 +1088,27 @@
       ]
     },
     {
+      "id": "percentages-ratio-growth-bounds",
+      "title": "Percentages, Ratio, Growth and Bounds",
+      "stage": "Intermediate",
+      "strand": "Ratio and proportion",
+      "source": "vault/03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds",
+      "diagnostic": {
+        "id": "markethall",
+        "title": "The Market Hall"
+      },
+      "lessons": [
+        {
+          "id": "pr-01-ratio-unitary-method",
+          "num": "Lesson 01",
+          "title": "Ratio, sharing and the unitary method",
+          "file": "lessons/percentages-ratio-growth-bounds/01-ratio-sharing-and-the-unitary-method.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "ks3-interactive-library",
       "title": "KS3 Interactive Library",
       "stage": "Key Stage 3",

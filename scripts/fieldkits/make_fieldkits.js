@@ -13,7 +13,8 @@ const KITS = [
   { unit: 'algebraic-expressions', file: 'NEO_Maths_Y10_Algebraic_Expressions_Lighthouse_v0.1.html', expedition: 'The Lighthouse' },
   { unit: 'place-value', file: 'NEO_Maths_Y7_Place_Value_Counting_House_v0.1.html', expedition: 'The Counting House' },
   { unit: 'angles', file: 'NEO_Maths_Y7_Angles_and_Area_Architects_Studio_v0.1.html', expedition: 'The Architect’s Studio' },
-  { unit: 'perimeter-area', file: 'NEO_Maths_Y7_Angles_and_Area_Architects_Studio_v0.1.html', expedition: 'The Architect’s Studio' }
+  { unit: 'perimeter-area', file: 'NEO_Maths_Y7_Angles_and_Area_Architects_Studio_v0.1.html', expedition: 'The Architect’s Studio' },
+  { unit: 'percentages-ratio-growth-bounds', file: 'NEO_Maths_Y10_Percentages_Ratio_Growth_Bounds_Market_Hall_v0.1.html', expedition: 'The Market Hall' }
 ];
 const outDir = path.join(ROOT, 'docs/assets/fieldkits');
 fs.mkdirSync(outDir, { recursive: true });
