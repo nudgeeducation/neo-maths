@@ -521,6 +521,14 @@
           "file": "lessons/angles/01-measuring-and-drawing-angles.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "an-02-line-and-point",
+          "num": "Lesson 02",
+          "title": "Angles on a line and at a point",
+          "file": "lessons/angles/02-angles-on-a-line-and-at-a-point.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
