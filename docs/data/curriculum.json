@@ -574,6 +574,14 @@
           "file": "lessons/perimeter-area/02-area-of-rectangles-and-triangles.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pa-03-parallelograms-trapezia",
+          "num": "Lesson 03",
+          "title": "Area of parallelograms and trapezia",
+          "file": "lessons/perimeter-area/03-area-of-parallelograms-and-trapezia.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

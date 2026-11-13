@@ -154,6 +154,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Perimeter_Area/Lesson_01_Perimeter_or_Area/NEO_Maths_Y7_PerimeterArea_Lesson_01_Perimeter_or_Area_v0.1.html",
     "pa-02-rectangles-triangles":
         "02_Foundations/01_Lessons/Perimeter_Area/Lesson_02_Rectangles_Triangles/NEO_Maths_Y7_PerimeterArea_Lesson_02_Rectangles_Triangles_v0.1.html",
+    "pa-03-parallelograms-trapezia":
+        "02_Foundations/01_Lessons/Perimeter_Area/Lesson_03_Parallelograms_Trapezia/NEO_Maths_Y7_PerimeterArea_Lesson_03_Parallelograms_Trapezia_v0.1.html",
     "ae-08-functions":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "shapes-06-platonic-solids":
