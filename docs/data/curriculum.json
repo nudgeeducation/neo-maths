@@ -566,6 +566,14 @@
           "file": "lessons/perimeter-area/01-perimeter-or-area.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pa-02-rectangles-triangles",
+          "num": "Lesson 02",
+          "title": "Area of rectangles and triangles",
+          "file": "lessons/perimeter-area/02-area-of-rectangles-and-triangles.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
