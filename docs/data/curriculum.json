@@ -529,6 +529,14 @@
           "file": "lessons/angles/02-angles-on-a-line-and-at-a-point.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "an-03-triangles",
+          "num": "Lesson 03",
+          "title": "Angles in a triangle",
+          "file": "lessons/angles/03-angles-in-a-triangle.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
