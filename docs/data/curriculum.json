@@ -537,6 +537,14 @@
           "file": "lessons/angles/03-angles-in-a-triangle.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "an-04-quadrilaterals",
+          "num": "Lesson 04",
+          "title": "Because–therefore: quadrilaterals and missing angles",
+          "file": "lessons/angles/04-because-therefore-quadrilaterals.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

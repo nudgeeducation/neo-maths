@@ -148,6 +148,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Angles/Lesson_02_Line_and_Point/NEO_Maths_Y7_Angles_Lesson_02_Line_and_Point_v0.1.html",
     "an-03-triangles":
         "02_Foundations/01_Lessons/Angles/Lesson_03_Triangles/NEO_Maths_Y7_Angles_Lesson_03_Triangles_v0.1.html",
+    "an-04-quadrilaterals":
+        "02_Foundations/01_Lessons/Angles/Lesson_04_Quadrilaterals/NEO_Maths_Y7_Angles_Lesson_04_Quadrilaterals_v0.1.html",
     "ae-08-functions":
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "shapes-06-platonic-solids":
