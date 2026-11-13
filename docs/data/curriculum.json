@@ -1105,6 +1105,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/01-ratio-sharing-and-the-unitary-method.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-02-direct-inverse-proportion",
+          "num": "Lesson 02",
+          "title": "Direct and inverse proportion",
+          "file": "lessons/percentages-ratio-growth-bounds/02-direct-and-inverse-proportion.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

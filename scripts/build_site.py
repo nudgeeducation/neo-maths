@@ -162,6 +162,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Algebraic_Expressions/Lesson_08_Functions/NEO_Maths_Y10_AlgebraicExpressions_Lesson_08_Functions_v0.1.html",
     "pr-01-ratio-unitary-method":
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_01_Ratio_Unitary_Method/NEO_Maths_Y10_PercentagesRatio_Lesson_01_Ratio_Unitary_Method_v0.1.html",
+    "pr-02-direct-inverse-proportion":
+        "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_02_Direct_Inverse_Proportion/NEO_Maths_Y10_PercentagesRatio_Lesson_02_Direct_Inverse_Proportion_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
