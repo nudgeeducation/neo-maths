@@ -1113,6 +1113,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/02-direct-and-inverse-proportion.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-03-percentages-multipliers",
+          "num": "Lesson 03",
+          "title": "Percentages as multipliers",
+          "file": "lessons/percentages-ratio-growth-bounds/03-percentages-as-multipliers.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
