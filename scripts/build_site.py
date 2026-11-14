@@ -170,6 +170,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_04_Percentage_Change/NEO_Maths_Y10_PercentagesRatio_Lesson_04_Percentage_Change_v0.1.html",
     "pr-05-reverse-percentages":
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_05_Reverse_Percentages/NEO_Maths_Y10_PercentagesRatio_Lesson_05_Reverse_Percentages_v0.1.html",
+    "pr-06-repeated-change":
+        "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_06_Repeated_Change/NEO_Maths_Y10_PercentagesRatio_Lesson_06_Repeated_Change_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
@@ -307,6 +309,9 @@ CHROME_STYLE = """
   .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .palette-keys[hidden]{display:none}
   .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
   .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
   .frac .fnum{padding:0 .25em .5px}
   .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
@@ -360,6 +365,7 @@ PALETTE_SCRIPT = """
   if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
   var DEFAULT=["a","b","c","x","y","\u00b2","\u00b3","\u221a","\u03c0","+","-","\u00d7","\u00f7","=","\u2248","\u00b0"];
   function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"\u2070","1":"\u00b9","2":"\u00b2","3":"\u00b3","4":"\u2074","5":"\u2075","6":"\u2076","7":"\u2077","8":"\u2078","9":"\u2079"};
   function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
   /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
   function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.\u00b2\u00b3]+) */ *([A-Za-z0-9.\u00b2\u00b3]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
@@ -370,12 +376,21 @@ PALETTE_SCRIPT = """
     var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="\u221a Symbols";
     var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
     var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
-    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button"; b.textContent=s; b.addEventListener("click",function(){insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press x\u207f again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="x\u207f"){ /* power key: the next digits typed become a superscript power, e.g. 1.06\u2074 */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
     var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
-    fr.addEventListener("click",function(){ insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
     t.addEventListener("click",function(){ k.hidden=!k.hidden; });
     f.addEventListener("input",function(){ updatePreview(f,pv); });
-    w.appendChild(t); w.appendChild(k); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
   }
   function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
   if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}

@@ -1137,6 +1137,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/05-reverse-percentages.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-06-repeated-change",
+          "num": "Lesson 06",
+          "title": "Repeated change: compound interest and depreciation",
+          "file": "lessons/percentages-ratio-growth-bounds/06-repeated-change-compound-interest-and-depreciation.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
