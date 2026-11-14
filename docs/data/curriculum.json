@@ -1161,6 +1161,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/08-bounds-of-a-rounded-value.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-09-calculating-with-bounds",
+          "num": "Lesson 09",
+          "title": "Calculating with bounds",
+          "file": "lessons/percentages-ratio-growth-bounds/09-calculating-with-bounds.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
