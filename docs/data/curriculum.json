@@ -1129,6 +1129,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/04-percentage-change.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-05-reverse-percentages",
+          "num": "Lesson 05",
+          "title": "Reverse percentages",
+          "file": "lessons/percentages-ratio-growth-bounds/05-reverse-percentages.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

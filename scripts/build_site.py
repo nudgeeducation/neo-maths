@@ -168,6 +168,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_03_Percentages_Multipliers/NEO_Maths_Y10_PercentagesRatio_Lesson_03_Percentages_Multipliers_v0.1.html",
     "pr-04-percentage-change":
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_04_Percentage_Change/NEO_Maths_Y10_PercentagesRatio_Lesson_04_Percentage_Change_v0.1.html",
+    "pr-05-reverse-percentages":
+        "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_05_Reverse_Percentages/NEO_Maths_Y10_PercentagesRatio_Lesson_05_Reverse_Percentages_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
