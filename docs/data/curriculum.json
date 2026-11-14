@@ -1169,6 +1169,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/09-calculating-with-bounds.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-10-bounds-in-problems",
+          "num": "Lesson 10",
+          "title": "Bounds in problems",
+          "file": "lessons/percentages-ratio-growth-bounds/10-bounds-in-problems.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
