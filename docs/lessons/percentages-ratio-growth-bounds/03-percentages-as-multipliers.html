@@ -172,6 +172,9 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 .psvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
 .two{color:#5c6b60}
 .care{border-left:4px solid #9cc59a;background:#f2f8ef;padding:8px 12px;border-radius:8px;margin:8px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.readline,.card p,.mq,.feedback,.pl,.readout,.myth,table.ptable th{line-height:1.9}
 </style>
 <div id="lessonView">
 <div class="neo">
@@ -601,7 +604,7 @@ function mlDraw(){ var W=220, x0=40, X=function(pc){ return +(x0+W*pc/100).toFix
   if(ML.mode===0){ var I0=ITEMS[ML.item]; R.innerHTML=ML.p+'% = '+ML.p+'/100 = <b>'+mfmt(m)+'</b>. '+ML.p+'% of '+pounds(I0.p*100)+' = '+pounds(I0.p*100)+' × '+mfmt(m)+' = <b>'+pounds(I0.p*ML.p)+'</b>'; }
   else if(ML.mode===1){ var I1=ITEMS[ML.item], chg=I1.p*Math.abs(ML.c);
     R.innerHTML=ML.c===0?'No change: × 1.':'<span class="two">Two steps: '+Math.abs(ML.c)+'% of '+pounds(I1.p*100)+' = '+pounds(chg)+', then '+pounds(I1.p*100)+(ML.c>0?' + ':' − ')+pounds(chg)+' = '+pounds(I1.p*(100+ML.c))+'.</span><br>One step: 100% '+(ML.c>0?'+':'−')+' '+Math.abs(ML.c)+'% = '+(100+ML.c)+'%, so '+pounds(I1.p*100)+' × <b>'+mfmt(m)+'</b> = <b>'+pounds(I1.p*(100+ML.c))+'</b>'; }
-  else { var P2=PARTS[ML.part]; R.innerHTML=ML.A+' out of '+P2.B+': '+ML.A+' ÷ '+P2.B+' = <b>'+mfmt(m)+'</b> = <b>'+(+(100*m).toFixed(4))+'%</b>'; } }
+  else { var P2=PARTS[ML.part]; R.innerHTML=ML.A+' out of '+P2.B+': <span class=fr><span>'+ML.A+'</span><span>'+P2.B+'</span></span> = <b>'+mfmt(m)+'</b> = <b>'+(+(100*m).toFixed(4))+'%</b>'; } }
 function mlInit(){ mlItem(0); mlPart(0); mlMode(0); }
 
 var ZQ=[
@@ -611,7 +614,7 @@ var ZQ=[
  {q:'What single <b>multiplier</b> decreases an amount by <b>20%</b>?',k:'mult',ans:0.8,hint:'100% − 20% = 80%.',slips:{0.2:'× 0.2 finds 20% of it, which is what is taken away, not what is left.',1.2:'× 1.2 is an increase.','-0.2':'A multiplier for what is left: 100% − 20%.'}},
  {q:'A <b>£45</b> concert ticket rises by <b>20%</b>. What is the new price?',k:'money',ans:54,hint:'£45 × 1.2.',slips:{9:'£9 is the rise. Add it to £45, or multiply by 1.2.',65:'That adds £20, not 20%.'}},
  {q:'A <b>£240</b> phone is reduced by <b>15%</b> in a sale. What is the sale price?',k:'money',ans:204,hint:'£240 × 0.85.',slips:{36:'£36 is the discount. The sale price is what is left.',225:'That takes off £15, not 15%.',276:'That is an increase. A reduction makes it smaller.'}},
- {q:'A café sold <b>18</b> of its <b>24</b> cakes. What <b>percentage</b> were sold?',k:'pct',ans:75,hint:'18 ÷ 24, then × 100.',slips:{0.75:'0.75 is the decimal. As a percentage: × 100.',133.33:'That is 24 ÷ 18. The part goes first: 18 ÷ 24.'}}
+ {q:'A café sold <b>18</b> of its <b>24</b> cakes. What <b>percentage</b> were sold?',k:'pct',ans:75,hint:'<span class=fr><span>18</span><span>24</span></span>, then × 100.',slips:{0.75:'0.75 is the decimal. As a percentage: × 100.',133.33:'That is <span class=fr><span>24</span><span>18</span></span>. The part goes first: <span class=fr><span>18</span><span>24</span></span>.'}}
 ];
 var zq={q:0};
 function zqRender(){ var n=ZQ.length;
@@ -748,7 +751,7 @@ var PRACTICE=[
  {label:"2 of 8 · A multiplier",q:"What single multiplier increases an amount by <b>12%</b>?",a:[],eq:pX(1.12),prompt:"What percentage of the original is the new amount?",hint:"100% + 12% = 112%.",sol:"100% + 12% = 112% = 1.12. Multiply by 1.12."},
  {label:"3 of 8 · Increase",q:"Increase <b>£75</b> by <b>8%</b>.",a:[],eq:pM(81),prompt:"What is the multiplier for an 8% increase?",hint:"£75 × 1.08.",sol:"The multiplier is 1.08, and 75 × 1.08 = 81. The new amount is £81."},
  {label:"4 of 8 · Decrease",q:"Decrease <b>£320</b> by <b>35%</b>.",a:[],eq:pM(208),prompt:"What percentage is left after a 35% decrease?",hint:"65% is left: £320 × 0.65.",sol:"100% − 35% = 65% = 0.65, and 320 × 0.65 = 208. The new amount is £208."},
- {label:"5 of 8 · As a percentage",q:"Write <b>27</b> as a percentage of <b>36</b>.",a:[],eq:pP(75),prompt:"Which number is the part, and which is the whole?",hint:"27 ÷ 36 = 0.75.",sol:"27 ÷ 36 = 0.75, and 0.75 × 100 = 75. 27 is 75% of 36."},
+ {label:"5 of 8 · As a percentage",q:"Write <b>27</b> as a percentage of <b>36</b>.",a:[],eq:pP(75),prompt:"Which number is the part, and which is the whole?",hint:"<span class=fr><span>27</span><span>36</span></span> = 0.75.",sol:"<span class=fr><span>27</span><span>36</span></span> = 0.75, and 0.75 × 100 = 75. 27 is 75% of 36."},
  {label:"6 of 8 · VAT",q:"VAT of <b>20%</b> is added to a price of <b>£85</b>. What is the price with VAT?",a:[],eq:pM(102),prompt:"What is the multiplier for adding 20%?",hint:"£85 × 1.2.",sol:"85 × 1.2 = 102. The price with VAT is £102."},
  {label:"7 of 8 · Reading a multiplier",q:"Multiplying by <b>0.72</b> is a decrease of what percentage?",a:[],eq:pP(28),prompt:"What percentage is 0.72?",hint:"0.72 = 72%. What was taken off 100%?",sol:"0.72 = 72%, so 100% − 72% = 28%. It is a 28% decrease."},
  {label:"8 of 8 · Two changes (stretch)",q:"A price rises by <b>25%</b>, then falls by <b>20%</b>. What is the overall percentage change?",a:["no change","none","the same","nothing","0%"],eq:function(v){ return same(pct(v),0); },prompt:"Write each change as a multiplier, then multiply them.",hint:"× 1.25 × 0.8 = ?",sol:"× 1.25 × 0.8 = × 1. Overall there is no change (0%): the 20% fall is taken from a bigger amount."}

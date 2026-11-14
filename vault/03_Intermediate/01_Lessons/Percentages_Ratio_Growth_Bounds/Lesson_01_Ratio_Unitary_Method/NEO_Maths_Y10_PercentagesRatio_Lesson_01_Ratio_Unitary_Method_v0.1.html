@@ -73,6 +73,9 @@ table.label .qm{color:#b0412f;font-weight:700}
 .bowl{max-width:300px;margin:6px auto;height:18px;border:2px solid #3f4d42;border-radius:9px;background:linear-gradient(90deg,#d9c08f 0 var(--fill,40%),#fff var(--fill,40%))}
 @media (max-width:520px){table.label{font-size:.85em}table.label th,table.label td{padding:4px 5px}.barsvg .blab{font-size:20px}.barsvg .bval{font-size:21px}.barsvg .ptag{font-size:19px}.psvg .plab{font-size:16px}}
 .care{border-left:4px solid #9cc59a;background:#f2f8ef;padding:8px 12px;border-radius:8px;margin:8px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.readline,.card p,.mq,.feedback,.pl,.readout,.myth,table.ptable th{line-height:1.9}
 </style>
 <div id="lessonView">
 <div class="neo">
@@ -126,7 +129,7 @@ table.label .qm{color:#b0412f;font-weight:700}
 <div id="prBody"></div>
 <div id="prRead" class="feedback" aria-live="polite"></div>
 </div>
-<p><b>Carry this forward:</b> total ÷ number of parts = one part. Then multiply. Next, take it to the <b>Nutrition</b> panel: the same idea reads a food label.</p>
+<p><b>Carry this forward:</b> one part = <span class=fr><span>total</span><span>number of parts</span></span>. Then multiply. Next, take it to the <b>Nutrition</b> panel: the same idea reads a food label.</p>
 </div>
 </details>
 
@@ -471,6 +474,7 @@ function ratioEquiv(v,want){ var r=ratioOf(v); if(!r||r.length!==want.length) re
 function gfmt(n){ return String(+(+n).toFixed(2)); }
 function pfmt(n){ return '£'+(+n).toFixed(2); }
 
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
 /* ---------------- The Recipe Bar: a reusable widget ---------------- */
 // A recipe is a ratio of ingredients. The batch is (sum of parts) × (one part); one part steps by 10, so every amount is exact.
 var RECIPES=[
@@ -510,18 +514,18 @@ function rbW(w){ rb.setW(w); document.querySelectorAll('#rbWays .chip').forEach(
 function rbDF(){ rb.df=!rb.df; rb.draw(); document.getElementById('rbDF').classList.toggle('active',rb.df); }
 function rbSay(S){ var el=document.getElementById('rbRead'); if(!el) return; var R=S.R(), p=R.parts.map(function(x){ return x*S.w; }), n=p.reduce(function(a,b){return a+b;},0);
   document.getElementById('rbTitle').textContent=R.name+': '+S.names().join(' : ')+' = '+p.join(' : ');
-  el.innerHTML='Batch '+gfmt(S.total())+' '+R.unit+' ÷ '+n+' parts = <b>'+gfmt(S.total()/n)+' '+R.unit+' in one part</b>. '+S.names().map(function(nm,i){ return nm+': '+p[i]+' × '+gfmt(S.total()/n)+' = <b>'+gfmt(S.amounts()[i])+' '+R.unit+'</b>'; }).join(' · ');
+  el.innerHTML='One part = '+FR('batch '+gfmt(S.total())+' '+R.unit,n+' parts')+' = <b>'+gfmt(S.total()/n)+' '+R.unit+'</b>. '+S.names().map(function(nm,i){ return nm+': '+p[i]+' × '+gfmt(S.total()/n)+' = <b>'+gfmt(S.amounts()[i])+' '+R.unit+'</b>'; }).join(' · ');
   document.getElementById('rbSwatch').style.background=mixColour(R.parts,R.col);
   document.getElementById('rbSwatchTxt').textContent=S.w===1?'The mixture':'The mixture: exactly the same as '+R.parts.join(' : ');
   document.getElementById('rbDFrow').style.display=R.dairyFree?'':'none'; }
 
 var ZQ=[
- {q:'Make <b>600 ml</b> of berry smoothie in the ratio fruit : yoghurt : milk = 2 : 1 : 1. How much <b>fruit</b>?',kind:'qty',ans:300,hint:'600 ml ÷ 4 parts = one part. Fruit is 2 parts.',slips:{150:'150 ml is one part. Fruit is 2 parts.',200:'There are 2 + 1 + 1 = 4 parts, not 3.',400:'Count all the parts: 2 + 1 + 1 = 4.'}},
- {q:'A <b>500 g</b> tray of flapjack in the ratio oats : butter : syrup = 3 : 1 : 1. How many grams of <b>oats</b>?',kind:'qty',ans:300,hint:'500 g ÷ 5 parts = 100 g in one part.',slips:{100:'100 g is one part. Oats are 3 parts.',166.67:'There are 3 + 1 + 1 = 5 parts.'}},
+ {q:'Make <b>600 ml</b> of berry smoothie in the ratio fruit : yoghurt : milk = 2 : 1 : 1. How much <b>fruit</b>?',kind:'qty',ans:300,hint:'<span class=fr><span>600 ml</span><span>4 parts</span></span> = one part. Fruit is 2 parts.',slips:{150:'150 ml is one part. Fruit is 2 parts.',200:'There are 2 + 1 + 1 = 4 parts, not 3.',400:'Count all the parts: 2 + 1 + 1 = 4.'}},
+ {q:'A <b>500 g</b> tray of flapjack in the ratio oats : butter : syrup = 3 : 1 : 1. How many grams of <b>oats</b>?',kind:'qty',ans:300,hint:'<span class=fr><span>500 g</span><span>5 parts</span></span> = 100 g in one part.',slips:{100:'100 g is one part. Oats are 3 parts.',166.67:'There are 3 + 1 + 1 = 5 parts.'}},
  {q:'A recipe card says <b>6 : 3 : 3</b>. Write the ratio in its <b>simplest form</b>.',kind:'ratio',ans:[2,1,1],hint:'Divide all three parts by the same number: the biggest one that divides them all.'},
  {q:'Is a smoothie made as <b>4 : 2 : 2</b> the same mixture as one made as <b>2 : 1 : 1</b>?',kind:'chip',chips:['Yes: the same mixture','No: it has more fruit'],ans:0,hint:'Try “Write as × 2” on the Recipe Bar. Do the amounts change?'},
- {q:'Trail mix is oats : raisins : seeds = 4 : 3 : 1. A bag has <b>120 g of raisins</b>. How many grams of <b>oats</b>?',kind:'qty',ans:160,hint:'Raisins are 3 parts, so one part is 120 ÷ 3 = 40 g.',slips:{90:'Raisins are 3 parts: find one part first (120 ÷ 3).',480:'480 would be 4 × 120. 120 g is 3 parts, not 1 part.',40:'40 g is one part. Oats are 4 parts.'}},
- {q:'A <b>400 g</b> bag of the same trail mix. How many <b>more</b> grams of oats than seeds?',kind:'qty',ans:150,hint:'One part is 400 ÷ 8 = 50 g. Oats are 4 parts and seeds 1 part: 3 parts more.',slips:{200:'200 g is all the oats. The question asks how many more oats than seeds.',50:'50 g is one part: the seeds. Oats are 3 parts more than that.'}}
+ {q:'Trail mix is oats : raisins : seeds = 4 : 3 : 1. A bag has <b>120 g of raisins</b>. How many grams of <b>oats</b>?',kind:'qty',ans:160,hint:'Raisins are 3 parts, so one part is <span class=fr><span>120</span><span>3</span></span> = 40 g.',slips:{90:'Raisins are 3 parts: find one part first (<span class=fr><span>120</span><span>3</span></span>).',480:'480 would be 4 × 120. 120 g is 3 parts, not 1 part.',40:'40 g is one part. Oats are 4 parts.'}},
+ {q:'A <b>400 g</b> bag of the same trail mix. How many <b>more</b> grams of oats than seeds?',kind:'qty',ans:150,hint:'One part is <span class=fr><span>400</span><span>8</span></span> = 50 g. Oats are 4 parts and seeds 1 part: 3 parts more.',slips:{200:'200 g is all the oats. The question asks how many more oats than seeds.',50:'50 g is one part: the seeds. Oats are 3 parts more than that.'}}
 ];
 var zq={q:0};
 function zqRender(){ var n=ZQ.length;
@@ -540,8 +544,8 @@ function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value;
 /* ---------------- Proof (stretch): why equal ratios make the same mixture ---------------- */
 var PROOFS={
  pr:{steps:[
-  {q:'600 ml of smoothie as <b>2 : 1 : 1</b>: 4 parts of 150 ml. Fruit is the 2 shaded parts. How much fruit?',chips:['2 × 150 = 300 ml','2 × 100 = 200 ml'],ans:0,ok:'2 : 1 : 1 — one part 150 ml, fruit 2 × 150 = 300 ml',hint:'600 ÷ 4 = 150.'},
-  {q:'Now split <b>every</b> part in half: <b>4 : 2 : 2</b>, 8 parts of 75 ml. Fruit is the 4 shaded parts. How much fruit?',chips:['4 × 75 = 300 ml: the same','4 × 150 = 600 ml: double'],ans:0,ok:'4 : 2 : 2 — one part 75 ml, fruit 4 × 75 = 300 ml: the same',hint:'600 ÷ 8 = 75.'},
+  {q:'600 ml of smoothie as <b>2 : 1 : 1</b>: 4 parts of 150 ml. Fruit is the 2 shaded parts. How much fruit?',chips:['2 × 150 = 300 ml','2 × 100 = 200 ml'],ans:0,ok:'2 : 1 : 1 — one part 150 ml, fruit 2 × 150 = 300 ml',hint:'<span class=fr><span>600</span><span>4</span></span> = 150.'},
+  {q:'Now split <b>every</b> part in half: <b>4 : 2 : 2</b>, 8 parts of 75 ml. Fruit is the 4 shaded parts. How much fruit?',chips:['4 × 75 = 300 ml: the same','4 × 150 = 600 ml: double'],ans:0,ok:'4 : 2 : 2 — one part 75 ml, fruit 4 × 75 = 300 ml: the same',hint:'<span class=fr><span>600</span><span>8</span></span> = 75.'},
   {q:'Multiplying every part by 2 doubled the <b>number</b> of parts and halved the <b>size</b> of each. So each ingredient …',chips:['stays exactly the same amount','doubles'],ans:0,ok:'Twice as many parts, each half the size: every amount is unchanged',hint:'2 × (half a part) = one whole part.'}],
   done:'✓ <b>That is why.</b> Multiplying or dividing every part of a ratio by the same number changes only how finely the batch is cut, not how much of each ingredient there is. So 2 : 1 : 1 and 4 : 2 : 2 are the same mixture, and the simplest form is just the easiest way to write it.'}
 };
@@ -565,9 +569,9 @@ function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
 var QS=[
  {q:'Share £40 in the ratio 3 : 5. What is the larger share?',ans:25,k:'money',hint:'8 parts: one part is £5.'},
  {q:'Write 15 : 25 in its simplest form.',ans:[3,5],k:'ratio',hint:'Both divide by 5.'},
- {q:'4 apples cost £1.20. How much do 7 apples cost?',ans:2.1,k:'money',hint:'One apple: £1.20 ÷ 4 = 30p.'},
+ {q:'4 apples cost £1.20. How much do 7 apples cost?',ans:2.1,k:'money',hint:'One apple: <span class=fr><span>£1.20</span><span>4</span></span> = 30p.'},
  {q:'Share 72 g in the ratio 1 : 2 : 3. What is the smallest share, in grams?',ans:12,k:'qty',hint:'6 parts: one part is 12 g.'},
- {q:'A recipe for 4 people uses 300 g of pasta. How much for 6 people?',ans:450,k:'qty',hint:'One person: 300 ÷ 4 = 75 g.'},
+ {q:'A recipe for 4 people uses 300 g of pasta. How much for 6 people?',ans:450,k:'qty',hint:'One person: <span class=fr><span>300</span><span>4</span></span> = 75 g.'},
  {q:'Two amounts are in the ratio 2 : 7. The smaller is 18 g. What is the larger, in grams?',ans:63,k:'qty',hint:'2 parts = 18 g, so one part is 9 g.'},
  {q:'£90 is shared in the ratio 4 : 5. How much more is the larger share than the smaller?',ans:10,k:'money',hint:'9 parts: one part is £10, and the difference is 1 part.'},
  {q:'Write 8 : 12 : 20 in its simplest form.',ans:[2,3,5],k:'ratio',hint:'All three divide by 4.'}
@@ -644,12 +648,12 @@ function lbDraw(){ var L=LABELS[lb.l], k=lb.g/10, h='<table class="label"><capti
   document.getElementById('lbPortion').textContent=lb.g+' g';
   document.getElementById('lbBowl').style.setProperty('--fill',(lb.g)+'%'); }
 var NQ=[
- {q:'Porridge oats have <b>9 g of fibre per 100 g</b>. How much fibre is in a <b>40 g</b> bowl?',ans:3.6,k:'qty',hint:'Per 10 g: 9 ÷ 10 = 0.9 g. A 40 g bowl is 4 lots of 10 g.',slips:{36:'That is for 400 g. Per 10 g is 9 ÷ 10 = 0.9 g.',0.4:'Check: 40 g is less than half of 100 g, so a bit less than half of 9 g.'}},
+ {q:'Porridge oats have <b>9 g of fibre per 100 g</b>. How much fibre is in a <b>40 g</b> bowl?',ans:3.6,k:'qty',hint:'Per 10 g: <span class=fr><span>9</span><span>10</span></span> = 0.9 g. A 40 g bowl is 4 lots of 10 g.',slips:{36:'That is for 400 g. Per 10 g is <span class=fr><span>9</span><span>10</span></span> = 0.9 g.',0.4:'Check: 40 g is less than half of 100 g, so a bit less than half of 9 g.'}},
  {q:'Porridge oats have <b>11 g of protein per 100 g</b>. How much protein is in a <b>40 g</b> bowl?',ans:4.4,k:'qty',hint:'Per 10 g: 1.1 g. Then × 4.',slips:{44:'That is for 400 g.'}},
  {q:'Bran flakes have <b>17 g of sugar per 100 g</b>. How much sugar is in a <b>30 g</b> bowl?',ans:5.1,k:'qty',hint:'Per 10 g: 1.7 g. Then × 3.',slips:{51:'That is for 300 g.'}},
  {q:'Per 100 g, which has <b>more fibre</b>: porridge oats or bran flakes?',kind:'chip',chips:['Porridge oats','Bran flakes','The same'],ans:1,hint:'Compare the per 100 g column: 9 g and 15 g.'},
  {q:'A <b>30 g</b> bowl of bran flakes or a <b>40 g</b> bowl of oats: which bowl has <b>more fibre</b>?',kind:'chip',chips:['The 30 g bowl of bran flakes','The 40 g bowl of oats','The same'],ans:0,hint:'Work out both: 1.5 × 3 and 0.9 × 4.'},
- {q:'Pancakes for <b>4</b> people need <b>300 ml</b> of milk. How much milk for <b>6</b> people?',ans:450,k:'qty',hint:'For one person: 300 ÷ 4 = 75 ml.',slips:{200:'More people need more milk, not less.',302:'Find one person first, then scale: do not add.'}},
+ {q:'Pancakes for <b>4</b> people need <b>300 ml</b> of milk. How much milk for <b>6</b> people?',ans:450,k:'qty',hint:'For one person: <span class=fr><span>300</span><span>4</span></span> = 75 ml.',slips:{200:'More people need more milk, not less.',302:'Find one person first, then scale: do not add.'}},
  {q:'The pancake shopping costs <b>£4.80</b>. Two households share it in the ratio <b>2 : 1</b>, by the number of people eating. How much does the larger household pay?',ans:3.2,k:'money',hint:'3 parts: one part is £1.60.',slips:{2.4:'That shares it equally. The ratio is 2 : 1.',1.6:'£1.60 is one part. The larger household has 2 parts.'}}
 ];
 var nq={q:0};
@@ -671,7 +675,7 @@ function nqInit(){ lbSet(0); nqRender(); }
   var RECONNECT={
     hcf:{title:'Highest common factor',prompt:'What is the highest common factor of 12 and 18?',answer:6,hint:'List the factors of each. Which is the biggest they share?'},
     frac:{title:'A fraction of an amount',prompt:'What is ⅗ of 40?',answer:24,hint:'One fifth of 40 is 8. Three fifths is 3 × 8.'},
-    pence:{title:'Sharing money',prompt:'Share £1.20 equally between 4. How much each, in pence?',answer:30,hint:'£1.20 is 120p. 120 ÷ 4.'}
+    pence:{title:'Sharing money',prompt:'Share £1.20 equally between 4. How much each, in pence?',answer:30,hint:'£1.20 is 120p. Work out <span class=fr><span>120</span><span>4</span></span>.'}
   };
   function matches(r,v){ var n=qty(String(v).replace(/^£/,'').replace(/\s*(p|pence)$/i,'')); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
   window.openReconnect=function(){
@@ -700,12 +704,12 @@ function nqInit(){ lbSet(0); nqRender(); }
 function pQ(n){ return function(v){ return same(qty(v),n); }; }
 function pM(n){ return function(v){ return same(money(v),n); }; }
 var PRACTICE=[
- {label:"1 of 8 · Simplify",q:"Write <b>18 : 24</b> in its simplest form.",a:[],eq:function(v){ return ratioIs(v,[3,4]); },prompt:"What is the biggest number that divides both 18 and 24?",hint:"Both divide by 6.",sol:"18 ÷ 6 = 3 and 24 ÷ 6 = 4, so 18 : 24 = 3 : 4."},
- {label:"2 of 8 · Share money",q:"Share <b>£56</b> in the ratio <b>3 : 4</b>. What is the <b>larger</b> share?",a:[],eq:pM(32),prompt:"How many parts are there altogether?",hint:"7 parts: one part is £56 ÷ 7.",sol:"3 + 4 = 7 parts. One part is £56 ÷ 7 = £8. The larger share is 4 × £8 = £32."},
- {label:"3 of 8 · Three parts",q:"Share <b>90 g</b> in the ratio <b>2 : 3 : 4</b>. What is the <b>smallest</b> share, in grams?",a:[],eq:pQ(20),prompt:"How many parts in all?",hint:"9 parts: one part is 10 g.",sol:"2 + 3 + 4 = 9 parts, so one part is 90 ÷ 9 = 10 g. The smallest share is 2 × 10 = 20 g."},
- {label:"4 of 8 · Find one, then scale",q:"<b>6</b> eggs cost <b>£1.50</b>. How much do <b>10</b> eggs cost?",a:[],eq:pM(2.5),prompt:"What does one egg cost?",hint:"£1.50 ÷ 6 = 25p.",sol:"One egg costs £1.50 ÷ 6 = £0.25, so 10 eggs cost 10 × £0.25 = £2.50."},
- {label:"5 of 8 · Scale a recipe",q:"A recipe for <b>4</b> people uses <b>250 g</b> of rice. How much rice for <b>10</b> people?",a:[],eq:pQ(625),prompt:"How much for one person?",hint:"250 ÷ 4 = 62.5 g per person.",sol:"For one person: 250 ÷ 4 = 62.5 g. For 10 people: 10 × 62.5 = 625 g."},
- {label:"6 of 8 · Read a label",q:"A label says <b>12 g of protein per 100 g</b>. How much protein is in a <b>35 g</b> portion?",a:[],eq:pQ(4.2),prompt:"How much protein in 1 g? Or in 5 g?",hint:"Per 5 g: 12 ÷ 20 = 0.6 g. A 35 g portion is 7 lots of 5 g.",sol:"Per 1 g: 12 ÷ 100 = 0.12 g. For 35 g: 35 × 0.12 = 4.2 g."},
+ {label:"1 of 8 · Simplify",q:"Write <b>18 : 24</b> in its simplest form.",a:[],eq:function(v){ return ratioIs(v,[3,4]); },prompt:"What is the biggest number that divides both 18 and 24?",hint:"Both divide by 6.",sol:"<span class=fr><span>18</span><span>6</span></span> = 3 and <span class=fr><span>24</span><span>6</span></span> = 4, so 18 : 24 = 3 : 4."},
+ {label:"2 of 8 · Share money",q:"Share <b>£56</b> in the ratio <b>3 : 4</b>. What is the <b>larger</b> share?",a:[],eq:pM(32),prompt:"How many parts are there altogether?",hint:"7 parts: one part is <span class=fr><span>£56</span><span>7</span></span>.",sol:"3 + 4 = 7 parts. One part is <span class=fr><span>£56</span><span>7</span></span> = £8. The larger share is 4 × £8 = £32."},
+ {label:"3 of 8 · Three parts",q:"Share <b>90 g</b> in the ratio <b>2 : 3 : 4</b>. What is the <b>smallest</b> share, in grams?",a:[],eq:pQ(20),prompt:"How many parts in all?",hint:"9 parts: one part is 10 g.",sol:"2 + 3 + 4 = 9 parts, so one part is <span class=fr><span>90</span><span>9</span></span> = 10 g. The smallest share is 2 × 10 = 20 g."},
+ {label:"4 of 8 · Find one, then scale",q:"<b>6</b> eggs cost <b>£1.50</b>. How much do <b>10</b> eggs cost?",a:[],eq:pM(2.5),prompt:"What does one egg cost?",hint:"<span class=fr><span>£1.50</span><span>6</span></span> = 25p.",sol:"One egg costs <span class=fr><span>£1.50</span><span>6</span></span> = £0.25, so 10 eggs cost 10 × £0.25 = £2.50."},
+ {label:"5 of 8 · Scale a recipe",q:"A recipe for <b>4</b> people uses <b>250 g</b> of rice. How much rice for <b>10</b> people?",a:[],eq:pQ(625),prompt:"How much for one person?",hint:"<span class=fr><span>250</span><span>4</span></span> = 62.5 g per person.",sol:"For one person: <span class=fr><span>250</span><span>4</span></span> = 62.5 g. For 10 people: 10 × 62.5 = 625 g."},
+ {label:"6 of 8 · Read a label",q:"A label says <b>12 g of protein per 100 g</b>. How much protein is in a <b>35 g</b> portion?",a:[],eq:pQ(4.2),prompt:"How much protein in 1 g? Or in 5 g?",hint:"Per 5 g: <span class=fr><span>12</span><span>20</span></span> = 0.6 g. A 35 g portion is 7 lots of 5 g.",sol:"Per 1 g: <span class=fr><span>12</span><span>100</span></span> = 0.12 g. For 35 g: 35 × 0.12 = 4.2 g."},
  {label:"7 of 8 · From one share",q:"Two amounts are in the ratio <b>3 : 5</b>. The larger is <b>40 g</b>. What is the smaller?",a:[],eq:pQ(24),prompt:"How many parts is 40 g?",hint:"5 parts = 40 g, so one part = 8 g.",sol:"5 parts = 40 g, so one part = 8 g. The smaller is 3 × 8 = 24 g."},
  {label:"8 of 8 · The difference (stretch)",q:"Two amounts are in the ratio <b>3 : 7</b>. Their <b>difference</b> is <b>28 g</b>. What is their <b>total</b>?",a:[],eq:pQ(70),prompt:"How many parts is the difference?",hint:"7 − 3 = 4 parts = 28 g, so one part = 7 g.",sol:"The difference is 7 − 3 = 4 parts = 28 g, so one part = 7 g. The total is 10 parts = 70 g."}
 ];

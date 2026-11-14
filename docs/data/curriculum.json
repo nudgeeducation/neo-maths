@@ -1121,6 +1121,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/03-percentages-as-multipliers.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-04-percentage-change",
+          "num": "Lesson 04",
+          "title": "Percentage change",
+          "file": "lessons/percentages-ratio-growth-bounds/04-percentage-change.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

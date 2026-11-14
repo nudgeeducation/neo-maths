@@ -96,6 +96,9 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 .twocol{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:flex-start}
 .twocol>div{flex:1 1 300px;min-width:0}
 .care{border-left:4px solid #9cc59a;background:#f2f8ef;padding:8px 12px;border-radius:8px;margin:8px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.readline,.card p,.mq,.feedback,.pl,.readout,.myth,table.ptable th{line-height:1.9}
 </style>
 <div id="lessonView">
 <div class="neo">
@@ -105,7 +108,7 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 
 <div class="info">
 <p><b>Lesson type:</b> Core — four relationships, one test: what stays the same?</p>
-<p><b>Stepping Stone:</b> recognise <b>direct</b> and <b>inverse proportion</b>; set them up as <i>y</i> = <i>kx</i> and <i>y</i> = <i>k</i>/<i>x</i> (and with squares and roots); find the <b>constant of proportionality</b> <i>k</i> from one pair of values; and link each to its <b>graph</b>.</p>
+<p><b>Stepping Stone:</b> recognise <b>direct</b> and <b>inverse proportion</b>; set them up as <i>y</i> = <i>kx</i> and <i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i></span></span> (and with squares and roots); find the <b>constant of proportionality</b> <i>k</i> from one pair of values; and link each to its <b>graph</b>.</p>
 <p><b>You will need:</b> the unitary method (Lesson 1), substitution, and squares and square roots, plus the optional <b>✏️ Scratchpad</b>. No calculator needed.</p>
 <p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
 <p><b>45-minute shape:</b> Connect 16 · Move 6 · Reflect 8 · Create 10 · Rest/Nourish 5</p>
@@ -129,7 +132,7 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 <summary>🌿 Connection — The Proportion Explorer</summary>
 <div class="card">
 <h3 style="margin-top:0">🔤 The idea for this lesson</h3>
-<p style="margin:6px 0">Two quantities are in <b>direct proportion</b> when <i>y</i> = <i>kx</i>: double <i>x</i> and <i>y</i> doubles, <i>y</i> ÷ <i>x</i> is always <i>k</i>, and the graph is a straight line through the origin. They are in <b>inverse proportion</b> when <i>y</i> = <i>k</i>/<i>x</i>: double <i>x</i> and <i>y</i> halves, <i>x</i> × <i>y</i> is always <i>k</i>, and the graph is a curve. <i>k</i> is the <b>constant of proportionality</b>, and one pair of values is enough to find it. The same idea works with squares and roots: <i>y</i> = <i>kx</i>², <i>y</i> = <i>k</i>√<i>x</i>.</p>
+<p style="margin:6px 0">Two quantities are in <b>direct proportion</b> when <i>y</i> = <i>kx</i>: double <i>x</i> and <i>y</i> doubles, <span class=fr><span><i>y</i></span><span><i>x</i></span></span> is always <i>k</i>, and the graph is a straight line through the origin. They are in <b>inverse proportion</b> when <i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i></span></span>: double <i>x</i> and <i>y</i> halves, <i>x</i> × <i>y</i> is always <i>k</i>, and the graph is a curve. <i>k</i> is the <b>constant of proportionality</b>, and one pair of values is enough to find it. The same idea works with squares and roots: <i>y</i> = <i>kx</i>², <i>y</i> = <i>k</i>√<i>x</i>.</p>
 </div>
 <p><b>What to do:</b> choose a situation. Step <i>x</i> up and down: each value is added to the table and plotted. Then show the curve.</p>
 <p><b>What you are trying to notice:</b> one column of the table never changes. Which one, for each situation? And what does each graph look like?</p>
@@ -143,9 +146,9 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 <div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div><div id="zqIn" class="buttonrow"><input id="zqA" class="numin neo-mathfield" style="max-width:190px" aria-label="Your answer" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div></div>
 <div id="zqRead" class="feedback" aria-live="polite"></div>
 <div class="proof">
-<p style="margin:0"><span class="stretch">stretch</span> <b>Why does the graph of <i>y</i> = 24/<i>x</i> never touch either axis?</b> A pattern suggests; a reason convinces.</p>
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why does the graph of <i>y</i> = <span class=fr><span>24</span><span><i>x</i></span></span> never touch either axis?</b> A pattern suggests; a reason convinces.</p>
 <div id="prFig"></div>
-<p class="small" style="text-align:center;margin:2px 0 6px">The curve <i>y</i> = 24/<i>x</i>. Each step colours the part it uses.</p>
+<p class="small" style="text-align:center;margin:2px 0 6px">The curve <i>y</i> = <span class=fr><span>24</span><span><i>x</i></span></span>. Each step colours the part it uses.</p>
 <div id="prBody"></div>
 <div id="prRead" class="feedback" aria-live="polite"></div>
 </div>
@@ -157,7 +160,7 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 <details class="hs">
 <summary>🚶 Movement — Spot the proportion</summary>
 <p><b>What to do:</b> decide which kind of proportion each table shows, as quickly as you comfortably can.</p>
-<p><b>What you are trying to notice:</b> a quick test finds the answer: <i>y</i> ÷ <i>x</i>, <i>x</i> × <i>y</i>, or <i>y</i> ÷ <i>x</i>².</p>
+<p><b>What you are trying to notice:</b> a quick test finds the answer: <span class=fr><span><i>y</i></span><span><i>x</i></span></span>, <i>x</i> × <i>y</i>, or <span class=fr><span><i>y</i></span><span><i>x</i>²</span></span>.</p>
 <div class="toolbox">
 <h3 style="margin-top:0">🔍 Which kind?</h3>
 <div id="spCount" class="small" style="text-align:center"></div>
@@ -192,7 +195,7 @@ table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em
 <h3 style="margin-top:0">🎯 Make it fit</h3>
 <div id="mkCount" class="small" style="text-align:center"></div>
 <div id="mkQ" class="mq"></div>
-<div id="ftTypes" class="buttonrow" style="justify-content:center"><button class="chip" onclick="ftType(0)"><i>y</i> = <i>kx</i></button><button class="chip" onclick="ftType(1)"><i>y</i> = <i>k</i>/<i>x</i></button><button class="chip" onclick="ftType(2)"><i>y</i> = <i>kx</i>²</button></div>
+<div id="ftTypes" class="buttonrow" style="justify-content:center"><button class="chip" onclick="ftType(0)"><i>y</i> = <i>kx</i></button><button class="chip" onclick="ftType(1)"><i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i></span></span></button><button class="chip" onclick="ftType(2)"><i>y</i> = <i>kx</i>²</button></div>
 <div class="stepper"><span><i>k</i>: <button onclick="ftK(-10)">−10</button> <button onclick="ftK(-1)">−1</button> <button onclick="ftK(1)">+1</button> <button onclick="ftK(10)">+10</button></span></div>
 <div id="ftFig"></div>
 <p id="ftRead" class="readline" aria-live="polite"></p>
@@ -495,10 +498,10 @@ function curve(A,G,f,a,b){ var d='', n=160, pen=false; for(var i=0;i<=n;i++){ va
 /* ---------------- CONNECTION: the Proportion Explorer ---------------- */
 // Each relationship has a context, allowed inputs (chosen so every output is exact), a formula and a test that stays constant.
 var REL=[
- {key:'direct',name:'Pay by the hour',kind:'y ∝ x',xs:[1,2,3,4,5,6,7,8,9,10],x0:3,f:function(x){ return 12*x; },eq:'<i>y</i> = 12<i>x</i>',xn:'hours worked, <i>x</i>',yn:'pay, <i>y</i> (£)',yfmt:function(y){ return '£'+y; },test:'<i>y</i> ÷ <i>x</i>',t:function(x,y){ return y/x; },G:{xmax:10,ymax:120,xs:1,ys:20,xl:'<tspan font-style="italic">x</tspan>',yl:'<tspan font-style="italic">y</tspan>'},say:'£12 an hour: twice the hours, twice the pay.'},
- {key:'inverse',name:'Sharing a job',kind:'y ∝ 1/x',xs:[1,2,3,4,6,8,12,24],x0:2,f:function(x){ return 24/x; },eq:'<i>y</i> = 24/<i>x</i>',xn:'number of workers, <i>x</i>',yn:'hours each, <i>y</i>',yfmt:function(y){ return y+' h'; },test:'<i>x</i> × <i>y</i>',t:function(x,y){ return x*y; },G:{xmax:24,ymax:24,xs:4,ys:4,xl:'<tspan font-style="italic">x</tspan>',yl:'<tspan font-style="italic">y</tspan>'},say:'A job of 24 worker-hours: twice the workers, half the time each.'},
- {key:'square',name:'A ball rolling down a slope',kind:'d ∝ t²',xs:[1,2,3,4,5,6],x0:2,f:function(t){ return 5*t*t; },eq:'<i>d</i> = 5<i>t</i>²',xn:'time, <i>t</i> (seconds)',yn:'distance, <i>d</i> (cm)',yfmt:function(y){ return y+' cm'; },test:'<i>d</i> ÷ <i>t</i>²',t:function(x,y){ return y/(x*x); },G:{xmax:6,ymax:180,xs:1,ys:30,xl:'<tspan font-style="italic">t</tspan>',yl:'<tspan font-style="italic">d</tspan>'},say:'Twice the time, four times the distance.'},
- {key:'root',name:'Fencing a square field',kind:'P ∝ √A',xs:[4,9,16,25,36,49,64,81,100],x0:16,f:function(a){ return 4*Math.sqrt(a); },eq:'<i>P</i> = 4√<i>A</i>',xn:'area, <i>A</i> (m²)',yn:'fence, <i>P</i> (m)',yfmt:function(y){ return y+' m'; },test:'<i>P</i> ÷ √<i>A</i>',t:function(x,y){ return y/Math.sqrt(x); },G:{xmax:100,ymax:40,xs:20,ys:8,xl:'<tspan font-style="italic">A</tspan>',yl:'<tspan font-style="italic">P</tspan>'},say:'Four times the area, twice the fence.'}
+ {key:'direct',name:'Pay by the hour',kind:'y ∝ x',xs:[1,2,3,4,5,6,7,8,9,10],x0:3,f:function(x){ return 12*x; },eq:'<i>y</i> = 12<i>x</i>',xn:'hours worked, <i>x</i>',yn:'pay, <i>y</i> (£)',yfmt:function(y){ return '£'+y; },test:'<span class=fr><span><i>y</i></span><span><i>x</i></span></span>',t:function(x,y){ return y/x; },G:{xmax:10,ymax:120,xs:1,ys:20,xl:'<tspan font-style="italic">x</tspan>',yl:'<tspan font-style="italic">y</tspan>'},say:'£12 an hour: twice the hours, twice the pay.'},
+ {key:'inverse',name:'Sharing a job',kind:'y ∝ 1/x',xs:[1,2,3,4,6,8,12,24],x0:2,f:function(x){ return 24/x; },eq:'<i>y</i> = <span class=fr><span>24</span><span><i>x</i></span></span>',xn:'number of workers, <i>x</i>',yn:'hours each, <i>y</i>',yfmt:function(y){ return y+' h'; },test:'<i>x</i> × <i>y</i>',t:function(x,y){ return x*y; },G:{xmax:24,ymax:24,xs:4,ys:4,xl:'<tspan font-style="italic">x</tspan>',yl:'<tspan font-style="italic">y</tspan>'},say:'A job of 24 worker-hours: twice the workers, half the time each.'},
+ {key:'square',name:'A ball rolling down a slope',kind:'d ∝ t²',xs:[1,2,3,4,5,6],x0:2,f:function(t){ return 5*t*t; },eq:'<i>d</i> = 5<i>t</i>²',xn:'time, <i>t</i> (seconds)',yn:'distance, <i>d</i> (cm)',yfmt:function(y){ return y+' cm'; },test:'<span class=fr><span><i>d</i></span><span><i>t</i>²</span></span>',t:function(x,y){ return y/(x*x); },G:{xmax:6,ymax:180,xs:1,ys:30,xl:'<tspan font-style="italic">t</tspan>',yl:'<tspan font-style="italic">d</tspan>'},say:'Twice the time, four times the distance.'},
+ {key:'root',name:'Fencing a square field',kind:'P ∝ √A',xs:[4,9,16,25,36,49,64,81,100],x0:16,f:function(a){ return 4*Math.sqrt(a); },eq:'<i>P</i> = 4√<i>A</i>',xn:'area, <i>A</i> (m²)',yn:'fence, <i>P</i> (m)',yfmt:function(y){ return y+' m'; },test:'<span class=fr><span><i>P</i></span><span>√<i>A</i></span></span>',t:function(x,y){ return y/Math.sqrt(x); },G:{xmax:100,ymax:40,xs:20,ys:8,xl:'<tspan font-style="italic">A</tspan>',yl:'<tspan font-style="italic">P</tspan>'},say:'Four times the area, twice the fence.'}
 ];
 var pe={m:0,i:0,pts:[],show:false};
 function peMode(m){ pe.m=m; var R=REL[m]; pe.i=R.xs.indexOf(R.x0); pe.pts=[]; pe.show=false; document.querySelectorAll('#peModes .chip').forEach(function(b,k){ b.classList.toggle('active',k===m); }); document.getElementById('peShow').classList.remove('active'); peAdd(); }
@@ -520,13 +523,13 @@ function peDraw(){ var R=REL[pe.m], A=axes(R.G), g=A.g, x=R.xs[pe.i];
 function peInit(){ peMode(0); }
 
 var ZQ=[
- {q:'In <b>Pay by the hour</b>, what is <i>y</i> ÷ <i>x</i>, every time?',ans:12,hint:'Pick any row: for example £36 for 3 hours.'},
- {q:'Which formula describes <b>Pay by the hour</b>?',kind:'chip',chips:['<i>y</i> = 12<i>x</i>','<i>y</i> = 12/<i>x</i>','<i>y</i> = <i>x</i> + 12'],ans:0,hint:'Pay is 12 times the hours.'},
+ {q:'In <b>Pay by the hour</b>, what is <span class=fr><span><i>y</i></span><span><i>x</i></span></span>, every time?',ans:12,hint:'Pick any row: for example £36 for 3 hours.'},
+ {q:'Which formula describes <b>Pay by the hour</b>?',kind:'chip',chips:['<i>y</i> = 12<i>x</i>','<i>y</i> = <span class=fr><span>12</span><span><i>x</i></span></span>','<i>y</i> = <i>x</i> + 12'],ans:0,hint:'Pay is 12 times the hours.'},
  {q:'In <b>Sharing a job</b>, what is <i>x</i> × <i>y</i>, every time?',ans:24,hint:'For example 2 workers × 12 hours each.',slips:{12:'Multiply the two columns together: 2 × 12, 3 × 8 …'}},
- {q:'In <b>Sharing a job</b>, how many hours does each of <b>8</b> workers take?',ans:3,hint:'8 × ? = 24.',slips:{16:'More workers means less time each. 8 × ? = 24.',192:'That is 24 × 8. The time each is 24 ÷ 8.'}},
- {q:'<i>y</i> is <b>directly</b> proportional to <i>x</i>, and <i>y</i> = 35 when <i>x</i> = 5. Find <i>y</i> when <i>x</i> = 9.',ans:63,hint:'Find <i>k</i> first: 35 ÷ 5 = 7, so <i>y</i> = 7<i>x</i>.',slips:{39:'Proportion multiplies; it does not add 4.',7:'7 is <i>k</i>. Now use <i>y</i> = 7<i>x</i> with <i>x</i> = 9.'}},
- {q:'<i>y</i> is <b>inversely</b> proportional to <i>x</i>, and <i>y</i> = 6 when <i>x</i> = 4. Find <i>y</i> when <i>x</i> = 3.',ans:8,hint:'Find <i>k</i> first: 6 × 4 = 24, so <i>y</i> = 24/<i>x</i>.',slips:{4.5:'That treats it as direct proportion. When <i>x</i> goes down, <i>y</i> goes up.',24:'24 is <i>k</i>. Now <i>y</i> = 24 ÷ 3.'}},
- {q:'<i>d</i> is proportional to <i>t</i>², and <i>d</i> = 20 when <i>t</i> = 2. Find <i>d</i> when <i>t</i> = 5.',ans:125,hint:'<i>k</i> = 20 ÷ 2² = 5, so <i>d</i> = 5<i>t</i>².',slips:{50:'That treats it as direct proportion to <i>t</i>. Square <i>t</i> first.',25:'<i>t</i>² = 25. Now multiply by <i>k</i> = 5.'}}
+ {q:'In <b>Sharing a job</b>, how many hours does each of <b>8</b> workers take?',ans:3,hint:'8 × ? = 24.',slips:{16:'More workers means less time each. 8 × ? = 24.',192:'That is 24 × 8. The time each is <span class=fr><span>24</span><span>8</span></span>.'}},
+ {q:'<i>y</i> is <b>directly</b> proportional to <i>x</i>, and <i>y</i> = 35 when <i>x</i> = 5. Find <i>y</i> when <i>x</i> = 9.',ans:63,hint:'Find <i>k</i> first: <span class=fr><span>35</span><span>5</span></span> = 7, so <i>y</i> = 7<i>x</i>.',slips:{39:'Proportion multiplies; it does not add 4.',7:'7 is <i>k</i>. Now use <i>y</i> = 7<i>x</i> with <i>x</i> = 9.'}},
+ {q:'<i>y</i> is <b>inversely</b> proportional to <i>x</i>, and <i>y</i> = 6 when <i>x</i> = 4. Find <i>y</i> when <i>x</i> = 3.',ans:8,hint:'Find <i>k</i> first: 6 × 4 = 24, so <i>y</i> = <span class=fr><span>24</span><span><i>x</i></span></span>.',slips:{4.5:'That treats it as direct proportion. When <i>x</i> goes down, <i>y</i> goes up.',24:'24 is <i>k</i>. Now <i>y</i> = <span class=fr><span>24</span><span>3</span></span>.'}},
+ {q:'<i>d</i> is proportional to <i>t</i>², and <i>d</i> = 20 when <i>t</i> = 2. Find <i>d</i> when <i>t</i> = 5.',ans:125,hint:'<i>k</i> = <span class=fr><span>20</span><span>2²</span></span> = 5, so <i>d</i> = 5<i>t</i>².',slips:{50:'That treats it as direct proportion to <i>t</i>. Square <i>t</i> first.',25:'<i>t</i>² = 25. Now multiply by <i>k</i> = 5.'}}
 ];
 var zq={q:0};
 function zqRender(){ var n=ZQ.length;
@@ -544,7 +547,7 @@ function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value;
 /* ---------------- Proof (stretch): why y = 24/x never meets the axes ---------------- */
 var PROOFS={
  pr:{steps:[
-  {q:'Every point on <i>y</i> = 24/<i>x</i> has <i>x</i> × <i>y</i> = 24. The shaded rectangles go from O to a point on the curve. What is the area of each one?',chips:['24 every time','it depends on the point'],ans:0,ok:'Every rectangle from O to the curve has area <i>x</i> × <i>y</i> = 24',hint:'2 × 12, 4 × 6, 8 × 3 …'},
+  {q:'Every point on <i>y</i> = <span class=fr><span>24</span><span><i>x</i></span></span> has <i>x</i> × <i>y</i> = 24. The shaded rectangles go from O to a point on the curve. What is the area of each one?',chips:['24 every time','it depends on the point'],ans:0,ok:'Every rectangle from O to the curve has area <i>x</i> × <i>y</i> = 24',hint:'2 × 12, 4 × 6, 8 × 3 …'},
   {q:'To touch the <b>vertical axis</b>, a point would need <i>x</i> = 0. Then <i>x</i> × <i>y</i> would be …',chips:['0, never 24: impossible','24, if <i>y</i> is big enough'],ans:0,ok:'On the vertical axis <i>x</i> = 0, so <i>x</i> × <i>y</i> = 0, not 24',hint:'0 times any number is 0.'},
   {q:'To touch the <b>horizontal axis</b>, a point would need <i>y</i> = 0. Then …',chips:['<i>x</i> × 0 = 0, not 24: impossible','it touches at <i>x</i> = 24'],ans:0,ok:'On the horizontal axis <i>y</i> = 0, so <i>x</i> × <i>y</i> = 0 again',hint:'At <i>x</i> = 24, <i>y</i> = 1, not 0.'}],
   done:'✓ <b>That is why.</b> Every point on the curve has <i>x</i> × <i>y</i> = 24, but every point on either axis has <i>x</i> × <i>y</i> = 0. So the curve gets closer and closer to both axes and never touches either one.'}
@@ -568,7 +571,7 @@ function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
   else msg(key+'Read','warn','Not yet. '+s.hint); }
 
 /* ---------------- MOVEMENT: spot the proportion ---------------- */
-var KINDS=['<i>y</i> ∝ <i>x</i>','<i>y</i> ∝ 1/<i>x</i>','<i>y</i> ∝ <i>x</i>²','None of these'];
+var KINDS=['<i>y</i> ∝ <i>x</i>','<i>y</i> ∝ <span class=fr><span>1</span><span><i>x</i></span></span>','<i>y</i> ∝ <i>x</i>²','None of these'];
 var SP=[[[1,5],[2,10],[4,20]],[[2,12],[3,8],[6,4]],[[1,3],[2,5],[3,7]],[[1,3],[2,12],[3,27]],[[5,4],[10,2],[20,1]],[[2,7],[4,14],[10,35]],[[1,10],[2,20],[3,40]],[[2,20],[4,80],[5,125]]];
 function spKind(T){ var c=function(f){ var v=T.map(function(p){ return f(p[0],p[1]); }); return v.every(function(z){ return Math.abs(z-v[0])<1e-9; }); };
   if(c(function(x,y){ return y/x; })) return 0; if(c(function(x,y){ return x*y; })) return 1; if(c(function(x,y){ return y/(x*x); })) return 2; return 3; }
@@ -577,8 +580,8 @@ var sp={i:0};
 function spRender(){ var T=SP[sp.i]; document.getElementById('spCount').textContent=(sp.i+1)+' of '+SP.length;
   document.getElementById('spQ').innerHTML='<table class="ptable small2"><tr><th><i>x</i></th>'+T.map(function(p){ return '<td>'+p[0]+'</td>'; }).join('')+'</tr><tr><th><i>y</i></th>'+T.map(function(p){ return '<td>'+p[1]+'</td>'; }).join('')+'</tr></table>';
   document.getElementById('spAns').innerHTML=chipsHtml(KINDS,'spPick'); }
-function spPick(k){ var a=SPANS[sp.i], why=['<i>y</i> ÷ <i>x</i> is the same each time.','<i>x</i> × <i>y</i> is the same each time.','<i>y</i> ÷ <i>x</i>² is the same each time.','None of <i>y</i> ÷ <i>x</i>, <i>x</i> × <i>y</i> or <i>y</i> ÷ <i>x</i>² stays the same.'][a];
-  if(k===a) msg('spRead','good','✓ Yes: '+why); else msg('spRead','warn','Not yet. Test it: work out <i>y</i> ÷ <i>x</i>, <i>x</i> × <i>y</i> and <i>y</i> ÷ <i>x</i>² for each pair.'); }
+function spPick(k){ var a=SPANS[sp.i], why=['<span class=fr><span><i>y</i></span><span><i>x</i></span></span> is the same each time.','<i>x</i> × <i>y</i> is the same each time.','<span class=fr><span><i>y</i></span><span><i>x</i>²</span></span> is the same each time.','None of <span class=fr><span><i>y</i></span><span><i>x</i></span></span>, <i>x</i> × <i>y</i> or <span class=fr><span><i>y</i></span><span><i>x</i>²</span></span> stays the same.'][a];
+  if(k===a) msg('spRead','good','✓ Yes: '+why); else msg('spRead','warn','Not yet. Test it: work out <span class=fr><span><i>y</i></span><span><i>x</i></span></span>, <i>x</i> × <i>y</i> and <span class=fr><span><i>y</i></span><span><i>x</i>²</span></span> for each pair.'); }
 function spNext(){ sp.i=(sp.i+1)%SP.length; document.getElementById('spRead').style.display='none'; spRender(); }
 function spInit(){ spRender(); }
 
@@ -586,10 +589,10 @@ function spInit(){ spRender(); }
 var TN=[
  {said:'If <i>y</i> ∝ <i>x</i>, the graph is a straight line through the origin.',truth:function(){ return true; },why:'<i>y</i> = <i>kx</i> is a straight line, and when <i>x</i> = 0, <i>y</i> = 0.'},
  {said:'<i>y</i> = 2<i>x</i> + 3 is direct proportion, because its graph is a straight line.',truth:function(){ return 2*1+3===(2*2+3)/2; },why:'When <i>x</i> doubles from 1 to 2, <i>y</i> goes from 5 to 7, not 10. Its line does not pass through the origin.'},
- {said:'If <i>y</i> ∝ 1/<i>x</i>, then when <i>x</i> doubles, <i>y</i> halves.',truth:function(){ return 24/4===(24/2)/2; },why:'<i>y</i> = <i>k</i>/<i>x</i>, so doubling <i>x</i> halves <i>y</i>.'},
+ {said:'If <i>y</i> ∝ <span class=fr><span>1</span><span><i>x</i></span></span>, then when <i>x</i> doubles, <i>y</i> halves.',truth:function(){ return 24/4===(24/2)/2; },why:'<i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i></span></span>, so doubling <i>x</i> halves <i>y</i>.'},
  {said:'If <i>y</i> ∝ <i>x</i>², then when <i>x</i> doubles, <i>y</i> doubles.',truth:function(){ return 5*4*4===2*5*2*2; },why:'(2<i>x</i>)² = 4<i>x</i>², so <i>y</i> is multiplied by 4.'},
- {said:'If <i>y</i> is inversely proportional to <i>x</i>, then <i>x</i> × <i>y</i> is the same for every pair.',truth:function(){ return true; },why:'<i>y</i> = <i>k</i>/<i>x</i> means <i>x</i> × <i>y</i> = <i>k</i>.'},
- {said:'The graph of <i>y</i> = 12/<i>x</i> crosses the <i>x</i>-axis at <i>x</i> = 12.',truth:function(){ return 12/12===0; },why:'At <i>x</i> = 12, <i>y</i> = 1. The curve never reaches <i>y</i> = 0 (see the stretch).'}
+ {said:'If <i>y</i> is inversely proportional to <i>x</i>, then <i>x</i> × <i>y</i> is the same for every pair.',truth:function(){ return true; },why:'<i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i></span></span> means <i>x</i> × <i>y</i> = <i>k</i>.'},
+ {said:'The graph of <i>y</i> = <span class=fr><span>12</span><span><i>x</i></span></span> crosses the <i>x</i>-axis at <i>x</i> = 12.',truth:function(){ return 12/12===0; },why:'At <i>x</i> = 12, <i>y</i> = 1. The curve never reaches <i>y</i> = 0 (see the stretch).'}
 ];
 var tn={i:0};
 function tnRender(){ document.getElementById('tnCount').textContent=(tn.i+1)+' of '+TN.length; document.getElementById('tnQ').innerHTML='“'+TN[tn.i].said+'”'; }
@@ -599,7 +602,7 @@ function tnInit(){ tnRender(); }
 
 /* ---------------- CREATIVITY: make it fit ---------------- */
 var FT={t:0,k:1};
-var FTT=[{n:'<i>y</i> = <i>kx</i>',f:function(x){ return FT.k*x; }},{n:'<i>y</i> = <i>k</i>/<i>x</i>',f:function(x){ return FT.k/x; }},{n:'<i>y</i> = <i>kx</i>²',f:function(x){ return FT.k*x*x; }}];
+var FTT=[{n:'<i>y</i> = <i>kx</i>',f:function(x){ return FT.k*x; }},{n:'<i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i></span></span>',f:function(x){ return FT.k/x; }},{n:'<i>y</i> = <i>kx</i>²',f:function(x){ return FT.k*x*x; }}];
 function ftType(t){ FT.t=t; document.querySelectorAll('#ftTypes .chip').forEach(function(b,i){ b.classList.toggle('active',i===t); }); ftDraw(); }
 function ftK(d){ var n=FT.k+d; if(n<1||n>60) return false; FT.k=n; ftDraw(); return true; }
 function ftOn(p){ return Math.abs(FTT[FT.t].f(p[0])-p[1])<1e-9; }
@@ -658,14 +661,14 @@ function mkNext(){ mk.i=(mk.i+1)%MK.length; document.getElementById('mkRead').st
 /* ---------------- PRACTICE COMPANION ---------------- */
 function pQ(n){ return function(v){ return same(qty(String(v).replace(/\s*(days?|h|hours?)\s*$/i,'')),n); }; }
 var PRACTICE=[
- {label:"1 of 8 · Direct",q:"<i>y</i> ∝ <i>x</i>, and <i>y</i> = 24 when <i>x</i> = 3. Find <i>y</i> when <i>x</i> = 7.",a:[],eq:pQ(56),prompt:"What is <i>k</i> in <i>y</i> = <i>kx</i>?",hint:"<i>k</i> = 24 ÷ 3 = 8.",sol:"<i>k</i> = 24 ÷ 3 = 8, so <i>y</i> = 8<i>x</i>. When <i>x</i> = 7, <i>y</i> = 56."},
- {label:"2 of 8 · Direct, backwards",q:"<i>y</i> ∝ <i>x</i>, and <i>y</i> = 30 when <i>x</i> = 6. Find <i>x</i> when <i>y</i> = 45.",a:[],eq:pQ(9),prompt:"Find <i>k</i>, then solve <i>kx</i> = 45.",hint:"<i>k</i> = 5, so 5<i>x</i> = 45.",sol:"<i>k</i> = 30 ÷ 6 = 5, so <i>y</i> = 5<i>x</i>. 5<i>x</i> = 45 gives <i>x</i> = 9."},
- {label:"3 of 8 · Inverse",q:"<i>y</i> ∝ 1/<i>x</i>, and <i>y</i> = 10 when <i>x</i> = 2. Find <i>y</i> when <i>x</i> = 5.",a:[],eq:pQ(4),prompt:"What stays the same: <i>y</i> ÷ <i>x</i> or <i>x</i> × <i>y</i>?",hint:"<i>k</i> = 10 × 2 = 20.",sol:"<i>k</i> = <i>x</i> × <i>y</i> = 20, so <i>y</i> = 20/<i>x</i>. When <i>x</i> = 5, <i>y</i> = 4."},
- {label:"4 of 8 · Inverse, backwards",q:"<i>y</i> ∝ 1/<i>x</i>, and <i>y</i> = 8 when <i>x</i> = 3. Find <i>x</i> when <i>y</i> = 6.",a:[],eq:pQ(4),prompt:"Find <i>k</i> first.",hint:"<i>k</i> = 24, so <i>x</i> × 6 = 24.",sol:"<i>k</i> = 8 × 3 = 24. <i>x</i> × 6 = 24 gives <i>x</i> = 4."},
+ {label:"1 of 8 · Direct",q:"<i>y</i> ∝ <i>x</i>, and <i>y</i> = 24 when <i>x</i> = 3. Find <i>y</i> when <i>x</i> = 7.",a:[],eq:pQ(56),prompt:"What is <i>k</i> in <i>y</i> = <i>kx</i>?",hint:"<i>k</i> = <span class=fr><span>24</span><span>3</span></span> = 8.",sol:"<i>k</i> = <span class=fr><span>24</span><span>3</span></span> = 8, so <i>y</i> = 8<i>x</i>. When <i>x</i> = 7, <i>y</i> = 56."},
+ {label:"2 of 8 · Direct, backwards",q:"<i>y</i> ∝ <i>x</i>, and <i>y</i> = 30 when <i>x</i> = 6. Find <i>x</i> when <i>y</i> = 45.",a:[],eq:pQ(9),prompt:"Find <i>k</i>, then solve <i>kx</i> = 45.",hint:"<i>k</i> = 5, so 5<i>x</i> = 45.",sol:"<i>k</i> = <span class=fr><span>30</span><span>6</span></span> = 5, so <i>y</i> = 5<i>x</i>. 5<i>x</i> = 45 gives <i>x</i> = 9."},
+ {label:"3 of 8 · Inverse",q:"<i>y</i> ∝ <span class=fr><span>1</span><span><i>x</i></span></span>, and <i>y</i> = 10 when <i>x</i> = 2. Find <i>y</i> when <i>x</i> = 5.",a:[],eq:pQ(4),prompt:"What stays the same: <span class=fr><span><i>y</i></span><span><i>x</i></span></span> or <i>x</i> × <i>y</i>?",hint:"<i>k</i> = 10 × 2 = 20.",sol:"<i>k</i> = <i>x</i> × <i>y</i> = 20, so <i>y</i> = <span class=fr><span>20</span><span><i>x</i></span></span>. When <i>x</i> = 5, <i>y</i> = 4."},
+ {label:"4 of 8 · Inverse, backwards",q:"<i>y</i> ∝ <span class=fr><span>1</span><span><i>x</i></span></span>, and <i>y</i> = 8 when <i>x</i> = 3. Find <i>x</i> when <i>y</i> = 6.",a:[],eq:pQ(4),prompt:"Find <i>k</i> first.",hint:"<i>k</i> = 24, so <i>x</i> × 6 = 24.",sol:"<i>k</i> = 8 × 3 = 24. <i>x</i> × 6 = 24 gives <i>x</i> = 4."},
  {label:"5 of 8 · Find k",q:"<i>y</i> is directly proportional to <i>x</i>, and <i>y</i> = 15 when <i>x</i> = 3. Write <i>y</i> = <i>kx</i>: what is <i>k</i>?",a:[],eq:pQ(5),prompt:"Substitute the pair into <i>y</i> = <i>kx</i>.",hint:"15 = <i>k</i> × 3.",sol:"15 = 3<i>k</i>, so <i>k</i> = 5 and <i>y</i> = 5<i>x</i>."},
- {label:"6 of 8 · A square",q:"<i>y</i> ∝ <i>x</i>², and <i>y</i> = 18 when <i>x</i> = 3. Find <i>y</i> when <i>x</i> = 5.",a:[],eq:pQ(50),prompt:"Write <i>y</i> = <i>kx</i>² and find <i>k</i>.",hint:"18 = <i>k</i> × 9, so <i>k</i> = 2.",sol:"<i>k</i> = 18 ÷ 9 = 2, so <i>y</i> = 2<i>x</i>². When <i>x</i> = 5, <i>y</i> = 2 × 25 = 50."},
- {label:"7 of 8 · Workers",q:"4 workers take 9 days to build a wall. How many days would 6 workers take, working at the same rate?",a:[],eq:pQ(6),prompt:"More workers: more time or less?",hint:"The job is 4 × 9 = 36 worker-days.",sol:"The job is 4 × 9 = 36 worker-days, so 6 workers take 36 ÷ 6 = 6 days."},
- {label:"8 of 8 · Inverse square (stretch)",q:"<i>y</i> ∝ 1/<i>x</i>², and <i>y</i> = 5 when <i>x</i> = 2. Find <i>y</i> when <i>x</i> = 4.",a:[],eq:pQ(1.25),prompt:"Write <i>y</i> = <i>k</i>/<i>x</i>² and find <i>k</i>.",hint:"5 = <i>k</i> ÷ 4, so <i>k</i> = 20.",sol:"<i>k</i> = 5 × 2² = 20, so <i>y</i> = 20/<i>x</i>². When <i>x</i> = 4, <i>y</i> = 20 ÷ 16 = 1.25 (or 5/4)."}
+ {label:"6 of 8 · A square",q:"<i>y</i> ∝ <i>x</i>², and <i>y</i> = 18 when <i>x</i> = 3. Find <i>y</i> when <i>x</i> = 5.",a:[],eq:pQ(50),prompt:"Write <i>y</i> = <i>kx</i>² and find <i>k</i>.",hint:"18 = <i>k</i> × 9, so <i>k</i> = 2.",sol:"<i>k</i> = <span class=fr><span>18</span><span>9</span></span> = 2, so <i>y</i> = 2<i>x</i>². When <i>x</i> = 5, <i>y</i> = 2 × 25 = 50."},
+ {label:"7 of 8 · Workers",q:"4 workers take 9 days to build a wall. How many days would 6 workers take, working at the same rate?",a:[],eq:pQ(6),prompt:"More workers: more time or less?",hint:"The job is 4 × 9 = 36 worker-days.",sol:"The job is 4 × 9 = 36 worker-days, so 6 workers take <span class=fr><span>36</span><span>6</span></span> = 6 days."},
+ {label:"8 of 8 · Inverse square (stretch)",q:"<i>y</i> ∝ <span class=fr><span>1</span><span><i>x</i>²</span></span>, and <i>y</i> = 5 when <i>x</i> = 2. Find <i>y</i> when <i>x</i> = 4.",a:[],eq:pQ(1.25),prompt:"Write <i>y</i> = <span class=fr><span><i>k</i></span><span><i>x</i>²</span></span> and find <i>k</i>.",hint:"5 = <span class=fr><span><i>k</i></span><span>4</span></span>, so <i>k</i> = 20.",sol:"<i>k</i> = 5 × 2² = 20, so <i>y</i> = <span class=fr><span>20</span><span><i>x</i>²</span></span>. When <i>x</i> = 4, <i>y</i> = <span class=fr><span>20</span><span>16</span></span> = 1.25 (or 5/4)."}
 ];
 var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
 function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
