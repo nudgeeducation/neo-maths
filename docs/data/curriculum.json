@@ -1145,6 +1145,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/06-repeated-change-compound-interest-and-depreciation.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-07-growth-models",
+          "num": "Lesson 07",
+          "title": "Growth models",
+          "file": "lessons/percentages-ratio-growth-bounds/07-growth-models.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
