@@ -1153,6 +1153,14 @@
           "file": "lessons/percentages-ratio-growth-bounds/07-growth-models.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "pr-08-bounds",
+          "num": "Lesson 08",
+          "title": "Bounds of a rounded value",
+          "file": "lessons/percentages-ratio-growth-bounds/08-bounds-of-a-rounded-value.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

@@ -174,6 +174,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_06_Repeated_Change/NEO_Maths_Y10_PercentagesRatio_Lesson_06_Repeated_Change_v0.1.html",
     "pr-07-growth-models":
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_07_Growth_Models/NEO_Maths_Y10_PercentagesRatio_Lesson_07_Growth_Models_v0.1.html",
+    "pr-08-bounds":
+        "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_08_Bounds/NEO_Maths_Y10_PercentagesRatio_Lesson_08_Bounds_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
