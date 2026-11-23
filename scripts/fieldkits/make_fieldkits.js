@@ -14,7 +14,8 @@ const KITS = [
   { unit: 'place-value', file: 'NEO_Maths_Y7_Place_Value_Counting_House_v0.1.html', expedition: 'The Counting House' },
   { unit: 'angles', file: 'NEO_Maths_Y7_Angles_and_Area_Architects_Studio_v0.1.html', expedition: 'The Architect’s Studio' },
   { unit: 'perimeter-area', file: 'NEO_Maths_Y7_Angles_and_Area_Architects_Studio_v0.1.html', expedition: 'The Architect’s Studio' },
-  { unit: 'percentages-ratio-growth-bounds', file: 'NEO_Maths_Y10_Percentages_Ratio_Growth_Bounds_Market_Hall_v0.1.html', expedition: 'The Market Hall' }
+  { unit: 'percentages-ratio-growth-bounds', file: 'NEO_Maths_Y10_Percentages_Ratio_Growth_Bounds_Market_Hall_v0.1.html', expedition: 'The Market Hall' },
+  { unit: 'sets-and-venn-diagrams', file: 'NEO_Maths_Y10_Sets_and_Venn_Diagrams_Sorting_Office_v0.1.html', expedition: 'The Sorting Office' }
 ];
 const outDir = path.join(ROOT, 'docs/assets/fieldkits');
 fs.mkdirSync(outDir, { recursive: true });

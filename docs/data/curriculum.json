@@ -1181,6 +1181,27 @@
       ]
     },
     {
+      "id": "sets-and-venn-diagrams",
+      "title": "Sets and Venn Diagrams",
+      "stage": "Intermediate",
+      "strand": "Number",
+      "source": "vault/03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams",
+      "diagnostic": {
+        "id": "sortingoffice",
+        "title": "The Sorting Office"
+      },
+      "lessons": [
+        {
+          "id": "sv-01-sets-elements-notation",
+          "num": "Lesson 01",
+          "title": "Sets, elements and set notation",
+          "file": "lessons/sets-and-venn-diagrams/01-sets-elements-and-set-notation.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "ks3-interactive-library",
       "title": "KS3 Interactive Library",
       "stage": "Key Stage 3",
