@@ -68,9 +68,9 @@ Finally, Venn diagrams **solve problems**. Given totals, fill the diagram from t
 | Room | Leads into | Lock checks |
 |---|---|---|
 | The Letter Racks | Lesson 1 | List the factors of 18 |
-| The Parcel Bays | Lesson 2 | Which numbers from 1 to 12 are both even and multiples of 3? Which are even or multiples of 3? |
+| The Parcel Bays | Lesson 2 | Which numbers from 1 to 12 are both even and multiples of 3? (Listing every number that is even or a multiple of 3 is caught as the “or” slip.) |
 | The Address Desk | Lesson 3 | List the integers *x* with 2 < *x* ≤ 6 |
-| The Three-Chute Machine | Lesson 4 | Read a count from a two-way table, or from a two-circle diagram with numbers |
+| The Three-Chute Machine | Lesson 4 | Read a count from a two-way table (heavy but not fragile) |
 | The Dispatch Board | Lesson 5 | A bag has 3 red and 5 blue counters. What is the probability of picking red? |
 
 The expedition follows the established format: a back door or side passage for every lock, a feel check, the field kit, a "Did you know?", Still, Flat, Comfort and Read aloud, and no scores. The unit's lessons get the **field kit** button with the expedition's tools. A short **end-of-unit assessment** follows Lesson 5; its approach is still to be agreed (the Unit Check-in proposal, awaiting the Director).
