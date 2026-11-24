@@ -444,6 +444,14 @@
           "file": "lessons/transformations-similarity-and-scale/01-reflection.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-02-rotation",
+          "num": "Lesson 02",
+          "title": "Rotation",
+          "file": "lessons/transformations-similarity-and-scale/02-rotation.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

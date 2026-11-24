@@ -868,5 +868,24 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 })();
 </script>
 <div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+
+<script>/* NEO: return to the exact place after the Geometry Studio */
+(function(){
+  var KEY='neoReturn:'+location.pathname, p=location.pathname, i=p.indexOf('/lessons/'), rel=i<0?null:'..'+p.slice(i);
+  function snap(){ var det=[].slice.call(document.querySelectorAll('details')), pv=document.getElementById('practiceView'), a=document.getElementById('practiceAnswer');
+    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:''}; }
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(snap())); }catch(e){} }
+  [].slice.call(document.querySelectorAll('a[href*="geometry-studio.html"]')).forEach(function(a){ var h=a.getAttribute('href');
+    if(rel&&!/[?&]return=/.test(h)) a.setAttribute('href',h+(h.indexOf('?')<0?'?':'&')+'return='+encodeURIComponent(rel));
+    a.addEventListener('click',save); });
+  var s=null; try{ s=JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){}
+  if(!s||Date.now()-s.t>3*3600*1000) return;
+  try{ sessionStorage.removeItem(KEY); }catch(e){}
+  function restore(){ var det=document.querySelectorAll('details'); (s.open||[]).forEach(function(k){ if(det[k]) det[k].open=true; });
+    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; } }
+    setTimeout(function(){ window.scrollTo(0,s.y); },s.practice?450:60); }
+  if(document.readyState==='complete') setTimeout(restore,80); else window.addEventListener('load',function(){ setTimeout(restore,80); });
+})();
+</script>
 </body>
 </html>

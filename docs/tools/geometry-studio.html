@@ -52,6 +52,8 @@ h1{color:#3f5f45;margin:0 0 2px;font-size:1.3em}.sub{color:#6a7f4e;margin:0 0 10
 .toolbox button.act{background:#eef3e8}
 .toolbox button.act[disabled]{opacity:.4;cursor:default}
 .stage{position:relative;background:#fbf7ef;flex:1;min-width:0}
+.canvasscroll{overflow:auto;width:100%;height:min(560px,72vh);background:#fbf7ef;overscroll-behavior:contain}
+.canvasscroll svg#canvas{width:2580px;height:1680px;max-width:none}
 svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 .hint{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.92em;min-height:1.2em}
 .legend{font-size:.82em;color:#6a6157;margin-top:8px}
@@ -168,6 +170,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
       <button data-act="snap">Snap points to the grid on / off</button>
       <button data-act="coords">Show coordinates on / off</button>
       <button data-act="plotpoints">Plot points… (type coordinates)</button>
+      <button data-act="centreview">Centre the view on the origin</button>
       <div class="sep"></div>
       <button class="disabled">Plot function… — soon</button>
       <button class="disabled">Bearings → use Measure → Bearing</button>
@@ -194,7 +197,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
     <button class="tool act" id="tbRedo" title="Redo (Ctrl/Cmd+Y or Shift+Ctrl/Cmd+Z)"><span>↷</span><span class="cap">Redo</span></button>
   </div>
   <div class="stage">
-    <svg id="canvas" viewBox="0 0 860 560" role="img" aria-label="Dynamic geometry construction area"></svg>
+    <div class="canvasscroll" id="canvasScroll" tabindex="0" aria-label="Drawing area: scroll to look around"><svg id="canvas" viewBox="-860 -560 2580 1680" width="2580" height="1680" role="img" aria-label="Dynamic geometry construction area"></svg></div>
   </div>
   <aside class="tasklane" id="taskLane" hidden aria-label="Lesson task">
     <div class="tl-tag" id="tlTag"></div>
@@ -225,6 +228,8 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 "use strict";
 var svg=document.getElementById("canvas"), hint=document.getElementById("hint");
 var VW=860, VH=560;
+/* the world is larger than the window: x from WX0 to WX0+WW, y from WY0 to WY0+WH (the original 860 x 560 area is in the middle) */
+var WX0=-860, WY0=-560, WW=2580, WH=1680;
 var objects=[], nextId=1, pointLabel=0;
 var tool="select";
 var sel=[];               // selection: array of object ids (Sketchpad-style)
@@ -308,7 +313,7 @@ function updateOnPoint(o,pos){var host=byId(o.on);if(isCircleish(host)){o.ang=an
 function arcPath(c,r,a0,swept){var a1=a0+swept;var s={x:c.x+r*Math.cos(a0),y:c.y+r*Math.sin(a0)},e={x:c.x+r*Math.cos(a1),y:c.y+r*Math.sin(a1)};var large=Math.abs(swept)>Math.PI?1:0,sweep=swept>=0?1:0;return "M"+s.x.toFixed(1)+" "+s.y.toFixed(1)+" A"+r.toFixed(1)+" "+r.toFixed(1)+" 0 "+large+" "+sweep+" "+e.x.toFixed(1)+" "+e.y.toFixed(1);}
 function normAng(x){while(x>Math.PI)x-=2*Math.PI;while(x<-Math.PI)x+=2*Math.PI;return x;}
 function isSel(id){return sel.indexOf(id)>=0;}
-function lineEndpoints(o){var l=lineGeom(o),u=unit(l.d),ext=2000;
+function lineEndpoints(o){var l=lineGeom(o),u=unit(l.d),ext=6000;
   if(o.type==="segment")return [P(o.a),P(o.b)];
   if(o.type==="line"&&o.kind==="ray")return [P(o.a),{x:P(o.a).x+u.x*ext,y:P(o.a).y+u.y*ext}];
   return [{x:l.p.x-u.x*ext,y:l.p.y-u.y*ext},{x:l.p.x+u.x*ext,y:l.p.y+u.y*ext}];}
@@ -318,22 +323,22 @@ function highlightSVG(o){var col="#e79b5a",w=9,op="0.45";
   if(o.type==="arc"){var ga=circGeom(o),a0=ang(ga.c,P(o.rp));return '<path d="'+arcPath(ga.c,ga.r,a0,o.swept)+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-opacity="'+op+'" stroke-linecap="round"/>';}
   return "";}
 /* numbered, labelled axes (GreenPrint v2.3): every unit numbered, italic x and y, O at the origin */
-function axesSVG(){var s="",u=AX.u,ox=AX.ox,oy=AX.oy,xmin=Math.ceil(-ox/u),xmax=Math.floor((VW-ox)/u),ymin=Math.ceil(-(VH-oy)/u),ymax=Math.floor(oy/u);
-  for(var i=xmin;i<=xmax;i++){var X=ox+i*u;s+='<line x1="'+X+'" y1="0" x2="'+X+'" y2="'+VH+'" stroke="#e2d9c6" stroke-width="1"/>';}
-  for(var j=ymin;j<=ymax;j++){var Y=oy-j*u;s+='<line x1="0" y1="'+Y+'" x2="'+VW+'" y2="'+Y+'" stroke="#e2d9c6" stroke-width="1"/>';}
-  s+='<line x1="0" y1="'+oy+'" x2="'+(VW-4)+'" y2="'+oy+'" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/><line x1="'+ox+'" y1="'+VH+'" x2="'+ox+'" y2="4" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/>';
+function axesSVG(){var s="",u=AX.u,ox=AX.ox,oy=AX.oy,xmin=Math.ceil((WX0-ox)/u),xmax=Math.floor((WX0+WW-ox)/u),ymin=Math.ceil(-(WY0+WH-oy)/u),ymax=Math.floor((oy-WY0)/u);
+  for(var i=xmin;i<=xmax;i++){var X=ox+i*u;s+='<line x1="'+X+'" y1="'+WY0+'" x2="'+X+'" y2="'+(WY0+WH)+'" stroke="#e2d9c6" stroke-width="1"/>';}
+  for(var j=ymin;j<=ymax;j++){var Y=oy-j*u;s+='<line x1="'+WX0+'" y1="'+Y+'" x2="'+(WX0+WW)+'" y2="'+Y+'" stroke="#e2d9c6" stroke-width="1"/>';}
+  s+='<line x1="'+WX0+'" y1="'+oy+'" x2="'+(WX0+WW-4)+'" y2="'+oy+'" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/><line x1="'+ox+'" y1="'+(WY0+WH)+'" x2="'+ox+'" y2="'+(WY0+4)+'" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/>';
   s+='<defs><marker id="axArr" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f3429"/></marker></defs>';
   for(var a=xmin;a<=xmax;a++){if(a===0)continue;var XX=ox+a*u;s+='<line x1="'+XX+'" y1="'+(oy-4)+'" x2="'+XX+'" y2="'+(oy+4)+'" stroke="#2f3429" stroke-width="1"/><text class="axnum" x="'+XX+'" y="'+(oy+16)+'" font-size="11" text-anchor="middle" fill="#4a4f45">'+fmtNum(a)+'</text>';}
   for(var b=ymin;b<=ymax;b++){if(b===0)continue;var YY=oy-b*u;s+='<line x1="'+(ox-4)+'" y1="'+YY+'" x2="'+(ox+4)+'" y2="'+YY+'" stroke="#2f3429" stroke-width="1"/><text class="axnum" x="'+(ox-7)+'" y="'+(YY+4)+'" font-size="11" text-anchor="end" fill="#4a4f45">'+fmtNum(b)+'</text>';}
   s+='<text x="'+(ox-7)+'" y="'+(oy+16)+'" font-size="12" text-anchor="end" font-family="Georgia,serif" font-style="italic" fill="#2f3429">O</text>';
-  s+='<text x="'+(VW-14)+'" y="'+(oy-8)+'" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">x</text><text x="'+(ox+9)+'" y="16" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">y</text>';
+  s+='<text x="'+(WX0+WW-14)+'" y="'+(oy-8)+'" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">x</text><text x="'+(ox+9)+'" y="'+(WY0+16)+'" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">y</text>';
   return s;}
 function eqLabel(o){if(o.eq==="x")return "x = "+fmtNum(o.k);if(o.eq==="y")return "y = "+fmtNum(o.k);if(o.eq==="yx")return "y = x";return "y = −x";}
 function render(){
   var s="";
   if(AX.on){s+=axesSVG();}else{
-  for(var gx=0;gx<=VW;gx+=30)s+='<line x1="'+gx+'" y1="0" x2="'+gx+'" y2="'+VH+'" stroke="#efe7d7" stroke-width="1"/>';
-  for(var gy=0;gy<=VH;gy+=30)s+='<line x1="0" y1="'+gy+'" x2="'+VW+'" y2="'+gy+'" stroke="#efe7d7" stroke-width="1"/>';}
+  for(var gx=WX0;gx<=WX0+WW;gx+=30)s+='<line x1="'+gx+'" y1="'+WY0+'" x2="'+gx+'" y2="'+(WY0+WH)+'" stroke="#efe7d7" stroke-width="1"/>';
+  for(var gy=WY0;gy<=WY0+WH;gy+=30)s+='<line x1="'+WX0+'" y1="'+gy+'" x2="'+(WX0+WW)+'" y2="'+gy+'" stroke="#efe7d7" stroke-width="1"/>';}
   // traces
   objects.forEach(function(o){if(o.trace&&o._trail)o._trail.forEach(function(p){s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="1.6" fill="#9a6fbf"/>';});});
   // filled polygons (behind lines/points)
@@ -394,7 +399,7 @@ function doUndo(){if(!history.length){setHint("Nothing to undo.");return;}future
 function doRedo(){if(!future.length){setHint("Nothing to redo.");return;}history.push(lastState);lastState=future.pop();restoreState(lastState);render();updateUndoRedo();setHint("Redone.");}
 
 /* ---------- pointer / instruments ---------- */
-function toXY(e){var r=svg.getBoundingClientRect();return {x:(e.clientX-r.left)*VW/r.width,y:(e.clientY-r.top)*VH/r.height};}
+function toXY(e){var r=svg.getBoundingClientRect();return {x:WX0+(e.clientX-r.left)*WW/r.width,y:WY0+(e.clientY-r.top)*WH/r.height};}
 function setHint(t){hint.innerHTML=t;}
 function toggleSel(id){var i=sel.indexOf(id);if(i>=0)sel.splice(i,1);else sel.push(id);}
 function commitCompass(){if(!compass)return;var _c=compass.c,_sw=compass.swept,_rp;if(compass.mode==="len"){var pol={id:nextId++,type:"point",kind:"polar",c:_c,seg:compass.seg,ang:compass.start,label:nextLabel()};objects.push(pol);_rp=pol.id;}else{_rp=compass.rp;}objects.push({id:nextId++,type:"arc",c:_c,rp:_rp,swept:_sw});objects.push({id:nextId++,type:"point",kind:"arcend",c:_c,rp:_rp,swept:_sw,label:nextLabel()});compass=null;setHint("Arc drawn with a fixed end point. Click a new centre for another.");}
@@ -515,6 +520,7 @@ var ACT={
   snap:function(){AX.snap=!AX.snap;setHint(AX.snap?"Points snap to grid points.":"Points no longer snap.");render();},
   coords:function(){if(!AX.on){AX.on=true;}AX.coords=!AX.coords;render();setHint(AX.coords?"Coordinates shown beside each point.":"Coordinates hidden.");},
   plotpoints:function(){openPlotDialog();},
+  centreview:function(){viewCentreOn(AX.ox,AX.oy);setHint("View centred on the origin. Scroll to look around: the drawing area is much larger than the window.");},
   markmirror:function(){var l=selLines();if(l.length!==1||selObjs().length!==1){need("exactly 1 line or segment: the mirror. Switch to Select, click an empty space, then click the line.");return;}objects.forEach(function(o){delete o.isMirror;});l[0].isMirror=true;sel=[];render();setHint("Mirror marked (shown with a purple glow). Now select what to reflect, then Transform → Reflect.");},
   markcentre:function(){var p=selPoints();if(p.length!==1||selObjs().length!==1){need("exactly 1 point: the centre of rotation.");return;}objects.forEach(function(o){delete o.isCentre;});p[0].isCentre=true;sel=[];render();setHint("Centre marked (purple ring). Now select what to rotate, then Transform → Rotate….");},
   mirrorline:function(){openMirrorDialog();},
@@ -572,7 +578,7 @@ function openColourDialog(){if(!sel.length){need("objects to colour first (switc
 function applyColour(col){selObjs().forEach(function(o){if(o.type==="polygon"){o.fill=(col==="default")?"#9ec7e8":col;}else{if(col==="default"||col==="none")delete o.colour;else o.colour=col;}});render();setHint("Colour applied.");}
 
 /* ---------- transformations (v0.5) ---------- */
-function transformable(){return selObjs().filter(function(o){return !o.hidden&&!o.isMirror&&(o.type==="point"||o.type==="segment"||o.type==="polygon"||o.type==="circle"||(o.type==="line"&&o.kind!=="eq"));});}
+function transformable(){return selObjs().filter(function(o){return !o.hidden&&!o.isMirror&&!o.isCentre&&(o.type==="point"||o.type==="segment"||o.type==="polygon"||o.type==="circle"||(o.type==="line"&&o.kind!=="eq"));});}
 function primeOf(l){var base=String(l||"").replace(/[′″‴⁗]+$/,""),cur=String(l||"").slice(base.length),order=["","′","″","‴","⁗"],taken={};objects.forEach(function(o){if(o.type==="point")taken[o.label]=1;});
   var i=Math.max(1,order.indexOf(cur)+1);while(i<order.length-1&&taken[base+order[i]])i++;return base+order[Math.min(i,order.length-1)];}
 function transformSel(tf,msg){var objs=transformable();if(!objs.length){need("something to transform: points, segments or a polygon (drag a box around a shape).");return false;}
@@ -587,7 +593,12 @@ function transformSel(tf,msg){var objs=transformable();if(!objs.length){need("so
       var have={};objs.forEach(function(q){if(q.type==="segment")have[q.a+"-"+q.b]=have[q.b+"-"+q.a]=1;});
       o.pts.forEach(function(a,i){var b=o.pts[(i+1)%o.pts.length];if(have[a+"-"+b])return;var edge=objects.filter(function(q){return q.type==="segment"&&((q.a===a&&q.b===b)||(q.a===b&&q.b===a));})[0];if(edge){have[a+"-"+b]=have[b+"-"+a]=1;objects.push({id:nextId++,type:"segment",a:img(a),b:img(b),img:true});}});}
   });
-  sel=[];render();setHint(msg);return true;}
+  sel=[];render();followPts(Object.keys(map).map(function(k){return P(map[k]);}));setHint(msg);return true;}
+/* scrolling: show points that are out of view; centre the view on a point */
+var scroller=document.getElementById("canvasScroll");
+function viewCentreOn(x,y){if(!scroller)return;scroller.scrollLeft=Math.max(0,(x-WX0)-scroller.clientWidth/2);scroller.scrollTop=Math.max(0,(y-WY0)-scroller.clientHeight/2);}
+function followPts(pts){if(!scroller||!pts.length)return;var xs=pts.map(function(p){return p.x;}),ys=pts.map(function(p){return p.y;}),x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
+  var L=WX0+scroller.scrollLeft,T=WY0+scroller.scrollTop,R=L+scroller.clientWidth,B=T+scroller.clientHeight;if(x0>=L+20&&x1<=R-20&&y0>=T+20&&y1<=B-20)return;viewCentreOn((x0+x1)/2,(y0+y1)/2);}
 function numIn(v){var t=String(v).trim().replace(/−/g,"-");if(!/^-?\d+(\.\d+)?$/.test(t))return NaN;return parseFloat(t);}
 function openRotateDialog(c){openDialog('<h3>Rotate about '+esc(c.label)+'</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Anticlockwise is positive; clockwise is negative. A quarter turn is 90°.</p><div class="row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button data-q="90">90°</button><button data-q="180">180°</button><button data-q="270">270°</button></div><div class="row"><label>Angle <input id="rtAng" type="text" inputmode="decimal" value="90" style="width:80px;padding:7px;border:1px solid #bcae98;border-radius:8px"> °</label></div><div class="row" style="margin-top:8px"><label><input type="radio" name="rtDir" value="1" checked> anticlockwise</label> &nbsp; <label><input type="radio" name="rtDir" value="-1"> clockwise</label></div>',
   [{label:"Rotate",primary:true,fn:function(){var a=numIn(document.getElementById("rtAng").value);if(isNaN(a)){setHint("Type the angle as a number of degrees, such as 90.");return;}var dir=+(dialog.querySelector('input[name=rtDir]:checked')||{value:1}).value;var deg=a*dir;closeDialog();transformSel({id:nextId++,type:"tf",kind:"rotate",c:c.id,deg:deg},"Rotated "+fmtNum(Math.abs(deg))+"° "+(deg>=0?"anticlockwise":"clockwise")+" about "+esc(c.label)+". Drag the centre or the object: the image follows.");}}]);
@@ -601,10 +612,10 @@ function parsePoints(text){var t=String(text).replace(/[−–—]/g,"-").replac
   rest=t.replace(re,"").replace(/[\s,;]+/g,"");return {pts:out,leftover:rest};}
 function plotPoints(text,join,free){var r=parsePoints(text);if(!r.pts.length)return {ok:false,msg:"Type each point as coordinates in brackets, such as A(1, 2) or (1, 2)."};
   if(r.leftover)return {ok:false,msg:"Some of that could not be read: “"+esc(r.leftover.slice(0,20))+"”. Type each point as A(1, 2) or (1, 2), separated by commas or spaces."};
-  var xmax=AX.ox/AX.u,ymax=AX.oy/AX.u,off=r.pts.filter(function(q){return Math.abs(q.x)>xmax||Math.abs(q.y)>ymax;});
+  var xmax=Math.floor((WX0+WW-AX.ox)/AX.u-0.5),ymax=Math.floor((AX.oy-WY0)/AX.u-0.5),off=r.pts.filter(function(q){return Math.abs(q.x)>xmax||Math.abs(q.y)>ymax;});
   if(off.length)return {ok:false,msg:"("+fmtNum(off[0].x)+", "+fmtNum(off[0].y)+") is beyond the edge of the grid, which shows x from −"+Math.floor(xmax)+" to "+Math.floor(xmax)+" and y from −"+Math.floor(ymax)+" to "+Math.floor(ymax)+"."};
   AX.on=true;var ids=r.pts.map(function(q){var p=fromU(q.x,q.y);var o={id:nextId++,type:"point",kind:free?"free":"fixed",x:p.x,y:p.y,label:q.label||nextLabel()};objects.push(o);return o.id;});
-  if(join&&ids.length>=2){if(ids.length>=3)objects.push({id:nextId++,type:"polygon",pts:ids.slice(),fill:"#9ec7e8"});ids.forEach(function(a,i){if(i===ids.length-1&&ids.length<3)return;objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});}
+  followPts(ids.map(P));if(join&&ids.length>=2){if(ids.length>=3)objects.push({id:nextId++,type:"polygon",pts:ids.slice(),fill:"#9ec7e8"});ids.forEach(function(a,i){if(i===ids.length-1&&ids.length<3)return;objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});}
   sel=[];render();return {ok:true,n:ids.length};}
 function openPlotDialog(){openDialog('<h3>Plot points</h3><p style="max-width:400px;color:#6a6157;margin:0 0 8px">Type each point as coordinates in brackets, with a name if you like: <b>A(1, 2), B(4, 2), C(1, 5)</b>. Points without a name get the next letter. They go exactly where you type and stay fixed there (shown as small squares).</p><textarea id="ppText" rows="3" style="width:100%;box-sizing:border-box;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="coordinates of the points"></textarea><div class="row" style="margin-top:8px"><label><input type="checkbox" id="ppJoin" checked> Join them in order to make a shape</label></div><div class="row" style="margin-top:4px"><label><input type="checkbox" id="ppFree"> Let me drag them afterwards</label></div><p id="ppMsg" style="color:#7a2b1c;min-height:1.2em;margin:6px 0 0"></p>',
   [{label:"Plot",primary:true,fn:function(){var free=document.getElementById("ppFree").checked,res=plotPoints(document.getElementById("ppText").value,document.getElementById("ppJoin").checked,free);if(!res.ok){document.getElementById("ppMsg").innerHTML=res.msg;return;}closeDialog();setHint(res.n+" point"+(res.n>1?"s":"")+" plotted"+(free?" (you can drag them)":" at fixed coordinates")+". Drag a box around the shape to select it for a transformation.");}}]);
@@ -1141,7 +1152,8 @@ function bootTaskContext(){
   document.getElementById("tlSaveWork").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].sketch=serialize();twSet(m);tlStatus("Construction saved on this device. It will be here when you return.");};
   document.getElementById("tlSaveConj").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].conjecture=conj.value;twSet(m);tlStatus("Saved what you noticed.");};
 }
-window.NEO_DGS={objects:function(){return objects;},P:P,ACT:ACT,AX:AX,toU:toU,fromU:fromU,byId:byId,setSel:function(a){sel=a.slice();},getSel:function(){return sel.slice();},transformSel:transformSel,TASKS:TASKS,render:render,snapPos:snapPos,undo:doUndo,serialize:serialize,loadData:loadData,lineGeom:lineGeom,addFreePoint:addFreePoint,plotPoints:plotPoints,parsePoints:parsePoints,enclosed:enclosed};
+window.NEO_DGS={objects:function(){return objects;},P:P,ACT:ACT,AX:AX,toU:toU,fromU:fromU,byId:byId,setSel:function(a){sel=a.slice();},getSel:function(){return sel.slice();},transformSel:transformSel,TASKS:TASKS,render:render,snapPos:snapPos,undo:doUndo,serialize:serialize,loadData:loadData,lineGeom:lineGeom,addFreePoint:addFreePoint,plotPoints:plotPoints,parsePoints:parsePoints,enclosed:enclosed,world:{x0:WX0,y0:WY0,w:WW,h:WH},scroller:function(){return scroller;}};
+if(scroller){scroller.scrollLeft=-WX0;scroller.scrollTop=-WY0;}
 bootTaskContext();
 
 updateTitle();

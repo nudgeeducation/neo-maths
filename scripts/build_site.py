@@ -192,6 +192,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams/Lesson_05_Venn_Problems_Probability/NEO_Maths_Y10_SetsVenn_Lesson_05_Venn_Problems_Probability_v0.1.html",
     "ts-01-reflection":
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_01_Reflection/NEO_Maths_Y9_Transformations_Lesson_01_Reflection_v0.1.html",
+    "ts-02-rotation":
+        "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_02_Rotation/NEO_Maths_Y9_Transformations_Lesson_02_Rotation_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
@@ -676,6 +678,40 @@ def inject_progress(html: str, lesson_id: str, depth: int) -> str:
 FIELDKIT_UNITS = {"inequalities", "formulae-rearranging", "number-systems", "algebraic-expressions", "place-value", "angles", "perimeter-area", "percentages-ratio-growth-bounds", "sets-and-venn-diagrams", "transformations-similarity-and-scale"}
 
 
+# Return to the exact place: every link to the Geometry Studio carries this lesson's address (so the Studio
+# always shows "Return to lesson"), and leaving for the Studio remembers the open panel, the scroll position and,
+# in the Practice Companion, the question and the typed answer. Coming back restores them. sessionStorage only:
+# nothing is recorded or sent anywhere.
+RETURN_SCRIPT = """
+<script>/* NEO: return to the exact place after the Geometry Studio */
+(function(){
+  var KEY='neoReturn:'+location.pathname, p=location.pathname, i=p.indexOf('/lessons/'), rel=i<0?null:'..'+p.slice(i);
+  function snap(){ var det=[].slice.call(document.querySelectorAll('details')), pv=document.getElementById('practiceView'), a=document.getElementById('practiceAnswer');
+    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:''}; }
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(snap())); }catch(e){} }
+  [].slice.call(document.querySelectorAll('a[href*="geometry-studio.html"]')).forEach(function(a){ var h=a.getAttribute('href');
+    if(rel&&!/[?&]return=/.test(h)) a.setAttribute('href',h+(h.indexOf('?')<0?'?':'&')+'return='+encodeURIComponent(rel));
+    a.addEventListener('click',save); });
+  var s=null; try{ s=JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){}
+  if(!s||Date.now()-s.t>3*3600*1000) return;
+  try{ sessionStorage.removeItem(KEY); }catch(e){}
+  function restore(){ var det=document.querySelectorAll('details'); (s.open||[]).forEach(function(k){ if(det[k]) det[k].open=true; });
+    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; } }
+    setTimeout(function(){ window.scrollTo(0,s.y); },s.practice?450:60); }
+  if(document.readyState==='complete') setTimeout(restore,80); else window.addEventListener('load',function(){ setTimeout(restore,80); });
+})();
+</script>
+"""
+
+
+def inject_return(html: str) -> str:
+    if "NEO: return to the exact place" in html:
+        return html
+    if re.search(r"</body>", html, re.IGNORECASE):
+        return re.sub(r"</body>", lambda _m: RETURN_SCRIPT + "</body>", html, count=1, flags=re.IGNORECASE)
+    return html + RETURN_SCRIPT
+
+
 def inject_fieldkit(html: str, unit_id: str, index: int, depth: int) -> str:
     if unit_id not in FIELDKIT_UNITS or "NEOFieldKit.mount" in html:
         return html
@@ -783,6 +819,7 @@ def main() -> None:
             html = inject_progress(html, lesson["id"], depth)
             html = inject_fieldkit(html, unit["id"], index, depth)
             html = inject_chrome(html, unit["title"], lesson["num"], lesson["title"], depth)
+            html = inject_return(html)
             html = ensure_charset(html)
             dest.write_text(html, encoding="utf-8")
             for gap in copy_lesson_assets(html, src, dest):

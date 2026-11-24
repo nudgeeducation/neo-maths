@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Rotation</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<style>
+.gsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px;touch-action:manipulation}
+.gsvg .gl{stroke:#e2d9c8;stroke-width:1}.gsvg .ax{stroke:#2f3429;stroke-width:1.6}
+.gsvg .tn{font-family:Arial,sans-serif;font-size:11px;fill:#5c6b4f}.gsvg .ti{font-family:Georgia,serif;font-style:italic;font-size:12px}
+.gsvg .axl{font-family:Georgia,serif;font-style:italic;font-size:16px;fill:#2f3429}
+.gsvg .mir{stroke:#7a4fb0;stroke-width:3}.gsvg .mir.try{stroke-dasharray:7 5}
+.gsvg .mlab{font-family:Georgia,serif;font-size:14px;fill:#7a4fb0;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:4}
+.gsvg .obj{fill:rgba(47,109,176,.28);stroke:#2b6cb0;stroke-width:2.2}.gsvg .objv{fill:#2b6cb0;stroke:#fff;stroke-width:1.5}
+.gsvg .img{fill:rgba(242,193,78,.45);stroke:#b8860b;stroke-width:2.2}.gsvg .imgv{fill:#b8860b;stroke:#fff;stroke-width:1.5}
+.gsvg .try{fill:none;stroke:#b0412f;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.gsvg .perp{stroke:#3f7a45;stroke-width:1.6;stroke-dasharray:5 4}
+.gsvg .selv{fill:none;stroke:#c1622e;stroke-width:2;stroke-dasharray:3 3}
+.gsvg .mid{fill:#3f7a45;stroke:#fff;stroke-width:1.5}.gsvg .ra{fill:none;stroke:#3f7a45;stroke-width:1.8}
+.gsvg .hl{stroke:#b0412f;stroke-width:3.5}.gsvg .mid.hl{fill:#b0412f}.gsvg .hlv{stroke:#b0412f;stroke-width:3}
+.lab .row2{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;margin:6px 0}
+.lab .chip.on,.md .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.lab table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}
+.lab table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df}
+.lab table.lt td:not(:last-child){white-space:nowrap}
+@media (max-width:520px){.lab table.lt{font-size:.88em}.lab table.lt td{padding:3px 4px}}
+.arrows button{min-width:38px}
+table.rt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif;font-size:1.05em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 14px;text-align:center}table.rt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.ru .opts,.md .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ru .opts .chip{font-family:Georgia,serif;font-size:1.05em}
+.wl .ask{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0}
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.studio{border:2px solid #365a68;background:#eef3f6}
+@media (max-width:520px){.gsvg .tn{font-size:14px}.gsvg .vl{font-size:17px}.gsvg .mlab{font-size:17px}.gsvg .axl{font-size:19px}}
+.gsvg .cen{fill:#7a4fb0;stroke:#fff;stroke-width:1.5}.gsvg .cenr{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:4 3}
+.gsvg .arc{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .target{fill:none;stroke:#b8860b;stroke-width:2.4;stroke-dasharray:6 4}
+.gsvg .sheet{fill:rgba(255,255,255,.55);stroke:#9fb0a3;stroke-width:1.5}.gsvg .trace{fill:rgba(176,65,47,.18);stroke:#b0412f;stroke-width:2.2}
+.gsvg .ghost{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .badge{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#5a3f10}
+.gsvg .rad{stroke:#3f7a45;stroke-width:2}.gsvg .bis{stroke:#7a4fb0;stroke-width:2;stroke-dasharray:6 4}
+.st .opts,.dz .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.dzscroll{max-width:660px;height:min(620px,88vw);overflow:auto;margin:6px auto;border:2px solid #c9d6bf;border-radius:12px;background:#fbf8f1;-webkit-overflow-scrolling:touch}
+.dzscroll .gsvg.big{max-width:none;width:auto;margin:0;border:none;border-radius:0}
+.dz .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.dz ol{margin:6px 0 6px 22px;font-family:Georgia,serif}
+.tp .turns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Transformations, Similarity and Scale</h1>
+<h2>Rotation</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>What does a turn need to know?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — a shape turns about a centre point on a coordinate grid.</p>
+<p><b>Stepping Stone:</b> <b>rotate</b> a shape about a <b>centre</b> through 90°, 180° or 270°, clockwise or anticlockwise, and describe a rotation fully: its centre, its angle and its direction.</p>
+<p><b>You will need:</b> Lesson 1, coordinates in four quadrants, and quarter and half turns — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 6 · Move 11 · Reflect 8 · Create 15 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_02_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_02_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Mark a centre. Draw a shape, then turn it a quarter turn about the centre, one corner at a time.')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Same turn, different names</summary>
+<p><b>Start here:</b> one turn can be described in more than one way. Choose the description that ends in the same place.</p>
+<p><b>What you are trying to notice:</b> a full turn is 360°, so a quarter turn clockwise ends where three quarters of a turn anticlockwise ends.</p>
+<div class="toolbox st">
+<h3 style="margin-top:0">🔄 Same turn, different names</h3>
+<div id="stCount" class="small" style="text-align:center"></div>
+<p id="stQ" style="text-align:center;font-family:Georgia,serif;font-size:1.15em"></p>
+<div id="stOpts" class="opts"></div>
+<div id="stRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="stNext()">Next card →</button></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">A <b>rotation</b> turns a shape about a fixed point, the <b>centre of rotation</b>. Every point turns through the same <b>angle</b>, and stays the same distance from the centre. The centre itself does not move.</p>
+<p style="margin:6px 0">A rotation is <b>fully described</b> by three things: the <b>centre</b> (as coordinates), the <b>angle</b> and the <b>direction</b>. <b>Anticlockwise</b> is the positive direction and <b>clockwise</b> is negative, so −90° means 90° clockwise.</p>
+</div>
+<p>Today's main activity, the <b>Rotation Designer</b>, is in <b>Creativity</b>.</p>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Tracing paper</summary>
+<p><b>What to do:</b> the tracing paper is pinned at the centre, with the flag traced on it. Turn it a quarter turn at a time until the traced flag lands exactly on the dashed outline. Then answer six questions.</p>
+<p><b>What you are trying to notice:</b> the pin does not move, and every point stays the same distance from it as it turns.</p>
+<div class="toolbox tp">
+<h3 style="margin-top:0">📄 Tracing paper</h3>
+<div id="tpCount" class="small" style="text-align:center"></div>
+<p id="tpQ" style="text-align:center"></p>
+<div id="tpFig"></div>
+<div class="turns"><button onclick="tpTurn(90)">↺ 90° anticlockwise</button><button onclick="tpTurn(-90)">↻ 90° clockwise</button><button onclick="tpReset()">Start again</button></div>
+<p id="tpTurned" style="text-align:center;font-family:Georgia,serif"></p>
+<div id="tpRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="tpNext()">Next round →</button></div>
+</div>
+<div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div><div id="zqIn" class="buttonrow"><input id="zqA" class="numin neo-mathfield" style="max-width:260px" aria-label="Your answer" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div></div>
+<div id="zqRead" class="feedback" aria-live="polite"></div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Now rotate it in the Geometry Studio</h3>
+<p>Rotate a flag about a marked centre, change the angle and the direction, then drag the centre and watch both images move.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts02-rotate&amp;return=../lessons/transformations-similarity-and-scale/02-rotation.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><b>Carry this forward:</b> to rotate a point, picture the tracing paper pinned at the centre, and turn it through the angle in the right direction.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Find the centre</summary>
+<p><b>What to do:</b> a flag and its image are drawn, and the angle is given. Tap the grid point you think is the centre. Your rotation appears dashed.</p>
+<p><b>What you are trying to notice:</b> the centre is the same distance from each point as from its image.</p>
+<div class="toolbox cf">
+<h3 style="margin-top:0">🎯 Find the centre</h3>
+<div id="cfCount" class="small" style="text-align:center"></div>
+<p id="cfQ" style="text-align:center"></p>
+<div id="cfFig"></div>
+<div id="cfRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="cfNext()">Next puzzle →</button></div>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why does the centre lie on the perpendicular bisector of <i>A</i> and <i>A</i>′?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The Rotation Designer (today's main activity)</summary>
+<p><b>What to do:</b> tap a grid point to choose the centre, then choose the angle, the direction and what to rotate. The dashed outline shows where it will go; press <b>Rotate</b> to add it. Build designs, and meet each brief.</p>
+<p><b>What you are trying to notice:</b> where the centre is decides where the image goes; turning the same shape again and again about one centre makes a design with rotational symmetry.</p>
+<div class="toolbox dz">
+<h3 style="margin-top:0">🌀 The Rotation Designer</h3>
+<div id="dzFig" class="dzscroll" tabindex="0" aria-label="Rotation Designer grid: scroll to look around"></div>
+<p class="small" style="text-align:center;margin:2px 0">The grid runs from −20 to 20: scroll or drag it to look around. It moves by itself to show the centre and the preview.</p>
+<div class="opts"><span class="small">Angle:</span><span id="dzAng" class="opts" style="margin:0"></span></div>
+<div class="opts"><span class="small">Direction:</span><span id="dzDirs" class="opts" style="margin:0"></span></div>
+<div class="opts"><span class="small">Rotate:</span><span id="dzSrcs" class="opts" style="margin:0"></span></div>
+<p id="dzNow" style="text-align:center"></p>
+<div class="buttonrow" style="justify-content:center"><button onclick="dzRotate()">🌀 Rotate</button><button onclick="dzUndo()">↶ Undo</button><button onclick="dzClear()">Clear</button></div>
+<ol id="dzList" aria-live="polite"></ol>
+<div id="dzCount" class="small" style="text-align:center"></div>
+<div id="dzQ" class="mq"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="dzCheck()">✅ Check</button><button onclick="dzNext()">Next brief →</button></div>
+<p id="dzFb" class="readline" style="text-align:center"></p>
+</div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build a rotational design in the Geometry Studio</h3>
+<p>Rotate one shape again and again about the same centre. Every copy changes when you drag the original.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts02-design&amp;return=../lessons/transformations-similarity-and-scale/02-rotation.html">📐 Open in the Geometry Studio →</a>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A wheel turns, and its centre stays still. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> find something near you that turns about a centre: a clock hand, a door, a lid. Where is its centre of rotation?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: noticing.</b> Today the mathematics feeds how you see designs.</p>
+<div class="card">
+<p><b>What it feeds:</b> many logos, wheel trims, flowers and window designs are made by rotating one piece about a centre. Counting how many times a design fits onto itself in one full turn gives its <b>order of rotational symmetry</b>. Animators use the same idea: a turntable lets them draw a character from every side by rotating it.</p>
+<p class="small">Carry one idea forward: centre, angle, direction.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Rotations described fully</summary>
+<p><b>Your task:</b> rotate a shape about a centre of your choice, twice, and describe each rotation fully.</p>
+<ul>
+<li>Choose a centre on a grid point, and rotate a shape through 90° in one direction.</li>
+<li>Rotate the same shape through a different angle or the other way.</li>
+<li>For each rotation, write its full description: centre (as coordinates), angle and direction.</li>
+<li><span class="stretch">stretch</span> Rotate an image back onto the original, and describe the rotation that does it.</li>
+</ul>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build your evidence in the Geometry Studio</h3>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts02-final&amp;return=../lessons/transformations-similarity-and-scale/02-rotation.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><strong>Submission choices:</strong> a saved Studio sketch with a screenshot, an annotated Scratchpad image, a photographed page, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_ROTATION_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Turns a shape roughly the right amount.</td><td>Knows a rotation needs a centre.</td><td>Explains that every point stays the same distance from the centre.</td><td>Explains why the centre is on the perpendicular bisector of a point and its image.</td></tr>
+<tr><td><b>Application</b></td><td>Rotates about the origin with one slip.</td><td>Rotates through 90°, 180° and 270° about the origin.</td><td>Rotates about any centre, in either direction.</td><td>Finds the centre of a given rotation.</td></tr>
+<tr><td><b>Communication</b></td><td>Gives the angle.</td><td>Gives the angle and the direction.</td><td>Gives a full description: centre, angle and direction.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one corner.</td><td>Checks every corner's distance from the centre.</td><td>Checks the direction against a clock.</td><td>Spots and fixes a rotation about the wrong centre.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Rotation — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type coordinates as (2, −1), and rotations in words, such as 90° clockwise. The <b>√ Symbols</b> palette has the minus sign, brackets and the degree sign.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Mark the centre. Turn one corner at a time, keeping its distance from the centre.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["−","(",")",",","°","x","y"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function I(t){ return '<i>'+t+'</i>'; }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function neg(n){ n=Math.round(n*1e9)/1e9; return n<0?'−'+(-n):String(n); }
+function pt(p){ return '('+neg(p[0])+', '+neg(p[1])+')'; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x'), Y=I('y');
+// a coordinate pair typed any way: (5, −1), 5,-1, 5 -1, x = 5, y = −1. Returns [x, y] or null.
+function pairOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[,;]?\s*(-?\d+(?:\.\d+)?)$/); if(!m){ var a=s.split(/[\s,;]+/).filter(Boolean); if(a.length===2){ var p=num(a[0]), q=num(a[1]); if(!isNaN(p)&&!isNaN(q)) return [p,q]; } return null; }
+  return [parseFloat(m[1]),parseFloat(m[2])]; }
+function samePair(p,q){ return !!p&&same(p[0],q[0])&&same(p[1],q[1]); }
+// a mirror line typed as an equation: x = 3, y = −1, y = x, y = −x (any spacing; x+y=0 and y−x=0 too). Returns {t,k} or null.
+function lineOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'');
+  var m=s.match(/^x=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=x$/); if(m) return {t:'x',k:parseFloat(m[1])};
+  m=s.match(/^y=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=y$/); if(m) return {t:'y',k:parseFloat(m[1])};
+  if(/^(y=x|x=y|y-x=0|x-y=0)$/.test(s)) return {t:'yx',k:0};
+  if(/^(y=-x|x=-y|y\+x=0|x\+y=0|-x=y)$/.test(s)) return {t:'ynx',k:0};
+  return null; }
+function sameLine(a,b){ return !!a&&a.t===b.t&&same(a.k,b.k); }
+function lineName(L){ return L.t==='x'?X+' = '+neg(L.k):L.t==='y'?Y+' = '+neg(L.k):L.t==='yx'?Y+' = '+X:Y+' = −'+X; }
+// reflection in a line, exactly
+function refl(p,L){ var x=p[0], y=p[1]; return L.t==='x'?[2*L.k-x,y]:L.t==='y'?[x,2*L.k-y]:L.t==='yx'?[y,x]:[-y,-x]; }
+function onLine(p,L){ return samePair(refl(p,L),p); }
+
+/* ---------------- A coordinate grid (numbered, labelled axes; GreenPrint v2.3) ---------------- */
+var G={o:230,s:34,m:6};
+function gx(x){ return G.o+x*G.s; } function gy(y){ return G.o-y*G.s; }
+function gridSvg(){ var h='', k, m=G.m;
+  for(k=-m;k<=m;k++) h+='<line x1="'+gx(k)+'" y1="'+gy(m+0.4)+'" x2="'+gx(k)+'" y2="'+gy(-m-0.4)+'" class="gl"/><line x1="'+gx(-m-0.4)+'" y1="'+gy(k)+'" x2="'+gx(m+0.4)+'" y2="'+gy(k)+'" class="gl"/>';
+  h+='<line x1="'+gx(-m-0.4)+'" y1="'+gy(0)+'" x2="'+gx(m+0.4)+'" y2="'+gy(0)+'" class="ax"/><line x1="'+gx(0)+'" y1="'+gy(m+0.4)+'" x2="'+gx(0)+'" y2="'+gy(-m-0.4)+'" class="ax"/>';
+  for(k=-m;k<=m;k++){ if(!k) continue; h+='<text x="'+gx(k)+'" y="'+(gy(0)+15)+'" class="tn" text-anchor="middle">'+neg(k)+'</text><text x="'+(gx(0)-6)+'" y="'+(gy(k)+4)+'" class="tn" text-anchor="end">'+neg(k)+'</text>'; }
+  h+='<text x="'+(gx(0)-6)+'" y="'+(gy(0)+15)+'" class="tn ti" text-anchor="end">O</text><text x="'+(gx(m+0.4)-2)+'" y="'+(gy(0)-7)+'" class="axl" text-anchor="end">x</text><text x="'+(gx(0)+7)+'" y="'+(gy(m+0.4)+12)+'" class="axl">y</text>';
+  return h; }
+function mirrorSvg(L,cls){ var e=G.m+0.4, a, b; if(L.t==='x'){ a=[L.k,e]; b=[L.k,-e]; } else if(L.t==='y'){ a=[-e,L.k]; b=[e,L.k]; } else if(L.t==='yx'){ a=[-e,-e]; b=[e,e]; } else { a=[-e,e]; b=[e,-e]; }
+  var lp=L.t==='x'?[L.k,G.m-0.2]:L.t==='y'?[G.m-1.2,L.k]:L.t==='yx'?[4.6,4.1]:[-5.4,4.9];
+  return '<line x1="'+gx(a[0])+'" y1="'+gy(a[1])+'" x2="'+gx(b[0])+'" y2="'+gy(b[1])+'" class="'+(cls||'mir')+'"/><text x="'+(gx(lp[0])+(L.t==='x'&&L.k<=0?-6:6))+'" y="'+(gy(lp[1])-6)+'" class="mlab" data-line="1"'+(L.t==='x'&&L.k<=0?' text-anchor="end"':'')+'>'+lineName(L).replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>')+'</text>'; }
+function triSvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl" data-v="'+labs[i]+'">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+function inGrid(p){ return Math.abs(p[0])<=G.m&&Math.abs(p[1])<=G.m; }
+function svgAt(ev,svg){ var b=svg.getBoundingClientRect(); var x=(ev.clientX-b.left)*2*G.o/b.width, y=(ev.clientY-b.top)*2*G.o/b.height; return [Math.round((x-G.o)/G.s),Math.round((G.o-y)/G.s)]; }
+var CLIPN=0;
+function wrap(inner,click,aria){ var cid='gclip'+(CLIPN++); return '<svg class="gsvg'+(G.big?' big':'')+'" viewBox="0 0 '+(2*G.o)+' '+(2*G.o)+'"'+(G.big?' width="'+(2*G.o)+'" height="'+(2*G.o)+'"':'')+' role="img" aria-label="'+aria+'"'+(click?' onclick="'+click+'(event,this)"':'')+'><defs><clipPath id="'+cid+'"><rect x="'+gx(-G.m-0.4)+'" y="'+gy(G.m+0.4)+'" width="'+(G.s*(2*G.m+0.8))+'" height="'+(G.s*(2*G.m+0.8))+'"/></clipPath></defs>'+gridSvg()+'<g clip-path="url(#'+cid+')">'+inner+'</g></svg>'; }
+
+/* ---------------- Rotation, exactly (multiples of 90°) ---------------- */
+function norm(d){ d=((Math.round(d)%360)+360)%360; return d; }
+function rot(p,c,deg){ var d=norm(deg), x=p[0]-c[0], y=p[1]-c[1], q;
+  q=d===0?[x,y]:d===90?[-y,x]:d===180?[-x,-y]:[y,-x]; return [c[0]+q[0]+0,c[1]+q[1]+0]; }
+function rotName(deg,c){ var d=norm(deg), a=Math.round(deg); var dir=a>=0?'anticlockwise':'clockwise'; return Math.abs(a)+'° '+dir+(c?' about '+pt(c):''); }
+// a rotation typed in words or signs: 90° clockwise, −90, 270 anticlockwise, 90 cw, a quarter turn clockwise, half turn. Returns degrees (anticlockwise positive) or null.
+function rotOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/°|degrees?/g,' ').replace(/anti-?\s*clockwise|counter-?\s*clockwise|acw|ccw/g,' A ').replace(/clockwise|\bcw\b/g,' C ').replace(/\s+/g,' ').trim();
+  var n=null, m=s.match(/-?\d+(\.\d+)?/); if(m) n=parseFloat(m[0]); else if(/quarter/.test(s)) n=90; else if(/half/.test(s)) n=180; else if(/three\s*quarters?/.test(s)) n=270;
+  if(/three\s*quarters?/.test(s)) n=270; if(n===null) return null;
+  var A=/\bA\b/.test(s), C=/\bC\b/.test(s); if(A&&C) return null; if(C) n=-Math.abs(n); return n; }
+function sameRot(a,b){ return a!==null&&b!==null&&norm(a)===norm(b); }
+function arcSvg(c,p,deg,cls){ var r=Math.hypot(p[0]-c[0],p[1]-c[1]); if(!r) return ''; var a0=Math.atan2(p[1]-c[1],p[0]-c[0]), a1=a0+deg*Math.PI/180, large=Math.abs(deg)>180?1:0, sw=deg>0?0:1;
+  var s=[gx(c[0]+r*Math.cos(a0)),gy(c[1]+r*Math.sin(a0))], e=[gx(c[0]+r*Math.cos(a1)),gy(c[1]+r*Math.sin(a1))];
+  return '<path d="M'+s[0]+' '+s[1]+' A'+(r*G.s)+' '+(r*G.s)+' 0 '+large+' '+sw+' '+e[0]+' '+e[1]+'" class="'+(cls||'arc')+'"/>'; }
+function centreSvg(c,lab){ return '<circle cx="'+gx(c[0])+'" cy="'+gy(c[1])+'" r="6" class="cen"/><circle cx="'+gx(c[0])+'" cy="'+gy(c[1])+'" r="11" class="cenr"/>'+(lab?'<text x="'+(gx(c[0])+9)+'" y="'+(gy(c[1])+17)+'" class="vl">'+lab+'</text>':''); }
+var FLAG=[[1,1],[1,4],[3,3]], FLAGL=['A','B','C'];
+
+/* ---------------- CONNECTION: same turn, different names ---------------- */
+var ST=[
+ {q:'90° clockwise',opts:['90° anticlockwise','270° anticlockwise','180°'],ans:1},
+ {q:'270° clockwise',opts:['90° anticlockwise','270° anticlockwise','90° clockwise'],ans:0},
+ {q:'−90°',opts:['90° anticlockwise','180°','90° clockwise'],ans:2},
+ {q:'180° anticlockwise',opts:['180° clockwise','90° clockwise','360°'],ans:0},
+ {q:'+90°',opts:['270° clockwise','90° clockwise','−90°'],ans:0}];
+var st={i:0};
+function stRender(){ var Q=ST[st.i]; document.getElementById('stCount').textContent='Card '+(st.i+1)+' of '+ST.length;
+  document.getElementById('stQ').innerHTML='Which of these is the <b>same rotation</b> as <b>'+Q.q+'</b>?';
+  document.getElementById('stOpts').innerHTML=Q.opts.map(function(o,k){ return '<button class="chip" data-k="'+k+'" onclick="stPick('+k+')">'+o+'</button>'; }).join(''); }
+function stPick(k){ var Q=ST[st.i], a=rotOf(Q.q), b=rotOf(Q.opts[k]);
+  if(k===Q.ans) msg('stRead','good','✓ Yes: '+Q.q+' and '+Q.opts[k]+' both end in the same place. A full turn is 360°, so turning one way or the other way round makes the same rotation.');
+  else msg('stRead','warn','Not quite: '+Q.opts[k]+' ends '+(norm(b-a)===180?'facing the opposite way':'a quarter turn away')+'. Picture the hands of a clock: clockwise is the way they turn.'); }
+function stNext(){ st.i=(st.i+1)%ST.length; document.getElementById('stRead').style.display='none'; stRender(); }
+
+/* ---------------- MOVEMENT: tracing paper ---------------- */
+var TP=[{c:[0,0],deg:90},{c:[1,0],deg:180},{c:[-1,1],deg:-90}];
+var tp={i:0,turn:0,done:false};
+function tpTarget(){ var R=TP[tp.i]; return FLAG.map(function(p){ return rot(p,R.c,R.deg); }); }
+function tpTurn(d){ if(tp.done) return; tp.turn+=d; tpDraw();
+  var R=TP[tp.i], now=FLAG.map(function(p){ return rot(p,R.c,tp.turn); }), tg=tpTarget();
+  if(now.every(function(p,i){ return samePair(p,tg[i]); })){ tp.done=true; tpDraw(); msg('tpRead','good','✓ It lands. You turned '+rotName(tp.turn)+' about '+pt(R.c)+(norm(tp.turn)!==norm(R.deg)||Math.abs(tp.turn)!==Math.abs(R.deg)?', which is the same rotation as '+rotName(R.deg):'')+'. A full description: <b>rotation '+rotName(R.deg,R.c)+'</b>.'); }
+  else document.getElementById('tpRead').style.display='none'; }
+function tpReset(){ tp.turn=0; tp.done=false; document.getElementById('tpRead').style.display='none'; tpDraw(); }
+function tpNext(){ tp.i=(tp.i+1)%TP.length; tpReset(); }
+function tpDraw(){ var R=TP[tp.i], tg=tpTarget(), h='';
+  h+='<polygon points="'+tg.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="target"/>';
+  h+=triSvg(FLAG,'obj',FLAGL);
+  var tr=FLAG.map(function(p){ return rot(p,R.c,tp.turn); });
+  h+='<g class="paper"><circle cx="'+gx(R.c[0])+'" cy="'+gy(R.c[1])+'" r="'+((Math.max.apply(null,FLAG.map(function(p){ return Math.hypot(p[0]-R.c[0],p[1]-R.c[1]); }))+0.8)*G.s)+'" class="sheet"/><polygon points="'+tr.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="trace"/></g>';
+  h+=centreSvg(R.c,'pin');
+  document.getElementById('tpCount').textContent='Round '+(tp.i+1)+' of '+TP.length;
+  document.getElementById('tpQ').innerHTML='The tracing paper is pinned at '+pt(R.c)+'. Turn it until the traced flag lands on the dashed outline.';
+  document.getElementById('tpFig').innerHTML=wrap(h,null,'Flag ABC, tracing paper pinned at '+pt(R.c)+', turned '+rotName(tp.turn)+', and a dashed target outline');
+  document.getElementById('tpTurned').innerHTML='Turned so far: <b>'+(tp.turn===0?'0°':rotName(tp.turn))+'</b>'; }
+
+/* ---------------- MOVEMENT: questions ---------------- */
+var ZQ=[
+ {q:'Rotate the point (4, 1) through 90° anticlockwise about '+I('O')+'(0, 0).',pair:rot([4,1],[0,0],90),hint:'Picture the tracing paper pinned at '+I('O')+': a quarter turn anticlockwise takes a point on the right up to the top.',slips:{'1,-4':'That is 90° <b>clockwise</b>.','-4,-1':'That is a half turn, 180°.'}},
+ {q:'Rotate the point (2, 3) through 180° about '+I('O')+'(0, 0).',pair:rot([2,3],[0,0],180),hint:'A half turn about '+I('O')+' sends a point to the opposite side of '+I('O')+', the same distance away.',slips:{'-2,3':'That is a reflection in the '+Y+'-axis. A half turn changes both coordinates.','2,-3':'That is a reflection in the '+X+'-axis. A half turn changes both coordinates.'}},
+ {q:'Rotate the point (−1, 4) through 90° clockwise about '+I('O')+'(0, 0).',pair:rot([-1,4],[0,0],-90),hint:'Clockwise is the way a clock\'s hands turn: a point at the top moves round to the right.',slips:{'-4,-1':'That is 90° <b>anticlockwise</b>.','1,-4':'That is a half turn, 180°.'}},
+ {q:'Rotate the point (4, 2) through 180° about the centre (1, 1).',pair:rot([4,2],[1,1],180),hint:'(4, 2) is 3 right and 1 up from (1, 1). A half turn sends it 3 left and 1 down from (1, 1).',slips:{'-4,-2':'That is a half turn about '+I('O')+'. Use the centre (1, 1).'}},
+ {q:'Which of these is a <b>full</b> description of a rotation?',kind:'chip',chips:['a rotation of 90°','a rotation about (1, 2)','a rotation of 90° clockwise about (1, 2)'],ans:2,hint:'A rotation needs three things: the centre, the angle and the direction.'},
+ {q:I('A')+'(2, 0) is rotated about '+I('O')+'(0, 0) to '+I('A')+'′(0, −2). Give the angle and the direction.',rotAns:-90,hint:'From the positive '+X+'-axis round to the negative '+Y+'-axis: which way, and how far?',slipsRot:{90:'That would take '+I('A')+' up to (0, 2). Which way did it turn?',180:'A half turn would take '+I('A')+' to (−2, 0).'}}];
+var zq={q:0};
+function zqRender(){ var n=ZQ.length;
+  if(zq.q>=n){ document.getElementById('zqQn').textContent='✓ All six questions done.'; document.getElementById('zqQ').innerHTML='Centre, angle, direction.'; document.getElementById('zqAns').innerHTML=''; document.getElementById('zqIn').style.display='none'; return; }
+  var Q=ZQ[zq.q]; document.getElementById('zqQn').textContent='Question '+(zq.q+1)+' of '+n; document.getElementById('zqQ').innerHTML=Q.q;
+  document.getElementById('zqAns').innerHTML=Q.kind==='chip'?chipsHtml(Q.chips,'zqChip'):'';
+  document.getElementById('zqIn').style.display=Q.kind==='chip'?'none':''; document.getElementById('zqA').value=''; document.getElementById('zqA').placeholder=Q.rotAns!==undefined?'such as 180° anticlockwise':'coordinates, such as (2, −1)'; }
+function zqRight(){ zq.q++; msg('zqRead','good','✓ Yes.'+(zq.q>=ZQ.length?' That\'s all of them.':'')); zqRender(); }
+function zqChip(k){ var Q=ZQ[zq.q]; if(k===Q.ans) zqRight(); else msg('zqRead','warn','Not yet. '+Q.hint); }
+function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value;
+  if(!v.trim()){ msg('zqRead','warn','Type an answer.'); return; }
+  if(Q.rotAns!==undefined){ var r=rotOf(v); if(r===null){ msg('zqRead','warn','Not yet. Give an angle and a direction, such as 180° anticlockwise.'); return; }
+    if(sameRot(r,Q.rotAns)){ if(!/clockwise|anti|cw|acw|-|−|half/i.test(v)&&norm(r)!==180){ msg('zqRead','warn','Nearly: say which direction, clockwise or anticlockwise.'); return; } return zqRight(); }
+    msg('zqRead','warn','Not yet. '+((Q.slipsRot&&Q.slipsRot[norm(r)])||Q.hint)); return; }
+  var p=pairOf(v); if(samePair(p,Q.pair)) return zqRight();
+  msg('zqRead','warn','Not yet. '+((p&&Q.slips&&Q.slips[p[0]+','+p[1]])||(p?'':'Type the coordinates, such as (2, −1). ')+Q.hint)); }
+
+/* ---------------- REFLECTION: centre finder ---------------- */
+var CF=[{c:[1,-1],deg:90},{c:[-1,0],deg:180},{c:[0,2],deg:-90}];
+var cf={i:0,guess:null,done:false};
+function cfImg(){ var R=CF[cf.i]; return FLAG.map(function(p){ return rot(p,R.c,R.deg); }); }
+function cfTap(ev,svg){ cfTry(svgAt(ev,svg)); }
+function cfTry(c){ if(!inGrid(c)) return; var R=CF[cf.i], mine=FLAG.map(function(p){ return rot(p,c,R.deg); }), tg=cfImg(); cf.guess=c;
+  if(mine.every(function(p,i){ return samePair(p,tg[i]); })){ cf.done=true; cfDraw(); msg('cfRead','good','✓ Yes: the centre is '+pt(c)+'. The rotation is '+rotName(R.deg,c)+'. Check: '+pt(c)+' is the same distance from '+I('A')+' as from '+I('A')+'′.'); return; }
+  cfDraw(); var dA=Math.hypot(FLAG[0][0]-c[0],FLAG[0][1]-c[1]), dA1=Math.hypot(tg[0][0]-c[0],tg[0][1]-c[1]);
+  msg('cfRead','warn','Not yet: rotating about '+pt(c)+' lands the flag where the dashed outline shows. '+(Math.abs(dA-dA1)>1e-9?pt(c)+' is not the same distance from '+I('A')+' as from '+I('A')+'′, so it cannot be the centre.':'This point is the same distance from '+I('A')+' and '+I('A')+'′, which is a good sign. Check '+I('B')+' and '+I('B')+'′ too.')); }
+function cfNext(){ cf.i=(cf.i+1)%CF.length; cf.guess=null; cf.done=false; document.getElementById('cfRead').style.display='none'; cfDraw(); }
+function cfDraw(){ var R=CF[cf.i], h=triSvg(FLAG,'obj',FLAGL)+triSvg(cfImg(),'img',['A′','B′','C′']);
+  if(cf.guess&&!cf.done) h+='<polygon points="'+FLAG.map(function(p){ var q=rot(p,cf.guess,R.deg); return gx(q[0])+','+gy(q[1]); }).join(' ')+'" class="try"/>'+centreSvg(cf.guess);
+  if(cf.done) h+=centreSvg(cf.guess)+arcSvg(cf.guess,FLAG[0],R.deg,'arc');
+  document.getElementById('cfCount').innerHTML='Puzzle '+(cf.i+1)+' of '+CF.length+(cf.done?' ✓':'');
+  document.getElementById('cfQ').innerHTML='Flag '+I('ABC')+' is rotated '+rotName(R.deg)+' onto '+I('A')+'′'+I('B')+'′'+I('C')+'′. Tap the grid point you think is the <b>centre</b>.';
+  document.getElementById('cfFig').innerHTML=wrap(h,cf.done?null:'cfTap','Flag ABC and its image after a rotation'+(cf.guess?'; your centre '+pt(cf.guess):'')); }
+
+/* ---------------- Proof (stretch): why is the centre on the perpendicular bisector? ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'In a rotation, every point turns about the centre '+I('O')+'. What happens to its distance from '+I('O')+'?',chips:['it gets bigger','it stays the same'],ans:1,ok:'Distance from the centre does not change: '+I('OA')+' = '+I('OA')+'′',hint:'Picture the tracing paper pinned at '+I('O')+': does the traced point slide nearer to the pin?'},
+  {q:'So '+I('O')+' is the same distance from '+I('A')+' as from '+I('A')+'′. Where are all such points?',chips:['on the perpendicular bisector of '+I('AA')+'′','on the line '+I('AA')+'′'],ans:0,ok:I('O')+' lies on the perpendicular bisector of '+I('AA')+'′',hint:'Which construction gives every point the same distance from two points?'},
+  {q:'The same is true for '+I('B')+' and '+I('B')+'′. So where is '+I('O')+'?',chips:['where the two perpendicular bisectors cross','anywhere on one of them'],ans:0,ok:I('O')+' is where the perpendicular bisectors of '+I('AA')+'′ and '+I('BB')+'′ cross',hint:I('O')+' has to be on both lines at once.'}],
+  done:'✓ <b>That is why.</b> A rotation keeps every point the same distance from its centre, so the centre is equidistant from each point and its image: it lies on every perpendicular bisector. Two of them cross at the centre.'}
+};
+var pr={pr:0};
+function prFigure(i){ var c=[1,-1], A=FLAG[0], A1=rot(A,c,90), B=FLAG[1], B1=rot(B,c,90), h='';
+  var bis=function(P,Q,cls){ var m=[(P[0]+Q[0])/2,(P[1]+Q[1])/2], d=[-(Q[1]-P[1]),Q[0]-P[0]], L=4; return '<line x1="'+gx(m[0]-L*d[0]/2)+'" y1="'+gy(m[1]-L*d[1]/2)+'" x2="'+gx(m[0]+L*d[0]/2)+'" y2="'+gy(m[1]+L*d[1]/2)+'" class="'+cls+'"/>'; };
+  h+='<line x1="'+gx(c[0])+'" y1="'+gy(c[1])+'" x2="'+gx(A[0])+'" y2="'+gy(A[1])+'" class="'+(i===0?'rad hl':'rad')+'"/><line x1="'+gx(c[0])+'" y1="'+gy(c[1])+'" x2="'+gx(A1[0])+'" y2="'+gy(A1[1])+'" class="'+(i===0?'rad hl':'rad')+'"/>';
+  if(i>=1) h+=bis(A,A1,i===1?'bis hl':'bis'); if(i>=2) h+=bis(B,B1,i===2?'bis hl':'bis');
+  h+='<line x1="'+gx(A[0])+'" y1="'+gy(A[1])+'" x2="'+gx(A1[0])+'" y2="'+gy(A1[1])+'" class="perp"/>';
+  [[A,'A'],[A1,'A′'],[B,'B'],[B1,'B′']].forEach(function(z){ h+='<circle cx="'+gx(z[0][0])+'" cy="'+gy(z[0][1])+'" r="5" class="'+(z[1].length>1?'imgv':'objv')+'"/><text x="'+(gx(z[0][0])+7)+'" y="'+(gy(z[0][1])-7)+'" class="vl"><tspan font-style="italic">'+z[1].charAt(0)+'</tspan>'+z[1].slice(1)+'</text>'; });
+  h+=centreSvg(c,'<tspan font-style="italic">O</tspan>');
+  return wrap(h,null,'Centre O, points A and B and their images A′ and B′'); }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CREATIVITY: the Rotation Designer (main activity) ---------------- */
+var DG={o:708,s:34,m:20,big:true};
+function onDG(fn){ var save=G; G=DG; try{ return fn(); } finally{ G=save; } }
+var DZ={c:[2,-2],ang:90,dir:1,src:'flag',copies:[],steps:[],i:0,done:[],fb:''};
+function dzSource(){ return DZ.src==='last'&&DZ.copies.length?DZ.copies[DZ.copies.length-1].pts:FLAG; }
+function dzTap(ev,svg){ var q=onDG(function(){ return svgAt(ev,svg); }); if(onDG(function(){ return inGrid(q); })){ DZ.c=q; DZ.fb=''; dzDraw(); } }
+function dzSetC(q){ if(!onDG(function(){ return inGrid(q); })) return false; DZ.c=q; DZ.fb=''; dzDraw(); return true; }
+function dzAngle(a){ DZ.ang=a; dzDraw(); } function dzDir(d){ DZ.dir=d; dzDraw(); } function dzSrc(s){ DZ.src=s; dzDraw(); }
+function dzRotate(){ var deg=DZ.ang*DZ.dir, src=dzSource(), pts=src.map(function(p){ return rot(p,DZ.c,deg); });
+  DZ.copies.push({pts:pts,deg:deg,c:DZ.c.slice(),from:DZ.src==='last'&&DZ.copies.length?'image '+DZ.copies.length:'the flag'}); DZ.steps.push({deg:DZ.ang,dir:DZ.dir}); DZ.fb=''; dzDraw(); }
+function dzUndo(){ DZ.copies.pop(); DZ.steps.pop(); DZ.fb=''; dzDraw(); }
+function dzClear(){ DZ.copies=[]; DZ.steps=[]; DZ.fb=''; dzDraw(); }
+function hasCopy(pts){ return DZ.copies.some(function(cp){ return cp.pts.every(function(p,i){ return samePair(p,pts[i]); }); }); }
+var DBRIEFS=[
+ {q:'Rotate the flag 90° anticlockwise about '+I('O')+'(0, 0).',test:function(){ return hasCopy(FLAG.map(function(p){ return rot(p,[0,0],90); }))?'':'No image yet matches a rotation of 90° anticlockwise about (0, 0). Tap '+I('O')+' to make it the centre.'; },done:'That is the rotation 90° anticlockwise about (0, 0).'},
+ {q:'Make a design with <b>four</b> flags around one centre: the flag and three images, no two the same.',test:function(){ for(var x=-20;x<=20;x++) for(var y=-20;y<=20;y++){ var c=[x,y]; if([90,180,270].every(function(d){ return hasCopy(FLAG.map(function(p){ return rot(p,c,d); })); })) return ''; } return 'You need the flag turned through 90°, 180° and 270° about the <b>same</b> centre.'; },done:'Four copies, a quarter turn apart: the design has rotational symmetry of order 4.'},
+ {q:'Make an image that is the same as a rotation of 90° <b>clockwise</b>, by turning <b>anticlockwise</b>.',test:function(){ return DZ.steps.some(function(s){ return s.dir===1&&s.deg===270; })?'':'Which anticlockwise angle ends in the same place as 90° clockwise?'; },done:'270° anticlockwise and 90° clockwise are the same rotation.'},
+ {q:'Rotate the flag 180° so that the image touches the flag at exactly one point.',test:function(){ return FLAG.some(function(v){ return hasCopy(FLAG.map(function(p){ return rot(p,v,180); })); })?'':'Where must the centre be for the image to share just one point with the flag?'; },done:'Rotating 180° about a corner of the flag: that corner is the only point that stays put.'},
+ {q:'<span class="stretch">stretch</span> Rotate the flag 180° so that '+I('A')+'′ lands on (−3, 3).',test:function(){ var c=[(FLAG[0][0]-3)/2,(FLAG[0][1]+3)/2]; return hasCopy(FLAG.map(function(p){ return rot(p,c,180); }))?'':'A half turn puts the centre exactly halfway between '+I('A')+' and '+I('A')+'′.'; },done:'The centre is (−1, 2), halfway between '+I('A')+'(1, 1) and (−3, 3).'}];
+function dzCheck(){ var why=DBRIEFS[DZ.i].test(); if(why) DZ.fb='<span style="color:#7a2b1c">Not yet. '+why+'</span>'; else { DZ.done[DZ.i]=true; DZ.fb='<span style="color:#2f6b46">✓ '+DBRIEFS[DZ.i].done+'</span>'; } dzDraw(); }
+function dzNext(){ DZ.i=(DZ.i+1)%DBRIEFS.length; DZ.fb=''; dzDraw(); }
+function dzDraw(){ onDG(dzDraw0); }
+// keep the centre, the flag and the preview in view; if they cannot all fit, show the preview
+function dzScroll(prev){ var box=document.getElementById('dzFig'), pts=FLAG.concat(prev,[DZ.c]), X=pts.map(function(p){ return gx(p[0]); }), Y=pts.map(function(p){ return gy(p[1]); });
+  var W=box.clientWidth, Hh=box.clientHeight, x0=Math.min.apply(null,X), x1=Math.max.apply(null,X), y0=Math.min.apply(null,Y), y1=Math.max.apply(null,Y);
+  var px=prev.map(function(p){ return gx(p[0]); }), py=prev.map(function(p){ return gy(p[1]); }), pcx=(Math.min.apply(null,px)+Math.max.apply(null,px))/2, pcy=(Math.min.apply(null,py)+Math.max.apply(null,py))/2;
+  var cx=(x1-x0<W-70)?(x0+x1)/2:pcx, cy=(y1-y0<Hh-70)?(y0+y1)/2:pcy;
+  box.scrollLeft=Math.max(0,cx-W/2); box.scrollTop=Math.max(0,cy-Hh/2); box.dataset.cx=Math.round(cx); box.dataset.cy=Math.round(cy); }
+function dzDraw0(){ var h='', off=false;
+  DZ.copies.forEach(function(cp,k){ if(cp.pts.some(function(p){ return !inGrid(p); })) off=true; h+='<polygon points="'+cp.pts.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="img" data-copy="'+k+'"/>'; var m=[(cp.pts[0][0]+cp.pts[1][0]+cp.pts[2][0])/3,(cp.pts[0][1]+cp.pts[1][1]+cp.pts[2][1])/3]; h+='<text x="'+gx(m[0])+'" y="'+(gy(m[1])+5)+'" class="badge" text-anchor="middle">'+(k+1)+'</text>'; });
+  h+=triSvg(FLAG,'obj',FLAGL);
+  var src=dzSource(), prev=src.map(function(p){ return rot(p,DZ.c,DZ.ang*DZ.dir); });
+  h+='<polygon points="'+prev.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="ghost"/>'+arcSvg(DZ.c,src[1],DZ.ang*DZ.dir,'arc')+centreSvg(DZ.c,'centre');
+  document.getElementById('dzFig').innerHTML=wrap(h,'dzTap','Rotation Designer: the flag, '+DZ.copies.length+' image'+(DZ.copies.length===1?'':'s')+', and the centre '+pt(DZ.c));
+  dzScroll(prev);
+  document.getElementById('dzAng').innerHTML=[90,180,270].map(function(a){ return '<button class="chip'+(DZ.ang===a?' on':'')+'" onclick="dzAngle('+a+')">'+a+'°</button>'; }).join('');
+  document.getElementById('dzDirs').innerHTML='<button class="chip'+(DZ.dir===1?' on':'')+'" onclick="dzDir(1)">anticlockwise</button><button class="chip'+(DZ.dir===-1?' on':'')+'" onclick="dzDir(-1)">clockwise</button>';
+  document.getElementById('dzSrcs').innerHTML='<button class="chip'+(DZ.src==='flag'?' on':'')+'" onclick="dzSrc(\'flag\')">the flag</button><button class="chip'+(DZ.src==='last'?' on':'')+'" onclick="dzSrc(\'last\')"'+(DZ.copies.length?'':' disabled')+'>the last image</button>';
+  document.getElementById('dzNow').innerHTML='Next: rotate <b>'+(DZ.src==='last'&&DZ.copies.length?'image '+DZ.copies.length:'the flag')+'</b> '+rotName(DZ.ang*DZ.dir,DZ.c)+' <span class="small">(dashed preview)</span>'+(off?'<br><span style="color:#7a2b1c" class="small">Part of the design is off this grid.</span>':'');
+  document.getElementById('dzList').innerHTML=DZ.copies.length?DZ.copies.map(function(cp,k){ return '<li>Image '+(k+1)+': '+cp.from+', rotated '+rotName(cp.deg,cp.c)+'</li>'; }).join(''):'<li class="small">No images yet.</li>';
+  document.getElementById('dzCount').innerHTML='Brief '+(DZ.i+1)+' of '+DBRIEFS.length+(DZ.done[DZ.i]?' ✓':''); document.getElementById('dzQ').innerHTML=DBRIEFS[DZ.i].q; document.getElementById('dzFb').innerHTML=DZ.fb; }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    turn:{title:'Quarter and half turns',prompt:'An arrow points north. It turns 90° clockwise. Which way does it point now: north, east, south or west?',answer:'east',hint:'Clockwise is the way a clock\'s hands turn: from 12 towards 3.'},
+    coords:{title:'Coordinates in four quadrants',prompt:'Write the coordinates of the point 2 to the left of the origin and 3 down.',answer:[-2,-3],pt:true,hint:'Across first, then up or down. Left and down are negative.'},
+    refl:{title:'Reflection (Lesson 1)',prompt:'Reflect the point (2, 5) in the <i>y</i>-axis.',answer:[-2,5],pt:true,hint:'Same distance from the <i>y</i>-axis, on the other side.'}
+  };
+  function matches(r,v){ if(r.pt) return samePair(pairOf(v),r.answer); if(r.line) return sameLine(lineOf(v),lineOf(r.answer)); var t=String(v).trim().toLowerCase().replace(/[.!]$/,''); return t===r.answer||t==='it is '+r.answer||t==='it\'s '+r.answer||t==='a '+r.answer+' line'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pP(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pR(deg){ return function(v){ var r=rotOf(v); if(r===null||!sameRot(r,deg)) return false; return norm(deg)===180||/clockwise|anti|cw|-|−/i.test(v)||r>0; }; }
+var PRACTICE=[
+ {label:"1 of 8 · A quarter turn",q:"Rotate the point <b>(2, 1)</b> through 90° anticlockwise about <i>O</i>(0, 0).",a:[],eq:pP(-1,2),prompt:"Picture tracing paper pinned at <i>O</i>. Where does a point to the right of <i>O</i> go in a quarter turn anticlockwise?",hint:"(2, 1) is 2 right and 1 up. After a quarter turn anticlockwise it is 2 up and 1 left.",sol:"The image is (−1, 2)."},
+ {label:"2 of 8 · A half turn",q:"Rotate the point <b>(3, −2)</b> through 180° about <i>O</i>(0, 0).",a:[],eq:pP(-3,2),prompt:"Where is the opposite side of <i>O</i>?",hint:"A half turn about <i>O</i> changes the sign of both coordinates.",sol:"The image is (−3, 2)."},
+ {label:"3 of 8 · Clockwise",q:"Rotate the point <b>(1, 4)</b> through 90° clockwise about <i>O</i>(0, 0).",a:[],eq:pP(4,-1),prompt:"Which way do a clock's hands turn?",hint:"(1, 4) is 1 right and 4 up. A quarter turn clockwise makes that 1 down and 4 right.",sol:"The image is (4, −1)."},
+ {label:"4 of 8 · Another centre",q:"Rotate the point <b>(5, 2)</b> through 180° about the centre <b>(2, 1)</b>.",a:[],eq:pP(-1,0),prompt:"How far is (5, 2) from the centre, across and up?",hint:"3 right and 1 up from (2, 1). A half turn makes it 3 left and 1 down from (2, 1).",sol:"(2 − 3, 1 − 1) = (−1, 0)."},
+ {label:"5 of 8 · A quarter turn about a point",q:"Rotate the point <b>(3, 1)</b> through 90° anticlockwise about the centre <b>(1, 1)</b>.",a:[],eq:pP(1,3),prompt:"Where is (3, 1) compared with the centre?",hint:"2 right of (1, 1). A quarter turn anticlockwise makes it 2 up from (1, 1).",sol:"The image is (1, 3)."},
+ {label:"6 of 8 · Same turn",q:"Which rotation, turning <b>anticlockwise</b>, is the same as 270° clockwise?",a:[],eq:pR(90),prompt:"How much is left to make a full turn of 360°?",hint:"270° one way and 90° the other way end in the same place.",sol:"90° anticlockwise."},
+ {label:"7 of 8 · Find the centre",q:"A rotation of 90° anticlockwise maps <i>A</i>(3, 1) to <i>A</i>′(−1, 3) and <i>B</i>(5, 1) to <i>B</i>′(−1, 5). What is the centre?",a:["o","origin","the origin","o(0,0)"],eq:pP(0,0),prompt:"Which point is the same distance from <i>A</i> and <i>A</i>′, and from <i>B</i> and <i>B</i>′?",hint:"Try the origin: rotate (3, 1) a quarter turn anticlockwise about (0, 0).",sol:"The centre is <i>O</i>(0, 0): rotating (3, 1) and (5, 1) a quarter turn anticlockwise about (0, 0) gives (−1, 3) and (−1, 5)."},
+ {label:"8 of 8 · Describe it (stretch)",q:"A rotation about <i>O</i>(0, 0) maps <i>Q</i>(2, 3) to <i>Q</i>′(−2, −3). What is the angle?",a:["half turn","a half turn"],eq:pR(180),prompt:"Where is <i>Q</i>′ compared with <i>Q</i> and <i>O</i>?",hint:"<i>Q</i>′ is on the opposite side of <i>O</i>, the same distance away.",sol:"180°, a half turn. (For a half turn, the direction does not matter.)"}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Picture tracing paper pinned at the centre — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  stRender();
+  tpDraw();
+  zqRender();
+  cfDraw();
+  prRender('pr');
+  dzDraw();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>
