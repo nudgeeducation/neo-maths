@@ -16,11 +16,14 @@
     '@media (max-width:480px){.neo-fk-tool{grid-template-columns:1fr}.neo-fk-tool svg{width:48px;height:48px}}';
   function card(t, here) {
     return '<div class="neo-fk-tool' + (here ? ' here' : '') + '"><div>' + t.icon + '</div><div><h3>' + t.title + '</h3>' +
-      '<div class="neo-fk-from">Found in ' + t.room + ' · ' + t.lesson.replace(/^Lesson (\d+) · /, 'Lesson $1: ') + '</div>' + t.body + '</div></div>';
+      '<div class="neo-fk-from">Found in ' + t.room + ' · ' + t.lesson.replace(/^(Lessons? [\d, and]+) · /, '$1: ') + '</div>' + t.body + '</div></div>';
   }
   function open(i) {
     var kit = window.NEO_FIELDKIT, back = document.getElementById('neoFieldKit');
-    var here = kit.tools[i], rest = kit.tools.filter(function (t, k) { return k !== i; });
+    // this lesson's tool: the one whose label names lesson i + 1 ("Lesson 3 · …" or "Lessons 1 and 4 · …")
+    var n = i + 1, at = -1;
+    kit.tools.forEach(function (t, k) { var m = /^Lessons? ([\d, and]+) ·/.exec(t.lesson || ''); if (at < 0 && m && m[1].split(/\D+/).indexOf(String(n)) >= 0) at = k; });
+    var here = at >= 0 ? kit.tools[at] : null, rest = kit.tools.filter(function (t, k) { return k !== at; });
     back.querySelector('.neo-fk-body').innerHTML =
       '<h2 id="neoFkTitle">🎒 Your field kit</h2><p class="neo-fk-sub">The tools from ' + kit.expedition + ', this unit’s expedition. Use them whenever they help. Looking things up in your kit is good practice, and it is never recorded.</p>' +
       (here ? '<div class="neo-fk-label">For this lesson</div>' + card(here, true) : '') +

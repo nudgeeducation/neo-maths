@@ -427,6 +427,27 @@
       ]
     },
     {
+      "id": "transformations-similarity-and-scale",
+      "title": "Transformations, Similarity and Scale",
+      "stage": "Foundations",
+      "strand": "Geometry",
+      "source": "vault/02_Foundations/01_Lessons/Transformations_Similarity_Scale",
+      "diagnostic": {
+        "id": "animationstudio",
+        "title": "The Animation Studio"
+      },
+      "lessons": [
+        {
+          "id": "ts-01-reflection",
+          "num": "Lesson 01",
+          "title": "Reflection",
+          "file": "lessons/transformations-similarity-and-scale/01-reflection.html",
+          "status": "live",
+          "cornerstones": []
+        }
+      ]
+    },
+    {
       "id": "place-value",
       "title": "Place Value",
       "stage": "Foundations",

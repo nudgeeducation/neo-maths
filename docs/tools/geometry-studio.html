@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEO Dynamic Geometry Studio — v0.4.1</title>
+<title>NEO Dynamic Geometry Studio — v0.5</title>
 <style>
 body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif}
 .wrap{max-width:1040px;margin:auto;padding:14px}
@@ -70,7 +70,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 <div class="topbar">
   <div class="titleblock">
     <h1>Dynamic Geometry Studio <span id="sketchName" style="font-size:.62em;font-weight:normal;color:#6a7f4e">— (unsaved)</span></h1>
-    <p class="sub">v0.4.1 — Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
+    <p class="sub">v0.5 — now with a coordinate grid and transformations (Graph and Transform menus). Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
   </div>
   <a id="returnBtn" class="returnbtn" href="#" hidden>← Return to lesson</a>
 </div>
@@ -134,11 +134,16 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
   </div>
   <div class="menu"><button data-menu="transform">Transform</button>
     <div class="dropdown">
-      <button class="disabled">Mark mirror / centre / vector — soon</button>
-      <button class="disabled">Reflect — soon</button>
-      <button class="disabled">Rotate… — soon</button>
-      <button class="disabled">Translate… — soon</button>
-      <button class="disabled">Enlarge… — soon</button>
+      <div class="lbl">mark first</div>
+      <button data-act="markmirror">Mark mirror (select 1 line or segment)</button>
+      <button data-act="mirrorline">Mirror line by equation… (x = a, y = b, y = x, y = −x)</button>
+      <button data-act="markcentre">Mark centre (select 1 point)</button>
+      <div class="sep"></div>
+      <div class="lbl">then transform the selection</div>
+      <button data-act="reflect">Reflect in the marked mirror</button>
+      <button data-act="rotate">Rotate about the marked centre…</button>
+      <button data-act="translate">Translate by a column vector…</button>
+      <button class="disabled">Enlarge… — coming in v0.6</button>
     </div>
   </div>
   <div class="menu"><button data-menu="measure">Measure</button>
@@ -159,7 +164,11 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
   </div>
   <div class="menu"><button data-menu="graph">Graph</button>
     <div class="dropdown">
-      <button class="disabled">Define axes — soon</button>
+      <button data-act="axes">Coordinate grid on / off</button>
+      <button data-act="snap">Snap points to the grid on / off</button>
+      <button data-act="coords">Show coordinates on / off</button>
+      <button data-act="plotpoints">Plot points… (type coordinates)</button>
+      <div class="sep"></div>
       <button class="disabled">Plot function… — soon</button>
       <button class="disabled">Bearings → use Measure → Bearing</button>
     </div>
@@ -204,7 +213,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
   </aside>
 </div>
 <div class="hint" id="hint">Pick an instrument on the left to draw, or use <b>Select</b> to choose objects then apply a menu action. Try: Point ×3, then Select all three and Construct → Angle bisector.</div>
-<p class="legend">v0.3 — instruments create objects; menus act on the current selection (highlighted). Everything stays dynamic: drag a free point and all dependents follow. Coming next: Transform &amp; Bearings (v0.4), then Number/Calculator &amp; Graph/Functions (v0.5).</p>
+<p class="legend">v0.5 — instruments create objects; menus act on the current selection (highlighted). Everything stays dynamic: drag a free point and all dependents follow, images included. Graph turns on a coordinate grid; Transform reflects, rotates and translates. Coming next: Enlarge and a task checker (v0.6).</p>
 </div>
 
 <input type="file" id="fileInput" accept="application/json,.json" style="display:none">
@@ -222,6 +231,12 @@ var sel=[];               // selection: array of object ids (Sketchpad-style)
 var pending=[];           // ids collected mid draw-gesture
 var drag=null, compass=null, hover=null;
 var labelsShown=true, currentName=null;
+/* v0.5: coordinate grid. 1 unit = 30 px (the same as 1 cm on the plain grid); origin at the centre. */
+var AX={on:false,snap:true,coords:false,ox:430,oy:280,u:30};
+function toU(p){return {x:(p.x-AX.ox)/AX.u,y:(AX.oy-p.y)/AX.u};}
+function fromU(x,y){return {x:AX.ox+x*AX.u,y:AX.oy-y*AX.u};}
+function snapPos(p){if(!AX.on||!AX.snap)return p;var q=toU(p);return fromU(Math.round(q.x),Math.round(q.y));}
+function fmtNum(v){var r=Math.round(v*100)/100;if(Math.abs(r)<1e-9)r=0;var t=String(r);return t.charAt(0)==="-"?"−"+t.slice(1):t;}
 var PALETTE=[["Charcoal","#2f3429"],["Ocean","#2b6cb0"],["Moss","#3f7a45"],["Berry","#b24c4c"],["Plum","#7a4fb0"],["Rust","#c1622e"],["Teal","#2f8f8f"],["Gold","#b8860b"]];
 var LSKEY="neoDGS_sketches_v1";
 
@@ -245,10 +260,18 @@ function P(id){var o=byId(id);if(!o||o.type!=="point")return {x:0,y:0};
   if(o.kind==="intersect"){var pts=intersectGeom(o.o1,o.o2);if(!pts.length)return o._last||{x:0,y:0};var pick=pts[Math.min(o.which,pts.length-1)];o._last=pick;return pick;}
   if(o.kind==="arcend"){var ce=P(o.c),rpe=P(o.rp),re=dist(ce,rpe),ae=ang(ce,rpe)+o.swept;return {x:ce.x+re*Math.cos(ae),y:ce.y+re*Math.sin(ae)};}
   if(o.kind==="polar"){var cp=P(o.c),rr=segLen(o.seg);return {x:cp.x+rr*Math.cos(o.ang),y:cp.y+rr*Math.sin(o.ang)};}
+  if(o.kind==="fixed")return {x:o.x,y:o.y};
+  if(o.kind==="image"){var tf=byId(o.tf);return tf?applyTf(tf,P(o.of)):P(o.of);}
   if(o.kind==="on"){var host=byId(o.on);if(isCircleish(host)){var g=circGeom(host);return {x:g.c.x+g.r*Math.cos(o.ang),y:g.c.y+g.r*Math.sin(o.ang)};}if(isLineish(host)){var lg=lineGeom(host);return {x:lg.p.x+o.t*lg.d.x,y:lg.p.y+o.t*lg.d.y};}return {x:0,y:0};}
   return {x:0,y:0};}
+function applyTf(t,p){
+  if(t.kind==="reflect"){var L=byId(t.line);if(!L)return p;var g=lineGeom(L),dd=g.d.x*g.d.x+g.d.y*g.d.y||1,k=((p.x-g.p.x)*g.d.x+(p.y-g.p.y)*g.d.y)/dd,f={x:g.p.x+k*g.d.x,y:g.p.y+k*g.d.y};return {x:2*f.x-p.x,y:2*f.y-p.y};}
+  if(t.kind==="rotate"){var c=P(t.c),a=t.deg*Math.PI/180,dx=p.x-c.x,dy=c.y-p.y,X=dx*Math.cos(a)-dy*Math.sin(a),Y=dx*Math.sin(a)+dy*Math.cos(a);return {x:c.x+X,y:c.y-Y};}
+  if(t.kind==="translate"){return {x:p.x+t.dx*AX.u,y:p.y-t.dy*AX.u};}
+  return p;}
 function lineGeom(o){
   if(o.type==="line"&&(o.kind==="through"||o.kind==="ray")){var a=P(o.a),b=P(o.b);return {p:a,d:sub(b,a)};}
+  if(o.type==="line"&&o.kind==="eq"){if(o.eq==="x")return {p:fromU(o.k,0),d:{x:0,y:1}};if(o.eq==="y")return {p:fromU(0,o.k),d:{x:1,y:0}};if(o.eq==="yx")return {p:fromU(0,0),d:{x:1,y:-1}};return {p:fromU(0,0),d:{x:1,y:1}};}
   if(o.type==="segment"){var a2=P(o.a),b2=P(o.b);return {p:a2,d:sub(b2,a2)};}
   if(o.type==="perpbis"){var a3=P(o.a),b3=P(o.b);var m={x:(a3.x+b3.x)/2,y:(a3.y+b3.y)/2};var ab=sub(b3,a3);return {p:m,d:{x:-ab.y,y:ab.x}};}
   if(o.type==="perp"){var bp=lineGeom(byId(o.base));return {p:P(o.thru),d:{x:-bp.d.y,y:bp.d.x}};}
@@ -265,7 +288,7 @@ function intersectGeom(id1,id2){var o1=byId(id1),o2=byId(id2);if(!o1||!o2)return
 
 /* ---------- create / pick ---------- */
 function nextLabel(){return String.fromCharCode(65+(pointLabel++%26));}
-function addFreePoint(x,y){var o={id:nextId++,type:"point",kind:"free",x:x,y:y,label:nextLabel()};objects.push(o);return o.id;}
+function addFreePoint(x,y){var sp=snapPos({x:x,y:y});var o={id:nextId++,type:"point",kind:"free",x:sp.x,y:sp.y,label:nextLabel()};objects.push(o);return o.id;}
 function nearestPoint(x,y,thr){var best=null,bd=thr||16;objects.forEach(function(o){if(o.type==="point"&&!o.hidden){var p=P(o.id),d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;best=o.id;}}});return best;}
 function nearestCurve(x,y,thr){var best=null,bd=thr||12;objects.forEach(function(o){if(o.hidden)return;var d=null;
   if(isCircleish(o)){var g=circGeom(o);d=Math.abs(Math.hypot(x-g.c.x,y-g.c.y)-g.r);}
@@ -275,10 +298,10 @@ function nearestCurve(x,y,thr){var best=null,bd=thr||12;objects.forEach(function
 function nearestCaption(x,y){for(var i=objects.length-1;i>=0;i--){var o=objects[i];if(o.type==="caption"&&!o.hidden){var w=(o.text||"").length*8+10;if(x>=o.x-4&&x<=o.x+w&&y>=o.y-16&&y<=o.y+6)return o.id;}}return null;}
 function pickOrCreatePoint(x,y){var id=nearestPoint(x,y);return id!=null?id:addFreePoint(x,y);}
 function pickAny(x,y){var id=nearestPoint(x,y);if(id!=null)return id;var cap=nearestCaption(x,y);if(cap!=null)return cap;var c=nearestCurve(x,y);if(c!=null)return c;return nearestPolygon(x,y);}
-function freeAncestors(id){var out={};(function walk(x){var o=byId(x);if(!o)return;if(o.type==="point"&&o.kind==="free"){out[x]=1;return;}["a","b","c","v","thru","base","o1","o2","rp","seg","at","of","on"].forEach(function(f){if(typeof o[f]==="number")walk(o[f]);});if(Array.isArray(o.pts))o.pts.forEach(walk);})(id);return Object.keys(out).map(Number);}
+function freeAncestors(id){var out={};(function walk(x){var o=byId(x);if(!o)return;if(o.type==="point"&&(o.kind==="free"||o.kind==="fixed")){out[x]=1;return;}["a","b","c","v","thru","base","o1","o2","rp","seg","at","of","on","tf","line"].forEach(function(f){if(typeof o[f]==="number")walk(o[f]);});if(Array.isArray(o.pts))o.pts.forEach(walk);})(id);return Object.keys(out).map(Number);}
 function pointInPoly(pt,verts){var inside=false;for(var i=0,j=verts.length-1;i<verts.length;j=i++){var a=verts[i],b=verts[j];if(((a.y>pt.y)!==(b.y>pt.y))&&(pt.x<(b.x-a.x)*(pt.y-a.y)/((b.y-a.y)||1e-9)+a.x))inside=!inside;}return inside;}
 function nearestPolygon(x,y){for(var i=objects.length-1;i>=0;i--){var o=objects[i];if(o.type==="polygon"&&!o.hidden&&pointInPoly({x:x,y:y},o.pts.map(P)))return o.id;}return null;}
-function enclosed(x0,y0,x1,y1){var lo={x:Math.min(x0,x1),y:Math.min(y0,y1)},hi={x:Math.max(x0,x1),y:Math.max(y0,y1)};var out=[];objects.forEach(function(o){if(o.hidden)return;if(o.type==="measlen"||o.type==="measang"||o.type==="meastext"||o.type==="measbear")return;var anc=freeAncestors(o.id);if(!anc.length)return;var all=anc.every(function(pid){var q=P(pid);return q.x>=lo.x&&q.x<=hi.x&&q.y>=lo.y&&q.y<=hi.y;});if(all)out.push(o.id);});return out;}
+function enclosed(x0,y0,x1,y1){var lo={x:Math.min(x0,x1),y:Math.min(y0,y1)},hi={x:Math.max(x0,x1),y:Math.max(y0,y1)};var out=[];objects.forEach(function(o){if(o.hidden)return;if(o.type==="measlen"||o.type==="measang"||o.type==="meastext"||o.type==="measbear"||o.type==="tf")return;var anc=freeAncestors(o.id);if(!anc.length)return;var all=anc.every(function(pid){var q=P(pid);return q.x>=lo.x&&q.x<=hi.x&&q.y>=lo.y&&q.y<=hi.y;});if(all)out.push(o.id);});return out;}
 function updateOnPoint(o,pos){var host=byId(o.on);if(isCircleish(host)){o.ang=ang(circGeom(host).c,pos);}else if(isLineish(host)){var lg=lineGeom(host);var dd=lg.d.x*lg.d.x+lg.d.y*lg.d.y||1;o.t=((pos.x-lg.p.x)*lg.d.x+(pos.y-lg.p.y)*lg.d.y)/dd;}}
 
 /* ---------- rendering ---------- */
@@ -294,22 +317,38 @@ function highlightSVG(o){var col="#e79b5a",w=9,op="0.45";
   if(o.type==="circle"){var g=circGeom(o);return '<circle cx="'+g.c.x.toFixed(1)+'" cy="'+g.c.y.toFixed(1)+'" r="'+g.r.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-opacity="'+op+'"/>';}
   if(o.type==="arc"){var ga=circGeom(o),a0=ang(ga.c,P(o.rp));return '<path d="'+arcPath(ga.c,ga.r,a0,o.swept)+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-opacity="'+op+'" stroke-linecap="round"/>';}
   return "";}
+/* numbered, labelled axes (GreenPrint v2.3): every unit numbered, italic x and y, O at the origin */
+function axesSVG(){var s="",u=AX.u,ox=AX.ox,oy=AX.oy,xmin=Math.ceil(-ox/u),xmax=Math.floor((VW-ox)/u),ymin=Math.ceil(-(VH-oy)/u),ymax=Math.floor(oy/u);
+  for(var i=xmin;i<=xmax;i++){var X=ox+i*u;s+='<line x1="'+X+'" y1="0" x2="'+X+'" y2="'+VH+'" stroke="#e2d9c6" stroke-width="1"/>';}
+  for(var j=ymin;j<=ymax;j++){var Y=oy-j*u;s+='<line x1="0" y1="'+Y+'" x2="'+VW+'" y2="'+Y+'" stroke="#e2d9c6" stroke-width="1"/>';}
+  s+='<line x1="0" y1="'+oy+'" x2="'+(VW-4)+'" y2="'+oy+'" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/><line x1="'+ox+'" y1="'+VH+'" x2="'+ox+'" y2="4" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/>';
+  s+='<defs><marker id="axArr" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f3429"/></marker></defs>';
+  for(var a=xmin;a<=xmax;a++){if(a===0)continue;var XX=ox+a*u;s+='<line x1="'+XX+'" y1="'+(oy-4)+'" x2="'+XX+'" y2="'+(oy+4)+'" stroke="#2f3429" stroke-width="1"/><text class="axnum" x="'+XX+'" y="'+(oy+16)+'" font-size="11" text-anchor="middle" fill="#4a4f45">'+fmtNum(a)+'</text>';}
+  for(var b=ymin;b<=ymax;b++){if(b===0)continue;var YY=oy-b*u;s+='<line x1="'+(ox-4)+'" y1="'+YY+'" x2="'+(ox+4)+'" y2="'+YY+'" stroke="#2f3429" stroke-width="1"/><text class="axnum" x="'+(ox-7)+'" y="'+(YY+4)+'" font-size="11" text-anchor="end" fill="#4a4f45">'+fmtNum(b)+'</text>';}
+  s+='<text x="'+(ox-7)+'" y="'+(oy+16)+'" font-size="12" text-anchor="end" font-family="Georgia,serif" font-style="italic" fill="#2f3429">O</text>';
+  s+='<text x="'+(VW-14)+'" y="'+(oy-8)+'" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">x</text><text x="'+(ox+9)+'" y="16" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">y</text>';
+  return s;}
+function eqLabel(o){if(o.eq==="x")return "x = "+fmtNum(o.k);if(o.eq==="y")return "y = "+fmtNum(o.k);if(o.eq==="yx")return "y = x";return "y = −x";}
 function render(){
   var s="";
+  if(AX.on){s+=axesSVG();}else{
   for(var gx=0;gx<=VW;gx+=30)s+='<line x1="'+gx+'" y1="0" x2="'+gx+'" y2="'+VH+'" stroke="#efe7d7" stroke-width="1"/>';
-  for(var gy=0;gy<=VH;gy+=30)s+='<line x1="0" y1="'+gy+'" x2="'+VW+'" y2="'+gy+'" stroke="#efe7d7" stroke-width="1"/>';
+  for(var gy=0;gy<=VH;gy+=30)s+='<line x1="0" y1="'+gy+'" x2="'+VW+'" y2="'+gy+'" stroke="#efe7d7" stroke-width="1"/>';}
   // traces
   objects.forEach(function(o){if(o.trace&&o._trail)o._trail.forEach(function(p){s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="1.6" fill="#9a6fbf"/>';});});
   // filled polygons (behind lines/points)
-  objects.forEach(function(o){if(o.hidden||o.type!=="polygon")return;var dd=o.pts.map(P).map(function(p){return p.x.toFixed(1)+","+p.y.toFixed(1);}).join(" ");var fill=o.fill||"#9ec7e8";s+='<polygon points="'+dd+'" fill="'+fill+'" fill-opacity="'+(fill==="none"?0:0.45)+'" stroke="none"/>';if(isSel(o.id))s+='<polygon points="'+dd+'" fill="#e79b5a" fill-opacity="0.35" stroke="#c1622e" stroke-width="3" stroke-dasharray="8 5"/>';});
+  objects.forEach(function(o){if(o.hidden||o.type!=="polygon")return;var dd=o.pts.map(P).map(function(p){return p.x.toFixed(1)+","+p.y.toFixed(1);}).join(" ");var fill=o.fill||(o.img?"#f2c14e":"#9ec7e8");s+='<polygon points="'+dd+'" fill="'+fill+'" fill-opacity="'+(fill==="none"?0:0.45)+'" stroke="none"/>';if(isSel(o.id))s+='<polygon points="'+dd+'" fill="#e79b5a" fill-opacity="0.35" stroke="#c1622e" stroke-width="3" stroke-dasharray="8 5"/>';});
   // selection glow
   sel.forEach(function(id){var so=byId(id);if(so&&so.type!=="point"&&so.type!=="polygon"&&!so.hidden)s+=highlightSVG(so);});
   // curves/lines
   objects.forEach(function(o){if(o.hidden)return;
     if(o.type==="circle"){var g=circGeom(o);s+='<circle cx="'+g.c.x.toFixed(1)+'" cy="'+g.c.y.toFixed(1)+'" r="'+g.r.toFixed(1)+'" fill="none" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||"#2b6cb0"))+'" stroke-width="1.8"/>';}
     else if(o.type==="arc"){var ga=circGeom(o),a0=ang(ga.c,P(o.rp));s+='<path d="'+arcPath(ga.c,ga.r,a0,o.swept)+'" fill="none" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||"#2b6cb0"))+'" stroke-width="1.8"/>';}
-    else if(isLineish(o)){var e=lineEndpoints(o);var col=(o.type==="line"||o.type==="segment")?"#2f3429":"#3f7a45";s+='<line x1="'+e[0].x.toFixed(1)+'" y1="'+e[0].y.toFixed(1)+'" x2="'+e[1].x.toFixed(1)+'" y2="'+e[1].y.toFixed(1)+'" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||col))+'" stroke-width="'+(o.type==="segment"?"2":o.type==="line"?"1.6":"2")+'"/>';}
-    else if(o.type==="measlen"){var ma=P(o.a),mb=P(o.b);var mx=(ma.x+mb.x)/2,my=(ma.y+mb.y)/2;s+='<line x1="'+ma.x.toFixed(1)+'" y1="'+ma.y.toFixed(1)+'" x2="'+mb.x.toFixed(1)+'" y2="'+mb.y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="1" stroke-dasharray="4 3"/><text x="'+mx.toFixed(1)+'" y="'+(my-6).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+(dist(ma,mb)/30).toFixed(1)+' cm</text>';}
+    else if(isLineish(o)&&o.isMirror){var em=lineEndpoints(o);s+='<line x1="'+em[0].x.toFixed(1)+'" y1="'+em[0].y.toFixed(1)+'" x2="'+em[1].x.toFixed(1)+'" y2="'+em[1].y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="9" stroke-opacity="0.32"/>';}
+    if(o.type==="line"&&o.kind==="eq"){var le=lineGeom(o),lp=o.eq==="x"?fromU(o.k,6.5):o.eq==="y"?fromU(11.5,o.k):o.eq==="yx"?fromU(6.6,6.6):fromU(-6.6,6.6),la=(o.eq==="x"&&o.k<=0)||o.eq==="ynx"?"end":"start",lx=lp.x+(la==="end"?-7:7);s+='<rect x="'+(la==="end"?lx-58:lx-2).toFixed(1)+'" y="'+(lp.y-22).toFixed(1)+'" width="60" height="19" rx="4" fill="#fbf8f1" fill-opacity="0.9"/><text x="'+lx.toFixed(1)+'" y="'+(lp.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" text-anchor="'+la+'" fill="#3f5f45">'+eqLabel(o)+'</text>';}
+    if(o.type==="circle"&&false){}
+    else if(isLineish(o)){var e=lineEndpoints(o);var col=o.img?"#b25f2e":(o.type==="line"||o.type==="segment")?"#2f3429":"#3f7a45";s+='<line x1="'+e[0].x.toFixed(1)+'" y1="'+e[0].y.toFixed(1)+'" x2="'+e[1].x.toFixed(1)+'" y2="'+e[1].y.toFixed(1)+'" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||col))+'" stroke-width="'+(o.type==="segment"?"2":o.type==="line"?"1.6":"2")+'"/>';}
+    else if(o.type==="measlen"){var ma=P(o.a),mb=P(o.b);var mx=(ma.x+mb.x)/2,my=(ma.y+mb.y)/2;s+='<line x1="'+ma.x.toFixed(1)+'" y1="'+ma.y.toFixed(1)+'" x2="'+mb.x.toFixed(1)+'" y2="'+mb.y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="1" stroke-dasharray="4 3"/><text x="'+mx.toFixed(1)+'" y="'+(my-6).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+(dist(ma,mb)/30).toFixed(1)+(AX.on?' units':' cm')+'</text>';}
     else if(o.type==="measang"){var qa=P(o.a),qv=P(o.v),qb=P(o.b);var a1=ang(qv,qa),da=normAng(ang(qv,qb)-a1);var midA=a1+da/2;s+='<path d="'+arcPath(qv,26,a1,da)+'" fill="none" stroke="#7a4fb0" stroke-width="1.5"/><text x="'+(qv.x+46*Math.cos(midA)).toFixed(1)+'" y="'+(qv.y+46*Math.sin(midA)+4).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+Math.abs(da*180/Math.PI).toFixed(0)+'°</text>';}
     else if(o.type==="meastext"){var pp=P(o.at);var txt="";if(o.kind==="radius"){var host=byId(o.of);if(host)txt="r = "+(circGeom(host).r/30).toFixed(1)+" cm";}s+='<text x="'+(pp.x+10).toFixed(1)+'" y="'+(pp.y+18).toFixed(1)+'" font-size="12" fill="#7a4fb0" font-weight="bold">'+txt+'</text>';}
     else if(o.type==="measbear"){var ba=P(o.a),bb=P(o.b);var dx=bb.x-ba.x,dy=bb.y-ba.y;var brg=(Math.atan2(dx,-dy)*180/Math.PI+360)%360;var north=-Math.PI/2,dir=Math.atan2(dy,dx);var da=(((dir-north)%(2*Math.PI))+2*Math.PI)%(2*Math.PI);var mid=north+da/2;var lbl=("00"+Math.round(brg)%360).slice(-3)+"°";
@@ -328,8 +367,10 @@ function render(){
   // points
   objects.forEach(function(o){if(o.type==="point"&&!o.hidden){var p=P(o.id),free=o.kind==="free";
     if(isSel(o.id))s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="10" fill="#e79b5a" fill-opacity="0.35" stroke="#c1622e" stroke-width="2"/>';
-    s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(free?5:4)+'" fill="'+(o.colour||(free?"#2f3429":"#b25f2e"))+'" stroke="#fff" stroke-width="1.5"/>';
-    if(labelsShown)s+='<text x="'+(p.x+8).toFixed(1)+'" y="'+(p.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" fill="#2f3429">'+o.label+'</text>';}});
+    if(o.kind==="fixed")s+='<rect x="'+(p.x-5).toFixed(1)+'" y="'+(p.y-5).toFixed(1)+'" width="10" height="10" fill="'+(o.colour||"#2f3429")+'" stroke="#fff" stroke-width="1.5" data-fixed="1"/>';
+    else s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(free?5:4)+'" fill="'+(o.colour||(free?"#2f3429":"#b25f2e"))+'" stroke="#fff" stroke-width="1.5"/>';
+    if(o.isCentre)s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="13" fill="none" stroke="#7a4fb0" stroke-width="2" stroke-dasharray="4 3"/>';
+    if(labelsShown){var lt=esc(o.label);if(AX.on&&AX.coords){var q=toU(p);lt+=' <tspan font-style="normal">('+fmtNum(q.x)+', '+fmtNum(q.y)+')</tspan>';}s+='<text x="'+(p.x+8).toFixed(1)+'" y="'+(p.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" fill="#2f3429">'+lt+'</text>';}}});
   pending.forEach(function(id){if(typeof id!=="number")return;var p=P(id);s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="9" fill="none" stroke="#c1622e" stroke-width="1.5" stroke-dasharray="3 3"/>';});
   if(drag&&drag.kind==="marquee"&&drag.moved){var x0=Math.min(drag.start.x,drag.last.x),y0=Math.min(drag.start.y,drag.last.y),ww=Math.abs(drag.last.x-drag.start.x),hh=Math.abs(drag.last.y-drag.start.y);s+='<rect x="'+x0.toFixed(1)+'" y="'+y0.toFixed(1)+'" width="'+ww.toFixed(1)+'" height="'+hh.toFixed(1)+'" fill="#3f5f45" fill-opacity="0.08" stroke="#3f5f45" stroke-width="1" stroke-dasharray="5 4"/>';}
   svg.innerHTML=s;
@@ -389,11 +430,14 @@ svg.addEventListener("pointerdown",function(e){var pos=toXY(e);try{svg.setPointe
 svg.addEventListener("pointermove",function(e){var pos=toXY(e);hover=pos;
   if(drag&&drag.kind==="ink-draw"){var io=byId(drag.candidate);if(io)io.pts.push([pos.x,pos.y]);drag.moved=true;render();return;}
   if(drag){var dx=pos.x-drag.last.x,dy=pos.y-drag.last.y;drag.total+=Math.hypot(dx,dy);if(drag.total>8)drag.moved=true;
-    if(drag.kind==="point"){var o=byId(drag.candidate);o.x=pos.x;o.y=pos.y;}
+    if(drag.kind==="point"){var o=byId(drag.candidate),sp=snapPos(pos);o.x=sp.x;o.y=sp.y;}
+    else if(drag.kind==="none"&&drag.moved&&!drag.warned){var fo=byId(drag.candidate);if(fo&&fo.kind==="fixed"){drag.warned=true;setHint("This point was plotted at fixed coordinates, so it does not move. (Graph → Plot points… → tick “Let me drag them afterwards” to plot points you can drag.)");}}
     else if(drag.kind==="on"){updateOnPoint(byId(drag.candidate),pos);}
     else if(drag.kind==="caption"){var oc=byId(drag.candidate);oc.x=pos.x;oc.y=pos.y;}
     else if(drag.kind==="ink"){var oi=byId(drag.candidate);oi.pts=oi.pts.map(function(p){return [p[0]+dx,p[1]+dy];});}
-    else if(drag.kind==="obj"){drag.ids.forEach(function(pid){var fp=byId(pid);if(fp){fp.x+=dx;fp.y+=dy;}});}
+    else if(drag.kind==="obj"){if(!drag.orig){drag.orig={};drag.acc={x:0,y:0};drag.ids.forEach(function(pid){var fp=byId(pid);if(fp&&fp.kind==="free")drag.orig[pid]={x:fp.x,y:fp.y};});}if(!Object.keys(drag.orig).length&&drag.moved&&!drag.warned){drag.warned=true;setHint("These points were plotted at fixed coordinates, so the shape does not move.");}drag.acc.x+=dx;drag.acc.y+=dy;
+      var off={x:drag.acc.x,y:drag.acc.y};if(AX.on&&AX.snap){off.x=Math.round(off.x/AX.u)*AX.u;off.y=Math.round(off.y/AX.u)*AX.u;}
+      drag.ids.forEach(function(pid){var fp=byId(pid),o0=drag.orig[pid];if(fp&&o0){fp.x=o0.x+off.x;fp.y=o0.y+off.y;}});}
     drag.last=pos;
     objects.forEach(function(t){if(t.trace&&t.type==="point"){t._trail=t._trail||[];t._trail.push(P(t.id));if(t._trail.length>400)t._trail.shift();}});
     render();return;}
@@ -421,11 +465,11 @@ function need(msg){setHint('<b>Select needed:</b> '+msg);}
 var ACT={
   undo:function(){doUndo();},
   redo:function(){doRedo();},
-  clear:function(){objects=[];sel=[];pending=[];compass=null;pointLabel=0;nextId=1;render();setHint("Cleared.");},
+  clear:function(){AX.coords=false;objects=[];sel=[];pending=[];compass=null;pointLabel=0;nextId=1;render();setHint("Cleared.");},
   selectall:function(){sel=objects.filter(function(o){return !o.hidden;}).map(function(o){return o.id;});render();setHint(selSummary());},
   deselect:function(){sel=[];render();setHint("Deselected.");},
   relabel:function(){var o=selObjs();if(o.length!==1||(o[0].type!=="point"&&o[0].type!=="caption")){need("exactly 1 point or text label.");return;}var it=o[0],cur=it.type==="caption"?it.text:it.label;var v=window.prompt(it.type==="caption"?"Edit text:":"Label for this point:",cur||"");if(v!=null){if(it.type==="caption")it.text=v;else it.label=v;render();setHint("Renamed.");}},
-  delete:function(){if(!sel.length){need("objects to delete.");return;}var dead={};sel.forEach(function(id){dead[id]=1;});var changed=true;while(changed){changed=false;objects.forEach(function(o){if(dead[o.id])return;["a","b","c","v","thru","base","o1","o2","rp","seg","at","of","on"].forEach(function(f){if(o[f]!=null&&dead[o[f]]){if(!dead[o.id]){dead[o.id]=1;changed=true;}}});if(Array.isArray(o.pts)&&o.pts.some(function(p){return dead[p];})&&!dead[o.id]){dead[o.id]=1;changed=true;}});}objects=objects.filter(function(o){return !dead[o.id];});sel=[];render();setHint("Deleted.");},
+  delete:function(){if(!sel.length){need("objects to delete.");return;}var dead={};sel.forEach(function(id){dead[id]=1;});var changed=true;while(changed){changed=false;objects.forEach(function(o){if(dead[o.id])return;["a","b","c","v","thru","base","o1","o2","rp","seg","at","of","on","tf","line"].forEach(function(f){if(o[f]!=null&&dead[o[f]]){if(!dead[o.id]){dead[o.id]=1;changed=true;}}});if(Array.isArray(o.pts)&&o.pts.some(function(p){return dead[p];})&&!dead[o.id]){dead[o.id]=1;changed=true;}});}objects=objects.filter(function(o){return !dead[o.id];});sel=[];render();setHint("Deleted.");},
   labels:function(){labelsShown=!labelsShown;render();},
   hide:function(){if(!sel.length){need("objects to hide.");return;}selObjs().forEach(function(o){o.hidden=true;});sel=[];render();setHint("Hidden (Display → Show all hidden to restore).");},
   showall:function(){objects.forEach(function(o){o.hidden=false;});render();setHint("All objects shown.");},
@@ -467,7 +511,17 @@ var ACT={
   importfile:function(){document.getElementById("fileInput").click();},
   polygon:function(){var p=selPoints();if(p.length<3){need("3 or more points (the vertices, in order).");return;}objects.push({id:nextId++,type:"polygon",pts:p.map(function(o){return o.id;}),fill:"#9ec7e8"});sel=[];render();setHint("Polygon interior constructed — select it, then Display → Colour… to fill it.");},
   colour:function(){openColourDialog();},
-  help:function(){openDialog("<h3>Quick reference</h3><p style='max-width:400px'>Left toolbox = <b>instruments</b> (draw points, segments, circles, and swing the compass). The top menus <b>act on the current selection</b>: switch to <b>Select</b>, click objects to build a selection, then choose an action.</p><ul style='max-width:400px'><li><b>Construct</b> builds dependent objects (midpoints, bisectors, perpendiculars, intersections).</li><li><b>Measure</b> reports lengths and angles.</li><li><b>Display</b> hides objects, toggles labels, and traces a point to reveal a locus.</li></ul><p style='color:#6a6157'>Transform, Number/Calculator and Graph/Functions are coming in later versions.</p>");}
+  axes:function(){AX.on=!AX.on;render();setHint(AX.on?"Coordinate grid on: 1 square = 1 unit. New points snap to grid points (Graph → Snap to turn it off).":"Coordinate grid off.");},
+  snap:function(){AX.snap=!AX.snap;setHint(AX.snap?"Points snap to grid points.":"Points no longer snap.");render();},
+  coords:function(){if(!AX.on){AX.on=true;}AX.coords=!AX.coords;render();setHint(AX.coords?"Coordinates shown beside each point.":"Coordinates hidden.");},
+  plotpoints:function(){openPlotDialog();},
+  markmirror:function(){var l=selLines();if(l.length!==1||selObjs().length!==1){need("exactly 1 line or segment: the mirror. Switch to Select, click an empty space, then click the line.");return;}objects.forEach(function(o){delete o.isMirror;});l[0].isMirror=true;sel=[];render();setHint("Mirror marked (shown with a purple glow). Now select what to reflect, then Transform → Reflect.");},
+  markcentre:function(){var p=selPoints();if(p.length!==1||selObjs().length!==1){need("exactly 1 point: the centre of rotation.");return;}objects.forEach(function(o){delete o.isCentre;});p[0].isCentre=true;sel=[];render();setHint("Centre marked (purple ring). Now select what to rotate, then Transform → Rotate….");},
+  mirrorline:function(){openMirrorDialog();},
+  reflect:function(){var m=objects.filter(function(o){return o.isMirror&&isLineish(o);})[0];if(!m){need("a mirror first: select a line, then Transform → Mark mirror (or Transform → Mirror line by equation…).");return;}transformSel({id:nextId++,type:"tf",kind:"reflect",line:m.id},"Reflected in the mirror. Drag the object: its image follows.");},
+  rotate:function(){var c=objects.filter(function(o){return o.isCentre&&o.type==="point";})[0];if(!c){need("a centre first: select a point, then Transform → Mark centre.");return;}if(!transformable().length){need("something to rotate: points, segments or a polygon (drag a box around a shape).");return;}openRotateDialog(c);},
+  translate:function(){if(!transformable().length){need("something to translate: points, segments or a polygon (drag a box around a shape).");return;}openTranslateDialog();},
+  help:function(){openDialog("<h3>Quick reference</h3><p style='max-width:400px'>Left toolbox = <b>instruments</b> (draw points, segments, circles, and swing the compass). The top menus <b>act on the current selection</b>: switch to <b>Select</b>, click objects to build a selection, then choose an action.</p><ul style='max-width:400px'><li><b>Construct</b> builds dependent objects (midpoints, bisectors, perpendiculars, intersections).</li><li><b>Measure</b> reports lengths and angles.</li><li><b>Display</b> hides objects, toggles labels, and traces a point to reveal a locus.</li></ul><ul style='max-width:400px'><li><b>Graph</b> turns on a coordinate grid: 1 square is 1 unit, and points snap to grid points. <b>Graph → Plot points…</b> places points at coordinates you type, such as A(1, 2), B(4, 2), C(1, 5); they stay fixed (small squares) unless you tick “Let me drag them afterwards”.</li><li><b>Transform</b>: mark a mirror or a centre first, then select a shape and Reflect, Rotate or Translate. Images are labelled with a prime (A′) and follow the object when you drag it.</li></ul><p style='color:#6a6157'>Enlarge, Number/Calculator and Plot function are coming in later versions.</p>");}
 };
 
 /* ---------- menu bar wiring ---------- */
@@ -500,8 +554,8 @@ document.getElementById("toolbox").addEventListener("click",function(e){var b=e.
 });
 
 /* ---------- serialisation + named-sketch store ---------- */
-function serialize(){return {version:"NEO-DGS-0.4.1",name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
-function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
+function serialize(){return {version:"NEO-DGS-0.5",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
+function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;if(data.axes){AX.on=!!data.axes.on;AX.snap=data.axes.snap!==false;AX.coords=!!data.axes.coords;}sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
 function storeMap(){try{return JSON.parse(localStorage.getItem(LSKEY)||"{}");}catch(e){return {};}}
 function storeSet(m){try{localStorage.setItem(LSKEY,JSON.stringify(m));}catch(e){}}
 function storeSave(name){var m=storeMap();currentName=name;m[name]=serialize();storeSet(m);updateTitle();}
@@ -516,6 +570,48 @@ function openSaveAsDialog(){openDialog('<h3>Save sketch as…</h3><div class="ro
 function openOpenDialog(){var m=storeMap();var names=Object.keys(m).sort();var h='<h3>Open sketch</h3>';if(!names.length)h+='<p style="color:#6a6157">No saved sketches yet — use “Save as…”, or Import from file.</p>';else{h+='<div style="max-height:260px;overflow:auto">';names.forEach(function(n){h+='<div style="display:flex;gap:8px;align-items:center;margin:5px 0"><button data-open="'+encodeURIComponent(n)+'" style="flex:1;text-align:left;padding:8px 10px">'+n+'</button><button data-del="'+encodeURIComponent(n)+'" title="Delete" style="padding:8px 10px">🗑</button></div>';});h+='</div>';}h+='<div class="row" style="margin-top:6px"><button data-import="1">Import from file…</button></div>';openDialog(h,[]);dialog.querySelectorAll("button[data-open]").forEach(function(b){b.onclick=function(){try{loadData(storeMap()[decodeURIComponent(b.dataset.open)]);setHint("Opened.");}catch(e){setHint("Could not open that sketch.");}closeDialog();};});dialog.querySelectorAll("button[data-del]").forEach(function(b){b.onclick=function(){var mm=storeMap();delete mm[decodeURIComponent(b.dataset.del)];storeSet(mm);openOpenDialog();};});var imp=dialog.querySelector("button[data-import]");if(imp)imp.onclick=function(){closeDialog();document.getElementById("fileInput").click();};}
 function openColourDialog(){if(!sel.length){need("objects to colour first (switch to Select and click some).");return;}var h='<h3>Colour</h3><p style="color:#6a6157;margin:0 0 8px;max-width:360px">Applies to the '+sel.length+' selected object(s). Polygons are <b>filled</b>; lines, circles and points are recoloured.</p><div style="display:flex;flex-wrap:wrap;gap:8px">';PALETTE.forEach(function(c){h+='<button data-col="'+c[1]+'" title="'+c[0]+'" style="width:44px;height:34px;background:'+c[1]+';border:1px solid #999;border-radius:7px"></button>';});h+='</div><div class="row" style="margin-top:12px"><button data-col="none">No fill (polygon)</button> <button data-col="default">Default colour</button> <label style="display:inline-flex;align-items:center;gap:6px;border:1px solid #738697;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:600">More colours… <input type="color" id="moreCol" value="#3f7a45" style="width:30px;height:24px;padding:0;border:none;background:none;cursor:pointer"></label></div>';openDialog(h,[]);dialog.querySelectorAll("button[data-col]").forEach(function(b){b.onclick=function(){applyColour(b.dataset.col);closeDialog();};});var mc=dialog.querySelector("#moreCol");if(mc){mc.addEventListener("input",function(){applyColour(mc.value);});mc.addEventListener("change",function(){applyColour(mc.value);closeDialog();});}}
 function applyColour(col){selObjs().forEach(function(o){if(o.type==="polygon"){o.fill=(col==="default")?"#9ec7e8":col;}else{if(col==="default"||col==="none")delete o.colour;else o.colour=col;}});render();setHint("Colour applied.");}
+
+/* ---------- transformations (v0.5) ---------- */
+function transformable(){return selObjs().filter(function(o){return !o.hidden&&!o.isMirror&&(o.type==="point"||o.type==="segment"||o.type==="polygon"||o.type==="circle"||(o.type==="line"&&o.kind!=="eq"));});}
+function primeOf(l){var base=String(l||"").replace(/[′″‴⁗]+$/,""),cur=String(l||"").slice(base.length),order=["","′","″","‴","⁗"],taken={};objects.forEach(function(o){if(o.type==="point")taken[o.label]=1;});
+  var i=Math.max(1,order.indexOf(cur)+1);while(i<order.length-1&&taken[base+order[i]])i++;return base+order[Math.min(i,order.length-1)];}
+function transformSel(tf,msg){var objs=transformable();if(!objs.length){need("something to transform: points, segments or a polygon (drag a box around a shape).");return false;}
+  objects.push(tf);var map={};
+  function img(pid){if(map[pid])return map[pid];var o=byId(pid);var im={id:nextId++,type:"point",kind:"image",of:pid,tf:tf.id,label:primeOf(o&&o.label)};objects.push(im);map[pid]=im.id;return im.id;}
+  objs.forEach(function(o){
+    if(o.type==="point")img(o.id);
+    else if(o.type==="segment")objects.push({id:nextId++,type:"segment",a:img(o.a),b:img(o.b),img:true});
+    else if(o.type==="line")objects.push({id:nextId++,type:"line",kind:o.kind,a:img(o.a),b:img(o.b),img:true});
+    else if(o.type==="circle")objects.push({id:nextId++,type:"circle",c:img(o.c),thru:img(o.thru),img:true});
+    else if(o.type==="polygon"){var np=o.pts.map(img);objects.push({id:nextId++,type:"polygon",pts:np,fill:o.img?o.fill:undefined,img:true});
+      var have={};objs.forEach(function(q){if(q.type==="segment")have[q.a+"-"+q.b]=have[q.b+"-"+q.a]=1;});
+      o.pts.forEach(function(a,i){var b=o.pts[(i+1)%o.pts.length];if(have[a+"-"+b])return;var edge=objects.filter(function(q){return q.type==="segment"&&((q.a===a&&q.b===b)||(q.a===b&&q.b===a));})[0];if(edge){have[a+"-"+b]=have[b+"-"+a]=1;objects.push({id:nextId++,type:"segment",a:img(a),b:img(b),img:true});}});}
+  });
+  sel=[];render();setHint(msg);return true;}
+function numIn(v){var t=String(v).trim().replace(/−/g,"-");if(!/^-?\d+(\.\d+)?$/.test(t))return NaN;return parseFloat(t);}
+function openRotateDialog(c){openDialog('<h3>Rotate about '+esc(c.label)+'</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Anticlockwise is positive; clockwise is negative. A quarter turn is 90°.</p><div class="row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button data-q="90">90°</button><button data-q="180">180°</button><button data-q="270">270°</button></div><div class="row"><label>Angle <input id="rtAng" type="text" inputmode="decimal" value="90" style="width:80px;padding:7px;border:1px solid #bcae98;border-radius:8px"> °</label></div><div class="row" style="margin-top:8px"><label><input type="radio" name="rtDir" value="1" checked> anticlockwise</label> &nbsp; <label><input type="radio" name="rtDir" value="-1"> clockwise</label></div>',
+  [{label:"Rotate",primary:true,fn:function(){var a=numIn(document.getElementById("rtAng").value);if(isNaN(a)){setHint("Type the angle as a number of degrees, such as 90.");return;}var dir=+(dialog.querySelector('input[name=rtDir]:checked')||{value:1}).value;var deg=a*dir;closeDialog();transformSel({id:nextId++,type:"tf",kind:"rotate",c:c.id,deg:deg},"Rotated "+fmtNum(Math.abs(deg))+"° "+(deg>=0?"anticlockwise":"clockwise")+" about "+esc(c.label)+". Drag the centre or the object: the image follows.");}}]);
+  dialog.querySelectorAll("button[data-q]").forEach(function(b){b.onclick=function(){document.getElementById("rtAng").value=b.dataset.q;};});}
+function openTranslateDialog(){openDialog('<h3>Translate by a column vector</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Top number: right (+) or left (−). Bottom number: up (+) or down (−). Each unit is one grid square.</p><div style="display:flex;align-items:center;gap:8px;font-size:1.6em"><span>(</span><span style="display:flex;flex-direction:column;gap:6px"><input id="tvX" type="text" inputmode="decimal" value="" aria-label="top number: right or left" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"><input id="tvY" type="text" inputmode="decimal" value="" aria-label="bottom number: up or down" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"></span><span>)</span></div>',
+  [{label:"Translate",primary:true,fn:function(){var dx=numIn(document.getElementById("tvX").value),dy=numIn(document.getElementById("tvY").value);if(isNaN(dx)||isNaN(dy)){setHint("Type a number in both boxes (use − for left or down), such as 3 and −2.");return;}closeDialog();if(!AX.on){AX.on=true;}transformSel({id:nextId++,type:"tf",kind:"translate",dx:dx,dy:dy},"Translated by the column vector ("+fmtNum(dx)+", "+fmtNum(dy)+"): "+(dx>=0?fmtNum(dx)+" right":fmtNum(-dx)+" left")+", "+(dy>=0?fmtNum(dy)+" up":fmtNum(-dy)+" down")+".");}}]);
+  setTimeout(function(){var i=document.getElementById("tvX");if(i)i.focus();},20);}
+/* Graph → Plot points: type coordinates, such as A(1, 2), B(4, 2), C(1, 5) */
+function parsePoints(text){var t=String(text).replace(/[−–—]/g,"-").replace(/′/g,"'"),re=/([A-Za-z][A-Za-z0-9']*)?\s*\(\s*(-?\d+(?:\.\d+)?)\s*[,;]\s*(-?\d+(?:\.\d+)?)\s*\)/g,m,out=[],rest=t;
+  while((m=re.exec(t))){out.push({label:m[1]?m[1].replace(/'/g,"′"):null,x:parseFloat(m[2]),y:parseFloat(m[3])});}
+  rest=t.replace(re,"").replace(/[\s,;]+/g,"");return {pts:out,leftover:rest};}
+function plotPoints(text,join,free){var r=parsePoints(text);if(!r.pts.length)return {ok:false,msg:"Type each point as coordinates in brackets, such as A(1, 2) or (1, 2)."};
+  if(r.leftover)return {ok:false,msg:"Some of that could not be read: “"+esc(r.leftover.slice(0,20))+"”. Type each point as A(1, 2) or (1, 2), separated by commas or spaces."};
+  var xmax=AX.ox/AX.u,ymax=AX.oy/AX.u,off=r.pts.filter(function(q){return Math.abs(q.x)>xmax||Math.abs(q.y)>ymax;});
+  if(off.length)return {ok:false,msg:"("+fmtNum(off[0].x)+", "+fmtNum(off[0].y)+") is beyond the edge of the grid, which shows x from −"+Math.floor(xmax)+" to "+Math.floor(xmax)+" and y from −"+Math.floor(ymax)+" to "+Math.floor(ymax)+"."};
+  AX.on=true;var ids=r.pts.map(function(q){var p=fromU(q.x,q.y);var o={id:nextId++,type:"point",kind:free?"free":"fixed",x:p.x,y:p.y,label:q.label||nextLabel()};objects.push(o);return o.id;});
+  if(join&&ids.length>=2){if(ids.length>=3)objects.push({id:nextId++,type:"polygon",pts:ids.slice(),fill:"#9ec7e8"});ids.forEach(function(a,i){if(i===ids.length-1&&ids.length<3)return;objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});}
+  sel=[];render();return {ok:true,n:ids.length};}
+function openPlotDialog(){openDialog('<h3>Plot points</h3><p style="max-width:400px;color:#6a6157;margin:0 0 8px">Type each point as coordinates in brackets, with a name if you like: <b>A(1, 2), B(4, 2), C(1, 5)</b>. Points without a name get the next letter. They go exactly where you type and stay fixed there (shown as small squares).</p><textarea id="ppText" rows="3" style="width:100%;box-sizing:border-box;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="coordinates of the points"></textarea><div class="row" style="margin-top:8px"><label><input type="checkbox" id="ppJoin" checked> Join them in order to make a shape</label></div><div class="row" style="margin-top:4px"><label><input type="checkbox" id="ppFree"> Let me drag them afterwards</label></div><p id="ppMsg" style="color:#7a2b1c;min-height:1.2em;margin:6px 0 0"></p>',
+  [{label:"Plot",primary:true,fn:function(){var free=document.getElementById("ppFree").checked,res=plotPoints(document.getElementById("ppText").value,document.getElementById("ppJoin").checked,free);if(!res.ok){document.getElementById("ppMsg").innerHTML=res.msg;return;}closeDialog();setHint(res.n+" point"+(res.n>1?"s":"")+" plotted"+(free?" (you can drag them)":" at fixed coordinates")+". Drag a box around the shape to select it for a transformation.");}}]);
+  setTimeout(function(){var i=document.getElementById("ppText");if(i)i.focus();},20);}
+function addEqLine(eq,k){var o={id:nextId++,type:"line",kind:"eq",eq:eq,k:k||0};objects.push(o);return o;}
+function openMirrorDialog(){openDialog('<h3>Mirror line by equation</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Turns on the coordinate grid, draws the line and marks it as the mirror.</p><div class="row"><select id="mlEq" style="padding:7px;border:1px solid #bcae98;border-radius:8px"><option value="x">x = a (vertical)</option><option value="y">y = b (horizontal)</option><option value="yx">y = x</option><option value="ynx">y = −x</option></select> <label>number <input id="mlK" type="text" inputmode="decimal" value="1" style="width:70px;padding:7px;border:1px solid #bcae98;border-radius:8px"></label></div>',
+  [{label:"Draw and mark",primary:true,fn:function(){var eq=document.getElementById("mlEq").value,k=numIn(document.getElementById("mlK").value);if((eq==="x"||eq==="y")&&isNaN(k)){setHint("Type the number for the line, such as 2 or −1.");return;}closeDialog();AX.on=true;var o=addEqLine(eq,(eq==="x"||eq==="y")?k:0);objects.forEach(function(q){delete q.isMirror;});o.isMirror=true;render();setHint("Mirror line "+eqLabel(o)+" drawn and marked. Select a shape, then Transform → Reflect.");}}]);}
 
 /* ---------- file import ---------- */
 document.getElementById("fileInput").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{loadData(JSON.parse(rd.result));setHint("Imported from file.");}catch(err){setHint("That file could not be read as a sketch.");}};rd.readAsText(f);e.target.value="";});
@@ -881,6 +977,126 @@ var TASKS={
           "Remember: this measurement checks your proof — it does not replace it."],
    big:"Save your work with your written proof: state each step of the angle-at-the-centre argument with its reason.",
    conj:"Why is a measured example not a proof, and what does the proof add that measuring cannot?"},
+ "ts01-reflect":{
+   tag:"Transformations · Lesson 1 · Movement",
+   title:"Reflect a triangle in a mirror line",
+   intro:"The grid is on and the mirror line x = −1 is drawn. Reflect triangle ABC in it, then test what the reflection does.",
+   setup:{axes:true,pts:[["A",1,1],["B",4,1],["C",1,3]],polys:[["A","B","C"]],eq:[["x",-1]],next:3},
+   steps:["Choose the Select tool (🖐). Click an empty part of the grid, then click the line x = −1 so it glows.",
+          "Transform → Mark mirror. The line gets a purple glow.",
+          "Drag a box around the whole triangle (press on an empty part of the grid near it and drag across it), so its corners and sides are selected.",
+          "Transform → Reflect in the marked mirror. The image A′B′C′ appears on the other side.",
+          "Drag A, B or C. Watch A′, B′ and C′: they follow, always the same distance from the mirror.",
+          "Check one pair: select A and A′, then Construct → Midpoint. Where does the midpoint land?"],
+   big:"Each image point is the same distance from the mirror as its object, on the other side, along a line at right angles to the mirror.",
+   conj:"Which points would not move at all if you reflected them in x = −1?"},
+ "ts01-mirror":{
+   tag:"Transformations · Lesson 1 · Creativity",
+   title:"Find the mirror line",
+   intro:"Triangle PQR and its reflection P′Q′R′ are drawn. Find the mirror line, then prove it by reflecting.",
+   setup:{axes:true,coords:true,pts:[["P",-4,1],["Q",-2,1],["R",-4,4],["P′",1,-4],["Q′",1,-2],["R′",4,-4]],polys:[["P","Q","R"],["P′","Q′","R′"]],fill:"#9ec7e8",next:18},
+   steps:["Choose Select. Click an empty part of the grid, then click P and then P′.",
+          "Construct → Perpendicular bisector. Every point on it is the same distance from P and P′: it is the mirror line.",
+          "Read its equation from the coordinates it passes through, such as (0, 0) and (2, 2).",
+          "Check: click the new line, Transform → Mark mirror. Drag a box around triangle PQR, then Transform → Reflect in the marked mirror.",
+          "The image lands exactly on P′Q′R′ if your mirror line is right."],
+   big:"The mirror line is the perpendicular bisector of the line joining any point to its image.",
+   conj:"What is the equation of the mirror line, and how do the coordinates of P and P′ show it?"},
+ "ts01-final":{
+   tag:"Transformations · Lesson 1 · Final Task",
+   title:"Your evidence: two reflections",
+   intro:"Reflect a shape in y = x, and in a vertical or horizontal line of your choice.",
+   setup:{axes:true,coords:true,pts:[["A",1,3],["B",3,3],["C",3,4]],polys:[["A","B","C"]],next:3},
+   steps:["Transform → Mirror line by equation…: choose y = x, then Draw and mark.",
+          "Drag a box around triangle ABC, then Transform → Reflect in the marked mirror.",
+          "Graph → Show coordinates is on: compare the coordinates of A and A′. What do you notice?",
+          "Transform → Mirror line by equation… again: choose x = a or y = b with a number of your own, then reflect ABC in that line too.",
+          "Make a shape of your own: Graph → Plot points…, type its corners, such as P(−5, −1), Q(−2, −1), R(−2, −3), and reflect it too.",
+          "Save your work, and write one sentence about each reflection."],
+   big:"Save your work and a sentence: a reflection is fully described by its mirror line.",
+   conj:"Reflecting in y = x, what happens to the coordinates of every point?"},
+ "ts02-rotate":{
+   tag:"Transformations · Lesson 2 · Movement",
+   title:"Rotate a shape about a centre",
+   intro:"Rotate the flag about the marked centre O, then change the angle and the direction.",
+   setup:{axes:true,pts:[["O",0,0],["A",1,1],["B",1,4],["C",3,3]],polys:[["A","B","C"]],centre:"O",next:3},
+   steps:["The centre O is already marked (purple ring). To mark a different centre: select one point, then Transform → Mark centre.",
+          "Choose Select. Drag a box around the flag ABC (not including O).",
+          "Transform → Rotate about the marked centre…: choose 90°, anticlockwise, then Rotate.",
+          "Select the flag again and rotate it 90° clockwise. Compare the two images.",
+          "Drag O to a new grid point. Both images move: a rotation depends on its centre."],
+   big:"A rotation is described by its centre, its angle and its direction. Anticlockwise is positive and clockwise is negative.",
+   conj:"Which single rotation would do the same as rotating 90° anticlockwise twice?"},
+ "ts02-design":{
+   tag:"Transformations · Lesson 2 · Creativity",
+   title:"A design with rotational symmetry",
+   intro:"Rotate one shape again and again about the same centre to build a pattern.",
+   setup:{axes:true,pts:[["O",0,0],["A",1,0],["B",3,1],["C",2,2]],polys:[["A","B","C"]],centre:"O",next:3},
+   steps:["Choose Select and drag a box around the shape ABC.",
+          "Transform → Rotate about the marked centre…: 90°, anticlockwise. Rotate.",
+          "Drag a box around the new image, and rotate it 90° anticlockwise again. Repeat once more.",
+          "You now have four copies. Drag A, B or C: every copy changes together.",
+          "Try 120° three times instead. How many copies does it take to come back to the start?"],
+   big:"Turning a shape by 360° ÷ n, n times, builds a design with rotational symmetry of order n.",
+   conj:"Which angle would make a design with six copies?"},
+ "ts02-final":{
+   tag:"Transformations · Lesson 2 · Final Task",
+   title:"Your evidence: rotations described fully",
+   intro:"Rotate a shape about a centre of your choice, twice, and describe each rotation fully.",
+   setup:{axes:true,coords:true,pts:[["A",2,1],["B",4,1],["C",4,2]],polys:[["A","B","C"]],next:3},
+   steps:["Point tool: place a centre on a grid point. Select it, then Transform → Mark centre.",
+          "Drag a box around ABC, then Transform → Rotate about the marked centre…: choose an angle and a direction.",
+          "Rotate ABC again with a different angle or direction.",
+          "Save your work, and write a full description of each rotation: the centre, the angle and the direction."],
+   big:"Save your work and two full descriptions: centre (as coordinates), angle, and direction.",
+   conj:"Why is “a rotation of 90°” not a full description?"},
+ "ts03-translate":{
+   tag:"Transformations · Lesson 3 · Movement",
+   title:"Translate by a column vector",
+   intro:"Slide the shape by a column vector, then undo the move with a second vector.",
+   setup:{axes:true,coords:true,pts:[["A",-3,1],["B",-1,1],["C",-1,3],["D",-3,2]],polys:[["A","B","C","D"]],next:4},
+   steps:["Choose Select. Drag a box around the shape ABCD.",
+          "Transform → Translate by a column vector…: top 4, bottom −3. Translate.",
+          "Compare A and A′: how did the coordinates change?",
+          "Drag a box around the image A′B′C′D′. Translate it by the column vector that brings it straight back.",
+          "Drag A: every copy moves the same way, by the same amount."],
+   big:"A column vector gives the move: the top number is right (+) or left (−); the bottom number is up (+) or down (−).",
+   conj:"What column vector undoes a translation by (4, −3)?"},
+ "ts03-final":{
+   tag:"Transformations · Lesson 3 · Final Task",
+   title:"Your evidence: a journey of translations",
+   intro:"Move a shape on a journey of three translations, and find the single vector for the whole journey.",
+   setup:{axes:true,coords:true,pts:[["A",-5,-3],["B",-4,-3],["C",-4,-1]],polys:[["A","B","C"]],next:3},
+   steps:["Choose three column vectors of your own.",
+          "Translate ABC by the first, then the image by the second, then that image by the third.",
+          "Work out the single column vector from ABC straight to the final image, and check it with one Translate.",
+          "Save your work, with the four column vectors written down."],
+   big:"Save your work and a sentence: the single vector is found by adding the top numbers and adding the bottom numbers.",
+   conj:"Why does adding the column vectors give the whole journey?"},
+ "ts04-congruent":{
+   tag:"Transformations · Lesson 4 · Reflection",
+   title:"What stays the same?",
+   intro:"Reflect, rotate and translate the same triangle, then measure the sides and angles of every image.",
+   setup:{axes:true,pts:[["A",1,1],["B",5,1],["C",2,4],["O",0,0]],polys:[["A","B","C"]],eq:[["y",-1,1]],centre:"O",next:3},
+   steps:["The mirror y = −1 and the centre O are already marked. Drag a box around ABC, then Transform → Reflect in the marked mirror.",
+          "Drag a box around ABC again, then Transform → Rotate about the marked centre…: 90° anticlockwise.",
+          "Drag a box around ABC again, then Transform → Translate by a column vector…: choose your own vector.",
+          "Measure: select two points, then Measure → Distance, for side AB and for the matching side of each image. Then Measure → Angle (arm, vertex, arm) for angle ABC and its images.",
+          "Drag A, B or C. Do the matching lengths and angles stay equal?"],
+   big:"Reflections, rotations and translations keep every length and every angle, so each image is congruent to the object.",
+   conj:"Which transformation turns the triangle over, and does that change whether it is congruent?"},
+ "ts04-final":{
+   tag:"Transformations · Lesson 4 · Final Task",
+   title:"Your evidence: congruent images",
+   intro:"Make three congruent images of one shape, one by each transformation, and show the evidence.",
+   setup:{axes:true,coords:true,pts:[["A",1,2],["B",3,2],["C",3,3],["D",2,4]],polys:[["A","B","C","D"]],next:4},
+   steps:["Reflect ABCD in a mirror line of your choice (Transform → Mirror line by equation…).",
+          "Rotate ABCD about a centre of your choice (select a point → Transform → Mark centre).",
+          "Translate ABCD by a column vector of your choice.",
+          "Measure one side and one angle on the object and on each image.",
+          "Save your work, with a sentence explaining why all three images are congruent to ABCD."],
+   big:"Save your work and a sentence: these transformations keep lengths and angles, so every image is congruent.",
+   conj:"Which of the three images could be slid onto ABCD without turning it over?"},
  "studio-open":{
    tag:"Open workspace",
    title:"Your construction space",
@@ -892,6 +1108,13 @@ function twMap(){try{return JSON.parse(localStorage.getItem(TKEY)||"{}");}catch(
 function twSet(m){try{localStorage.setItem(TKEY,JSON.stringify(m));}catch(e){}}
 function qparam(name){var m=new RegExp("[?&]"+name+"=([^&]*)").exec(window.location.search);return m?decodeURIComponent(m[1].replace(/\+/g," ")):null;}
 function safeReturn(u){ if(!u) return null; if(/^[a-z][a-z0-9+.-]*:/i.test(u)||u.indexOf("//")===0) return null; return u; } /* relative same-site only */
+function buildSetup(su){if(su.axes)AX.on=true;if(su.coords)AX.coords=true;var byLab={};
+  (su.pts||[]).forEach(function(q){var p=fromU(q[1],q[2]);var o={id:nextId++,type:"point",kind:"free",x:p.x,y:p.y,label:q[0]};objects.push(o);byLab[q[0]]=o.id;});
+  (su.polys||[]).forEach(function(L){var ids=L.map(function(l){return byLab[l];});objects.push({id:nextId++,type:"polygon",pts:ids,fill:su.fill||"#9ec7e8"});ids.forEach(function(a,i){objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});});
+  (su.segs||[]).forEach(function(L){objects.push({id:nextId++,type:"segment",a:byLab[L[0]],b:byLab[L[1]]});});
+  (su.eq||[]).forEach(function(e){var o=addEqLine(e[0],e[1]);if(e[2])o.isMirror=true;});
+  if(su.centre&&byLab[su.centre])byId(byLab[su.centre]).isCentre=true;
+  pointLabel=su.next||pointLabel;}
 function tlStatus(msg){var s=document.getElementById("tlStatus");if(s)s.textContent=msg||"";}
 function bootTaskContext(){
   var ret=safeReturn(qparam("return"));
@@ -909,14 +1132,16 @@ function bootTaskContext(){
   var big=document.getElementById("tlBig");if(t.big){big.textContent=t.big;big.hidden=false;}else{big.hidden=true;}
   var conj=document.getElementById("tlConj");if(t.conj)conj.placeholder=t.conj;
   lane.hidden=false;
-  /* restore any earlier work for this task on this device */
+  /* restore any earlier work for this task on this device; otherwise build its starting sketch */
   var saved=twMap()[id];
+  if(t.setup&&!(saved&&saved.sketch))buildSetup(t.setup);
   if(saved){ if(saved.conjecture)conj.value=saved.conjecture;
     if(saved.sketch){try{loadData(saved.sketch);tlStatus("Restored your earlier work on this task.");}catch(e){}}
   }
   document.getElementById("tlSaveWork").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].sketch=serialize();twSet(m);tlStatus("Construction saved on this device. It will be here when you return.");};
   document.getElementById("tlSaveConj").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].conjecture=conj.value;twSet(m);tlStatus("Saved what you noticed.");};
 }
+window.NEO_DGS={objects:function(){return objects;},P:P,ACT:ACT,AX:AX,toU:toU,fromU:fromU,byId:byId,setSel:function(a){sel=a.slice();},getSel:function(){return sel.slice();},transformSel:transformSel,TASKS:TASKS,render:render,snapPos:snapPos,undo:doUndo,serialize:serialize,loadData:loadData,lineGeom:lineGeom,addFreePoint:addFreePoint,plotPoints:plotPoints,parsePoints:parsePoints,enclosed:enclosed};
 bootTaskContext();
 
 updateTitle();

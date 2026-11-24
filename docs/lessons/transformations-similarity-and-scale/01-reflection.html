@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Reflection</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Transformations, Similarity and Scale &middot; <strong>Lesson 01 &mdash; Reflection</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.gsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px;touch-action:manipulation}
+.gsvg .gl{stroke:#e2d9c8;stroke-width:1}.gsvg .ax{stroke:#2f3429;stroke-width:1.6}
+.gsvg .tn{font-family:Arial,sans-serif;font-size:11px;fill:#5c6b4f}.gsvg .ti{font-family:Georgia,serif;font-style:italic;font-size:12px}
+.gsvg .axl{font-family:Georgia,serif;font-style:italic;font-size:16px;fill:#2f3429}
+.gsvg .mir{stroke:#7a4fb0;stroke-width:3}.gsvg .mir.try{stroke-dasharray:7 5}
+.gsvg .mlab{font-family:Georgia,serif;font-size:14px;fill:#7a4fb0;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:4}
+.gsvg .obj{fill:rgba(47,109,176,.28);stroke:#2b6cb0;stroke-width:2.2}.gsvg .objv{fill:#2b6cb0;stroke:#fff;stroke-width:1.5}
+.gsvg .img{fill:rgba(242,193,78,.45);stroke:#b8860b;stroke-width:2.2}.gsvg .imgv{fill:#b8860b;stroke:#fff;stroke-width:1.5}
+.gsvg .try{fill:none;stroke:#b0412f;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.gsvg .perp{stroke:#3f7a45;stroke-width:1.6;stroke-dasharray:5 4}
+.gsvg .selv{fill:none;stroke:#c1622e;stroke-width:2;stroke-dasharray:3 3}
+.gsvg .mid{fill:#3f7a45;stroke:#fff;stroke-width:1.5}.gsvg .ra{fill:none;stroke:#3f7a45;stroke-width:1.8}
+.gsvg .hl{stroke:#b0412f;stroke-width:3.5}.gsvg .mid.hl{fill:#b0412f}.gsvg .hlv{stroke:#b0412f;stroke-width:3}
+.lab .row2{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;margin:6px 0}
+.lab .chip.on,.md .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.lab table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}
+.lab table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df}
+.lab table.lt td:not(:last-child){white-space:nowrap}
+@media (max-width:520px){.lab table.lt{font-size:.88em}.lab table.lt td{padding:3px 4px}}
+.arrows button{min-width:38px}
+table.rt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif;font-size:1.05em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 14px;text-align:center}table.rt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.ru .opts,.md .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ru .opts .chip{font-family:Georgia,serif;font-size:1.05em}
+.wl .ask{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0}
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.studio{border:2px solid #365a68;background:#eef3f6}
+@media (max-width:520px){.gsvg .tn{font-size:14px}.gsvg .vl{font-size:17px}.gsvg .mlab{font-size:17px}.gsvg .axl{font-size:19px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Transformations, Similarity and Scale</h1>
+<h2>Reflection</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Where does the mirror send each point?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — the first lesson of the unit. A shape meets a mirror line on a coordinate grid.</p>
+<p><b>Stepping Stone:</b> <b>reflect</b> a shape in a mirror line, including <i>x</i> = <i>a</i>, <i>y</i> = <i>b</i>, <i>y</i> = <i>x</i> and <i>y</i> = −<i>x</i>, and find the <b>mirror line</b> from an object and its image.</p>
+<p><b>You will need:</b> coordinates in all four quadrants, and the lines <i>x</i> = <i>a</i> and <i>y</i> = <i>b</i> — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 6 · Move 16 · Reflect 9 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_01_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_01_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Draw the mirror line x = 1. Mark a point, then its reflection: the same distance on the other side.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Where does it land?</summary>
+<p><b>Start here:</b> a point <i>P</i> and a mirror line. Tap the grid point where <i>P</i>'s reflection, <i>P</i>′, lands.</p>
+<p><b>What you are trying to notice:</b> the reflection is straight across the mirror, the same distance away on the other side.</p>
+<div class="toolbox wl">
+<h3 style="margin-top:0">🪞 Where does it land?</h3>
+<div id="wlCount" class="small" style="text-align:center"></div>
+<p id="wlQ" class="ask"></p>
+<div id="wlFig"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="wlNext()">Next point →</button></div>
+<div id="wlRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">A <b>reflection</b> flips a shape over a <b>mirror line</b>. The shape you start with is the <b>object</b>; the shape you get is the <b>image</b>. If the object's corner is <i>A</i>, the image's matching corner is <i>A</i>′, read “<i>A</i> dash” or “<i>A</i> prime”.</p>
+<p style="margin:6px 0">Every image point is the <b>same distance</b> from the mirror as its object point, on the <b>other side</b>, along a line at <b>right angles</b> to the mirror. A reflection is fully described by its mirror line, such as <i>x</i> = 1, <i>y</i> = −2 or <i>y</i> = <i>x</i>.</p>
+</div>
+<p>Today's main activity, the <b>Mirror Line Lab</b>, is in <b>Movement</b>.</p>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — The Mirror Line Lab (today's main activity)</summary>
+<p><b>What to do:</b> choose a mirror line and move the corners of triangle <i>ABC</i>: choose a corner, then tap a grid point or use the arrows. Watch the image <i>A</i>′<i>B</i>′<i>C</i>′. Then switch on <b>Predict first</b>: tap where each image corner will land before it appears.</p>
+<p><b>What you are trying to notice:</b> each dashed line crosses the mirror at right angles and is cut in half by it. A corner <b>on</b> the mirror stays put. The image is the triangle <b>turned over</b>.</p>
+<div class="toolbox lab">
+<h3 style="margin-top:0">🔬 The Mirror Line Lab</h3>
+<div class="row2"><span class="small">Mirror:</span><span id="labTypes" class="row2" style="margin:0"></span></div>
+<div class="row2" id="labKrow"><span id="labKname"></span> = <button onclick="labK(-1)" aria-label="move the mirror down one">−1</button> <b id="labK" style="min-width:30px;text-align:center;font-family:Georgia,serif;font-size:1.2em"></b> <button onclick="labK(1)" aria-label="move the mirror up one">+1</button></div>
+<div id="labFig"></div>
+<p id="labNote" class="small" style="text-align:center"></p>
+<div class="row2"><span id="labVerts" class="row2" style="margin:0"></span><span class="arrows"><button onclick="labMove(-1,0)" aria-label="left">←</button> <button onclick="labMove(0,1)" aria-label="up">↑</button> <button onclick="labMove(0,-1)" aria-label="down">↓</button> <button onclick="labMove(1,0)" aria-label="right">→</button></span></div>
+<div class="row2"><button class="chip" id="labM0" onclick="labMode(false)">Show the image</button><button class="chip" id="labM1" onclick="labMode(true)">Predict first</button><button class="chip" id="labD" onclick="labDist()">Show distances</button></div>
+<table class="lt" id="labTable" aria-live="polite"></table>
+<p id="labFb" class="readline" style="text-align:center"></p>
+</div>
+<div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div><div id="zqIn" class="buttonrow"><input id="zqA" class="numin neo-mathfield" style="max-width:260px" aria-label="Your answer" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div></div>
+<div id="zqRead" class="feedback" aria-live="polite"></div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Now reflect it in the Geometry Studio</h3>
+<p>Reflect a triangle in <i>x</i> = −1 for real, then drag its corners and watch the image follow. Your task travels with you, and a <b>Return to lesson</b> button brings you straight back.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts01-reflect&amp;return=../lessons/transformations-similarity-and-scale/01-reflection.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><b>Carry this forward:</b> to reflect a point, find its distance from the mirror at right angles, then go the same distance on the other side.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Coordinate rules</summary>
+<p><b>What to do:</b> each table shows points and their images in one mirror line. Choose the rule that fits <b>every</b> row.</p>
+<p><b>What you are trying to notice:</b> some mirror lines change the coordinates in a simple pattern: <i>y</i> = <i>x</i> swaps them.</p>
+<div class="toolbox ru">
+<h3 style="margin-top:0">🔁 Coordinate rules</h3>
+<div id="ruCount" class="small" style="text-align:center"></div>
+<p id="ruQ" style="text-align:center"></p>
+<table class="rt" id="ruTable"></table>
+<div id="ruOpts" class="opts"></div>
+<div id="ruRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ruNext()">Next mirror →</button></div>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why does reflecting in <i>y</i> = <i>x</i> swap the coordinates?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Mirror detective</summary>
+<p><b>What to do:</b> triangle <i>ABC</i> and its reflection <i>A</i>′<i>B</i>′<i>C</i>′ are drawn, but the mirror line is missing. Choose a mirror line and <b>Test it</b>: your reflection appears dashed.</p>
+<p><b>What you are trying to notice:</b> the mirror line passes halfway between each corner and its image, at right angles to the line joining them.</p>
+<div class="toolbox md">
+<h3 style="margin-top:0">🔎 Mirror detective</h3>
+<div id="mdCount" class="small" style="text-align:center"></div>
+<div id="mdFig"></div>
+<div class="opts"><span class="small">Mirror:</span><span id="mdTypes" class="opts" style="margin:0"></span></div>
+<div class="opts" id="mdKrow"><span id="mdKname"></span> = <button onclick="mdK(-1)" aria-label="down one">−1</button> <b id="mdK" style="min-width:30px;text-align:center;font-family:Georgia,serif;font-size:1.2em"></b> <button onclick="mdK(1)" aria-label="up one">+1</button></div>
+<p id="mdLine" style="text-align:center;font-family:Georgia,serif"></p>
+<div class="buttonrow" style="justify-content:center"><button onclick="mdTest()">🔎 Test it</button><button onclick="mdNext()">Next puzzle →</button></div>
+<div id="mdRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Find a mirror line in the Geometry Studio</h3>
+<p>A triangle and its reflection are waiting. Find the mirror line with a construction you already know, the perpendicular bisector, then prove it by reflecting.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts01-mirror&amp;return=../lessons/transformations-similarity-and-scale/01-reflection.html">📐 Open in the Geometry Studio →</a>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A still lake reflects the trees on its bank. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> look for a reflection near you: a window, a screen, a spoon. Which way round is the reflection of your hand?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: noticing.</b> Today the mathematics feeds how you read the world around you.</p>
+<div class="card">
+<p><b>What it feeds:</b> reflections are everywhere once you look. The word on the front of many ambulances is written as its own reflection, so that a driver ahead reads it the right way round in a rear-view mirror. Many logos and buildings are designed with a mirror line so they look balanced.</p>
+<p class="small">Carry one idea forward: same distance, other side.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Two reflections</summary>
+<p><b>Your task:</b> reflect a triangle in two different mirror lines, and describe each reflection fully.</p>
+<ul>
+<li>Reflect the triangle in <i>y</i> = <i>x</i>, and compare the coordinates of each corner with its image.</li>
+<li>Reflect the same triangle in a vertical or horizontal line of your choice, such as <i>x</i> = 2.</li>
+<li>For each, write the equation of the mirror line and one sentence about what happened to the coordinates.</li>
+<li><span class="stretch">stretch</span> Reflect the first image in a second mirror line. Describe where the triangle ends up.</li>
+</ul>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build your evidence in the Geometry Studio</h3>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts01-final&amp;return=../lessons/transformations-similarity-and-scale/01-reflection.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><strong>Submission choices:</strong> a saved Studio sketch with a screenshot, an annotated Scratchpad image, a photographed page, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_REFLECTION_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Draws an image on the other side of the mirror.</td><td>Keeps each image point the same distance from the mirror.</td><td>Explains that image points are at right angles across the mirror, at equal distances.</td><td>Explains why points on the mirror stay put.</td></tr>
+<tr><td><b>Application</b></td><td>Reflects in a vertical or horizontal line with one slip.</td><td>Reflects in <i>x</i> = <i>a</i> and <i>y</i> = <i>b</i> correctly.</td><td>Reflects in <i>y</i> = <i>x</i> and <i>y</i> = −<i>x</i> correctly.</td><td>Finds the mirror line from an object and its image.</td></tr>
+<tr><td><b>Communication</b></td><td>Labels the object.</td><td>Labels the image with primes (<i>A</i>′).</td><td>Gives the mirror line as an equation.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one point.</td><td>Checks every corner's distance from the mirror.</td><td>Checks the coordinates against a rule.</td><td>Spots and fixes a reflection in the wrong line.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Reflection — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type coordinates as (2, −1), and mirror lines as equations, such as <i>y</i> = 3. The <b>√ Symbols</b> palette has the minus sign and brackets.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Draw the mirror line first. Count the squares from the point to the mirror, at right angles.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["−","(",")",",","=","x","y"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function I(t){ return '<i>'+t+'</i>'; }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function neg(n){ n=Math.round(n*1e9)/1e9; return n<0?'−'+(-n):String(n); }
+function pt(p){ return '('+neg(p[0])+', '+neg(p[1])+')'; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x'), Y=I('y');
+// a coordinate pair typed any way: (5, −1), 5,-1, 5 -1, x = 5, y = −1. Returns [x, y] or null.
+function pairOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[,;]?\s*(-?\d+(?:\.\d+)?)$/); if(!m){ var a=s.split(/[\s,;]+/).filter(Boolean); if(a.length===2){ var p=num(a[0]), q=num(a[1]); if(!isNaN(p)&&!isNaN(q)) return [p,q]; } return null; }
+  return [parseFloat(m[1]),parseFloat(m[2])]; }
+function samePair(p,q){ return !!p&&same(p[0],q[0])&&same(p[1],q[1]); }
+// a mirror line typed as an equation: x = 3, y = −1, y = x, y = −x (any spacing; x+y=0 and y−x=0 too). Returns {t,k} or null.
+function lineOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'');
+  var m=s.match(/^x=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=x$/); if(m) return {t:'x',k:parseFloat(m[1])};
+  m=s.match(/^y=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=y$/); if(m) return {t:'y',k:parseFloat(m[1])};
+  if(/^(y=x|x=y|y-x=0|x-y=0)$/.test(s)) return {t:'yx',k:0};
+  if(/^(y=-x|x=-y|y\+x=0|x\+y=0|-x=y)$/.test(s)) return {t:'ynx',k:0};
+  return null; }
+function sameLine(a,b){ return !!a&&a.t===b.t&&same(a.k,b.k); }
+function lineName(L){ return L.t==='x'?X+' = '+neg(L.k):L.t==='y'?Y+' = '+neg(L.k):L.t==='yx'?Y+' = '+X:Y+' = −'+X; }
+// reflection in a line, exactly
+function refl(p,L){ var x=p[0], y=p[1]; return L.t==='x'?[2*L.k-x,y]:L.t==='y'?[x,2*L.k-y]:L.t==='yx'?[y,x]:[-y,-x]; }
+function onLine(p,L){ return samePair(refl(p,L),p); }
+
+/* ---------------- A coordinate grid (numbered, labelled axes; GreenPrint v2.3) ---------------- */
+var G={o:230,s:34,m:6};
+function gx(x){ return G.o+x*G.s; } function gy(y){ return G.o-y*G.s; }
+function gridSvg(){ var h='', k, m=G.m;
+  for(k=-m;k<=m;k++) h+='<line x1="'+gx(k)+'" y1="'+gy(m+0.4)+'" x2="'+gx(k)+'" y2="'+gy(-m-0.4)+'" class="gl"/><line x1="'+gx(-m-0.4)+'" y1="'+gy(k)+'" x2="'+gx(m+0.4)+'" y2="'+gy(k)+'" class="gl"/>';
+  h+='<line x1="'+gx(-m-0.4)+'" y1="'+gy(0)+'" x2="'+gx(m+0.4)+'" y2="'+gy(0)+'" class="ax"/><line x1="'+gx(0)+'" y1="'+gy(m+0.4)+'" x2="'+gx(0)+'" y2="'+gy(-m-0.4)+'" class="ax"/>';
+  for(k=-m;k<=m;k++){ if(!k) continue; h+='<text x="'+gx(k)+'" y="'+(gy(0)+15)+'" class="tn" text-anchor="middle">'+neg(k)+'</text><text x="'+(gx(0)-6)+'" y="'+(gy(k)+4)+'" class="tn" text-anchor="end">'+neg(k)+'</text>'; }
+  h+='<text x="'+(gx(0)-6)+'" y="'+(gy(0)+15)+'" class="tn ti" text-anchor="end">O</text><text x="'+(gx(m+0.4)-2)+'" y="'+(gy(0)-7)+'" class="axl" text-anchor="end">x</text><text x="'+(gx(0)+7)+'" y="'+(gy(m+0.4)+12)+'" class="axl">y</text>';
+  return h; }
+function mirrorSvg(L,cls){ var e=G.m+0.4, a, b; if(L.t==='x'){ a=[L.k,e]; b=[L.k,-e]; } else if(L.t==='y'){ a=[-e,L.k]; b=[e,L.k]; } else if(L.t==='yx'){ a=[-e,-e]; b=[e,e]; } else { a=[-e,e]; b=[e,-e]; }
+  var lp=L.t==='x'?[L.k,G.m-0.2]:L.t==='y'?[G.m-1.2,L.k]:L.t==='yx'?[4.6,4.1]:[-5.4,4.9];
+  return '<line x1="'+gx(a[0])+'" y1="'+gy(a[1])+'" x2="'+gx(b[0])+'" y2="'+gy(b[1])+'" class="'+(cls||'mir')+'"/><text x="'+(gx(lp[0])+(L.t==='x'&&L.k<=0?-6:6))+'" y="'+(gy(lp[1])-6)+'" class="mlab" data-line="1"'+(L.t==='x'&&L.k<=0?' text-anchor="end"':'')+'>'+lineName(L).replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>')+'</text>'; }
+function triSvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl" data-v="'+labs[i]+'">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+function inGrid(p){ return Math.abs(p[0])<=G.m&&Math.abs(p[1])<=G.m; }
+function svgAt(ev,svg){ var b=svg.getBoundingClientRect(); var x=(ev.clientX-b.left)*460/b.width, y=(ev.clientY-b.top)*460/b.height; return [Math.round((x-G.o)/G.s),Math.round((G.o-y)/G.s)]; }
+function wrap(inner,click,aria){ return '<svg class="gsvg" viewBox="0 0 460 460" role="img" aria-label="'+aria+'"'+(click?' onclick="'+click+'(event,this)"':'')+'><defs><clipPath id="gclip"><rect x="'+gx(-G.m-0.4)+'" y="'+gy(G.m+0.4)+'" width="'+(G.s*(2*G.m+0.8))+'" height="'+(G.s*(2*G.m+0.8))+'"/></clipPath></defs>'+gridSvg()+'<g clip-path="url(#gclip)">'+inner+'</g></svg>'; }
+
+/* ---------------- CONNECTION: where does it land? ---------------- */
+var WL=[{p:[3,2],L:{t:'x',k:1}},{p:[-2,4],L:{t:'y',k:2}},{p:[1,-3],L:{t:'x',k:-2}}];
+var wl={i:0,done:false};
+function wlRender(){ var R=WL[wl.i]; document.getElementById('wlCount').textContent='Point '+(wl.i+1)+' of '+WL.length;
+  document.getElementById('wlQ').innerHTML='Reflect '+I('P')+pt(R.p)+' in the mirror line '+lineName(R.L)+'. Tap where '+I('P')+'′ lands.';
+  document.getElementById('wlFig').innerHTML=wrap(mirrorSvg(R.L)+'<circle cx="'+gx(R.p[0])+'" cy="'+gy(R.p[1])+'" r="6" class="objv"/><text x="'+(gx(R.p[0])+8)+'" y="'+(gy(R.p[1])-8)+'" class="vl"><tspan font-style="italic">P</tspan></text>'+(wl.done?wlShow(R):''),wl.done?null:'wlTap','Coordinate grid with point P and a mirror line'); }
+function wlShow(R){ var q=refl(R.p,R.L); return '<line x1="'+gx(R.p[0])+'" y1="'+gy(R.p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="perp"/><circle cx="'+gx(q[0])+'" cy="'+gy(q[1])+'" r="6" class="imgv"/><text x="'+(gx(q[0])+8)+'" y="'+(gy(q[1])-8)+'" class="vl"><tspan font-style="italic">P</tspan>′</text>'; }
+function wlTap(ev,svg){ wlPick(svgAt(ev,svg)); }
+function wlPick(q){ var R=WL[wl.i], want=refl(R.p,R.L), d=R.L.t==='x'?Math.abs(R.p[0]-R.L.k):Math.abs(R.p[1]-R.L.k), side=R.L.t==='x'?(R.p[0]>R.L.k?'right':'left'):(R.p[1]>R.L.k?'above':'below');
+  if(samePair(q,want)){ wl.done=true; wlRender(); msg('wlRead','good','✓ Yes: '+I('P')+' is '+d+' square'+(d===1?'':'s')+' '+side+' the mirror, so '+I('P')+'′ is '+d+' square'+(d===1?'':'s')+' on the other side: '+I('P')+'′'+pt(want)+'.'); return; }
+  var why=samePair(q,R.p)?'That is where '+I('P')+' already is.':(R.L.t==='x'&&q[1]!==R.p[1])||(R.L.t==='y'&&q[0]!==R.p[0])?'The image is straight across the mirror, at right angles to it: '+(R.L.t==='x'?'level with '+I('P')+'.':'directly above or below '+I('P')+'.'):'Count the squares from '+I('P')+' to the mirror: '+d+'. The image is the same distance on the other side.';
+  msg('wlRead','warn','Not yet. '+why); }
+function wlNext(){ wl.i=(wl.i+1)%WL.length; wl.done=false; document.getElementById('wlRead').style.display='none'; wlRender(); }
+
+/* ---------------- MOVEMENT: the Mirror Line Lab (main activity) ---------------- */
+var LAB={P:[[1,1],[4,1],[1,3]],L:{t:'x',k:-1},v:0,dist:true,predict:false,guess:{},msg:''};
+var LABS=['A','B','C'];
+function labImg(){ return LAB.P.map(function(p){ return refl(p,LAB.L); }); }
+function labType(t){ LAB.L={t:t,k:(t==='x'||t==='y')?(LAB.L.t===t?LAB.L.k:1):0}; labReset(); }
+function labK(d){ if(LAB.L.t!=='x'&&LAB.L.t!=='y') return false; var k=LAB.L.k+d; if(k<-4||k>4) return false; LAB.L.k=k; labReset(); return true; }
+function labVertex(i){ LAB.v=i; labDraw(); }
+function labMove(dx,dy){ var p=LAB.P[LAB.v], q=[p[0]+dx,p[1]+dy]; if(!inGrid(q)) return false; LAB.P[LAB.v]=q; labReset(); return true; }
+function labSet(q){ if(!inGrid(q)) return false; LAB.P[LAB.v]=q; labReset(); return true; }
+function labTap(ev,svg){ var q=svgAt(ev,svg); if(LAB.predict&&labNextGuess()>=0) return labGuess(q); labSet(q); }
+function labReset(){ LAB.guess={}; LAB.msg=''; labDraw(); }
+function labMode(m){ LAB.predict=m; labReset(); }
+function labDist(){ LAB.dist=!LAB.dist; labDraw(); }
+function labNextGuess(){ for(var i=0;i<3;i++) if(!LAB.guess[i]) return i; return -1; }
+function labGuess(q){ var i=labNextGuess(), want=labImg()[i], p=LAB.P[i];
+  if(samePair(q,want)){ LAB.guess[i]=true; LAB.msg='<span style="color:#2f6b46">✓ '+I(LABS[i])+'′ is at '+pt(want)+'.'+(labNextGuess()<0?' All three found: the whole image is drawn.':' Now tap where '+I(LABS[labNextGuess()])+'′ lands.')+'</span>'; }
+  else LAB.msg='<span style="color:#7a2b1c">Not yet. '+(samePair(q,p)?'That is where '+I(LABS[i])+' is now.':'Find the distance from '+I(LABS[i])+' to the mirror, at right angles to it. '+I(LABS[i])+'′ is the same distance on the other side.')+'</span>';
+  labDraw(); }
+function labDraw(){ var I3=labImg(), off=I3.some(function(p){ return !inGrid(p); }), predicting=LAB.predict&&labNextGuess()>=0, h=mirrorSvg(LAB.L);
+  if(LAB.dist&&!predicting) LAB.P.forEach(function(p,i){ var q=I3[i]; if(samePair(p,q)) return; h+='<line x1="'+gx(p[0])+'" y1="'+gy(p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="perp" data-perp="'+i+'"/>'; });
+  h+=triSvg(LAB.P,'obj',LABS);
+  if(!predicting) h+=triSvg(I3,'img',LABS.map(function(l){ return l+'′'; }));
+  else I3.forEach(function(q,i){ if(LAB.guess[i]) h+='<circle cx="'+gx(q[0])+'" cy="'+gy(q[1])+'" r="5" class="imgv"/><text x="'+(gx(q[0])+7)+'" y="'+(gy(q[1])-7)+'" class="vl"><tspan font-style="italic">'+LABS[i]+'</tspan>′</text>'; });
+  h+='<circle cx="'+gx(LAB.P[LAB.v][0])+'" cy="'+gy(LAB.P[LAB.v][1])+'" r="10" class="selv"/>';
+  document.getElementById('labFig').innerHTML=wrap(h,'labTap','Mirror Line Lab: triangle ABC, the mirror line '+lineName(LAB.L).replace(/<[^>]+>/g,'')+(predicting?', and the image still to predict':', and its image A′B′C′'));
+  document.getElementById('labTypes').innerHTML=[['x',X+' = '+I('a')],['y',Y+' = '+I('b')],['yx',Y+' = '+X],['ynx',Y+' = −'+X]].map(function(t){ return '<button class="chip'+(LAB.L.t===t[0]?' on':'')+'" data-t="'+t[0]+'" onclick="labType(\''+t[0]+'\')">'+t[1]+'</button>'; }).join('');
+  document.getElementById('labKrow').style.display=(LAB.L.t==='x'||LAB.L.t==='y')?'':'none'; document.getElementById('labK').textContent=neg(LAB.L.k); document.getElementById('labKname').innerHTML=LAB.L.t==='x'?I('a'):I('b');
+  document.getElementById('labVerts').innerHTML=LABS.map(function(l,i){ return '<button class="chip'+(LAB.v===i?' on':'')+'" onclick="labVertex('+i+')">move '+I(l)+'</button>'; }).join('');
+  document.getElementById('labM0').classList.toggle('on',!LAB.predict); document.getElementById('labM1').classList.toggle('on',LAB.predict); document.getElementById('labD').classList.toggle('on',LAB.dist);
+  document.getElementById('labTable').innerHTML=LAB.P.map(function(p,i){ var q=I3[i], fixed=samePair(p,q); return '<tr><td>'+I(LABS[i])+pt(p)+'</td><td>→</td><td>'+(predicting&&!LAB.guess[i]?'?':I(LABS[i])+'′'+pt(q))+'</td><td class="small">'+(predicting&&!LAB.guess[i]?'':fixed?'on the mirror: it stays put':labDistText(p))+'</td></tr>'; }).join('');
+  document.getElementById('labNote').innerHTML=(predicting?'<b>Predict first:</b> tap where '+I(LABS[labNextGuess()])+'′ will land.':'Tap a grid point to move the ringed corner, or use the arrows.')+(off&&!predicting?' <span style="color:#7a2b1c">Part of the image is off this grid: move the triangle or the mirror.</span>':'');
+  document.getElementById('labFb').innerHTML=LAB.msg; }
+function labDistText(p){ var L=LAB.L; if(L.t==='x'){ var d=Math.abs(p[0]-L.k); return d+' square'+(d===1?'':'s')+' from the mirror, each side'; } if(L.t==='y'){ var e=Math.abs(p[1]-L.k); return e+' square'+(e===1?'':'s')+' from the mirror, each side'; } return 'equal distances, at right angles to the mirror'; }
+
+/* ---------------- MOVEMENT: questions ---------------- */
+var ZQ=[
+ {q:'Reflect the point (4, 1) in the line '+X+' = 2.',pair:[2*2-4,1],hint:'(4, 1) is 2 squares right of '+X+' = 2.',slips:{'-4,1':'That is the reflection in the '+Y+'-axis, '+X+' = 0. Use the line '+X+' = 2.','4,1':'That is the point itself. The image is on the other side of the mirror.'}},
+ {q:'Reflect the point (−3, 2) in the line '+Y+' = −1.',pair:[-3,-4],hint:'(−3, 2) is 3 squares above '+Y+' = −1.',slips:{'-3,-2':'That is the reflection in the '+X+'-axis, '+Y+' = 0. Use the line '+Y+' = −1.','3,2':'A horizontal mirror changes the '+Y+'-coordinate, not the '+X+'-coordinate.'}},
+ {q:'Reflect the point (5, −2) in the line '+Y+' = '+X+'.',pair:[-2,5],hint:'Reflecting in '+Y+' = '+X+' swaps the coordinates.',slips:{'2,-5':'Swap the coordinates exactly: the '+X+'-coordinate becomes −2.','-5,2':'That is the reflection in '+Y+' = −'+X+' (swap <b>and</b> change both signs).'}},
+ {q:'Reflect the point (3, 1) in the line '+Y+' = −'+X+'.',pair:[-1,-3],hint:'Reflecting in '+Y+' = −'+X+' swaps the coordinates and changes both signs.',slips:{'1,3':'That is the reflection in '+Y+' = '+X+'. For '+Y+' = −'+X+', change both signs too.','-3,-1':'Swap the coordinates as well as changing the signs.'}},
+ {q:'Which point does <b>not</b> move when it is reflected in the line '+X+' = 3?',kind:'chip',chips:['(−3, 3)','(2, 3)','(3, −2)'],ans:2,hint:'A point stays put only if it is <b>on</b> the mirror: its '+X+'-coordinate is 3.'},
+ {q:''+I('A')+'(1, 4) is reflected to '+I('A')+'′(5, 4). What is the equation of the mirror line?',line:{t:'x',k:3},hint:'The mirror is halfway between '+I('A')+' and '+I('A')+'′.',slips:{'y=4':'The mirror is not the line through '+I('A')+' and '+I('A')+'′; it crosses that line at right angles, halfway along.','x=4':'Halfway between 1 and 5 is 3.'}}];
+var zq={q:0};
+function zqRender(){ var n=ZQ.length;
+  if(zq.q>=n){ document.getElementById('zqQn').textContent='✓ All six questions done.'; document.getElementById('zqQ').innerHTML='Same distance, other side, at right angles to the mirror.'; document.getElementById('zqAns').innerHTML=''; document.getElementById('zqIn').style.display='none'; return; }
+  var Q=ZQ[zq.q]; document.getElementById('zqQn').textContent='Question '+(zq.q+1)+' of '+n; document.getElementById('zqQ').innerHTML=Q.q;
+  document.getElementById('zqAns').innerHTML=Q.kind==='chip'?chipsHtml(Q.chips,'zqChip'):'';
+  document.getElementById('zqIn').style.display=Q.kind==='chip'?'none':''; document.getElementById('zqA').value=''; document.getElementById('zqA').placeholder=Q.line?'an equation, such as y = 2':'coordinates, such as (2, −1)'; }
+function zqRight(){ zq.q++; msg('zqRead','good','✓ Yes.'+(zq.q>=ZQ.length?' That\'s all of them.':'')); zqRender(); }
+function zqChip(k){ var Q=ZQ[zq.q]; if(k===Q.ans) zqRight(); else msg('zqRead','warn','Not yet. '+Q.hint); }
+function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value;
+  if(!v.trim()){ msg('zqRead','warn','Type an answer.'); return; }
+  if(Q.line){ var L=lineOf(v); if(sameLine(L,Q.line)) return zqRight(); var key=String(v).toLowerCase().replace(/[−–]/g,'-').replace(/\s+/g,''); msg('zqRead','warn','Not yet. '+((Q.slips&&Q.slips[key])||(L?'':'Write it as an equation, such as '+X+' = 2. ')+Q.hint)); return; }
+  var p=pairOf(v); if(samePair(p,Q.pair)) return zqRight();
+  msg('zqRead','warn','Not yet. '+((p&&Q.slips&&Q.slips[p[0]+','+p[1]])||(p?'':'Type the coordinates, such as (2, −1). ')+Q.hint)); }
+
+/* ---------------- REFLECTION: coordinate rules ---------------- */
+var RU=[
+ {L:{t:'yx',k:0},pts:[[4,1],[-2,3],[5,-1],[0,2]],chips:['('+X+', '+Y+') → (−'+X+', '+Y+')','('+X+', '+Y+') → ('+Y+', '+X+')','('+X+', '+Y+') → (−'+Y+', −'+X+')'],f:[function(p){return [-p[0],p[1]];},function(p){return [p[1],p[0]];},function(p){return [-p[1],-p[0]];}],ans:1},
+ {L:{t:'ynx',k:0},pts:[[4,1],[-2,3],[5,-1],[0,2]],chips:['('+X+', '+Y+') → (−'+Y+', −'+X+')','('+X+', '+Y+') → ('+Y+', '+X+')','('+X+', '+Y+') → (−'+X+', −'+Y+')'],f:[function(p){return [-p[1],-p[0]];},function(p){return [p[1],p[0]];},function(p){return [-p[0],-p[1]];}],ans:0},
+ {L:{t:'x',k:0},pts:[[3,2],[-1,4],[2,-5],[0,1]],chips:['('+X+', '+Y+') → ('+X+', −'+Y+')','('+X+', '+Y+') → ('+Y+', '+X+')','('+X+', '+Y+') → (−'+X+', '+Y+')'],f:[function(p){return [p[0],-p[1]];},function(p){return [p[1],p[0]];},function(p){return [-p[0],p[1]];}],ans:2},
+ {L:{t:'y',k:2},pts:[[1,5],[3,0],[-2,2],[4,-1]],chips:['('+X+', '+Y+') → ('+X+', −'+Y+')','('+X+', '+Y+') → ('+X+', 4 − '+Y+')','('+X+', '+Y+') → ('+X+', '+Y+' − 4)'],f:[function(p){return [p[0],-p[1]];},function(p){return [p[0],4-p[1]];},function(p){return [p[0],p[1]-4];}],ans:1}];
+var ru={i:0};
+function ruRender(){ var R=RU[ru.i];
+  document.getElementById('ruCount').textContent='Mirror '+(ru.i+1)+' of '+RU.length;
+  document.getElementById('ruQ').innerHTML='Points and their images after reflecting in <b>'+lineName(R.L)+'</b>'+(R.L.t==='x'&&R.L.k===0?' (the '+Y+'-axis)':'')+'. Which rule fits <b>every</b> row?';
+  document.getElementById('ruTable').innerHTML='<tr><th>Object</th><th>Image</th></tr>'+R.pts.map(function(p){ return '<tr><td>'+pt(p)+'</td><td>'+pt(refl(p,R.L))+'</td></tr>'; }).join('');
+  document.getElementById('ruOpts').innerHTML=R.chips.map(function(c,k){ return '<button class="chip" data-k="'+k+'" onclick="ruPick('+k+')">'+c+'</button>'; }).join(''); }
+function ruPick(k){ var R=RU[ru.i];
+  if(k===R.ans){ msg('ruRead','good','✓ Yes: '+R.chips[k]+' works for every row.'+(R.L.t==='y'?' The mirror '+Y+' = 2 is halfway between '+Y+' and 4 − '+Y+'.':'')); return; }
+  var bad=R.pts.filter(function(p){ return !samePair(R.f[k](p),refl(p,R.L)); })[0];
+  msg('ruRead','warn','Not quite: that rule sends '+pt(bad)+' to '+pt(R.f[k](bad))+', but its image is '+pt(refl(bad,R.L))+'.'); }
+function ruNext(){ ru.i=(ru.i+1)%RU.length; document.getElementById('ruRead').style.display='none'; ruRender(); }
+
+/* ---------------- Proof (stretch): why does y = x swap the coordinates? ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'Take '+I('P')+'(4, 1) and '+I('Q')+'(1, 4). Their midpoint is (2.5, 2.5). Which line is it on?',chips:['the '+X+'-axis',Y+' = '+X+': its coordinates are equal'],ans:1,ok:'The midpoint (2.5, 2.5) is on '+Y+' = '+X,hint:'Which points have equal coordinates?'},
+  {q:'From '+I('P')+' to '+I('Q')+' is 3 left and 3 up. How does '+I('PQ')+' cross the line '+Y+' = '+X+' (which goes 1 right for every 1 up)?',chips:['at right angles','parallel to it'],ans:0,ok:I('PQ')+' crosses '+Y+' = '+X+' at right angles',hint:'Left-and-up at 45° meets right-and-up at 45°: what angle is that?'},
+  {q:'So '+Y+' = '+X+' cuts '+I('PQ')+' in half, at right angles. What does that make '+I('Q')+'?',chips:['the reflection of '+I('P')+' in '+Y+' = '+X,'a rotation of '+I('P')],ans:0,ok:I('Q')+'(1, 4) is the reflection of '+I('P')+'(4, 1)',hint:'Same distance on the other side, along a line at right angles to the mirror.'},
+  {q:'Does the same reasoning work for any point ('+I('a')+', '+I('b')+') and ('+I('b')+', '+I('a')+')?',chips:['yes: the midpoint always has equal coordinates, and the move is always equal left and up','no: only for (4, 1)'],ans:0,ok:'For any ('+I('a')+', '+I('b')+'), the same two facts hold',hint:'The midpoint of ('+I('a')+', '+I('b')+') and ('+I('b')+', '+I('a')+') is ('+FR(I('a')+' + '+I('b'),'2')+', '+FR(I('a')+' + '+I('b'),'2')+').'}],
+  done:'✓ <b>That is why.</b> The line '+Y+' = '+X+' is the perpendicular bisector of the segment from ('+I('a')+', '+I('b')+') to ('+I('b')+', '+I('a')+'), so reflecting in '+Y+' = '+X+' swaps the coordinates of every point.'}
+};
+var pr={pr:0};
+function prFigure(i){ var P=[4,1], Q=[1,4], M=[2.5,2.5], h=mirrorSvg({t:'yx',k:0});
+  h+='<line x1="'+gx(P[0])+'" y1="'+gy(P[1])+'" x2="'+gx(Q[0])+'" y2="'+gy(Q[1])+'" class="'+(i===1?'perp hl':'perp')+'"/>';
+  if(i===0||i>=2) h+='<circle cx="'+gx(M[0])+'" cy="'+gy(M[1])+'" r="5" class="'+(i===0?'mid hl':'mid')+'"/>';
+  if(i>=1) h+='<path d="M'+(gx(M[0])+9)+' '+(gy(M[1])+9)+' l9 -9 l-9 -9" class="ra'+(i===1?' hl':'')+'"/>';
+  h+='<circle cx="'+gx(P[0])+'" cy="'+gy(P[1])+'" r="5" class="objv"/><text x="'+(gx(P[0])+8)+'" y="'+(gy(P[1])+4)+'" class="vl"><tspan font-style="italic">P</tspan>(4, 1)</text>';
+  h+='<circle cx="'+gx(Q[0])+'" cy="'+gy(Q[1])+'" r="5" class="'+(i===2?'imgv hlv':'imgv')+'"/><text x="'+(gx(Q[0])+8)+'" y="'+(gy(Q[1])-8)+'" class="vl"><tspan font-style="italic">Q</tspan>(1, 4)</text>';
+  return wrap(h,null,'The line y = x, the points P(4, 1) and Q(1, 4), and the segment PQ'); }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CREATIVITY: mirror detective ---------------- */
+var MD=[
+ {obj:[[-5,1],[-3,1],[-5,3]],L:{t:'x',k:-1}},
+ {obj:[[1,4],[4,4],[1,6]],L:{t:'y',k:1}},
+ {obj:[[2,5],[4,5],[2,6]],L:{t:'yx',k:0}},
+ {obj:[[-5,1],[-3,1],[-5,2]],L:{t:'ynx',k:0}}];
+var md={i:0,L:{t:'x',k:0},tested:false,done:[]};
+function mdImg(){ var M=MD[md.i]; return M.obj.map(function(p){ return refl(p,M.L); }); }
+function mdType(t){ md.L={t:t,k:(t==='x'||t==='y')?(md.L.t===t?md.L.k:0):0}; md.tested=false; document.getElementById('mdRead').style.display='none'; mdDraw(); }
+function mdK(d){ if(md.L.t!=='x'&&md.L.t!=='y') return false; var k=md.L.k+d; if(k<-4||k>4) return false; md.L.k=k; md.tested=false; document.getElementById('mdRead').style.display='none'; mdDraw(); return true; }
+function mdTest(){ var M=MD[md.i], mine=M.obj.map(function(p){ return refl(p,md.L); }), target=mdImg(); md.tested=true; mdDraw();
+  if(mine.every(function(p,i){ return samePair(p,target[i]); })){ md.done[md.i]=true; mdDraw(); msg('mdRead','good','✓ Your reflection lands exactly on the image: the mirror line is '+lineName(md.L)+'.'); return; }
+  var a=M.obj[0], b=target[0], mid=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+  var hint=md.L.t===M.L.t?'Right kind of line, but not quite in the right place. ':'';
+  msg('mdRead','warn','Not yet: your reflection (dashed) misses the image. '+hint+'The mirror passes halfway between each corner and its image. Where is halfway between '+I('A')+' and '+I('A')+'′?'); }
+function mdNext(){ md.i=(md.i+1)%MD.length; md.L={t:'x',k:0}; md.tested=false; document.getElementById('mdRead').style.display='none'; mdDraw(); }
+function mdDraw(){ var M=MD[md.i], h='';
+  h+=triSvg(M.obj,'obj',['A','B','C'])+triSvg(mdImg(),'img',['A′','B′','C′']);
+  if(md.tested) h+=mirrorSvg(md.L,'mir try')+'<polygon points="'+M.obj.map(function(p){ var q=refl(p,md.L); return gx(q[0])+','+gy(q[1]); }).join(' ')+'" class="try"/>';
+  document.getElementById('mdCount').innerHTML='Puzzle '+(md.i+1)+' of '+MD.length+(md.done[md.i]?' ✓':'');
+  document.getElementById('mdFig').innerHTML=wrap(h,null,'Triangle ABC and its reflection A′B′C′'+(md.tested?', with your mirror line and your reflection dashed':''));
+  document.getElementById('mdTypes').innerHTML=[['x',X+' = '+I('a')],['y',Y+' = '+I('b')],['yx',Y+' = '+X],['ynx',Y+' = −'+X]].map(function(t){ return '<button class="chip'+(md.L.t===t[0]?' on':'')+'" onclick="mdType(\''+t[0]+'\')">'+t[1]+'</button>'; }).join('');
+  document.getElementById('mdKrow').style.display=(md.L.t==='x'||md.L.t==='y')?'':'none'; document.getElementById('mdK').textContent=neg(md.L.k); document.getElementById('mdKname').innerHTML=md.L.t==='x'?I('a'):I('b');
+  document.getElementById('mdLine').innerHTML='Your mirror: <b>'+lineName(md.L)+'</b>'; }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    coords:{title:'Coordinates in four quadrants',prompt:'Write the coordinates of the point 4 to the left of the origin and 1 up.',answer:[-4,1],pt:true,hint:'Across first, then up or down: (across, up). Left is negative.'},
+    vline:{title:'The line x = a',prompt:'The points (2, −1), (2, 0) and (2, 5) are on one straight line. What is its equation?',answer:'x=2',line:true,hint:'Which coordinate is the same for all three points?'},
+    hline:{title:'The line y = b',prompt:'Is the line <i>y</i> = 3 vertical or horizontal?',answer:'horizontal',hint:'Every point on it has <i>y</i>-coordinate 3: (0, 3), (1, 3), (2, 3) … Picture them.'}
+  };
+  function matches(r,v){ if(r.pt) return samePair(pairOf(v),r.answer); if(r.line) return sameLine(lineOf(v),lineOf(r.answer)); var t=String(v).trim().toLowerCase().replace(/[.!]$/,''); return t===r.answer||t==='it is '+r.answer||t==='it\'s '+r.answer||t==='a '+r.answer+' line'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pP(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pL(t,k){ return function(v){ return sameLine(lineOf(v),{t:t,k:k}); }; }
+var PRACTICE=[
+ {label:"1 of 8 · The y-axis",q:"Reflect the point <b>(3, 5)</b> in the <i>y</i>-axis (the line <i>x</i> = 0).",a:[],eq:pP(-3,5),prompt:"How far is (3, 5) from the <i>y</i>-axis, and on which side?",hint:"3 squares to the right, so the image is 3 squares to the left.",sol:"The image is (−3, 5): the <i>x</i>-coordinate changes sign, and the <i>y</i>-coordinate stays the same."},
+ {label:"2 of 8 · A vertical mirror",q:"Reflect the point <b>(−1, 3)</b> in the line <i>x</i> = 1.",a:[],eq:pP(3,3),prompt:"How many squares is (−1, 3) from the line <i>x</i> = 1?",hint:"It is 2 squares to the left of <i>x</i> = 1.",sol:"2 squares left of <i>x</i> = 1, so the image is 2 squares right of it: (3, 3)."},
+ {label:"3 of 8 · A horizontal mirror",q:"Reflect the point <b>(4, −2)</b> in the line <i>y</i> = 1.",a:[],eq:pP(4,4),prompt:"Does a horizontal mirror change the <i>x</i>-coordinate or the <i>y</i>-coordinate?",hint:"(4, −2) is 3 squares below <i>y</i> = 1.",sol:"3 squares below <i>y</i> = 1, so the image is 3 squares above it: (4, 4)."},
+ {label:"4 of 8 · y = x",q:"Reflect the point <b>(3, −5)</b> in the line <i>y</i> = <i>x</i>.",a:[],eq:pP(-5,3),prompt:"What does reflecting in <i>y</i> = <i>x</i> do to the coordinates?",hint:"Swap them.",sol:"Reflecting in <i>y</i> = <i>x</i> swaps the coordinates: (−5, 3)."},
+ {label:"5 of 8 · y = −x",q:"Reflect the point <b>(−2, −4)</b> in the line <i>y</i> = −<i>x</i>.",a:[],eq:pP(4,2),prompt:"Reflecting in <i>y</i> = −<i>x</i>: swap, and what else?",hint:"Swap the coordinates and change both signs.",sol:"Swap to (−4, −2), then change both signs: (4, 2)."},
+ {label:"6 of 8 · Find the mirror",q:"<i>A</i>(2, 1) is reflected to <i>A</i>′(2, 7). What is the equation of the mirror line?",a:[],eq:pL('y',4),prompt:"Is the mirror vertical or horizontal? Where is it?",hint:"It is halfway between <i>A</i> and <i>A</i>′.",sol:"Halfway between <i>y</i> = 1 and <i>y</i> = 7 is <i>y</i> = 4, so the mirror line is <i>y</i> = 4."},
+ {label:"7 of 8 · A diagonal mirror",q:"<i>B</i>(1, −4) is reflected to <i>B</i>′(−4, 1). What is the equation of the mirror line?",a:[],eq:pL('yx',0),prompt:"What has happened to the coordinates?",hint:"They have swapped.",sol:"The coordinates have swapped, so the mirror line is <i>y</i> = <i>x</i>."},
+ {label:"8 of 8 · Two mirrors (stretch)",q:"The point <b>(1, 1)</b> is reflected in <i>x</i> = −1, and its image is then reflected in <i>x</i> = 2. Where does it end up?",a:[],eq:pP(7,1),prompt:"Do one reflection at a time.",hint:"In <i>x</i> = −1: (1, 1) goes to (−3, 1). Now reflect (−3, 1) in <i>x</i> = 2.",sol:"(1, 1) → (−3, 1) → (7, 1). Two reflections in parallel mirrors 3 apart moved the point 6 to the right."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Count the squares to the mirror, at right angles — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  wlRender();
+  labDraw();
+  zqRender();
+  ruRender();
+  prRender('pr');
+  mdDraw();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('ts-01-reflection');</script>
+
+<script src="../../assets/fieldkits/transformations-similarity-and-scale.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(0);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press xⁿ again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="xⁿ"){ /* power key: the next digits typed become a superscript power, e.g. 1.06⁴ */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+</body>
+</html>
