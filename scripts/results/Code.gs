@@ -32,7 +32,8 @@ const CONFIG = {
     'countinghouse': { file: 'CountingHouse', title: 'The Counting House · Place Value', short: 'The Counting House' },
     'studio': { file: 'Studio', title: 'The Architect\u2019s Studio · Angles and Area', short: 'The Architect\u2019s Studio' },
     'markethall': { file: 'MarketHall', title: 'The Market Hall · Percentages, Ratio, Growth and Bounds', short: 'The Market Hall' },
-    'sortingoffice': { file: 'SortingOffice', title: 'The Sorting Office · Sets and Venn Diagrams', short: 'The Sorting Office' }
+    'sortingoffice': { file: 'SortingOffice', title: 'The Sorting Office · Sets and Venn Diagrams', short: 'The Sorting Office' },
+    'animationstudio': { file: 'AnimationStudio', title: 'The Animation Studio · Transformations, Similarity and Scale', short: 'The Animation Studio' }
   }
 };
 

@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Animation Studio · Transformations, Similarity and Scale</title>
+<style>
+:root{--ink:#2f3429;--paper:#f7f3ea;--h1:#3f5f45;--h2:#6a7f4e;--gold:#d8b26e;--teal:#2AB3A0;--blue:#365a68;--night:#0f1a24;
+--ready:#e3f0df;--strength:#e5eef2;--refresh:#fff1cf;--new:#f1e9dc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);font-family:Arial,sans-serif;color:var(--ink);overflow:hidden}
+body.comfort{font-size:1.15em;letter-spacing:.02em}
+body.comfort .panel,body.comfort .hud{line-height:1.75}
+.top{position:fixed;inset:0 0 auto 0;height:52px;background:#1b2b3a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;gap:10px;z-index:30}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.8em;white-space:nowrap}
+.top .tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.top button{background:#2b4152;color:#fff;border:1px solid #4d6577;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:.82em}
+.top button[aria-pressed=true]{background:var(--teal);color:#08201d;border-color:var(--teal)}
+
+/* 3D scene */
+#vp{position:fixed;top:52px;left:0;right:0;bottom:0;overflow:hidden;perspective:900px;perspective-origin:50% 40%}
+#world{position:absolute;left:50%;top:46%;width:0;height:0;transform-style:preserve-3d;transition:transform 2.6s cubic-bezier(.45,.05,.35,1)}
+body.still #world{transition:none}
+body.flat #vp,body.flat #veil{display:none}
+body.flat{background:#efe9df;overflow:auto}
+body.flat .hud{position:static;transform:none;margin:76px auto 20px}
+.f{position:absolute;transform-style:preserve-3d}
+.wall{background:linear-gradient(#3a3f4a 0 62%,#b0412f 62% 63.5%,#2f333b 63.5%);box-shadow:inset 0 0 160px rgba(0,0,0,.45)}
+.wall.side{background:linear-gradient(#353a44 0 62%,#b0412f 62% 63.5%,#2b2f36 63.5%)}
+.wall.side.r{background:linear-gradient(#353a44 0 62%,#b0412f 62% 63.5%,#2b2f36 63.5%)}
+.floor{background:repeating-linear-gradient(90deg,#8a6a48 0 70px,#7d5f40 70px 74px),#8a6a48;box-shadow:inset 0 0 220px rgba(0,0,0,.5)}
+.floor.stone{background:repeating-linear-gradient(90deg,#7a5c3e 0 70px,#6e5236 70px 74px),#7a5c3e;box-shadow:inset 0 0 220px rgba(0,0,0,.5)}
+.ceiling{background:radial-gradient(circle at 30% 50%,rgba(255,240,200,.35) 0 8%,transparent 9%),radial-gradient(circle at 70% 50%,rgba(255,240,200,.35) 0 8%,transparent 9%),#23262c}
+.prop{position:absolute;left:50%;top:50%;transform:translate(-50%,-55%)}
+.p-board{width:560px;height:300px;background:#e9e4d6;border:14px solid #5a3f26;border-radius:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:26px;box-sizing:border-box}
+.p-board i{display:block;background:#fff;border:3px solid #2f3a44;border-radius:3px;background-image:linear-gradient(#d9dfe3 1px,transparent 1px),linear-gradient(90deg,#d9dfe3 1px,transparent 1px);background-size:12px 12px}
+.p-turn{width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,#2f3a44 0 6%,#c9b48a 6.5% 60%,#8a7350 61% 64%,#c9b48a 65%);border:14px solid #5a4a36;position:relative}
+.p-turn i{position:absolute;left:50%;top:14%;width:16px;height:150px;margin-left:-8px;background:#b0412f;border-radius:6px}
+.p-turn i:after{content:"";position:absolute;left:-18px;top:-26px;border:26px solid transparent;border-bottom:30px solid #b0412f;border-top:0}
+.p-track{width:600px;height:220px;background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.35) 58px 60px),repeating-linear-gradient(0deg,transparent 0 58px,rgba(255,255,255,.35) 58px 60px),#4a5a66;border:10px solid #2f3a44;position:relative}
+.p-track i{position:absolute;left:60px;top:60px;width:60px;height:60px;border-radius:50%;background:#f2c14e;box-shadow:240px 120px 0 rgba(242,193,78,.5)}
+.p-mirror{width:300px;height:420px;border-radius:150px 150px 12px 12px;background:linear-gradient(115deg,#cfe0ec 0 40%,#eef5fa 45%,#b9cfdf 55%,#cfe0ec);border:16px solid #8a6a2f;box-shadow:0 0 40px rgba(255,240,200,.3)}
+.p-lens{width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,#cfe0ec 0 14%,#6f8fa8 15% 34%,#2f3a44 35% 52%,#1f232a 53% 70%,#3a3f4a 71%);box-shadow:0 0 0 18px #2f333b,0 0 50px rgba(127,182,224,.4)}
+.p-model{width:560px;height:260px;background:#d9cfb8;border:10px solid #5a3f26;position:relative}
+.p-model i{position:absolute;bottom:30px;width:110px;height:120px;background:#f4f1e6;border:4px solid #4a5a66}
+.p-model i:nth-child(1){left:40px}.p-model i:nth-child(2){left:200px;height:170px;background:#e0c98f}.p-model i:nth-child(3){left:360px;height:90px}
+.p-screen{width:620px;height:330px;background:radial-gradient(ellipse at 50% 40%,#fff8e4,#e8dcc0 60%,#cbbd9c);border:18px solid #1f232a;box-shadow:0 0 70px rgba(255,240,200,.45)}
+.arch{position:absolute;left:50%;bottom:0;width:220px;height:380px;margin-left:-110px;border-radius:12px 12px 0 0;background:#1f232a;overflow:hidden;border:10px solid #b0412f;border-bottom:0}
+.arch .curtain{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#7b2f2f 0 18px,#6a2626 18px 26px);transition:transform 1.4s ease}
+.arch.open .curtain{transform:translateY(-100%)}
+.arch .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(255,240,200,.6),transparent 60%)}
+.door{background:repeating-linear-gradient(0deg,#3a3f4a 0 92px,#333842 92px 96px);border:8px solid #23262c;transform-origin:0 50%;transition:transform 1.8s ease;cursor:pointer}
+body.still .door{transition:none}
+.door .lock{position:absolute;right:26px;top:48%;width:46px;height:62px;border-radius:10px;background:linear-gradient(#e4c27a,#a9802f);box-shadow:0 0 0 3px #6b5020,0 0 18px rgba(255,210,120,.5)}
+.door .lock:after{content:"";position:absolute;left:18px;top:20px;width:10px;height:22px;border-radius:5px;background:#3a2614}
+.lintel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.plaque{background:linear-gradient(#f4f1e6,#d9d2bc);color:#2f3a33;font-family:Georgia,serif;font-weight:700;font-size:26px;padding:8px 26px;border-radius:6px;box-shadow:0 2px 0 #8a8270;white-space:nowrap}
+.lamp{width:44px;height:44px;border-radius:50%;background:#6f6a60;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25);transition:all 1.2s}
+.lamp.gold{background:radial-gradient(circle,#fff5c9,#f2c14e 60%,#c58a1c);box-shadow:0 0 30px 12px rgba(242,193,78,.7)}
+.lamp.blue{background:radial-gradient(circle,#e8f6ff,#7fb6e0 60%,#3f7aa8);box-shadow:0 0 30px 12px rgba(127,182,224,.6)}
+.reel{position:absolute;left:50%;top:6%;width:300px;height:300px;margin-left:-150px;border-radius:50%;background:radial-gradient(circle,#23262c 0 8%,#8a8f98 8.5% 12%,transparent 12.5%),radial-gradient(circle at 50% 22%,#23262c 0 9%,transparent 9.5%),radial-gradient(circle at 50% 78%,#23262c 0 9%,transparent 9.5%),radial-gradient(circle at 22% 50%,#23262c 0 9%,transparent 9.5%),radial-gradient(circle at 78% 50%,#23262c 0 9%,transparent 9.5%),#a9aeb6;border:16px solid #5a5f68;box-shadow:0 0 40px rgba(255,240,200,.25)}
+.filmstrip{position:absolute;left:50%;bottom:0;width:880px;height:150px;margin-left:-440px;background:repeating-linear-gradient(90deg,#1f232a 0 14px,transparent 14px 120px) 0 0/100% 100%,linear-gradient(#1f232a 0 14%,#f4ecd6 14% 86%,#1f232a 86%);border-top:8px solid #b0412f}
+
+/* Furniture, field-kit objects and notes */
+.desk svg,.plant svg{width:100%;height:100%;display:block}
+.item{cursor:pointer;transition:opacity 1s,filter .6s}
+.item svg{width:100%;height:100%}
+.item.ready{filter:drop-shadow(0 0 14px rgba(255,220,130,.95))}
+.item.taken{opacity:0;pointer-events:none}
+.rug{border-radius:16px;box-shadow:0 0 0 14px rgba(0,0,0,.08)}
+.note{position:absolute;left:60px;top:250px;width:150px;height:110px;background:#f3e6c4;border:6px solid #8a6d40;border-radius:4px;font-family:Georgia,serif;font-size:21px;font-weight:700;color:#3a2a10;display:grid;place-items:center;text-align:center;cursor:pointer;transform:rotate(-3deg);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.note:before{content:"";position:absolute;top:-12px;left:66px;width:14px;height:14px;border-radius:50%;background:#b0412f}
+
+/* HUD and panels */
+#veil{position:fixed;inset:52px 0 0 0;background:#000;opacity:0;pointer-events:none;transition:opacity .9s;z-index:5}
+#veil.on{opacity:1}
+.hud{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(780px,calc(100% - 24px));background:rgba(247,243,234,.97);border-radius:16px;padding:12px 16px 14px;z-index:10;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.where{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.where .room{font-weight:700;color:var(--h1)}
+.where .leads{font-size:.88em;color:#5c6b4f}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:13px;height:13px;border-radius:50%;background:#d9d2c4;border:2px solid #b9ae98}
+.dots i.gold{background:#f2c14e;border-color:#c58a1c}.dots i.blue{background:#7fb6e0;border-color:#3f7aa8}
+.dots i.here{outline:3px solid var(--teal);outline-offset:1px}
+.dots i.domedot{border-radius:3px}
+.hud .say{margin:0 0 10px;font-size:1.05em}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button.go,button.opt,button.soft{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;color:var(--ink);font-size:1em}
+button.go{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.soft{border-style:dashed;color:#5c6b4f}
+button.opt[aria-pressed=true]{background:var(--h1);color:#fff;border-color:var(--h1)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.modal{position:fixed;inset:52px 0 0 0;display:none;align-items:center;justify-content:center;z-index:20;background:rgba(10,16,24,.55);padding:16px}
+.modal.show{display:flex}
+.panel{background:var(--paper);border-radius:18px;padding:20px 22px;width:min(680px,100%);max-height:calc(100vh - 90px);overflow:auto}
+.panel h2{color:var(--h1);margin:0 0 4px}
+.panel .sub{color:#5c6b4f;margin:0 0 10px;font-size:.92em}
+.panel .q{font-size:1.25em;margin:6px 0 12px}.big{font-family:Georgia,'Times New Roman',serif;font-size:1.25em;white-space:nowrap}
+.label{font-weight:700;color:#5c6b4f;margin:12px 0 6px}
+input.ans{font-size:1.15em;padding:8px 10px;border-radius:8px;border:1px solid #738697;width:10em}
+.locked{opacity:.45;pointer-events:none}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;display:none}
+.fb.show{display:block}.fb.good{background:var(--ready)}.fb.try{background:var(--refresh)}.fb.calm{background:var(--strength)}
+.info{background:#fffaf0;padding:12px 14px;border-left:6px solid var(--gold);border-radius:10px;margin:12px 0}
+.glass{background:#e5eef2;padding:10px 14px;border-radius:10px;margin:10px 0;font-size:.95em}
+.glass summary{font-weight:700;cursor:pointer}
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.roomcard{border-radius:12px;padding:10px;background:#fff;border:3px solid #d9d2c4;text-align:center;font-size:.92em}
+.roomcard .lampdot{width:20px;height:20px;border-radius:50%;margin:0 auto 6px;background:#c9c2b4}
+.roomcard.gold{border-color:#f2c14e}.roomcard.gold .lampdot{background:#f2c14e;box-shadow:0 0 12px #f2c14e}
+.roomcard.blue{border-color:#7fb6e0}.roomcard.blue .lampdot{background:#7fb6e0;box-shadow:0 0 12px #7fb6e0}
+.roomcard.unvisited{opacity:.6}
+.roomcard small{display:block;color:#5c6b4f;margin-top:4px}
+.pack{background:var(--new);border-radius:12px;padding:10px 14px}
+table.adult{width:100%;border-collapse:collapse;font-size:.88em;background:#fff}
+table.adult th,table.adult td{border:1px solid #d9d2c4;padding:6px 8px;text-align:left;vertical-align:top}
+table.adult th{background:#eef3e8}
+textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;padding:8px;font:inherit}
+.small{font-size:.85em;color:#5c6b4f}
+.tool{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start;background:#fff;border-radius:12px;padding:12px 14px;margin:10px 0}
+.tool .ic svg{width:72px;height:72px}
+.tool h3{margin:0 0 4px;color:var(--h1);font-size:1.05em}
+.tool p{margin:4px 0}
+.tool table.sq{border-collapse:collapse;font-size:.95em}
+.tool table.sq td{border:1px solid #d9d2c4;padding:3px 7px;text-align:center}
+.kitlist{columns:2;margin:6px 0 0;padding-left:18px}
+.didyou{background:#fffaf0;border-left:6px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:1.05em}
+@media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
+@media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
+
+.mathpalette{margin:8px 0 0;flex-basis:100%}
+.palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px}
+.palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.palette-keys[hidden]{display:none}
+.palette-keys button{min-width:44px;padding:8px 10px;font-size:1.1em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+.palette-keys button:focus-visible,.palette-toggle:focus-visible{outline:3px solid #f2c14e;outline-offset:2px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;line-height:1.2}
+.fr>span{display:block;padding:0 .25em}
+.fr>span:first-child{border-bottom:2px solid currentColor}
+.readas{flex-basis:100%;margin-top:6px;font-size:1.05em}
+.readas:empty{display:none}
+.ralabel{font-size:.8em;opacity:.75;margin-right:4px}
+</style>
+</head>
+<body>
+<div class="top"><b>NEO MATHS · THE ANIMATION STUDIO</b>
+  <div class="tools">
+    <button id="kitBtn" title="The tools you have collected">Field kit · <span id="kitCount">0</span></button>
+    <button id="planBtn" title="See your floor plan at any time">Floor plan</button>
+    <button id="stillBtn" aria-pressed="false" title="No movement: rooms change with a gentle fade">Still mode</button>
+    <button id="flatBtn" aria-pressed="false" title="No 3D at all: just the questions, one room at a time">Flat view</button>
+    <button id="comfortBtn" aria-pressed="false" title="Larger text and more space">Aa Comfort</button>
+  </div></div>
+<div id="vp" aria-hidden="true"><div id="world"></div></div>
+<div id="veil"></div>
+
+<div class="hud" id="hud">
+  <div class="where"><div><span class="room" id="roomName"></span> <span class="leads" id="leads"></span></div><div class="dots" id="dots" aria-hidden="true"></div></div>
+  <p class="say" id="say" aria-live="polite"></p>
+  <div class="row" id="acts"></div>
+</div>
+
+<div class="modal show" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wt"><div class="panel" id="welcomePanel"></div></div>
+<div class="modal" id="lockModal" role="dialog" aria-modal="true" aria-labelledby="lt"><div class="panel" id="lockPanel"></div></div>
+<div class="modal" id="kitModal" role="dialog" aria-modal="true" aria-labelledby="kt"><div class="panel" id="kitPanel"></div></div>
+<div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
+
+<script>window.NEO_PALETTE_SYMBOLS=["−", "(", ")", ",", "="];</script>
+<script id="neoPalette">
+/* NEO symbols palette for expeditions (same keys and preview as the lessons). Symbols: window.NEO_PALETTE_SYMBOLS */
+var NEOPalette=(function(){
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+  // How a typed answer is read: everything after "/" up to the next + or - is the denominator.
+  function readAs(v){
+    var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
+    s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/').replace(/\^2/g,'²').replace(/\^3/g,'³');
+    var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
+    function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
+    function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
+    var terms=[], cur='', d=0;
+    for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
+    terms.push(cur);
+    var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
+      var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
+      return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
+    return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function attach(f){ if(!f||f.dataset.paletteReady) return; f.dataset.paletteReady='1';
+    var w=document.createElement('div'); w.className='mathpalette';
+    var t=document.createElement('button'); t.type='button'; t.className='palette-toggle'; t.textContent='√ Symbols'; t.setAttribute('aria-expanded','false');
+    var k=document.createElement('div'); k.className='palette-keys'; k.hidden=true;
+    var pv=document.createElement('div'); pv.className='readas'; pv.setAttribute('aria-live','polite');
+    function upd(){ pv.innerHTML=readAs(f.value); }
+    (window.NEO_PALETTE_SYMBOLS||[]).forEach(function(s){ var b=document.createElement('button'); b.type='button'; b.textContent=s; b.setAttribute('aria-label','Insert '+s); b.onclick=function(){ insert(f,s); upd(); }; k.appendChild(b); });
+    var fr=document.createElement('button'); fr.type='button'; fr.title='Insert a fraction bar (numerator / denominator)'; fr.setAttribute('aria-label','Insert a fraction bar');
+    fr.innerHTML=F('a','b'); fr.onclick=function(){ insert(f,'/'); upd(); }; k.appendChild(fr);
+    t.onclick=function(){ k.hidden=!k.hidden; t.setAttribute('aria-expanded',String(!k.hidden)); };
+    f.addEventListener('input',upd);
+    w.appendChild(t); w.appendChild(k);
+    var row=f.parentNode; row.parentNode.insertBefore(pv,row.nextSibling); row.parentNode.insertBefore(w,pv);
+  }
+  return {attach:attach,readAs:readAs,F:F};
+})();
+</script>
+
+<script>var NEO_APP_URL=<?= appUrl ?>;</script>
+<script>
+/* ---------- Answer reading: equivalent forms always accepted ---------- */
+function num(v){
+  var s=String(v).trim().toLowerCase().replace(/−/g,'-').replace(/\s+/g,'').replace(/÷/g,'/');
+  var g={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅜':.375}; if(g[s]!=null) return g[s];
+  var w={'fourteen':14,'seven':7,'ten':10,'six':6,'nine':9,'thirtyeight':38,'twentythree':23,'minusten':-10,'negativeten':-10}; if(w[s.replace(/-/g,'')]!=null) return w[s.replace(/-/g,'')];
+  s=s.replace(/²/g,'^2').replace(/³/g,'^3'); var m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\^(-?\d+(?:\.\d+)?)$/))) return Math.pow(+m[1],+m[2]);
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/))) return +m[1]/+m[2];
+  if(/^\+?-?\d*\.?\d+$/.test(s)) return +s; return NaN;
+}
+function near(a,b,t){return Math.abs(a-b)<(t||1e-9)}
+function alg(v){return String(v).toLowerCase().replace(/\s+/g,'').replace(/[×*·]/g,'').replace(/−/g,'-');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function $(id){return document.getElementById(id);}
+
+/* ---------- The unit: six rooms (Transformations, Similarity and Scale, Lessons 1–10) ---------- */
+// Answers are read by value (QA gate 6a): figures, number words, fractions, decimals and percentages;
+// coordinates with or without brackets; directions as words; units are allowed.
+function wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  var ones={zero:0,nought:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,i,w;
+  for(i=0;i<parts.length;i++){ w=parts[i];
+    if(w==='a') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='point'){ total+=cur; cur=0; var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){ if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;} else return NaN; }
+      return any&&used?total+parseFloat(dec):NaN; }
+    else return NaN; }
+  return used?total+cur:NaN;
+}
+// a number: 7, seven, 3/8, 0.375, 37.5%, "3 out of 8", "3 in 8", parcels
+function num(v){
+  var s=String(v).toLowerCase().trim().replace(/[−–]/g,'-').replace(/,/g,'').replace(/\s*(cm|centimetres?|centimeters?|m|metres?|meters?)\s*$/,'').trim();
+  if(!s) return NaN;
+  var pc=s.match(/^(-?\d+(?:\.\d+)?)\s*(%|per ?cent)$/); if(pc) return parseFloat(pc[1])/100;
+  if(/^-?\d+(\.\d+)?$/.test(s)||/^-?\.\d+$/.test(s)) return parseFloat(s);
+  var f=s.match(/^(-?\d+(?:\.\d+)?)\s*(?:\/|out of|in)\s*(\d+(?:\.\d+)?)$/); if(f) return +f[2]===0?NaN:parseFloat(f[1])/parseFloat(f[2]);
+  return wordNum(s);
+}
+// a list of whole numbers, in any order: {1, 2, 3}, 1 2 3, 1, 2 and 3, one two three. Returns a sorted list without repeats, or null.
+// a coordinate pair: (5, -1), 5,-1, 5 -1, x = 5 y = -1. Returns [x, y] or null.
+function pair(v){ var s=String(v).toLowerCase().replace(/[−–]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[, ;]\s*(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)$/); return m?[parseFloat(m[1]),parseFloat(m[2])]:null; }
+function eqn(a,b){ return Math.abs(a-b)<1e-9; }
+function GRIDSVG(){ // four triangles on a grid for the Mirror Booth: B is A turned over, C is A enlarged, D has A's area but not its shape
+  var u=22, g='', W=19, H=9, tri=function(pts,lab,lx,ly,col){ return '<polygon points="'+pts.map(function(p){ return (p[0]*u+10)+','+((H-p[1])*u+10); }).join(' ')+'" fill="'+col+'" stroke="#2f3a44" stroke-width="2.5"/><text x="'+(lx*u+10)+'" y="'+((H-ly)*u+16)+'" font-size="20" font-weight="700" font-family="Georgia,serif" text-anchor="middle" fill="#2f3a44">'+lab+'</text>'; };
+  for(var x=0;x<=W;x++) g+='<line x1="'+(x*u+10)+'" y1="10" x2="'+(x*u+10)+'" y2="'+(H*u+10)+'" stroke="#d9dfe3" stroke-width="1"/>';
+  for(var y=0;y<=H;y++) g+='<line x1="10" y1="'+(y*u+10)+'" x2="'+(W*u+10)+'" y2="'+(y*u+10)+'" stroke="#d9dfe3" stroke-width="1"/>';
+  g+=tri([[1,5],[4,5],[1,7]],'A',0.45,5.75,'rgba(176,65,47,.28)')+tri([[9,5],[6,5],[9,7]],'B',9.55,5.75,'rgba(47,109,176,.25)')+tri([[11,1],[17,1],[11,5]],'C',12.4,2,'rgba(63,143,79,.25)')+tri([[1,1],[7,1],[1,2]],'D',0.45,1.25,'rgba(242,193,78,.45)');
+  return '<svg viewBox="0 0 '+(W*u+20)+' '+(H*u+20)+'" style="width:100%;max-width:460px;display:block;margin:8px auto;background:#fff;border-radius:8px" role="img" aria-label="Four triangles on a square grid. A is a right-angled triangle 3 squares wide and 2 squares tall. B is A turned over, the same size. C is the same shape as A but twice as long in every direction. D is 6 squares wide and 1 square tall.">'+g+'</svg>'; }
+function letters(v){ var s=String(v).toUpperCase().replace(/\bAND\b|&|,|;|\bSHAPES?\b/g,' ').trim(); if(/^(NONE|NO|NOTHING|NEITHER|NOT ANY)$/.test(s)) return []; var p=s.split(/\s+/).filter(Boolean); if(!p.every(function(x){ return /^[A-D]$/.test(x); })) return null; return p.filter(function(x,i){ return p.indexOf(x)===i; }).sort(); }
+var ROOMS=[
+ {name:'The Storyboard Wall', lesson:'Lessons 1 and 4 · Reflection, and what transformations keep', prop:'<div class="prop p-board"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>', floor:'',
+  arrive:'You step into the Animation Studio. A long wall is covered with storyboard frames on a coordinate grid. In one frame, a character walks in a straight line from (3, 0) to (3, 5).',
+  q:'The character walks along the straight line through <b>(3, 0)</b> and <b>(3, 5)</b>. What is the <b>equation</b> of that line?', speak:'The character walks along the straight line through three, zero and three, five. What is the equation of that line?', route:'Coordinates and the lines x = a and y = b',
+  check:function(v){ var s=String(v).toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-');
+    if(s==='x=3'||s==='3=x') return 'right'; if(s==='y=3'||s==='3=y') return 'swapped'; if(s==='3') return 'number'; if(/^\(?3,[05]\)?$/.test(s)) return 'point'; if(s==='x=0'||s==='y=0'||s==='y=5') return 'other'; return 'no'; },
+  why:{swapped:'On this line the <b>first</b> coordinate is always 3: (3, 0), (3, 1), (3, 2), … The first coordinate is <i>x</i>.', number:'3 is the right number. Write it as an equation: which coordinate is always 3?', point:'That is one point on the line. The equation says what is true for <b>every</b> point on it.', other:'Look at what stays the same along the path: the <i>x</i>-coordinate or the <i>y</i>-coordinate?'},
+  adult:{swapped:'Gave y = 3 for x = 3: mixes up which coordinate is fixed.', number:'Knew the value but not the form of the equation.', point:'Gave a point rather than the equation of the line.', other:'Not yet linking a vertical line to a fixed x-coordinate.'},
+  hint:'List three points on the path: (3, 0), (3, 1), (3, 2). What is the same about all of them?',
+  show:'Every point on the path has <i>x</i>-coordinate 3, whatever its <i>y</i>-coordinate. So the line is <i>x</i> = 3: a vertical line.'},
+ {name:'The Turntable', lesson:'Lesson 2 · Rotation', prop:'<div class="prop p-turn"><i></i></div>', floor:'stone',
+  arrive:'A character stands on a turntable so the animators can draw it from every side. An arrow on the turntable points north, straight up the screen.',
+  q:'The turntable makes a <b>quarter turn clockwise</b>. Which way does the arrow point now: north, east, south or west?', speak:'The turntable makes a quarter turn clockwise. Which way does the arrow point now: north, east, south or west?', route:'Quarter and half turns, clockwise and anticlockwise',
+  check:function(v){ var s=String(v).toLowerCase().replace(/[^a-z]/g,'');
+    if(/^(east|e|right|totheright|eastwards|pointseast)$/.test(s)) return 'right'; if(/^(west|w|left|totheleft)$/.test(s)) return 'anti'; if(/^(south|s|down)$/.test(s)) return 'half'; if(/^(north|n|up)$/.test(s)) return 'full'; return 'no'; },
+  why:{anti:'West is a quarter turn <b>anticlockwise</b>. Clockwise is the way a clock\'s hands turn: from 12 towards 3.', half:'South is a <b>half</b> turn. A quarter turn is one right angle: 90°.', full:'North is where it started. A quarter turn moves it through one right angle.'},
+  adult:{anti:'Turned anticlockwise for clockwise.', half:'Turned through a half turn for a quarter turn.', full:'Did not turn: unsure what a quarter turn is.'},
+  hint:'Picture a clock face with north at 12. Clockwise goes from 12 towards 3.',
+  show:'Clockwise is the way a clock\'s hands move. A quarter turn is 90°, from 12 to 3 on a clock, so the arrow turns from north to <b>east</b>.'},
+ {name:'The Slide Track', lesson:'Lesson 3 · Translation and column vectors', prop:'<div class="prop p-track"><i></i></div>', floor:'',
+  arrive:'Puppets glide along a track laid over a square grid. A puppet waits at (1, 2), ready for its next move.',
+  q:'The puppet at <b>(1, 2)</b> slides <b>4 squares right</b> and <b>3 squares down</b>. What are its new coordinates?', speak:'The puppet at one, two slides four squares right and three squares down. What are its new coordinates?', route:'Moves on a coordinate grid',
+  check:function(v){ var p=pair(v); if(!p) return 'no'; var k=p[0]+','+p[1];
+    if(k==='5,-1') return 'right'; if(k==='5,5') return 'up'; if(k==='-3,-1') return 'left'; if(k==='-2,6') return 'swapped'; if(k==='4,-3'||k==='4,3') return 'moves'; return 'no'; },
+  why:{up:'Moving <b>down</b> makes the second coordinate smaller: 2 − 3.', left:'Moving <b>right</b> makes the first coordinate bigger: 1 + 4.', swapped:'Right and left change the <b>first</b> coordinate; up and down change the second.', moves:'Those are the moves. Add them to the starting point (1, 2) to find where the puppet lands.'},
+  adult:{up:'Moved up instead of down.', left:'Moved left instead of right.', swapped:'Applied the moves to the wrong coordinates.', moves:'Gave the move instead of the new position.'},
+  hint:'Right changes the first coordinate. Down changes the second. Start from (1, 2).',
+  show:'Right 4: the first coordinate goes from 1 to 5. Down 3: the second goes from 2 to −1. The puppet lands at <b>(5, −1)</b>.'},
+ {name:'The Mirror Booth', lesson:'Lessons 4 and 7 · Congruence, and similar shapes', prop:'<div class="prop p-mirror"><i></i></div>', floor:'stone',
+  arrive:'In the mirror booth, animators check whether a character still looks right when it is flipped, moved or resized.',
+  q:'Which of shapes B, C and D are <b>congruent</b> to shape A: exactly the same shape <b>and</b> size?'+GRIDSVG()+'Type the letter or letters, or “none”.', speak:'Shape A is a right-angled triangle three squares wide and two squares tall. B is A turned over, the same size. C is the same shape but twice as long in every direction. D is six squares wide and one square tall. Which of B, C and D are congruent to A? Type the letters, or none.', route:'Same shape and size',
+  check:function(v){ var L=letters(v); if(!L) return 'no'; var k=L.join('');
+    if(k==='B') return 'right'; if(k==='') return 'none'; if(k==='C'||k==='BC') return 'similar'; if(k.indexOf('D')>=0) return 'area'; return 'no'; },
+  why:{none:'B is A turned over. Turning a shape over does not change any length or angle, so it is still exactly the same shape and size.', similar:'C is the same shape, but twice as big. Congruent shapes must be the same <b>size</b> too.', area:'D covers the same area as A, but its sides are different lengths. Congruent shapes match side for side and angle for angle.'},
+  adult:{none:'Did not accept a reflected shape as congruent.', similar:'Included the enlargement: congruent confused with similar.', area:'Judged congruence by area.'},
+  hint:'Compare the lengths of the sides. Count squares across and up for each triangle.',
+  show:'A has sides 3 across and 2 up. B is A turned over, with the same sides and angles, so B is congruent to A. C has sides 6 and 4: the same shape but bigger (similar, not congruent). D has sides 6 and 1. So only <b>B</b>.'},
+ {name:'The Zoom Lens', lesson:'Lessons 6 and 8 · Enlargement, and missing lengths', prop:'<div class="prop p-lens"><i></i></div>', floor:'',
+  arrive:'The camera\'s zoom lens can make a scene bigger or smaller. Every length in the shot is multiplied by the same number: the scale factor.',
+  q:'A lamp on the set is <b>6 cm</b> tall. The lens uses a <b>scale factor of <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span></b>. How tall is the lamp in the shot?', speak:'A lamp on the set is six centimetres tall. The lens uses a scale factor of one half. How tall is the lamp in the shot?', route:'Multiplying by a scale factor, including fractions',
+  check:function(v){ var n=num(String(v).replace(/½/g,'.5')); if(eqn(n,3)) return 'right'; if(eqn(n,12)) return 'times2'; if(eqn(n,5.5)) return 'minus'; if(eqn(n,6.5)) return 'plus'; if(eqn(n,6)) return 'same'; return 'no'; },
+  why:{times2:'12 cm is twice as tall. A scale factor of <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span> makes every length <b>half</b> as long.', minus:'A scale factor <b>multiplies</b>: 6 × <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span>, not 6 − <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span>.', plus:'A scale factor <b>multiplies</b>: 6 × <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span>, not 6 + <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span>.', same:'A scale factor of <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span> changes every length: multiply 6 by <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span>.'},
+  adult:{times2:'Divided by ½ (or doubled) instead of multiplying.', minus:'Subtracted the scale factor.', plus:'Added the scale factor.', same:'Did not apply the scale factor.'},
+  hint:'Multiplying by '+'<span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span>'+' is the same as halving.',
+  show:'Every length is multiplied by the scale factor: 6 × <span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">1</span><span style="padding:0 3px">2</span></span> = <b>3 cm</b>. A scale factor between 0 and 1 makes the image smaller.'},
+ {name:'The Set Model', lesson:'Lesson 9 · Maps and scale drawings', prop:'<div class="prop p-model"><i></i><i></i><i></i></div>', floor:'stone',
+  arrive:'On a table stands the plan for the film\'s set. The key says: 1 cm on the plan represents 2 m on the real set.',
+  q:'On the plan, <b>1 cm represents 2 m</b>. A wall on the plan is <b>4.5 cm</b> long. How long is the real wall?', speak:'On the plan, one centimetre represents two metres. A wall on the plan is four point five centimetres long. How long is the real wall?', route:'Scale plans',
+  check:function(v){ var s=String(v).toLowerCase(); var n=num(v); if(/cm|centimet/.test(s)&&eqn(n,900)) return 'right'; if(/cm|centimet/.test(s)&&eqn(n,9)) return 'unit';
+    if(eqn(n,9)) return 'right'; if(eqn(n,2.25)) return 'divide'; if(eqn(n,6.5)) return 'add'; if(eqn(n,4.5)) return 'same'; return 'no'; },
+  why:{divide:'Each centimetre on the plan is 2 m in real life, so the real wall is <b>longer</b>: multiply by 2.', add:'Each of the 4.5 centimetres stands for 2 m, so multiply: 4.5 × 2.', same:'4.5 cm is the length on the plan. Each centimetre stands for 2 m.', unit:'9 is right, but the unit is metres: 9 m.'},
+  adult:{divide:'Divided by the scale instead of multiplying.', add:'Added the scale instead of multiplying.', same:'Gave the plan length.', unit:'Right value with the wrong unit.'},
+  hint:'Each centimetre on the plan stands for 2 m. How many centimetres long is the wall?',
+  show:'Each centimetre stands for 2 m, so 4.5 cm stands for 4.5 × 2 = <b>9 m</b>.'}
+];
+var DOME=ROOMS.length;
+
+/* ---------- The field kit: one tool per room ---------- */
+function FRK(n,d){ return '<span style="display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.1"><span style="border-bottom:2px solid currentColor;padding:0 3px">'+n+'</span><span style="padding:0 3px">'+d+'</span></span>'; }
+var IC={
+ lines:'<svg viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" fill="#f4f1e6" stroke="#4a5a66" stroke-width="2"/><path d="M30 10V90" stroke="#b0412f" stroke-width="4"/><path d="M10 64H90" stroke="#2f6db0" stroke-width="4"/><text x="36" y="26" font-size="12" fill="#b0412f">x = 1</text><text x="58" y="58" font-size="12" fill="#2f6db0">y = 2</text></svg>',
+ turn:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="36" fill="#f4f1e6" stroke="#4a5a66" stroke-width="3"/><path d="M50 50V20" stroke="#2f3a44" stroke-width="4"/><path d="M58 18 A33 33 0 0 1 82 42" fill="none" stroke="#b0412f" stroke-width="4"/><path d="M82 42l-9-2 7-6z" fill="#b0412f"/><text x="50" y="78" font-size="11" text-anchor="middle" fill="#2f3a44">clockwise</text></svg>',
+ move:'<svg viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" fill="#f4f1e6" stroke="#4a5a66" stroke-width="2"/><circle cx="26" cy="36" r="6" fill="#2f6db0"/><path d="M26 36H70" stroke="#3f8f4f" stroke-width="4"/><path d="M70 36V70" stroke="#b0412f" stroke-width="4"/><circle cx="70" cy="70" r="6" fill="#2f6db0"/></svg>',
+ same:'<svg viewBox="0 0 100 100"><path d="M14 70H44V50Z" fill="rgba(176,65,47,.3)" stroke="#2f3a44" stroke-width="3"/><path d="M86 70H56V50Z" fill="rgba(47,109,176,.3)" stroke="#2f3a44" stroke-width="3"/><path d="M50 20V86" stroke="#4a5a66" stroke-width="2" stroke-dasharray="4 3"/></svg>',
+ zoom:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="#2f3a44"/><circle cx="50" cy="50" r="22" fill="#6f8fa8"/><circle cx="50" cy="50" r="10" fill="#cfe0ec"/><text x="50" y="96" font-size="12" text-anchor="middle" fill="#2f3a44">× ½</text></svg>',
+ scale:'<svg viewBox="0 0 100 100"><rect x="12" y="34" width="76" height="30" fill="#f4f1e6" stroke="#4a5a66" stroke-width="2"/><path d="M12 64v-10M31 64v-6M50 64v-10M69 64v-6M88 64v-10" stroke="#2f3a44" stroke-width="2"/><text x="50" y="26" font-size="12" text-anchor="middle" fill="#2f3a44">1 cm : 2 m</text></svg>'
+};
+var KIT=[
+ {name:'line card', title:'Line card', icon:IC.lines, body:function(){return '<p><b>On the line <i>x</i> = 1, every point has <i>x</i>-coordinate 1.</b> It is a vertical line.</p><p><b>On the line <i>y</i> = 2, every point has <i>y</i>-coordinate 2.</b> It is a horizontal line.</p>';}},
+ {name:'turning card', title:'Turning card', icon:IC.turn, body:function(){return '<p><b>Clockwise</b> is the way a clock\'s hands turn. <b>Anticlockwise</b> is the other way.</p><p>A quarter turn is 90°, a half turn is 180°, and a three-quarter turn is 270°.</p>';}},
+ {name:'grid-move card', title:'Grid-move card', icon:IC.move, body:function(){return '<p><b>Right and left change the first coordinate. Up and down change the second.</b></p><p>From (2, 1), move 3 right and 4 up: (2 + 3, 1 + 4) = (5, 5).</p>';}},
+ {name:'same-shape card', title:'Same-shape card', icon:IC.same, body:function(){return '<p><b>Congruent</b> shapes are exactly the same shape and size. A shape that is turned or flipped over is still congruent.</p><p>If every length is multiplied by the same number, the shape is <b>similar</b>: the same shape, a different size.</p>';}},
+ {name:'scale-factor card', title:'Scale-factor card', icon:IC.zoom, body:function(){return '<p><b>A scale factor multiplies every length.</b></p><p>Scale factor 2: 5 cm becomes 10 cm. Scale factor '+FRK('1','2')+': 5 cm becomes 2.5 cm.</p>';}},
+ {name:'plan-scale card', title:'Plan-scale card', icon:IC.scale, body:function(){return '<p><b>“1 cm represents 3 m” means each centimetre on the plan stands for 3 m in real life.</b></p><p>A 2.5 cm line on the plan: 2.5 × 3 = 7.5 m in real life.</p>';}}
+];
+var NOTES=[
+ 'The first flip book, called a kineograph, was patented in 1868 by John Barnes Linnett: a little animation made of many slightly moved pictures.',
+ 'The kaleidoscope, invented by David Brewster in 1816, makes its patterns with mirrors: every image is a reflection of a reflection.',
+ 'The artist M. C. Escher made famous prints in which one shape, moved, turned and flipped, tiles a whole page with no gaps.',
+ 'The word “congruent” comes from the Latin <i>congruere</i>, meaning to agree or come together.',
+ 'A pantograph, described by Christoph Scheiner in 1603, is a hinged frame that copies a drawing at a larger or smaller size: an enlargement machine.',
+ 'On a map with scale 1 : 25 000, 1 cm on the map represents 25 000 cm, which is 250 m, on the ground.'
+];
+var RUGS=['#2f4f6b','#7b2f2f','#3f5f45','#6b4a7a','#7a5a2f','#2f5f6b'];
+DOME=ROOMS.length;
+
+var DESK='<svg viewBox="0 0 300 150"><rect x="10" y="40" width="280" height="16" rx="3" fill="#7a5233"/><rect x="24" y="56" width="14" height="94" fill="#5a3b22"/><rect x="262" y="56" width="14" height="94" fill="#5a3b22"/><rect x="40" y="56" width="220" height="38" fill="#6b472b"/><rect x="132" y="68" width="36" height="8" rx="4" fill="#c9a35a"/><rect x="236" y="20" width="6" height="22" fill="#3a2a10"/><path d="M222 4 L256 4 L250 22 L228 22 Z" fill="#2f5f5a"/><ellipse cx="239" cy="40" rx="30" ry="8" fill="rgba(255,220,140,.35)"/></svg>';
+var PLANT='<svg viewBox="0 0 150 260"><ellipse cx="55" cy="90" rx="20" ry="58" fill="#4d7a3f" transform="rotate(-22 55 90)"/><ellipse cx="95" cy="92" rx="20" ry="60" fill="#5f8a4e" transform="rotate(20 95 92)"/><ellipse cx="75" cy="70" rx="18" ry="66" fill="#41693a"/><ellipse cx="40" cy="140" rx="16" ry="40" fill="#5f8a4e" transform="rotate(-50 40 140)"/><ellipse cx="112" cy="140" rx="16" ry="40" fill="#4d7a3f" transform="rotate(50 112 140)"/><path d="M38 170 L112 170 L102 255 L48 255 Z" fill="#b5653f"/><rect x="32" y="162" width="86" height="16" rx="4" fill="#9a5233"/></svg>';
+
+/* ---------- State, kept only on this device ---------- */
+var KEY='neo-animationstudio-transformations-v01';
+function fresh(){return ROOMS.map(function(){return {feel:null,result:null,side:false,signal:null,kit:false};});}
+var st=fresh(), at=0, opened=[];
+function save(){try{localStorage.setItem(KEY,JSON.stringify({st:st,at:at}));}catch(e){}}
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.st&&d.st.length===ROOMS.length)return d;}catch(e){}return null;}
+function forget(){try{localStorage.removeItem(KEY);localStorage.removeItem(KEY+'-exp');}catch(e){}}
+var EXP=(function(){var id;try{id=localStorage.getItem(KEY+'-exp');}catch(e){}if(!id){id='exp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);try{localStorage.setItem(KEY+'-exp',id);}catch(e){}}return id;})();
+var UNIT={name:'Transformations, Similarity and Scale',id:'y9-transformations-similarity-scale'};
+
+/* ---------- Building the rooms ---------- */
+var D=1300,W=1200,H=700,L=1200,DW=280,DH=460, world=$('world'), building=0;
+function face(w,h,tf,cls,html){var e=document.createElement('div');e.className='f '+cls;
+  e.style.cssText='width:'+w+'px;height:'+h+'px;left:'+(-w/2)+'px;top:'+(-h/2)+'px;transform:'+tf;if(html)e.innerHTML=html;e.dataset.r=building;world.appendChild(e);return e;}
+function build(i){
+  building=i;
+  var z=-i*D, zb=z-L/2, last=i===DOME, r=ROOMS[i]||{};
+  face(W,L,'translate3d(0,'+H/2+'px,'+z+'px) rotateX(90deg)','floor '+(r.floor||''));
+  face(W,L,'translate3d(0,'+(-H/2)+'px,'+z+'px) rotateX(-90deg)','ceiling');
+  face(L,H,'translate3d('+(-W/2)+'px,0,'+z+'px) rotateY(90deg)','wall side', last?'<div class="prop p-screen"></div>':r.prop);
+  face(L,H,'translate3d('+(W/2)+'px,0,'+z+'px) rotateY(-90deg)','wall side r', last?'<div class="prop p-screen"></div>':'<div class="arch" id="arch'+i+'"><div class="glow"></div><div class="curtain"></div></div>');
+  if(last){ face(W,H,'translate3d(0,0,'+zb+'px)','wall','<div class="reel"></div><div class="filmstrip"></div>'); return; }
+  var pw=(W-DW)/2;
+  var lw=face(pw,H,'translate3d('+(-(DW/2+pw/2))+'px,0,'+zb+'px)','wall','<div class="note" role="button" tabindex="-1">Did you<br>know?</div>');
+  lw.querySelector('.note').onclick=function(){ if(i===at) readNote(); };
+  face(pw,H,'translate3d('+(DW/2+pw/2)+'px,0,'+zb+'px)','wall');
+  face(DW+2,H-DH,'translate3d(0,'+(-DH/2)+'px,'+zb+'px)','wall');
+  face(560,170,'translate3d(0,'+(-DH/2-30)+'px,'+(zb+1)+'px)','lintel','<div class="plaque">'+r.name+'</div><div class="lamp" id="lamp'+i+'"></div>');
+  var d=face(DW,DH,'translate3d(0,'+((H-DH)/2)+'px,'+zb+'px)','door','<div class="lock"></div>'); d.id='door'+i;
+  d.onclick=function(){ if(i===at && !isOpen(i)) openLock(); };
+  // Furniture kept to the edges, so the door and the desk stay the focus.
+  var rug=face(640,420,'translate3d(0,'+(H/2-2)+'px,'+(z-40)+'px) rotateX(90deg)','rug'); rug.style.background='repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 10px,transparent 10px 40px),'+RUGS[i]; rug.style.border='10px solid rgba(233,215,168,.55)';
+  face(300,150,'translate3d(-380px,'+(H/2-75)+'px,'+(z-330)+'px)','desk',DESK);
+  var it=face(96,96,'translate3d(-420px,'+(H/2-150-40)+'px,'+(z-328)+'px)','item',KIT[i].icon); it.id='item'+i;
+  it.onclick=function(){ if(i===at) pickUp(); };
+  face(150,260,'translate3d(420px,'+(H/2-130)+'px,'+(z-470)+'px)','plant',PLANT);
+}
+for(var i=0;i<=DOME;i++) build(i);
+function place(i,glide){ world.style.transform='translate3d(0,0,'+(-300+i*D)+'px)'; if(!glide) hideBehind(); }
+// Rooms already left sit between the viewer and the screen, so hide them once we have arrived.
+function hideBehind(){ [].forEach.call(world.children,function(e){ e.style.visibility= +e.dataset.r<at?'hidden':''; }); }
+function isOpen(i){var s=st[i];return s.result==='right'||s.result==='second';}
+function still(){return document.body.classList.contains('still');}
+function flat(){return document.body.classList.contains('flat');}
+function setStill(on){document.body.classList.toggle('still',on);$('stillBtn').setAttribute('aria-pressed',on);}
+function setFlat(on){document.body.classList.toggle('flat',on);$('flatBtn').setAttribute('aria-pressed',on);}
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) setStill(true);
+// Restore lamps, doors and curtains to match the saved state.
+function restoreScene(){ kitCount(); st.forEach(function(s,i){ if(s.kit){ $('item'+i).classList.add('taken'); } if(isOpen(i)){ $('door'+i).style.transform+=' rotateY(-100deg)'; $('lamp'+i).classList.add('gold'); } else if(s.side){ $('arch'+i).classList.add('open'); $('lamp'+i).classList.add('blue'); } }); }
+
+/* ---------- HUD ---------- */
+function dots(){ $('dots').innerHTML=ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side?'blue':'';return '<i class="'+c+(i===at?' here':'')+'"></i>';}).join('')+'<i class="domedot'+(at===DOME?' here':'')+'"></i>'; }
+function hud(text,buttons){
+  $('roomName').textContent= at===DOME?'The Screening Room':ROOMS[at].name;
+  $('leads').textContent= at===DOME?'· the end of the expedition':'· leads into '+ROOMS[at].lesson;
+  $('say').innerHTML=text; dots(); var a=$('acts'); a.innerHTML='';
+  buttons.forEach(function(b){var e=document.createElement('button');e.className=b[2]||'go';e.textContent=b[0];e.onclick=b[1];if(b[3])e.disabled=true;a.appendChild(e);});
+}
+function roomHud(){
+  if(at===DOME){ hud('You\'ve reached the screening room. The lights dim, and every scene you passed through plays on the big screen.',[['See your floor plan',showPlan,'go']]); return; }
+  var r=ROOMS[at], s=st[at], done=isOpen(at), side=s.side;
+  var text=r.arrive, resolved=done||side, k=KIT[at];
+  if(done) text='The door is open, and the lamp above it is lit.'; else if(side) text='The curtain is drawn back. A lantern lights the side passage, and this lock is on your packing list.';
+  if(resolved && !s.kit) text+=' On the desk, the '+k.name+' is waiting for you.';
+  if(resolved && s.kit) text+=' The '+k.name+' is in your field kit.';
+  var b=[['Examine the lock',openLock,'go',done],['Take the side passage',takeSide,'soft',done||side]];
+  if(resolved && !s.kit) b.push(['Pick up the '+k.name,pickUp,'go']);
+  b.push([at===DOME-1?'Walk through to the screening room →':'Walk on →',walkOn,'go',!resolved]);
+  b.push(['Did you know?',readNote,'soft']);
+  hud(text,b);
+  var el=$('item'+at); if(el) el.classList.toggle('ready',resolved && !s.kit);
+}
+
+/* ---------- Field kit and notes ---------- */
+function kitCount(){ var n=st.filter(function(s){return s.kit;}).length; $('kitCount').textContent=n; return n; }
+function toolCard(i){ var k=KIT[i]; return '<div class="tool"><div class="ic">'+k.icon+'</div><div><h3>'+k.title+'</h3><p class="small">Found in '+ROOMS[i].name+'</p>'+k.body()+'</div></div>'; }
+function kitModal(html){ $('kitPanel').innerHTML=html+'<div class="row" style="margin-top:12px"><button class="go" id="kitClose">Back to the expedition</button></div>'; $('kitModal').classList.add('show'); $('kitClose').onclick=function(){$('kitModal').classList.remove('show');try{speechSynthesis.cancel();}catch(e){}}; setTimeout(function(){$('kitClose').focus();},0); }
+function pickUp(){
+  var s=st[at]; if(s.kit) return;
+  if(!(isOpen(at)||s.side)){ $('say').innerHTML='Something on the desk catches your eye. It will be yours to take once you\'ve dealt with the lock — either way through.'; return; }
+  s.kit=true; save(); kitCount(); var el=$('item'+at); if(el){el.classList.remove('ready');el.classList.add('taken');}
+  kitModal('<h2 id="kt">You add the '+KIT[at].name+' to your field kit</h2><p class="sub">It comes with you through the Animation Studio and into the lessons. Looking things up in your kit is good practice, and it is never recorded.</p>'+toolCard(at));
+  roomHud();
+}
+function showKit(){
+  var have=ROOMS.map(function(r,i){return i;}).filter(function(i){return st[i].kit;});
+  kitModal('<h2 id="kt">Your field kit</h2><p class="sub">Tools you have collected. Use them whenever they help, in the Animation Studio and in the lessons. Using your kit is never recorded.</p>'+
+    (have.length?have.map(toolCard).join(''):'<p>Your kit is empty so far. Each room has a tool waiting on its bench.</p>'));
+}
+function readNote(){
+  var i=at===DOME?DOME-1:at;
+  kitModal('<h2 id="kt">Did you know?</h2><p class="sub">'+ROOMS[i].name+' · just for interest: this is not part of the expedition</p><div class="didyou">'+NOTES[i]+'</div>'+('speechSynthesis' in window?'<div class="row" style="margin-top:10px"><button class="soft" id="noteRead">🔊 Read aloud</button></div>':''));
+  if($('noteRead')) $('noteRead').onclick=function(){speak(NOTES[i]);};
+}
+
+/* ---------- The lock panel ---------- */
+function speak(t){ try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang='en-GB'; u.rate=.92; speechSynthesis.speak(u);}catch(e){} }
+function openLock(){
+  var r=ROOMS[at], s=st[at];
+  var h='<h2 id="lt">'+r.name+'</h2><p class="sub">'+r.lesson+'</p><div class="q">'+r.q+'</div>';
+  if('speechSynthesis' in window) h+='<div class="row"><button class="soft" id="readBtn">🔊 Read aloud</button></div>';
+  h+='<div class="label">First, how does this lock look to you?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Not sure'],['new','This is new to me']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
+  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
+  var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
+  if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
+  h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show'); if($('ans')) NEOPalette.attach($('ans'));
+  if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
+  [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
+  if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
+  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; }
+  $('sideFromLock').onclick=function(){closeLock();takeSide();}; $('closeLock').onclick=closeLock;
+  setTimeout(function(){var f=document.querySelector('[data-feel]');if(f)f.focus();},0);
+}
+function closeLock(){ try{speechSynthesis.cancel();}catch(e){} $('lockModal').classList.remove('show'); roomHud(); }
+function fb(k,m){var f=$('fb');f.className='fb show '+k;f.innerHTML=m;}
+function tryKey(v){
+  var r=ROOMS[at], s=st[at]; if(!String(v).trim()) return;
+  var res=r.choices?(v===r.answer?'right':v):r.check(v);
+  if(res==='right'){
+    s.result= s.result==='notyet'?'second':'right'; save();
+    fb('good','<b>The key turns.</b> '+r.show);
+    setTimeout(function(){closeLock();$('door'+at).style.transform+=' rotateY(-100deg)';$('lamp'+at).classList.add('gold');roomHud();},1700);
+  } else {
+    if(s.result===null) s.result='notyet';
+    if(!s.signal && r.adult && r.adult[res]) s.signal=r.adult[res];
+    save();
+    var why=r.why&&r.why[res];
+    fb('try',(why?why:'The key doesn\'t turn yet. '+r.hint)+' <button class="soft" id="showBtn">Show me how</button>');
+    $('showBtn').onclick=function(){fb('calm',r.show+' You can try the key again, or take the side passage. Either is fine.');};
+  }
+}
+function takeSide(){ var s=st[at]; s.side=true; save(); $('arch'+at).classList.add('open'); $('lamp'+at).classList.add('blue'); roomHud(); }
+function walkOn(){
+  var viaDoor=isOpen(at), next=at+1;
+  hud('…',[]);
+  if(flat()){ at=next; place(at); save(); arrive(); return; }
+  if(!viaDoor || still()){
+    $('veil').classList.add('on');
+    setTimeout(function(){at=next;world.style.transition='none';place(at);world.offsetWidth;world.style.transition='';save();setTimeout(function(){$('veil').classList.remove('on');arrive();},350);},950);
+  } else { at=next; place(at,true); save(); setTimeout(function(){hideBehind();arrive();},2700); }
+}
+function arrive(){ roomHud(); if(at===DOME) setTimeout(showPlan, flat()?0:1200); }
+
+/* ---------- Floor plan and the adult view ---------- */
+function outcome(i){ var s=st[i];
+  if(s.result==='right') return s.feel==='sure'?'ready':'strength';
+  if(s.result==='second') return 'refresh';
+  if(s.result==='notyet' && s.feel==='sure') return 'look';
+  if(s.result===null && !s.side) return 'unvisited';
+  return 'new'; }
+var OUT={ready:'Ready',strength:'Hidden strength',refresh:'Got there with a nudge',look:'Worth a second look',new:'New ground',unvisited:'Not visited yet'};
+var LEARN={ready:'You\'re carrying what this lesson needs.',strength:'You knew more than you thought.',refresh:'A quick refresh before this lesson would help.',look:'Worth another look before the lesson.',new:'We\'ll build this together in the lesson.',unvisited:'Waiting for you.'};
+function showPlan(){
+  var o=ROOMS.map(function(r,i){return outcome(i);}), done=at===DOME;
+  var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me',null:'—'};
+  var h='<h2 id="pt">Your floor plan</h2><p class="sub">Transformations, Similarity and Scale · Foundations · Spring term</p><p>'+(done?'Gold lamps are rooms you unlocked. Blue lanterns mark rooms we\'ll explore together in the lessons.':'Your expedition so far. You can carry on whenever you like.')+'</p><div class="plan">'+
+    ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side||o[i]==='new'||o[i]==='look'?'blue':o[i]==='unvisited'?'unvisited':'';
+      return '<div class="roomcard '+c+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson.replace(/^Lesson (\d) · /,'Lesson $1: ')+'</small><small><b>'+OUT[o[i]]+'</b> · '+LEARN[o[i]]+'</small></div>';}).join('')+
+    '<div class="roomcard"><div class="lampdot" style="border-radius:4px;background:#2b4470"></div><b>The Screening Room</b><small>'+(done?'Reached':'At the end of the studio')+'</small></div></div>';
+  var routes=ROOMS.filter(function(r,i){return ['look','new','refresh'].indexOf(o[i])>=0;}).map(function(r){return r.route;});
+  routes=routes.filter(function(x,i){return routes.indexOf(x)===i;});
+  h+= routes.length?'<div class="pack"><b>Your packing list</b><p>Short Reconnection Routes to try before the unit starts. Each one takes about ten minutes and brings you straight back.</p><ul>'+routes.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+    : (done?'<div class="pack"><b>Your packing list is empty.</b> You\'re carrying everything this unit builds on. Enjoy the journey.</div>':'');
+  var have=ROOMS.map(function(r,i){return i;}).filter(function(i){return st[i].kit;}), missed=ROOMS.map(function(r,i){return i;}).filter(function(i){return !st[i].kit;});
+  h+='<div class="label">Your field kit for this unit</div>'+(have.length?'<ul class="kitlist">'+have.map(function(i){return '<li>'+KIT[i].title+'</li>';}).join('')+'</ul>':'<p class="small">Empty so far.</p>')+
+     (missed.length&&done?'<p class="small">Still waiting on a desk: '+missed.map(function(i){return KIT[i].title+' ('+ROOMS[i].name+')';}).join(', ')+'. Your supporting adult can give you these at the start of the unit.</p>':'');
+  if(done) h+='<div class="label">How do you feel about starting this unit? (Optional — only kept if you choose to share it.)</div><textarea id="feelText" placeholder="Anything you\'d like your supporting adult to know…"></textarea><div class="row noprint" style="margin-top:6px"><button class="soft" id="shareFeel">Share this with my supporting adult</button><span id="feelStatus" class="small"></span></div>';
+  h+='<details class="glass" id="adultDetails"><summary>See exactly what your supporting adult sees</summary><p class="small">The same information as your floor plan. No scores, no times, no attempt counts.</p><table class="adult"><tr><th>Room · lesson</th><th>How the lock looked</th><th>Outcome</th><th>What it might suggest</th><th>Suggested route</th></tr>'+
+    ROOMS.map(function(r,i){var x=o[i];return '<tr><td>'+r.name+'<br><span class="small">'+r.lesson+'</span></td><td>'+feelTxt[st[i].feel]+'</td><td>'+OUT[x]+'</td><td>'+(st[i].signal?esc(st[i].signal):(x==='strength'?'Felt unsure but was right: worth saying out loud.':x==='new'&&st[i].side?'Chose to learn this in the unit.':'—'))+'</td><td>'+(['look','new','refresh'].indexOf(x)>=0?esc(r.route):'—')+'</td></tr>';}).join('')+
+    '</table><p class="small"><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) is the most useful signal; it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud. Outcomes use the learner\'s own words and never a score.</p></details>';
+  h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the screening room':'Back to the expedition')+'</button><button class="soft" id="printPlan">Print or save this floor plan</button>'+(done?'<button class="soft" id="againBtn">Start a new expedition</button>':'')+'</div>';
+  h+='<div id="saveStatus" class="pack noprint" style="margin-top:12px">'+(done?'Saving your floor plan to your learner record…':'Your floor plan is saved when you reach the screening room.')+'</div>';
+  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Animation Studio v0.1</p>';
+  $('planPanel').innerHTML=h; $('planModal').classList.add('show');
+  $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
+  $('printPlan').onclick=function(){$('adultDetails').open=true;window.print();};
+  if($('againBtn')) $('againBtn').onclick=function(){forget();location.reload();};
+  if($('shareFeel')) $('shareFeel').onclick=shareFeeling;
+  if(done) record();
+}
+
+/* ---------- Saving to the learner record (NEO results service) ---------- */
+function served(){ return typeof google!=='undefined' && google.script && google.script.run; }
+function passportLink(){ return (typeof NEO_APP_URL==='string'&&NEO_APP_URL)?' <a href="'+NEO_APP_URL+'?page=passport" target="_top">Open my learner passport</a>.':''; }
+function record(){
+  var box=$('saveStatus'); if(!box) return;
+  if(!served()){ box.innerHTML='This copy is not connected to the NEO results service, so nothing has been saved. Open the expedition from your NEO link to save it.'; return; }
+  var feelTxt={sure:'I\'ve got this',unsure:'Not sure',new:'This is new to me'};
+  var rooms=ROOMS.map(function(r,i){ var x=outcome(i);
+    return {room:r.name, lesson:r.lesson, felt:feelTxt[st[i].feel]||'', outcome:OUT[x],
+      suggests:st[i].signal||(x==='strength'?'Felt unsure but was right: worth saying out loud.':x==='new'&&st[i].side?'Chose to learn this in the unit.':''),
+      route:['look','new','refresh'].indexOf(x)>=0?r.route:''}; });
+  google.script.run
+    .withSuccessHandler(function(){ box.innerHTML='<b>Saved to your learner record ✓</b>'+passportLink(); })
+    .withFailureHandler(function(){ box.innerHTML='Your floor plan could not be saved just now. It is still here. <button class="soft" id="saveAgain">Try saving again</button>'; $('saveAgain').onclick=function(){box.innerHTML='Saving…';record();}; })
+    .saveDiagnostic({unit:UNIT.name, unitId:UNIT.id, expedition:EXP, rooms:rooms});
+}
+function shareFeeling(){
+  var t=($('feelText').value||'').trim(), out=$('feelStatus');
+  if(!t){ out.textContent='Write something first, or leave it empty: it is optional.'; return; }
+  if(!served()){ out.textContent='This copy is not connected, so it cannot be shared from here.'; return; }
+  out.textContent='Sharing…';
+  google.script.run.withSuccessHandler(function(){ out.textContent='Shared with your supporting adult ✓'; })
+    .withFailureHandler(function(){ out.textContent='Could not share just now. Please try again.'; })
+    .saveComment({unit:UNIT.name, unitId:UNIT.id, expedition:EXP, comment:t});
+}
+
+/* ---------- Welcome ---------- */
+function welcome(){
+  var saved=load();
+  var h='<h2 id="wt">Welcome to the Animation Studio</h2><p class="sub">Transformations, Similarity and Scale · Foundations · before you set off</p>'+
+   '<div class="info"><p><b>This is an expedition, not a test.</b> There is no clock to beat, no score and nothing to lose. It takes about 10 minutes, and you can stop and come back.</p>'+
+   '<p>The Animation Studio is where a short film is made: characters are flipped, turned, slid and resized, frame by frame. It has six rooms, one for each part of the unit, and you walk from the storyboard wall to the screening room. Each room has a locked door, and the right answer is the key. If a lock looks unfamiliar, every room also has a <b>side passage</b> that leads on just the same. Taking it is a good choice: it tells us what to help you with.</p><p>In every room you will also find a <b>tool for your field kit</b> on the bench. It comes with you into the lessons, and looking things up in it is never recorded.</p></div>'+
+   '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>When you reach the screening room, your floor plan is saved to your <b>NEO learner record</b>, in a spreadsheet that NEO keeps in its own Google Drive. Your supporting adult and NEO maths staff can see it, and they see exactly the floor plan you see. You can always see it too, in your <b>learner passport</b>.</p><p>Your comment at the end is only saved if you choose to share it.</p></details>'+
+   '<p>If moving between rooms feels uncomfortable, choose <b>Still mode</b>: rooms change with a gentle fade and nothing moves. <b>Flat view</b> shows just the questions, with no 3D at all. Every question has a <b>Read aloud</b> button. You can change any of these from the top bar at any time.</p>'+
+   '<div class="row">'+(saved?'<button class="go" id="contBtn">Continue where you left off</button><button class="soft" id="newBtn">Start a new expedition</button>':'<button class="go" id="enterBtn">Step inside</button><button class="soft" id="enterStillBtn">Step inside in Still mode</button><button class="soft" id="enterFlatBtn">Use Flat view</button>')+'</div>';
+  $('welcomePanel').innerHTML=h;
+  function go(){ $('welcome').classList.remove('show'); world.style.transition='none'; place(at); world.offsetWidth; world.style.transition=''; roomHud(); }
+  if(saved){ $('contBtn').onclick=function(){st=saved.st;at=saved.at;restoreScene();go();}; $('newBtn').onclick=function(){forget();st=fresh();at=0;go();}; }
+  else { $('enterBtn').onclick=go; $('enterStillBtn').onclick=function(){setStill(true);go();}; $('enterFlatBtn').onclick=function(){setFlat(true);go();}; }
+}
+place(0); welcome();
+$('kitBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) showKit(); };
+$('planBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) showPlan(); };
+$('stillBtn').onclick=function(){setStill(!still());};
+$('flatBtn').onclick=function(){setFlat(!flat());};
+$('comfortBtn').onclick=function(){var on=document.body.classList.toggle('comfort');this.setAttribute('aria-pressed',on);};
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if($('lockModal').classList.contains('show')) closeLock(); else { $('planModal').classList.remove('show'); $('kitModal').classList.remove('show'); } } });
+</script>
+</body>
+</html>
