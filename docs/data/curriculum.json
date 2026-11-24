@@ -1198,6 +1198,14 @@
           "file": "lessons/sets-and-venn-diagrams/01-sets-elements-and-set-notation.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "sv-02-union-intersection-complement",
+          "num": "Lesson 02",
+          "title": "Union, intersection and complement",
+          "file": "lessons/sets-and-venn-diagrams/02-union-intersection-and-complement.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

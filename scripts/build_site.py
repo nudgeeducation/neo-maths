@@ -182,6 +182,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Percentages_Ratio_Growth_Bounds/Lesson_10_Bounds_In_Problems/NEO_Maths_Y10_PercentagesRatio_Lesson_10_Bounds_In_Problems_v0.1.html",
     "sv-01-sets-elements-notation":
         "03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams/Lesson_01_Sets_Elements_Notation/NEO_Maths_Y10_SetsVenn_Lesson_01_Sets_Elements_Notation_v0.1.html",
+    "sv-02-union-intersection-complement":
+        "03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams/Lesson_02_Union_Intersection_Complement/NEO_Maths_Y10_SetsVenn_Lesson_02_Union_Intersection_Complement_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":
