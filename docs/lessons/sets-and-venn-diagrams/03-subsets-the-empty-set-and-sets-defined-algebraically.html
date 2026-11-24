@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Subsets, the empty set and sets defined algebraically</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Sets and Venn Diagrams &middot; <strong>Lesson 03 &mdash; Subsets, the empty set and sets defined algebraically</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.claim{font-size:1.4em;text-align:center;padding:6px 0;font-family:Georgia,'Times New Roman',serif}
+.machine{max-width:420px;margin:8px auto;background:#2f3b45;color:#fff;border-radius:14px;padding:10px 14px;text-align:center}
+.machine .rule{font-family:Georgia,'Times New Roman',serif;font-size:1.5em;margin:4px 0}
+.machine .out{background:#e8efe0;color:#1f2a33;border-radius:8px;padding:6px;font-family:'Courier New',monospace;font-size:1.2em;min-height:1.6em}
+.machine .out.jam{background:#fbe3dc;color:#7a2b1c}
+.exl{color:#7a2b1c;font-size:.95em;text-align:center}
+.mq{border-left:4px solid #c9b48a;background:#fffdf7;border-radius:8px;padding:8px 12px;margin:8px 0}
+.barsvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto}
+.barsvg .blab{font-family:Georgia,serif;font-size:15px;fill:#3f4d42}
+.barsvg .bval{font-family:Georgia,serif;font-size:16px;font-weight:700;fill:#1f2a33}
+.barsvg .ptag{font-family:Georgia,serif;font-size:14px;font-weight:700;fill:#b0412f}
+.psvg{width:100%;max-width:380px;height:auto;display:block;margin:6px auto}
+.psvg .plab{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.psvg .hil{stroke:#b0412f;stroke-width:3.5}
+.swatch{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0}
+.swatch i{display:block;flex:0 0 54px;width:54px;height:54px;border-radius:50%;border:3px solid #3f4d42;box-shadow:inset 0 -8px 0 rgba(0,0,0,.08)}
+.stepper{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;align-items:center;margin:6px 0}
+.stepper span{white-space:nowrap}
+.stepper button{min-width:40px}
+.stepper b{display:inline-block;min-width:56px;text-align:center}
+table.label{border-collapse:collapse;margin:8px auto;font-size:.95em;background:#fff}
+table.label .op{color:#b0412f}
+table.label caption{font-weight:700;padding:4px;text-align:left}
+table.label th,table.label td{border:1.5px solid #1f2a33;padding:5px 8px;text-align:right}
+table.label td:first-child,table.label th:first-child{text-align:left}
+table.label th{background:#f3f1ea;font-size:.85em}
+table.label .qm{color:#b0412f;font-weight:700}
+.labelwrap{overflow-x:auto}
+.bowl{max-width:300px;margin:6px auto;height:18px;border:2px solid #3f4d42;border-radius:9px;background:linear-gradient(90deg,#d9c08f 0 var(--fill,40%),#fff var(--fill,40%))}
+@media (max-width:520px){.bsvg .bl{font-size:16px}.bsvg .tk{font-size:14px}.mlsvg .tk{font-size:17px}.mlsvg .mkl{font-size:20px}.mlsvg .bl{font-size:19px}.graphsvg .tick{font-size:16px}.graphsvg .axl{font-size:20px}.graphsvg .note{font-size:16px}table.label{font-size:.85em}table.label th,table.label td{padding:4px 5px}.barsvg .blab{font-size:20px}.barsvg .bval{font-size:21px}.barsvg .ptag{font-size:19px}.psvg .plab{font-size:16px}}
+.graphsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.graphsvg .grid{stroke:#e2e7df;stroke-width:1}
+.graphsvg .ax{stroke:#1f2a33;stroke-width:2}
+.graphsvg .tick{font-family:Georgia,serif;font-size:12px;fill:#3f4d42}
+.graphsvg .axl{font-family:Georgia,serif;font-size:16px;font-weight:700;fill:#1f2a33}
+.graphsvg .crv{fill:none;stroke:#2f6db0;stroke-width:2.5}
+.graphsvg .pt{fill:#2f4f6b;stroke:#fff;stroke-width:1.5}
+.graphsvg .pt.cur{fill:#b0412f}
+.graphsvg .rect{stroke:#8f6a26;stroke-width:1.5}
+.graphsvg .r0{fill:rgba(242,193,78,.35)}.graphsvg .r1{fill:rgba(156,197,154,.4)}.graphsvg .r2{fill:rgba(231,163,196,.4)}
+.graphsvg .hiax{stroke:#b0412f;stroke-width:5}
+.graphsvg .note{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#b0412f}
+.graphsvg .target{fill:none;stroke:#b0412f;stroke-width:2.5;stroke-dasharray:4 3}
+.graphsvg .target.hit{fill:rgba(63,143,79,.35);stroke:#3f8f4f;stroke-dasharray:none}
+.psvg2{max-width:360px}
+table.ptable{border-collapse:collapse;margin:8px auto;background:#fff}
+table.ptable th,table.ptable td{border:1.5px solid #9fb0a3;padding:5px 9px;text-align:center;font-size:.95em}
+table.ptable th{background:#eef4e8;font-weight:600;font-size:.85em}
+table.ptable tr.cur td{background:#fff3d6}
+table.ptable .tt{background:#f6f2fb;font-weight:700}
+table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em}
+.twocol{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:flex-start}
+.twocol>div{flex:1 1 300px;min-width:0}
+.mlsvg{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.mlsvg .nl{stroke:#3f4d42;stroke-width:2}.mlsvg .nl.hund,.mlsvg .hundl{stroke:#1f2a33;stroke-width:3}
+.mlsvg .hundl{stroke-dasharray:4 3;stroke-width:2}
+.mlsvg .tk{font-family:Georgia,serif;font-size:12px;fill:#3f4d42}.mlsvg .tk.hund{font-weight:700;fill:#1f2a33}
+.mlsvg .link{stroke:#b0412f;stroke-width:2;stroke-dasharray:3 3}.mlsvg .mk{fill:#b0412f}
+.mlsvg .mkl{font-family:Georgia,serif;font-size:14px;font-weight:700;fill:#b0412f}
+.mlsvg .bar0{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}.mlsvg .bar1{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.5}.mlsvg .bar1.up{fill:#9cc59a;stroke:#3f5f45}.mlsvg .bar1.down{fill:#e7a3a3;stroke:#b0412f}
+.mlsvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.psvg .pb{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}.psvg .pb.on{stroke-width:3}
+.psvg .pup{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.5}.psvg .pdown{fill:#fff;stroke:#b0412f;stroke-width:1.5;stroke-dasharray:4 3}
+.psvg .hl{stroke:#b0412f;stroke-width:3.5}
+.psvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
+.two{color:#5c6b60}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.readline,.card p,.mq,.feedback,.pl,.readout{line-height:1.9}
+.bsvg{width:100%;max-width:440px;height:auto;display:block;margin:4px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.bsvg .bfore{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.bsvg .aftr{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.bsvg .chg.up{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.5}.bsvg .chg.down{fill:#fff;stroke:#b0412f;stroke-width:2;stroke-dasharray:5 3}
+.bsvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.bsvg .tk{font-family:Georgia,serif;font-size:11px;fill:#5c6b60}
+.bsvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
+.boards{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.boards>div{flex:1 1 300px;min-width:0}
+.care{border-left:4px solid #9cc59a;background:#f2f8ef;padding:8px 12px;border-radius:8px;margin:8px 0}
+.umach{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;max-width:560px;margin:8px auto;background:#2f3b45;color:#fff;border-radius:14px;padding:10px 12px}
+.umach .ubox{background:#e8efe0;color:#1f2a33;border-radius:10px;padding:6px 12px;min-width:110px;text-align:center}
+.umach .ubox small{display:block;font-size:.8em;color:#3f4d42}
+.umach .ubox b{font-family:Georgia,'Times New Roman',serif;font-size:1.35em}
+.umach .ubox.q b{color:#b0412f}
+.umach .uarrow{font-family:Georgia,'Times New Roman',serif;font-size:1.25em;text-align:center;min-width:90px}
+.umach .uarrow small{display:block;font-size:.7em;color:#cfd8cf}
+.umach.jam{background:#7a2b1c}
+.usvg{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.usvg .uo{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.usvg .ua{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.usvg .uup{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.5}
+.usvg .ugap{fill:#fff;stroke:#b0412f;stroke-width:2;stroke-dasharray:5 3}
+.usvg .uslip{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.5}
+.usvg .ublk{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.2}
+.usvg .ublk.up{fill:#9cc59a;stroke:#3f5f45}
+.usvg .ublk.on,.usvg .uo.on,.usvg .uslip.on{stroke:#b0412f;stroke-width:3.5}
+.usvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
+.usvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.usvg .bl.slip{fill:#8f6a26}
+.usvg .bk{font-family:Georgia,serif;font-size:11px;fill:#1f2a33}
+.tag{display:inline-block;background:#fff7e0;border:2px dashed #c9a24a;border-radius:10px;padding:8px 16px;font-family:Georgia,serif;font-size:1.2em;margin:6px auto}
+@media (max-width:520px){.usvg .bl{font-size:17px}.usvg .bk{font-size:13px}.umach .ubox{min-width:92px}}
+.racesvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.racesvg .ax{stroke:#1f2a33;stroke-width:2}.racesvg .grid{stroke:#e2e7df;stroke-width:1}
+.racesvg .tick{font-family:Georgia,serif;font-size:11px;fill:#3f4d42}.racesvg .axl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.racesvg .cs{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1}.racesvg .cc{fill:#9cc59a;stroke:#3f5f45;stroke-width:1}
+.racesvg .cx{fill:#f2c14e;stroke:#8f6a26;stroke-width:1}.racesvg .now{stroke:#b0412f;stroke-width:2.5}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:.9em;margin:4px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid #3f4d42}
+.racetab{max-height:260px;overflow:auto;margin:6px auto;max-width:560px}
+table.rt{border-collapse:collapse;width:100%;background:#fff;font-size:.92em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 6px;text-align:right}
+table.rt th{background:#eef4e8;font-size:.85em;text-align:center;position:sticky;top:0}
+table.rt td:first-child{text-align:center}
+table.rt tr.cur td{background:#fff3d6;font-weight:700}
+.offer{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:6px 0}
+.offer>div{flex:1 1 220px;max-width:280px;background:#fff7e0;border:2px dashed #c9a24a;border-radius:10px;padding:8px 12px;text-align:center}
+.psvg3{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.psvg3 .pb{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.2}.psvg3 .pi{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.2}.psvg3 .px{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.2}
+.psvg3 .on{stroke:#b0412f;stroke-width:3.5}
+.psvg3 .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}.psvg3 .bk{font-family:Georgia,serif;font-size:12px;fill:#1f2a33}
+@media (max-width:520px){.racesvg .tick{font-size:13px}.racesvg .axl{font-size:16px}.psvg3 .bl{font-size:16px}.psvg3 .bk{font-size:14px}table.rt{font-size:.82em}table.rt th,table.rt td{padding:3px 4px}}
+.models{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.models>div{flex:1 1 280px;min-width:0;background:#fff;border-radius:10px;padding:8px 10px;border-left:5px solid #2f6db0}
+.models>div.mB{border-left-color:#3f8f4f}
+.models h4{margin:2px 0 4px}
+.graphsvg .lA{fill:none;stroke:#2f6db0;stroke-width:2.5}.graphsvg .lB{fill:none;stroke:#3f8f4f;stroke-width:2.5}
+.graphsvg .pA{fill:#2f6db0;stroke:#fff;stroke-width:1.2}.graphsvg .pB{fill:#3f8f4f;stroke:#fff;stroke-width:1.2}
+.graphsvg .ovt{fill:none;stroke:#b0412f;stroke-width:2.5}
+table.mt{display:table;border-collapse:collapse;width:100%;background:#fff;font-size:.9em;margin:4px 0}
+table.mt th,table.mt td{border:1.5px solid #9fb0a3;padding:3px 5px;text-align:right}
+table.mt th{background:#eef4e8;font-size:.82em;text-align:center}
+table.mt td:first-child{text-align:center}
+.dsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.dsvg .da{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.2}.dsvg .db{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.2}.dsvg .on{stroke:#b0412f;stroke-width:3}
+.dsvg .ten{stroke:#2f4f6b;stroke-width:1.5;stroke-dasharray:4 3}
+.dsvg .bk{font-family:Georgia,serif;font-size:10px;fill:#1f2a33}.dsvg .bl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#1f2a33}
+.seq{font-family:Georgia,serif;font-size:1.35em;text-align:center;letter-spacing:.02em}
+@media (max-width:520px){.dsvg .bk{font-size:12px}.dsvg .bl{font-size:14px}table.mt{font-size:.82em}}
+.zsvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.zsvg .nl{stroke:#1f2a33;stroke-width:2}.zsvg .tk{stroke:#3f4d42;stroke-width:1}.zsvg .tk.maj{stroke-width:2}
+.zsvg .tl{font-family:Georgia,serif;font-size:12px;fill:#3f4d42}.zsvg .tl.r{font-weight:700;fill:#1f2a33;font-size:14px}
+.zsvg .band{fill:rgba(63,143,79,.28);stroke:#3f8f4f;stroke-width:1}.zsvg .band2{fill:rgba(47,109,176,.10);stroke:#9fb0c8;stroke-width:1}
+.zsvg .lo{fill:#3f8f4f;stroke:#1f2a33;stroke-width:1.5}.zsvg .hi{fill:#fff;stroke:#1f2a33;stroke-width:2}
+.zsvg .bl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#3f8f4f}
+.zsvg .pr{fill:#b0412f}.zsvg .pl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#b0412f}
+.zsvg .pf .on{stroke:#b0412f;stroke-width:3.5}
+.zsvg .seg{stroke:#b0412f;stroke-width:5;opacity:.8}
+.zw .stepper b{min-width:76px}
+.zw .stepper span{white-space:normal;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px}
+.zw .zacc .chip{margin:2px}
+@media (max-width:520px){.zw .zlab{flex-basis:100%;text-align:center;font-weight:600}}
+.cands{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+@media (max-width:520px){.zsvg .tl{font-size:15px}.zsvg .tl.r{font-size:17px}.zsvg .bl,.zsvg .pl{font-size:15px}}
+.bc .ins{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.bc .ins>div{flex:1 1 260px;min-width:0;background:#fff;border-radius:10px;padding:8px 10px;border-left:5px solid #2f6db0}
+.bc .ins>div.inB{border-left-color:#8f6a26}
+.bc .ins h4{margin:2px 0 4px}
+.bc .flip .chip.on{background:#2f6db0;color:#fff;border-color:#2f6db0}
+.bc .opbig{font-family:Georgia,serif;font-size:1.25em;text-align:center;margin:6px 0}
+.rsvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.rsvg .nl{stroke:#1f2a33;stroke-width:2}.rsvg .mk{fill:#9fb0a3;stroke:#1f2a33;stroke-width:1}.rsvg .mk.cur{fill:#2f6db0}.rsvg .mk.max{fill:#3f8f4f}.rsvg .mk.min{fill:#b0412f}
+.rsvg .rv{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:3 3}
+.rsvg .ml{font-family:Georgia,serif;font-size:11px;font-weight:700;fill:#1f2a33}.rsvg .ml.max{fill:#2f6b46}.rsvg .ml.min{fill:#7a2b1c}
+table.ct{display:table;border-collapse:collapse;width:100%;background:#fff;font-size:.92em;margin:6px 0}
+table.ct th,table.ct td{border:1.5px solid #9fb0a3;padding:4px 6px;text-align:center}
+table.ct th{background:#eef4e8;font-size:.85em}
+table.ct tr.cur td{background:#e5edf4}table.ct tr.max td:last-child{background:#e3f0df;font-weight:700}table.ct tr.min td:last-child{background:#fbe3dc;font-weight:700}
+.rope{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.rope .pc{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.2}.rope .pc.b{fill:#9cc59a;stroke:#3f5f45}.rope .on{stroke:#b0412f;stroke-width:3}
+.rope .bk{font-family:Georgia,serif;font-size:12px;fill:#1f2a33}.rope .bl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#1f2a33}
+@media (max-width:520px){.rsvg .ml{font-size:14px}.rope .bk,.rope .bl{font-size:14px}table.ct{font-size:.82em}}
+.hs2 .ins{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.hs2 .ins>div{flex:1 1 260px;min-width:0;background:#fff;border-radius:10px;padding:8px 10px;border-left:5px solid #2f6db0}
+.hs2 .ins>div.inB{border-left-color:#8f6a26}.hs2 .ins h4{margin:2px 0 4px}
+.hs2 .stepper span{white-space:normal;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px}.hs2 .stepper button{min-width:38px}
+.dsvg2{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.dsvg2 .nl{stroke:#1f2a33;stroke-width:2}.dsvg2 .band{fill:rgba(47,109,176,.25);stroke:#2f6db0;stroke-width:1}
+.dsvg2 .lo{fill:#2f6db0;stroke:#1f2a33;stroke-width:1.5}.dsvg2 .hi{fill:#fff;stroke:#1f2a33;stroke-width:2}
+.dsvg2 .th{stroke:#b0412f;stroke-width:2.5;stroke-dasharray:5 3}.dsvg2 .tl{font-family:Georgia,serif;font-size:12px;fill:#1f2a33}.dsvg2 .tl.th2{fill:#b0412f;font-weight:700}
+.dsvg2 .bd{stroke:#8f6a26;stroke-width:2;stroke-dasharray:3 3}.dsvg2 .on{stroke:#b0412f;stroke-width:4}
+table.ld{display:table;border-collapse:collapse;width:100%;background:#fff;font-size:.92em;margin:6px 0}
+table.ld th,table.ld td{border:1.5px solid #9fb0a3;padding:4px 6px;text-align:center}table.ld th{background:#eef4e8;font-size:.85em}
+table.ld tr.yes td:last-child{background:#e3f0df;font-weight:700}table.ld tr.no td:last-child{background:#fbe3dc}
+.verdict{font-weight:700;text-align:center;padding:6px;border-radius:8px;margin:6px 0}.verdict.yes{background:#e3f0df;color:#2f6b46}.verdict.no{background:#fbe3dc;color:#7a2b1c}.verdict.unsure{background:#fff1cf;color:#6b5320}
+@media (max-width:520px){.dsvg2 .tl{font-size:15px}table.ld{font-size:.82em}}
+.ss .rules{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+.ss .uni{position:relative;border:3px solid #2f4f6b;border-radius:6px;background:#fbfaf5;padding:30px 10px 10px;margin:8px auto;max-width:600px}
+.ss .uni>.ulab{position:absolute;left:8px;top:4px;font-family:Georgia,serif;font-weight:700;font-size:1.2em;color:#2f4f6b}
+.ss .ring{border:3px solid #b0412f;border-radius:50%;background:rgba(176,65,47,.08);min-height:150px;max-width:380px;margin:0 auto 10px;padding:30px 24px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-content:center;position:relative}
+.ss .ring>.rlab{position:absolute;left:50%;top:6px;transform:translateX(-50%);font-family:Georgia,serif;font-weight:700;color:#b0412f}
+.ss .ring .emp{font-family:Georgia,serif;color:#7a8a80;font-size:1.3em}
+.ss .rest{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ss .tile{min-width:42px;height:42px;border-radius:8px;border:2px solid #4a5a66;background:#fff;font-family:Georgia,serif;font-size:1.1em;font-weight:700;cursor:pointer;padding:0 6px}
+.ss .ring .tile{background:#fbe3dc;border-color:#b0412f}
+.ss .tile.sel{box-shadow:0 0 0 3px #f2c14e}
+.ss .tile:disabled{cursor:default;opacity:1;color:inherit}
+.ss .readout2{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0;line-height:1.7}
+.ss .mode .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.mm{font-family:Georgia,serif;font-size:1.25em;text-align:center;margin:8px 0}
+.mm .obj{display:inline-block;min-width:60px;padding:6px 12px;border:2px solid #4a5a66;border-radius:8px;background:#fff;font-weight:700}
+.wd{font-family:Georgia,serif;font-size:1.2em;text-align:center;margin:8px 0}
+.fsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.fsvg .fc{fill:#fff;stroke:#4a5a66;stroke-width:1.5}.fsvg .fc.on{stroke:#b0412f;stroke-width:3.5}
+.fsvg .ft{font-family:Georgia,serif;font-size:15px;font-weight:700;fill:#1f2a33}
+.fsvg .arc{fill:none;stroke:#2f6db0;stroke-width:2}.fsvg .arc.on{stroke:#b0412f;stroke-width:3.5}
+.fsvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.same .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.same .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.same .target{font-family:Georgia,serif;font-size:1.35em;text-align:center;margin:6px 0}
+@media (max-width:520px){.ss .tile{min-width:38px;height:38px}.ss .ring{padding:30px 10px}.fsvg .ft{font-size:17px}}
+.vsvg{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border-radius:10px;cursor:pointer;touch-action:manipulation}
+.vsvg .uni{fill:none;stroke:#2f4f6b;stroke-width:2.5}.vsvg .ca{fill:none;stroke:#b0412f;stroke-width:2.5}.vsvg .cb{fill:none;stroke:#2f6db0;stroke-width:2.5}
+.vsvg .lit{fill:#f2c14e;opacity:.6}
+.vsvg .el{font-family:Georgia,serif;font-size:15px;font-weight:700;fill:#1f2a33;pointer-events:none}
+.vsvg .lab{font-family:Georgia,serif;font-size:17px;font-weight:700;font-style:italic;pointer-events:none}
+.vsvg .ul{font-family:Georgia,serif;font-size:16px;font-weight:700;fill:#2f4f6b;pointer-events:none}
+.vsvg .cnt{font-family:Georgia,serif;font-size:20px;font-weight:700;fill:#1f2a33;pointer-events:none}
+.rl .pairs,.rl .cards{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+.rl .mode .chip.on,.rl .rbtn .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.rl .card2{font-family:Georgia,serif;font-size:1.5em;text-align:center;margin:6px 0}
+.rl .rbtn{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.notes2{font-family:Georgia,serif;font-size:1.1em;text-align:center;line-height:1.7;margin:6px 0}
+.pi .next{font-family:Georgia,serif;font-size:1.6em;text-align:center;margin:6px 0}
+.ao .word{font-family:Georgia,serif;font-size:1.25em;text-align:center;margin:8px 0}
+.cr .stepper b{min-width:44px}
+@media (max-width:520px){.vsvg .el{font-size:17px}.vsvg .lab{font-size:19px}.vsvg .cnt{font-size:22px}}
+.dc .rulebig{font-family:Georgia,'Times New Roman',serif;font-size:1.35em;text-align:center;margin:6px 0}
+.dc .dctl{display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:center;align-items:center;margin:6px 0}
+.dc .dctl .grp{white-space:nowrap}
+.dc .dctl b{display:inline-block;min-width:34px;text-align:center;font-family:Georgia,serif;font-size:1.25em}
+.dc .dctl .sym{font-family:Georgia,serif;font-size:1.25em;min-width:48px}
+.dc .dctl .xv{font-family:Georgia,serif;font-size:1.35em}
+.nlsvg{width:100%;max-width:580px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.nlsvg .nl{stroke:#1f2a33;stroke-width:2}.nlsvg .tk{stroke:#3f4d42;stroke-width:1.5}
+.nlsvg .tl{font-family:Georgia,serif;font-size:13px;fill:#3f4d42}
+.nlsvg .seg{stroke:#3f8f4f;stroke-width:7;opacity:.35}
+.nlsvg .ep{stroke:#1f2a33;stroke-width:2}.nlsvg .ep.in{fill:#3f8f4f}.nlsvg .ep.open{fill:#fff}
+.vsvg .cbb{fill:none;stroke:#2f6db0;stroke-width:2.5}
+.nlsvg .dot{fill:#b0412f;stroke:#fff;stroke-width:1.5}
+.ac .tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ac .tiles .chip.on{background:#b0412f;color:#fff;border-color:#b0412f}
+.ac .ask{font-family:Georgia,serif;font-size:1.35em;text-align:center;margin:6px 0}
+.ns .sets{font-family:Georgia,serif;font-size:1.15em;text-align:center;line-height:1.8;margin:6px 0}
+.ns .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ns .why{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:8px 12px;border-radius:8px;margin:8px 0}
+.ns .ph{text-align:center;color:#5c6b60;font-style:italic;margin:10px 0}
+.sc .tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.sc .tiles .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.sc .found{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0;min-height:2em}
+.sc .found span{font-family:Georgia,serif;background:#fff;border:1.5px solid #9fb0a3;border-radius:8px;padding:2px 8px}
+.ssvg{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.ssvg .bx{fill:#fff;stroke:#9fb0a3;stroke-width:1.5}.ssvg .hd{fill:#eef4e8;stroke:#3f5f45;stroke-width:1.5}
+.ssvg .tx{font-family:Georgia,serif;font-size:14px;fill:#1f2a33}.ssvg .th{font-family:Georgia,serif;font-size:14px;font-weight:700;fill:#1f2a33}
+.ssvg .ar{stroke:#9fb0a3;stroke-width:1.5}
+.ssvg .on{stroke:#b0412f;stroke-width:3.5}
+@media (max-width:520px){.dc .rulebig{font-size:1.12em}.nlsvg .tl{font-size:19px}.ssvg .tx,.ssvg .th{font-size:16px}.dc .dctl .sym{min-width:44px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Sets and Venn Diagrams</h1>
+<h2>Subsets, the empty set and sets defined algebraically</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Can a set hide inside another, or be empty?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — sets described by a rule, sets inside sets, and the set with nothing in it.</p>
+<p><b>Stepping Stone:</b> understand <b>subsets</b> (<i>A</i> ⊂ <i>B</i>) and the <b>empty set</b>, ∅, and list sets <b>defined algebraically</b>, such as {<i>x</i> : <i>x</i> is an integer, −2 ≤ <i>x</i> &lt; 3}.</p>
+<p><b>You will need:</b> Lessons 1 and 2, inequalities such as 2 &lt; <i>x</i> ≤ 6, and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 7 · Move 11 · Reflect 15 · Create 7 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_SetsVenn_Lesson_03_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_SetsVenn_Lesson_03_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw a number line from −6 to 10. Mark the integers that fit a rule, with an open circle where an end is left out.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Which integers fit?</summary>
+<p><b>Start here:</b> an inequality is a rule. Tap every integer that fits it, then check. If none fits, say so.</p>
+<p><b>What you are trying to notice:</b> &lt; leaves the end number out; ≤ lets it in. Sometimes nothing fits at all.</p>
+<div class="toolbox ac">
+<h3 style="margin-top:0">🔍 Which integers fit?</h3>
+<div id="acCount" class="small" style="text-align:center"></div>
+<p class="ask" id="acQ"></p>
+<div id="acFig"></div>
+<div class="tiles" id="acTiles"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="acCheck()">✅ Check</button><button onclick="acNone()">No integer fits</button><button onclick="acNext()">Next rule →</button></div>
+<div id="acRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0"><b>{<i>x</i> : <i>x</i> is an integer, 2 &lt; <i>x</i> ≤ 6}</b> is a set <b>defined algebraically</b>. Read it as “the set of <i>x</i> <b>such that</b> <i>x</i> is an integer and 2 &lt; <i>x</i> ≤ 6”. The colon means “such that”. Listed, it is {3, 4, 5, 6}.</p>
+<p style="margin:6px 0"><b><i>A</i> ⊂ <i>B</i></b>, read “<i>A</i> is a <b>subset</b> of <i>B</i>”, means <b>every</b> element of <i>A</i> is also in <i>B</i>. On a Venn diagram, <i>A</i>'s circle sits inside <i>B</i>'s.</p>
+<p style="margin:6px 0">The <b>empty set</b>, ∅, has no elements, so <i>n</i>(∅) = 0. A rule that nothing fits gives ∅.</p>
+</div>
+<p>Today's main activity, <b>Inside, overlapping or apart?</b>, is in <b>Reflection</b>.</p>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — The Set-Builder Decoder</summary>
+<p><b>What to do:</b> change the numbers at each end with −1 and +1, and tap a symbol to switch it between &lt; and ≤. Watch the number line and the list. Say the rule aloud: “the set of <i>x</i> such that …”.</p>
+<p><b>What you are trying to notice:</b> an open circle leaves an end out and a filled circle lets it in; moving an end by one, or switching its symbol, adds or removes one integer.</p>
+<div class="toolbox dc"><h3 style="margin-top:0">🔓 The Set-Builder Decoder</h3><div id="dcMv"></div></div>
+<div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div><div id="zqIn" class="buttonrow"><input id="zqA" class="numin neo-mathfield" style="max-width:260px" aria-label="Your answer" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div></div>
+<div id="zqRead" class="feedback" aria-live="polite"></div>
+<p><b>Carry this forward:</b> to list a set defined algebraically, find the first and last integers that fit, then list everything between. If nothing fits, the set is ∅.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Inside, overlapping or apart? (today's main activity)</summary>
+<p><b>What to do:</b> read the two sets. Decide how they sit together: is one inside the other, do they overlap, or are they apart? Then show <b>why</b>. The Venn diagram appears when you decide.</p>
+<p><b>What you are trying to notice:</b> <i>A</i> ⊂ <i>B</i> needs <b>every</b> element of <i>A</i> to be in <i>B</i>, and one element outside is enough to show it is not. When <i>A</i> ⊂ <i>B</i>, <i>A</i> ∩ <i>B</i> = <i>A</i> and <i>A</i> ∪ <i>B</i> = <i>B</i>.</p>
+<div class="toolbox ns">
+<h3 style="margin-top:0">🪆 Inside, overlapping or apart?</h3>
+<div id="nsCount" class="small" style="text-align:center"></div>
+<div id="nsSets" class="sets"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="nsLists()">📋 Show the lists</button></div>
+<div id="nsList" class="sets" style="display:none"></div>
+<div id="nsAsk"></div>
+<div id="nsFig"></div>
+<div id="nsRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="nsNext()">Next pair →</button></div>
+</div>
+<p><b>Carry this forward:</b> to test <i>A</i> ⊂ <i>B</i>, check every element of <i>A</i>. To show it is <b>not</b> true, one element of <i>A</i> outside <i>B</i> is enough. The empty set is a subset of every set: it has no element that could be outside.</p>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Rule writer</summary>
+<p><b>What to do:</b> set the rule to make each set in the brief, then check. There is often more than one rule that works.</p>
+<p><b>What you are trying to notice:</b> different rules can describe the same set; a set is decided by its elements, not by how it is written.</p>
+<div class="toolbox dc"><h3 style="margin-top:0">✍️ Rule writer</h3><div id="dcCr"></div></div>
+<div class="toolbox sc">
+<h3 style="margin-top:0"><span class="stretch">stretch</span> 🧮 How many subsets?</h3>
+<p class="small" style="text-align:center">Choose a set. Tap letters to build a subset (tap none for ∅), then add it. Can you find them all?</p>
+<div class="buttonrow" style="justify-content:center" id="scSize"></div>
+<div class="tiles" id="scTiles"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="scAdd()">➕ Add this subset</button><button onclick="scReset()">Start again</button></div>
+<div id="scRead" class="feedback" aria-live="polite"></div>
+<div class="found" id="scFound"></div>
+<p id="scTally" class="notes2"></p>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why does {<i>a</i>, <i>b</i>, <i>c</i>} have twice as many subsets as {<i>a</i>, <i>b</i>}?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>Some groups sit completely inside others. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> think of a set inside a set: a favourite song inside a playlist, inside all your music. Which is the subset?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: practical.</b> Today the mathematics feeds how you read a range.</p>
+<div class="card">
+<p><b>What it feeds:</b> today feeds <b>reading ranges exactly</b>. “Under 16” on a ticket means age &lt; 16, so a 16-year-old does not fit; “16 and over” means age ≥ 16. A price filter “£10 to £20” might mean 10 ≤ price ≤ 20 or 10 ≤ price &lt; 20, and the difference decides whether a £20 item appears. Asking “is the end included?” is the same question as &lt; or ≤.</p>
+<p class="small">Carry one idea forward: is the end in, or out?</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — My sets inside sets</summary>
+<p><b>Your task:</b> choose a universal set ℰ and two sets <i>A</i> and <i>B</i> with <i>A</i> ⊂ <i>B</i>. Define at least one of them algebraically, as {<i>x</i> : …}.</p>
+<ul>
+<li>List both sets and draw the Venn diagram, with <i>A</i>'s circle inside <i>B</i>'s and every element in its region.</li>
+<li>Explain why <i>A</i> ⊂ <i>B</i>, and give an element that shows <i>B</i> is not a subset of <i>A</i>.</li>
+<li>Write a rule in set-builder notation that gives ∅.</li>
+<li><span class="stretch">stretch</span> Write two different rules for the same set, and explain why they give the same elements.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_VENN_SUBSETS_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Lists some integers that fit a rule.</td><td>Knows that ⊂ means “inside”.</td><td>Explains that <i>A</i> ⊂ <i>B</i> means every element of <i>A</i> is in <i>B</i>.</td><td>Explains why ∅ is a subset of every set.</td></tr>
+<tr><td><b>Application</b></td><td>Lists a set from a rule with one end wrong.</td><td>Lists sets defined algebraically correctly.</td><td>Decides subset or not, with a counterexample when not.</td><td>Writes rules for given sets, including ∅.</td></tr>
+<tr><td><b>Communication</b></td><td>Draws two circles.</td><td>Draws <i>A</i>'s circle inside <i>B</i>'s.</td><td>Reads {<i>x</i> : …} aloud correctly and uses <i>subset</i> precisely.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one element.</td><td>Checks the end numbers of each rule.</td><td>Checks every element of <i>A</i> against <i>B</i>.</td><td>Spots and fixes an end that should be left out.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Subsets, the empty set and sets defined algebraically — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">List elements in any order, separated by commas. For the empty set, use the <b>∅</b> key in the <b>√ Symbols</b> palette.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw a number line, or the Venn diagram, first. Mark the end numbers carefully.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["{","}",",","∅","⊂","∪","∩",":","≤","<"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function money(v){ var s=String(v).trim().toLowerCase(); var m=s.match(/^(\d+(?:\.\d+)?)\s*(p|pence)$/); if(m) return parseFloat(m[1])/100; return num(s.replace(/^£\s*/,'').replace(/\s*(pounds?|£)\s*$/,'')); }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function I(t){ return '<i>'+t+'</i>'; }
+
+/* ---------------- Reading sets (QA gate 6a) ---------------- */
+// The empty set: ∅, { }, {}, empty, the empty set, none, nothing, no elements
+function isEmptySet(v){ return /^\s*(∅|\{\s*\}|(the\s+)?empty(\s+set)?|none|nothing|no\s+elements?)\s*$/i.test(String(v)); }
+// A list of whole numbers in any order, with commas, spaces, "and" or curly brackets; repeats ignored; number words allowed.
+// Returns a sorted array, [] for the empty set, or null if it cannot be read.
+function setOf(v){ if(isEmptySet(v)) return [];
+  var s=String(v).toLowerCase().replace(/^\s*[a-z]\s*=\s*/,'').replace(/[{}()\[\]]/g,' ').replace(/\band\b|&/g,',').trim(); if(!s) return null;
+  var parts=/,|;/.test(s)?s.split(/[,;]+/):s.split(/\s+/), out=[];
+  for(var i=0;i<parts.length;i++){ var p=parts[i].trim(); if(!p) continue; var n=/^-?\d+$/.test(p)?parseInt(p,10):num(p); if(isNaN(n)||n!==Math.round(n)) return null; if(out.indexOf(n)<0) out.push(n); }
+  return out.length?out.sort(function(a,b){ return a-b; }):null; }
+function sameSet(a,b){ return !!a&&a.length===b.length&&a.every(function(x,i){ return x===b[i]; }); }
+function neg(n){ return n<0?'−'+(-n):String(n); }
+function showSet(L){ return L.length?'{'+L.map(neg).join(', ')+'}':'∅'; }
+
+function isPrime(n){ if(n<2) return false; for(var d=2;d*d<=n;d++) if(n%d===0) return false; return true; }
+function range(n){ var u=[]; for(var i=1;i<=n;i++) u.push(i); return u; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x');
+// set-builder text for a two-ended rule on the integers
+function ruleOf(a,sa,sb,b,kind){ return '{'+X+' : '+X+' is '+(kind||'an integer')+', <span style="white-space:nowrap">'+neg(a)+' '+sa+' '+X+' '+sb+' '+neg(b)+'}</span>'; }
+function fits(v,a,sa,sb,b){ return (sa==='<'?v>a:v>=a)&&(sb==='<'?v<b:v<=b); }
+function intsIn(a,sa,sb,b){ var out=[]; for(var v=a;v<=b;v++) if(fits(v,a,sa,sb,b)) out.push(v); return out; }
+function whyNot(v,a,sa,sb,b){ if(!(sa==='<'?v>a:v>=a)) return neg(a)+' '+sa+' '+X+' needs '+X+' to be '+(sa==='<'?'greater than ':'at least ')+neg(a);
+  return X+' '+sb+' '+neg(b)+' needs '+X+' to be '+(sb==='<'?'less than ':'at most ')+neg(b); }
+
+/* ---------------- A number line (reusable) ---------------- */
+var NL={lo:-6,hi:10,x0:26,dx:33};
+function nlx(v){ return NL.x0+(v-NL.lo)*NL.dx; }
+// o: {a,sa,sb,b} draws the rule; o.dots: integers to mark
+function numLine(o){ var g='', y=40;
+  g+='<line x1="'+(nlx(NL.lo)-16)+'" y1="'+y+'" x2="'+(nlx(NL.hi)+16)+'" y2="'+y+'" class="nl"/>';
+  if(o.a!=null&&o.a<o.b) g+='<line x1="'+nlx(Math.max(o.a,NL.lo-0.4))+'" y1="'+y+'" x2="'+nlx(Math.min(o.b,NL.hi+0.4))+'" y2="'+y+'" class="seg"/>';
+  for(var v=NL.lo;v<=NL.hi;v++) g+='<line x1="'+nlx(v)+'" y1="'+(y-7)+'" x2="'+nlx(v)+'" y2="'+(y+7)+'" class="tk"/><text x="'+nlx(v)+'" y="'+(y+30)+'" text-anchor="middle" class="tl">'+neg(v)+'</text>';
+  if(o.a!=null) [[o.a,o.sa],[o.b,o.sb]].forEach(function(e){ if(e[0]>=NL.lo&&e[0]<=NL.hi) g+='<circle cx="'+nlx(e[0])+'" cy="'+y+'" r="10" class="ep '+(e[1]==='<'?'open':'in')+'" data-e="'+e[0]+'"/>'; });
+  (o.dots||[]).forEach(function(v){ if(v>=NL.lo&&v<=NL.hi) g+='<circle cx="'+nlx(v)+'" cy="'+y+'" r="6" class="dot" data-v="'+v+'"/>'; });
+  return '<svg class="nlsvg" viewBox="0 0 580 84" role="img" aria-label="'+(o.aria||'A number line from −6 to 10')+'">'+g+'</svg>'; }
+
+/* ---------------- CONNECTION: which integers fit? ---------------- */
+var AC=[{a:2,sa:'<',sb:'≤',b:6},{a:-3,sa:'≤',sb:'<',b:1},{a:-1,sa:'<',sb:'<',b:0}];
+var ac={i:0,sel:{}}; var AC_T=[-4,-3,-2,-1,0,1,2,3,4,5,6,7,8];
+function acR(){ return AC[ac.i]; }
+function acRule(R){ return neg(R.a)+' '+R.sa+' '+X+' '+R.sb+' '+neg(R.b); }
+function acRender(){ var R=acR(), sel=Object.keys(ac.sel).map(Number).sort(function(p,q){ return p-q; });
+  document.getElementById('acCount').textContent='Rule '+(ac.i+1)+' of '+AC.length;
+  document.getElementById('acQ').innerHTML='Which integers fit '+acRule(R)+'?';
+  document.getElementById('acFig').innerHTML=numLine({dots:sel,aria:'Number line showing the integers you have chosen'});
+  document.getElementById('acTiles').innerHTML=AC_T.map(function(v){ return '<button class="chip'+(ac.sel[v]?' on':'')+'" data-v="'+v+'" onclick="acTap('+v+')">'+neg(v)+'</button>'; }).join(''); }
+function acTap(v){ if(ac.sel[v]) delete ac.sel[v]; else ac.sel[v]=true; acRender(); }
+function acCheck(){ var R=acR(), want=intsIn(R.a,R.sa,R.sb,R.b), sel=Object.keys(ac.sel).map(Number).sort(function(p,q){ return p-q; });
+  if(!sel.length){ msg('acRead','warn','Tap the integers that fit, or choose “No integer fits”.'); return; }
+  var extra=sel.filter(function(v){ return want.indexOf(v)<0; }), miss=want.filter(function(v){ return sel.indexOf(v)<0; });
+  if(!extra.length&&!miss.length){ document.getElementById('acFig').innerHTML=numLine({a:R.a,sa:R.sa,sb:R.sb,b:R.b,dots:want,aria:'Number line showing the rule and the integers that fit'});
+    msg('acRead','good','✓ Yes: {'+X+' : '+X+' is an integer, '+acRule(R)+'} = '+showSet(want)+'. '+(R.sa==='<'?neg(R.a)+' is left out (open circle); ':neg(R.a)+' is in (filled circle); ')+(R.sb==='<'?neg(R.b)+' is left out.':neg(R.b)+' is in.')); return; }
+  var t=[]; if(extra.length) t.push(neg(extra[0])+' does not fit: '+whyNot(extra[0],R.a,R.sa,R.sb,R.b)+'.'); if(miss.length) t.push('Something is missing: check '+(miss.indexOf(want[0])>=0||miss.indexOf(want[want.length-1])>=0?'the end numbers.':'the integers in between.'));
+  if(!want.length) t=['No integer fits this rule. '+t[0]];
+  msg('acRead','warn','Not yet. '+t.join(' ')); }
+function acNone(){ var R=acR(), want=intsIn(R.a,R.sa,R.sb,R.b);
+  if(!want.length){ ac.sel={}; document.getElementById('acFig').innerHTML=numLine({a:R.a,sa:R.sa,sb:R.sb,b:R.b,dots:[],aria:'Number line showing the rule: no integer fits'});
+    msg('acRead','good','✓ Yes: there is no integer between '+neg(R.a)+' and '+neg(R.b)+'. {'+X+' : '+X+' is an integer, '+acRule(R)+'} = ∅, the <b>empty set</b>.'); }
+  else msg('acRead','warn','Not quite: '+neg(want[0])+' fits '+acRule(R)+'.'); }
+function acNext(){ ac.i=(ac.i+1)%AC.length; ac.sel={}; document.getElementById('acRead').style.display='none'; acRender(); }
+
+/* ---------------- The Set-Builder Decoder (reusable; two instances) ---------------- */
+var DC={};
+function makeDecoder(key,host,st){
+  var S={key:key,a:st.a,sa:st.sa,sb:st.sb,b:st.b,briefs:st.briefs||null,i:0,done:[],fb:''};
+  S.L=function(){ return intsIn(S.a,S.sa,S.sb,S.b); };
+  S.step=function(k,d){ var v=S[k]+d; if(v<-5||v>9) return false; S[k]=v; S.fb=''; S.draw(); return true; };
+  S.flip=function(k){ S[k]=S[k]==='<'?'≤':'<'; S.fb=''; S.draw(); };
+  S.set=function(a,sa,sb,b){ S.a=a; S.sa=sa; S.sb=sb; S.b=b; S.fb=''; S.draw(); };
+  var Pp='DC.'+key+'.';
+  host.innerHTML='<div class="rulebig"></div><div class="fig"></div>'
+   +'<div class="dctl"><span class="grp"><button onclick="'+Pp+'step(\'a\',-1)" aria-label="left number down one">−1</button> <b class="va"></b> <button onclick="'+Pp+'step(\'a\',1)" aria-label="left number up one">+1</button></span>'
+   +'<span class="grp"><button class="chip sym fa" onclick="'+Pp+'flip(\'sa\')" aria-label="switch the left symbol"></button> <span class="xv">'+X+'</span> <button class="chip sym fb" onclick="'+Pp+'flip(\'sb\')" aria-label="switch the right symbol"></button></span>'
+   +'<span class="grp"><button onclick="'+Pp+'step(\'b\',-1)" aria-label="right number down one">−1</button> <b class="vb"></b> <button onclick="'+Pp+'step(\'b\',1)" aria-label="right number up one">+1</button></span></div>'
+   +'<div class="notes2" aria-live="polite"></div>'
+   +(S.briefs?'<div class="small bc" style="text-align:center"></div><div class="mq bq"></div><div class="buttonrow" style="justify-content:center"><button onclick="'+Pp+'check()">✅ Check</button><button onclick="'+Pp+'next()">Next brief →</button></div><p class="readline fbk" style="text-align:center"></p>':'');
+  var q=function(c){ return host.querySelector(c); };
+  S.check=function(){ var B=S.briefs[S.i], why=B.test(S);
+    if(why) S.fb='<span style="color:#7a2b1c">Not yet. '+why+'</span>'; else { S.done[S.i]=true; S.fb='<span style="color:#2f6b46">✓ '+B.done+'</span>'; } S.draw(); };
+  S.next=function(){ S.i=(S.i+1)%S.briefs.length; S.fb=''; S.draw(); };
+  S.draw=function(){ var L=S.L();
+    q('.rulebig').innerHTML=ruleOf(S.a,S.sa,S.sb,S.b);
+    q('.fig').innerHTML=numLine({a:S.a,sa:S.sa,sb:S.sb,b:S.b,dots:L,aria:'Number line: '+(S.sa==='<'?'open':'filled')+' circle at '+neg(S.a)+', '+(S.sb==='<'?'open':'filled')+' circle at '+neg(S.b)+'; integers that fit: '+(L.length?L.map(neg).join(', '):'none')});
+    q('.va').textContent=neg(S.a); q('.vb').textContent=neg(S.b); q('.fa').textContent=S.sa; q('.fb').textContent=S.sb;
+    q('.notes2').innerHTML='“the set of '+X+' such that '+X+' is an integer, '+X+' is '+(S.sa==='<'?'greater than ':'greater than or equal to ')+neg(S.a)+' and '+(S.sb==='<'?'less than ':'less than or equal to ')+neg(S.b)+'”<br>= '+showSet(L)+' &nbsp; '+I('n')+' = '+L.length+(L.length?'':' &nbsp; <span class="small">(no integer fits: the empty set)</span>');
+    if(S.briefs){ q('.bc').innerHTML='Brief '+(S.i+1)+' of '+S.briefs.length+(S.done[S.i]?' ✓':''); q('.bq').innerHTML=S.briefs[S.i].q; q('.fbk').innerHTML=S.fb; } };
+  S.draw(); DC[key]=S; return S; }
+function setDiff(L,want){ var extra=L.filter(function(v){ return want.indexOf(v)<0; }), miss=want.filter(function(v){ return L.indexOf(v)<0; });
+  return 'You have '+showSet(L)+'. '+(extra.length?neg(extra[0])+' should not be in it. ':'')+(miss.length?neg(miss[0])+' is missing. ':''); }
+var BRIEFS=[
+ {q:'Make {−2, −1, 0, 1, 2}.',test:function(S){ return sameSet(S.L(),[-2,-1,0,1,2])?'':setDiff(S.L(),[-2,-1,0,1,2]); },done:'That rule gives {−2, −1, 0, 1, 2}.'},
+ {q:'Make {3, 4, 5, 6} with &lt; at <b>both</b> ends.',test:function(S){ if(S.sa!=='<'||S.sb!=='<') return 'Use &lt; at both ends: tap a ≤ to switch it.'; return sameSet(S.L(),[3,4,5,6])?'':setDiff(S.L(),[3,4,5,6])+'With &lt;, the end numbers are left out.'; },done:'2 &lt; '+X+' &lt; 7: 2 and 7 are left out.'},
+ {q:'Make {3, 4, 5, 6} again, with ≤ at <b>both</b> ends.',test:function(S){ if(S.sa!=='≤'||S.sb!=='≤') return 'Use ≤ at both ends.'; return sameSet(S.L(),[3,4,5,6])?'':setDiff(S.L(),[3,4,5,6]); },done:'3 ≤ '+X+' ≤ 6 and 2 &lt; '+X+' &lt; 7 are different rules for the same set.'},
+ {q:'Make the empty set, ∅, with &lt; at both ends and the left number smaller than the right.',test:function(S){ if(S.sa!=='<'||S.sb!=='<') return 'Use &lt; at both ends.'; if(S.a>=S.b) return 'Keep the left number smaller than the right.'; return S.L().length?setDiff(S.L(),[])+'Bring the ends closer together.':''; },done:'No integer lies strictly between two neighbouring integers, so the set is ∅.'},
+ {q:'Make a set with exactly <b>one</b> element, using &lt; at one end and ≤ at the other.',test:function(S){ if(S.sa===S.sb) return 'Use one &lt; and one ≤.'; return S.L().length===1?'':'You have '+I('n')+' = '+S.L().length+'.'; },done:'One element: '+I('n')+' = 1.'},
+ {q:'<span class="stretch">stretch</span> Make a set '+I('B')+' with {1, 2} ⊂ '+I('B')+', '+I('n')+'('+I('B')+') = 5 and 0 ∉ '+I('B')+'.',test:function(S){ var L=S.L(); if(L.indexOf(1)<0||L.indexOf(2)<0) return 'Every element of {1, 2} must be in '+I('B')+'.'; if(L.indexOf(0)>=0) return '0 must not be in '+I('B')+'.'; return L.length===5?'':'You have '+I('n')+'('+I('B')+') = '+L.length+'.'; },done:I('B')+' = {1, 2, 3, 4, 5}: it has to start at 1 to leave out 0 and keep 1.'}];
+
+/* ---------------- MOVEMENT: questions ---------------- */
+var ZQ=[
+ {q:'List {'+X+' : '+X+' is an integer, −1 &lt; '+X+' ≤ 3}.',set:[0,1,2,3],hint:'Which is the first integer greater than −1?',slips:{'-1,0,1,2,3':'−1 &lt; '+X+' means '+X+' is greater than −1, so −1 is left out.','0,1,2':'≤ 3 lets 3 in.'}},
+ {q:'Find '+I('n')+'({'+X+' : '+X+' is an integer, −3 ≤ '+X+' ≤ 3}).',ans:7,hint:'List them: −3, −2, … , 3.',slips:{6:'Count 0 as well: −3, −2, −1, 0, 1, 2, 3.',5:'Both ends are in: ≤ includes them.'}},
+ {q:'List {'+X+' : '+X+' is an integer, 6 &lt; '+X+' &lt; 7}.',set:[],hint:'Is there an integer between 6 and 7?',slips:{'6,7':'&lt; leaves out both 6 and 7.','6':'6 &lt; '+X+' leaves out 6.','7':X+' &lt; 7 leaves out 7.'}},
+ {q:'Which rule gives the same set as {'+X+' : '+X+' is an integer, 1 ≤ '+X+' &lt; 5}?',kind:'chip',chips:['1 &lt; '+X+' ≤ 5','0 ≤ '+X+' ≤ 5','0 &lt; '+X+' ≤ 4'],ans:2,hint:'List {1, 2, 3, 4} first, then test each rule.'},
+ {q:'List {'+X+' : '+X+' is a positive integer, '+X+' &lt; 4}.',set:[1,2,3],hint:'The positive integers start at 1.',slips:{'0,1,2,3':'0 is not positive.','1,2,3,4':X+' &lt; 4 leaves out 4.'}},
+ {q:'List {'+X+' : '+X+' is an even integer, 1 &lt; '+X+' ≤ 9}.',set:[2,4,6,8],hint:'Which integers from 2 to 9 are even?',slips:{'2,3,4,5,6,7,8,9':'Only the even integers belong.','2,4,6,8,10':'≤ 9 stops at 9.'}}];
+var zq={q:0};
+function zqRender(){ var n=ZQ.length;
+  if(zq.q>=n){ document.getElementById('zqQn').textContent='✓ All six questions done.'; document.getElementById('zqQ').innerHTML='First integer, last integer, everything between.'; document.getElementById('zqAns').innerHTML=''; document.getElementById('zqIn').style.display='none'; return; }
+  var Q=ZQ[zq.q]; document.getElementById('zqQn').textContent='Question '+(zq.q+1)+' of '+n; document.getElementById('zqQ').innerHTML=Q.q;
+  document.getElementById('zqAns').innerHTML=Q.kind==='chip'?chipsHtml(Q.chips,'zqChip'):'';
+  document.getElementById('zqIn').style.display=Q.kind==='chip'?'none':''; document.getElementById('zqA').value=''; }
+function zqRight(){ zq.q++; msg('zqRead','good','✓ Yes.'+(zq.q>=ZQ.length?' That\'s all of them.':'')); zqRender(); }
+function zqChip(k){ var Q=ZQ[zq.q]; if(k===Q.ans) zqRight(); else msg('zqRead','warn','Not yet. '+Q.hint); }
+function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value;
+  if(!v.trim()){ msg('zqRead','warn','Type an answer.'); return; }
+  if(Q.set){ var L=setOf(v); if(L&&sameSet(L,Q.set)) return zqRight();
+    var key=L?L.join(','):null; msg('zqRead','warn','Not yet. '+((Q.slips&&key!=null&&Q.slips[key])||(L&&L.length&&!Q.set.length?'No integer fits this rule.':L&&L.every(function(x){ return Q.set.indexOf(x)>=0; })?'Those all belong, but some are missing.':Q.hint))); return; }
+  var n=num(v); if(same(n,Q.ans)) return zqRight(); msg('zqRead','warn','Not yet. '+((Q.slips&&Q.slips[n])||Q.hint)); }
+
+/* ---------------- A two-set Venn diagram in three layouts ---------------- */
+// circles [cx, cy, r]; la, lb: label positions
+var GEO={
+ over:{A:[155,135,92],B:[245,135,92],la:[78,52],lb:[322,52]},
+ apart:{A:[110,138,82],B:[290,138,82],la:[44,62],lb:[356,62]},
+ inA:{A:[178,150,56],B:[200,135,110],la:[178,112],lb:[108,46]},
+ inB:{A:[200,135,110],B:[222,150,56],la:[108,46],lb:[222,112]}};
+function inside(G,k,x,y,m){ var c=G[k]; return Math.hypot(x-c[0],y-c[1])<c[2]+(m||0); }
+function geoSlots(lay,reg){ var G=GEO[lay], out=[];
+  for(var y=34;y<=238;y+=24) for(var x=26;x<=376;x+=26){
+    var inA=inside(G,'A',x,y,-15), outA=!inside(G,'A',x,y,13), inB=inside(G,'B',x,y,-15), outB=!inside(G,'B',x,y,13);
+    var k=inA&&inB?'AB':inA&&outB?'A':inB&&outA?'B':outA&&outB?'out':null;
+    if(k!==reg) continue;
+    if([G.la,G.lb,[22,24]].some(function(p){ return Math.hypot(x-p[0],y-(p[1]-6))<22; })) continue;
+    out.push([x,y]); }
+  var c; if(reg==='out') c=[372,236]; else { c=[0,0]; out.forEach(function(p){ c[0]+=p[0]/out.length; c[1]+=p[1]/out.length; }); }
+  return out.sort(function(p,q){ return Math.hypot(p[0]-c[0],p[1]-c[1])-Math.hypot(q[0]-c[0],q[1]-c[1]); }); }
+var GSLOTS={}; Object.keys(GEO).forEach(function(l){ GSLOTS[l]={}; ['A','AB','B','out'].forEach(function(r){ GSLOTS[l][r]=geoSlots(l,r); }); });
+function vennG(o){ var G=GEO[o.lay], g='';
+  g+='<rect x="10" y="10" width="380" height="240" class="uni"/>';
+  [['A','ca'],['B','cbb']].forEach(function(c){ var C=G[c[0]]; g+='<circle cx="'+C[0]+'" cy="'+C[1]+'" r="'+C[2]+'" class="'+c[1]+'" data-c="'+c[0]+'"/>'; });
+  g+='<text x="18" y="30" class="ul">ℰ</text><text x="'+G.la[0]+'" y="'+G.la[1]+'" text-anchor="middle" class="lab" fill="#b0412f">A</text><text x="'+G.lb[0]+'" y="'+G.lb[1]+'" text-anchor="middle" class="lab" fill="#2f6db0">B</text>';
+  ['A','AB','B','out'].forEach(function(k){ (o.elems[k]||[]).forEach(function(v,i){ var p=GSLOTS[o.lay][k][i]; g+='<text x="'+p[0]+'" y="'+(p[1]+5)+'" text-anchor="middle" class="el" data-v="'+v+'" data-k="'+k+'">'+v+'</text>'; }); });
+  return '<svg class="vsvg" viewBox="0 0 400 260" role="img" aria-label="'+o.aria+'">'+g+'</svg>'; }
+
+/* ---------------- REFLECTION: inside, overlapping or apart? (main activity) ---------------- */
+function F(desc,f){ return {d:desc,f:f}; }
+var NS=[
+ {U:12,A:F('{multiples of 4}',function(n){ return n%4===0; }),B:F('{even numbers}',function(n){ return n%2===0; })},
+ {U:12,A:F('{factors of 10}',function(n){ return 10%n===0; }),B:F('{odd numbers}',function(n){ return n%2===1; })},
+ {U:12,A:F('{factors of 8}',function(n){ return 8%n===0; }),B:F('{factors of 4}',function(n){ return 4%n===0; })},
+ {U:12,A:F('{prime numbers}',isPrime),B:F('{multiples of 6}',function(n){ return n%6===0; })},
+ {U:12,A:F(ruleOf(1,'≤','≤',4),function(n){ return n>=1&&n<=4; }),B:F('{factors of 12}',function(n){ return 12%n===0; })},
+ {U:12,A:F(ruleOf(2,'≤','≤',8),function(n){ return n>=2&&n<=8; }),B:F(ruleOf(5,'<','<',12),function(n){ return n>5&&n<12; })},
+ {U:12,A:F(ruleOf(0,'<','<',10),function(n){ return n>0&&n<10; }),B:F('{square numbers}',function(n){ return Math.round(Math.sqrt(n))**2===n; })},
+ {U:10,A:F(ruleOf(3,'<','<',4),function(n){ return n>3&&n<4; }),B:F('{odd numbers}',function(n){ return n%2===1; })}];
+var REL={sub:I('A')+' ⊂ '+I('B')+': every element of '+I('A')+' is in '+I('B'),sup:I('B')+' ⊂ '+I('A')+': every element of '+I('B')+' is in '+I('A'),over:'They overlap: some elements are shared, and neither is inside the other',apart:'They have no elements in common'};
+var RELK=['sub','sup','over','apart'];
+function nsData(i){ var C=NS[i], U=range(C.U), A=U.filter(C.A.f), B=U.filter(C.B.f);
+  var AB=A.filter(function(v){ return B.indexOf(v)>=0; }), aOut=A.filter(function(v){ return B.indexOf(v)<0; }), bOut=B.filter(function(v){ return A.indexOf(v)<0; });
+  var rel=!aOut.length?'sub':!bOut.length?'sup':AB.length?'over':'apart';
+  var lay=rel==='sub'?'inA':rel==='sup'?'inB':rel==='over'?'over':'apart';
+  var out=U.filter(function(v){ return A.indexOf(v)<0&&B.indexOf(v)<0; });
+  return {U:U,A:A,B:B,AB:AB,aOut:aOut,bOut:bOut,rel:rel,lay:lay,out:out}; }
+var ns={i:0,stage:'decide',w:0,listed:false};
+function nsAccept(D,k){ return k===D.rel||(D.A.length===0&&k==='apart'); }
+function nsRender(){ var C=NS[ns.i], D=nsData(ns.i);
+  document.getElementById('nsCount').textContent='Pair '+(ns.i+1)+' of '+NS.length;
+  document.getElementById('nsSets').innerHTML='ℰ = {1, 2, …, '+C.U+'}<br>'+I('A')+' = '+C.A.d+'<br>'+I('B')+' = '+C.B.d;
+  var Ls=document.getElementById('nsList'); Ls.innerHTML=I('A')+' = '+showSet(D.A)+'<br>'+I('B')+' = '+showSet(D.B); Ls.style.display=ns.listed?'':'none';
+  var ask=document.getElementById('nsAsk'), h='';
+  if(ns.stage==='decide'){ h='<p class="ph" style="font-style:normal;color:#1f2a33"><b>How do '+I('A')+' and '+I('B')+' sit together?</b></p><div class="opts">'+RELK.map(function(k){ return '<button class="chip" data-k="'+k+'" onclick="nsPick(\''+k+'\')">'+REL[k]+'</button>'; }).join('')+'</div>';
+    document.getElementById('nsFig').innerHTML='<p class="ph">The Venn diagram appears when you decide.</p>'; }
+  else { document.getElementById('nsFig').innerHTML=vennG({lay:D.lay,elems:{A:D.aOut,AB:D.AB,B:D.bOut,out:D.out},aria:nsAria(D)});
+    h='<div class="why">'+nsWhyHtml(D)+'</div>'; }
+  ask.innerHTML=h; }
+function nsAria(D){ var t={inA:'circle A drawn inside circle B',inB:'circle B drawn inside circle A',over:'circles A and B overlap',apart:'circles A and B drawn apart'}[D.lay];
+  return 'Venn diagram, '+t+'. Only A: '+(D.aOut.join(', ')||'none')+'. Both: '+(D.AB.join(', ')||'none')+'. Only B: '+(D.bOut.join(', ')||'none')+'. Neither: '+(D.out.join(', ')||'none')+'.'; }
+function nsLists(){ ns.listed=!ns.listed; document.getElementById('nsList').style.display=ns.listed?'':'none'; }
+function nsPick(k){ var D=nsData(ns.i);
+  if(nsAccept(D,k)){ ns.stage='why'; ns.w=0; nsRender();
+    msg('nsRead','good',D.A.length===0?(k==='sub'?'✓ Yes. '+I('A')+' = ∅: it has no elements, so none of them is outside '+I('B')+'. (They also have no elements in common.)':'✓ True: they share no elements. And there is more: '+I('A')+' = ∅ has no element outside '+I('B')+', so '+I('A')+' ⊂ '+I('B')+' as well. The empty set is a subset of every set.'):'✓ Yes. Now show why.');
+    return; }
+  var t;
+  if(k==='sub') t=D.aOut[0]+' ∈ '+I('A')+' but '+D.aOut[0]+' ∉ '+I('B')+', so '+I('A')+' is not a subset of '+I('B')+'.';
+  else if(k==='sup') t=D.bOut[0]+' ∈ '+I('B')+' but '+D.bOut[0]+' ∉ '+I('A')+', so '+I('B')+' is not a subset of '+I('A')+'.';
+  else if(k==='apart') t=D.AB[0]+' is in both '+I('A')+' and '+I('B')+'.';
+  else t=D.rel==='apart'?'They share no elements at all.':D.rel==='sub'?'Check: is every element of '+I('A')+' also in '+I('B')+'?':'Check: is every element of '+I('B')+' also in '+I('A')+'?';
+  msg('nsRead','warn','Not quite: '+t+(ns.listed?'':' Try 📋 Show the lists.')); }
+// the "why" steps: subset cases ask for A ∩ B and A ∪ B; the others ask for a counterexample each way
+function nsSteps(D){
+  if(D.rel==='sub'||D.rel==='sup'){ var small=D.rel==='sub'?'A':'B', big=D.rel==='sub'?'B':'A';
+    return [{q:'So what is '+I('A')+' ∩ '+I('B')+'?',opts:['A','B','∅'],ok:D.A.length===0?['A','∅']:[small],good:I('A')+' ∩ '+I('B')+' = '+(D.A.length===0?'∅ = '+I('A'):I(small)+' = '+showSet(D.AB))+': everything in '+I(small)+' is in both.'},
+            {q:'And what is '+I('A')+' ∪ '+I('B')+'?',opts:['A','B','ℰ'],ok:[big],good:I('A')+' ∪ '+I('B')+' = '+I(big)+': '+I(small)+' adds nothing new.'}]; }
+  return [{q:'Which element of '+I('A')+' shows that '+I('A')+' is <b>not</b> a subset of '+I('B')+'?',opts:D.A.map(String),ok:D.aOut.map(String),pick:'A',done:NSDONE[ns.i+':0'],good:'is in '+I('A')+' but not in '+I('B')+', so '+I('A')+' is not a subset of '+I('B')+'.'},
+          {q:'Which element of '+I('B')+' shows that '+I('B')+' is <b>not</b> a subset of '+I('A')+'?',opts:D.B.map(String),ok:D.bOut.map(String),pick:'B',done:NSDONE[ns.i+':1'],good:'is in '+I('B')+' but not in '+I('A')+', so '+I('B')+' is not a subset of '+I('A')+'.'}]; }
+var NSORD={}, NSDONE={};
+function nsWhyHtml(D){ var S=nsSteps(D), h='';
+  for(var j=0;j<ns.w&&j<S.length;j++) h+='<p class="pl">✓ '+(S[j].pick?S[j].done+' '+S[j].good:S[j].good)+'</p>';
+  if(ns.w<S.length){ var s=S[ns.w], key=ns.i+':'+ns.w;
+    if(!NSORD[key]) NSORD[key]=s.pick?s.opts.slice():shuffle(s.opts.slice());
+    h+='<p class="pl"><b>'+s.q+'</b></p><div class="opts">'+NSORD[key].map(function(o){ return '<button class="chip" data-o="'+o+'" onclick="nsWhy(\''+o+'\')">'+(/^[AB]$/.test(o)?I(o):o)+'</button>'; }).join('')+'</div>'; }
+  else h+='<p class="pl"><b>'+nsSummary(D)+'</b></p>';
+  return h; }
+function nsSummary(D){ if(D.A.length===0) return I('A')+' = ∅ sits inside '+I('B')+' (and inside every set). The circle is drawn, but nothing is in it.';
+  if(D.rel==='sub') return 'Every element of '+I('A')+' is in '+I('B')+', so '+I('A')+' ⊂ '+I('B')+' and '+I('A')+'\'s circle sits inside '+I('B')+'\'s.';
+  if(D.rel==='sup') return 'Every element of '+I('B')+' is in '+I('A')+', so '+I('B')+' ⊂ '+I('A')+' and '+I('B')+'\'s circle sits inside '+I('A')+'\'s. Order matters: '+I('A')+' is not a subset of '+I('B')+'.';
+  if(D.rel==='over') return 'Neither is a subset of the other, but they share '+showSet(D.AB)+': the circles overlap.';
+  return 'Neither is a subset of the other, and '+I('A')+' ∩ '+I('B')+' = ∅: the circles are drawn apart.'; }
+function nsWhy(o){ if(ns.stage!=='why') return; var D=nsData(ns.i), s=nsSteps(D)[ns.w]; if(!s) return;
+  if(s.ok.indexOf(o)>=0){ NSDONE[ns.i+':'+ns.w]=o; ns.w++; document.getElementById('nsRead').style.display='none'; nsRender(); return; }
+  var t;
+  if(s.pick) t=o+' is in '+I(s.pick==='A'?'B':'A')+' as well, so it does not break the rule. Look for one that is not.';
+  else t=(o==='∅'?I('A')+' and '+I('B')+' do share elements.':o==='ℰ'?'Is every element of ℰ in '+I('A')+' or '+I('B')+'?':'Not quite: which circle is inside the other?');
+  msg('nsRead','warn','Not yet. '+t); }
+function nsNext(){ ns.i=(ns.i+1)%NS.length; ns.stage='decide'; ns.w=0; ns.listed=false; document.getElementById('nsRead').style.display='none'; nsRender(); }
+
+/* ---------------- CREATIVITY stretch: how many subsets? ---------------- */
+var SC={n:2,sel:{},found:[],done:{}};
+var SCL=['a','b','c'];
+function scKey(sel){ return SCL.slice(0,SC.n).filter(function(l){ return sel[l]; }).join(''); }
+function scShow(k){ return k?'{'+k.split('').map(I).join(', ')+'}':'∅'; }
+function scSize(n){ SC.n=n; SC.sel={}; SC.found=[]; document.getElementById('scRead').style.display='none'; scDraw(); }
+function scTap(l){ if(SC.sel[l]) delete SC.sel[l]; else SC.sel[l]=true; scDraw(); }
+function scAdd(){ var k=scKey(SC.sel);
+  if(SC.found.indexOf(k)>=0){ msg('scRead','warn',scShow(k)+' is already on the list. Try a different subset.'); return; }
+  SC.found.push(k); SC.sel={}; var all=Math.pow(2,SC.n);
+  if(SC.found.length===all){ SC.done[SC.n]=all; msg('scRead','good','✓ That is all of them: '+all+' subsets of a set with '+SC.n+' element'+(SC.n>1?'s':'')+', including ∅ and the set itself.'); }
+  else msg('scRead','good','Added '+scShow(k)+'.'+(SC.found.indexOf('')<0&&SC.found.length>=2?' Have you included ∅?':''));
+  scDraw(); }
+function scReset(){ SC.sel={}; SC.found=[]; document.getElementById('scRead').style.display='none'; scDraw(); }
+function scDraw(){ document.getElementById('scSize').innerHTML=[1,2,3].map(function(n){ return '<button class="chip'+(n===SC.n?' active':'')+'" onclick="scSize('+n+')">'+scShow(SCL.slice(0,n).join(''))+'</button>'; }).join('');
+  document.getElementById('scTiles').innerHTML=SCL.slice(0,SC.n).map(function(l){ return '<button class="chip'+(SC.sel[l]?' on':'')+'" data-l="'+l+'" onclick="scTap(\''+l+'\')">'+I(l)+'</button>'; }).join('')+' <span style="font-family:Georgia,serif;font-size:1.2em">→ '+scShow(scKey(SC.sel))+'</span>';
+  document.getElementById('scFound').innerHTML=SC.found.map(function(k){ return '<span>'+scShow(k)+'</span>'; }).join('');
+  document.getElementById('scTally').innerHTML='Found: '+SC.found.length+(SC.found.length===Math.pow(2,SC.n)?' (all of them)':'')+'<br><span class="small">Complete so far: '+([1,2,3].filter(function(n){ return SC.done[n]; }).map(function(n){ return n+' element'+(n>1?'s':'')+' → '+SC.done[n]+' subsets'; }).join('; ')||'none yet')+'</span>'; }
+
+/* ---------------- Proof (stretch): adding an element doubles the subsets ---------------- */
+var SUBL=['∅','{a}','{b}','{a, b}'], SUBR=['{c}','{a, c}','{b, c}','{a, b, c}'];
+function itl(t){ return t.replace(/([abc])/g,'<tspan font-style="italic">$1</tspan>'); }
+function prFigure(i){ var g='', hl=[['hd'],['L'],['ar','R'],['L','R']][i]||[];
+  g+='<rect x="30" y="10" width="150" height="30" rx="6" class="hd'+(hl.indexOf('hd')>=0?' on':'')+'"/><text x="105" y="31" text-anchor="middle" class="th">without '+itl('c')+'</text>';
+  g+='<rect x="240" y="10" width="150" height="30" rx="6" class="hd'+(hl.indexOf('hd')>=0?' on':'')+'"/><text x="315" y="31" text-anchor="middle" class="th">with '+itl('c')+'</text>';
+  for(var k=0;k<4;k++){ var y=52+k*38;
+    g+='<rect x="45" y="'+y+'" width="120" height="28" rx="6" class="bx'+(hl.indexOf('L')>=0?' on':'')+'"/><text x="105" y="'+(y+19)+'" text-anchor="middle" class="tx">'+itl(SUBL[k])+'</text>';
+    g+='<line x1="168" y1="'+(y+14)+'" x2="252" y2="'+(y+14)+'" class="ar'+(hl.indexOf('ar')>=0?' on':'')+'" marker-end="url(#prArr)"/><text x="210" y="'+(y+9)+'" text-anchor="middle" class="tx" style="font-size:11px">add '+itl('c')+'</text>';
+    g+='<rect x="255" y="'+y+'" width="120" height="28" rx="6" class="bx'+(hl.indexOf('R')>=0?' on':'')+'"/><text x="315" y="'+(y+19)+'" text-anchor="middle" class="tx">'+itl(SUBR[k])+'</text>'; }
+  return '<svg class="ssvg" viewBox="0 0 420 210" role="img" aria-label="The subsets of {a, b, c} in two columns: without c, and with c added"><defs><marker id="prArr" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#9fb0a3"/></marker></defs>'+g+'</svg>'; }
+var PROOFS={
+ pr:{steps:[
+  {q:'Take any subset of {'+I('a')+', '+I('b')+', '+I('c')+'}. Which column does it belong in?',chips:['Every subset has '+I('c')+' in it','Exactly one column: either '+I('c')+' is in it or it is not'],ans:1,ok:'Every subset goes in exactly one column: without '+I('c')+' or with '+I('c'),hint:'Is {'+I('a')+'} a subset? Does it contain '+I('c')+'?'},
+  {q:'The subsets without '+I('c')+': what are they?',chips:['Exactly the subsets of {'+I('a')+', '+I('b')+'}: 4 of them','Only {'+I('a')+'} and {'+I('b')+'}: 2 of them'],ans:0,ok:'Without '+I('c')+': the 4 subsets of {'+I('a')+', '+I('b')+'}, including ∅ and {'+I('a')+', '+I('b')+'}',hint:'Remember ∅ and the whole of {'+I('a')+', '+I('b')+'}.'},
+  {q:'Each subset with '+I('c')+' is one without '+I('c')+', with '+I('c')+' added. How many are there?',chips:['Just one: {'+I('a')+', '+I('b')+', '+I('c')+'}','The same number: 4'],ans:1,ok:'With '+I('c')+': one for each subset without '+I('c')+', so 4 again',hint:'Follow each arrow: does every box on the left have a partner?'},
+  {q:'So how many subsets does {'+I('a')+', '+I('b')+', '+I('c')+'} have?',chips:['4 + 4 = 8: double the subsets of {'+I('a')+', '+I('b')+'}','4 + 1 = 5'],ans:0,ok:'4 + 4 = 8',hint:'Add the two columns.'}],
+  done:'✓ <b>That is why.</b> A new element doubles the number of subsets: every old subset appears twice, once without it and once with it. So 1 element gives 2 subsets, 2 give 4, 3 give 8, 4 give 16: a set with '+I('n')+' elements has 2<sup>'+I('n')+'</sup> subsets.'}
+};
+var pr={pr:0};
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    ineq:{title:'Integers that fit an inequality',prompt:'How many integers <i>x</i> satisfy 2 &lt; <i>x</i> ≤ 6?',answer:4,hint:'2 is left out (&lt;) and 6 is in (≤): 3, 4, 5, …'},
+    factors:{title:'Listing a set (Lesson 1)',prompt:'Find <i>n</i>({factors of 12}).',answer:6,hint:'1 × 12, 2 × 6 and 3 × 4.'},
+    inter:{title:'Intersection (Lesson 2)',prompt:'<i>A</i> = {1, 2, 3, 4} and <i>B</i> = {3, 4, 5}. Find <i>n</i>(<i>A</i> ∩ <i>B</i>).',answer:2,hint:'Which numbers are in both?'}
+  };
+  function matches(r,v){ var n=money(String(v).replace(/\s*(%|per ?cent)\s*$/i,'')); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pS(L){ return function(v){ return sameSet(setOf(v),L); }; }
+function pV(n){ return function(v){ return same(num(v),n); }; }
+function pYes(v){ return /^\s*(yes|y|true|yes it is|it is|a\s*⊂\s*b)\s*[.!]?\s*$/i.test(String(v)); }
+function pOneOf(L){ return function(v){ var S=setOf(v); return !!S&&S.length===1&&L.indexOf(S[0])>=0; }; }
+var X3='<i>x</i>';
+var PRACTICE=[
+ {label:"1 of 8 · Listing",q:"List {"+X3+" : "+X3+" is an integer, −4 ≤ "+X3+" &lt; 1}.",a:[],eq:pS([-4,-3,-2,-1,0]),prompt:"Is −4 in the set? Is 1?",hint:"≤ lets −4 in; &lt; leaves 1 out.",sol:"{−4, −3, −2, −1, 0}: −4 is in, 1 is not."},
+ {label:"2 of 8 · Counting",q:"Find <i>n</i>({"+X3+" : "+X3+" is an integer, 5 &lt; "+X3+" ≤ 11}).",a:[],eq:pV(6),prompt:"What is the first integer that fits? The last?",hint:"6, 7, 8, 9, 10, 11.",sol:"The set is {6, 7, 8, 9, 10, 11}, so <i>n</i> = 6."},
+ {label:"3 of 8 · Nothing fits",q:"List {"+X3+" : "+X3+" is an integer, 4 &lt; "+X3+" &lt; 5}.",a:[],eq:pS([]),prompt:"Is there an integer between 4 and 5?",hint:"Both ends are left out, and nothing lies between them.",sol:"No integer fits, so the set is ∅, the empty set."},
+ {label:"4 of 8 · Subset?",q:"<i>A</i> = {2, 4} and <i>B</i> = {1, 2, 3, 4, 5}. Is <i>A</i> ⊂ <i>B</i>? Answer yes or no.",a:["yes"],eq:pYes,prompt:"Is every element of <i>A</i> in <i>B</i>?",hint:"Check 2, then check 4.",sol:"Yes: 2 ∈ <i>B</i> and 4 ∈ <i>B</i>, so every element of <i>A</i> is in <i>B</i>, and <i>A</i> ⊂ <i>B</i>."},
+ {label:"5 of 8 · Not a subset",q:"<i>A</i> = {factors of 6} and <i>B</i> = {factors of 12}. <i>B</i> is not a subset of <i>A</i>. Give one element that shows this.",a:[],eq:pOneOf([4,12]),prompt:"List both sets. Which element of <i>B</i> is missing from <i>A</i>?",hint:"<i>A</i> = {1, 2, 3, 6}; <i>B</i> = {1, 2, 3, 4, 6, 12}.",sol:"4 (or 12): 4 ∈ <i>B</i> but 4 ∉ <i>A</i>. One such element is enough."},
+ {label:"6 of 8 · Inside",q:"<i>A</i> ⊂ <i>B</i>, <i>n</i>(<i>A</i>) = 5 and <i>n</i>(<i>B</i>) = 12. Find <i>n</i>(<i>A</i> ∪ <i>B</i>).",a:[],eq:pV(12),prompt:"Draw <i>A</i>'s circle inside <i>B</i>'s. What does <i>A</i> add to <i>B</i>?",hint:"When <i>A</i> ⊂ <i>B</i>, <i>A</i> ∪ <i>B</i> = <i>B</i>.",sol:"<i>A</i> adds nothing new, so <i>A</i> ∪ <i>B</i> = <i>B</i> and <i>n</i>(<i>A</i> ∪ <i>B</i>) = 12."},
+ {label:"7 of 8 · Find the end",q:"{"+X3+" : "+X3+" is an integer, <i>k</i> &lt; "+X3+" ≤ 3} = {−2, −1, 0, 1, 2, 3}. Find the integer <i>k</i>.",a:[],eq:pV(-3),prompt:"Is <i>k</i> itself in the set?",hint:"&lt; leaves <i>k</i> out, and the first integer in is −2.",sol:"<i>k</i> = −3: −3 &lt; "+X3+" leaves −3 out and lets −2 in."},
+ {label:"8 of 8 · How many subsets? (stretch)",q:"How many subsets does {<i>p</i>, <i>q</i>, <i>r</i>} have? Include ∅ and {<i>p</i>, <i>q</i>, <i>r</i>} itself.",a:[],eq:pV(8),prompt:"How many subsets does {<i>p</i>, <i>q</i>} have? What happens when you add <i>r</i>?",hint:"Each subset of {<i>p</i>, <i>q</i>} appears twice: without <i>r</i> and with <i>r</i>.",sol:"{<i>p</i>, <i>q</i>} has 4 subsets; adding <i>r</i> doubles them: 4 × 2 = 8."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Check the end numbers, or each element — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  acRender();
+  makeDecoder('mv',document.getElementById('dcMv'),{a:-2,sa:'<',sb:'≤',b:1});
+  zqRender();
+  nsRender();
+  makeDecoder('cr',document.getElementById('dcCr'),{a:0,sa:'≤',sb:'<',b:2,briefs:BRIEFS});
+  scDraw();
+  prRender('pr');
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('sv-03-subsets-empty-set-algebraic');</script>
+
+<script src="../../assets/fieldkits/sets-and-venn-diagrams.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(2);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press xⁿ again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="xⁿ"){ /* power key: the next digits typed become a superscript power, e.g. 1.06⁴ */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+</body>
+</html>

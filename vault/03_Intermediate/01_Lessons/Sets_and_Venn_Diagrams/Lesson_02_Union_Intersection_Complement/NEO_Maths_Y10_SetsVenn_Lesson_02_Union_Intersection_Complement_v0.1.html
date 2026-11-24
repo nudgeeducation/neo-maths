@@ -754,7 +754,7 @@ var ZQ=[
  {q:QS+'List '+I('A')+' ∪ '+I('B')+'.',set:[1,2,3,4,5,6,8,10],hint:'∪ means in at least one of them.',slips:{'2,4':'That is the intersection. ∪ includes everything in <b>either</b> set.','1,2,2,3,4,4,5,6,8,10':'List each element once.'}},
  {q:QS+'List '+I('A')+'′.',set:[1,3,5,7,9],hint:'Everything in ℰ that is not in '+I('A')+'.',slips:{'1,3,5':'Include every element of ℰ that is not in '+I('A')+', not only those in '+I('B')+'.'}},
  {q:QS+'Find '+I('n')+'('+I('A')+' ∪ '+I('B')+').',ans:8,hint:'List the union first, then count.',slips:{10:'5 + 5 counts 2 and 4 twice. Count the union directly.'}},
- {q:'Which region is '+I('A')+' ∩ '+I('B')+'′?',kind:'chip',chips:['in '+I('A')+' but not in '+I('B'),'in '+I('B')+' but not in '+I('A'),'in neither'],ans:0,hint:I('B')+'′ means not in '+I('B')+'.'},
+ {q:'Which region is '+I('A')+' ∩ '+I('B')+'′?',kind:'chip',chips:['in '+I('B')+' but not in '+I('A'),'in neither','in '+I('A')+' but not in '+I('B')],ans:2,hint:I('B')+'′ means not in '+I('B')+'.'},
  {q:QS+'List ('+I('A')+' ∪ '+I('B')+')′.',set:[7,9],hint:'Find the union, then everything outside it.',slips:{'1,3,5,7,9':'That is '+I('A')+'′. The complement of the union is outside <b>both</b> circles.'}}];
 var zq={q:0};
 function zqRender(){ var n=ZQ.length;
@@ -809,10 +809,10 @@ function mkNext(){ mk.i=(mk.i+1)%MK.length; document.getElementById('mkRead').st
 /* ---------------- Proof (stretch): the counting rule for a union ---------------- */
 var PROOFS={
  pr:{steps:[
-  {q:'Count '+I('n')+'('+I('A')+'). Which regions are in '+I('A')+'?',chips:['only '+I('A')+' and both: 6 + 3 = 9','only '+I('A')+': 6'],ans:0,ok:I('n')+'('+I('A')+') = 6 + 3 = 9',hint:I('A')+' is the whole circle, including the overlap.'},
+  {q:'Count '+I('n')+'('+I('A')+'). Which regions are in '+I('A')+'?',chips:['only '+I('A')+': 6','only '+I('A')+' and both: 6 + 3 = 9'],ans:1,ok:I('n')+'('+I('A')+') = 6 + 3 = 9',hint:I('A')+' is the whole circle, including the overlap.'},
   {q:'Count '+I('n')+'('+I('B')+').',chips:['both and only '+I('B')+': 3 + 4 = 7','only '+I('B')+': 4'],ans:0,ok:I('n')+'('+I('B')+') = 3 + 4 = 7',hint:I('B')+' is the whole circle, including the overlap.'},
   {q:I('n')+'('+I('A')+') + '+I('n')+'('+I('B')+') = 16. Which region has been counted twice?',chips:['the intersection, '+I('A')+' ∩ '+I('B')+' (3 elements)','only '+I('A')],ans:0,ok:'The 3 elements of '+I('A')+' ∩ '+I('B')+' were counted in both',hint:'Which region is inside both circles?'},
-  {q:'So '+I('n')+'('+I('A')+' ∪ '+I('B')+') = 16 − …',chips:['3, once: 13','6: 10'],ans:0,ok:I('n')+'('+I('A')+' ∪ '+I('B')+') = 16 − 3 = 13 = 6 + 3 + 4',hint:'Take away the extra count of the intersection.'}],
+  {q:'So '+I('n')+'('+I('A')+' ∪ '+I('B')+') = 16 − …',chips:['6: 10','3, once: 13'],ans:1,ok:I('n')+'('+I('A')+' ∪ '+I('B')+') = 16 − 3 = 13 = 6 + 3 + 4',hint:'Take away the extra count of the intersection.'}],
   done:'✓ <b>That is why.</b> Adding '+I('n')+'('+I('A')+') and '+I('n')+'('+I('B')+') counts every element of the union once, except those in '+I('A')+' ∩ '+I('B')+', which are counted twice. Taking '+I('n')+'('+I('A')+' ∩ '+I('B')+') away once corrects it: '+I('n')+'('+I('A')+' ∪ '+I('B')+') = '+I('n')+'('+I('A')+') + '+I('n')+'('+I('B')+') − '+I('n')+'('+I('A')+' ∩ '+I('B')+').'}
 };
 var pr={pr:0};

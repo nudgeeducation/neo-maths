@@ -1206,6 +1206,14 @@
           "file": "lessons/sets-and-venn-diagrams/02-union-intersection-and-complement.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "sv-03-subsets-empty-set-algebraic",
+          "num": "Lesson 03",
+          "title": "Subsets, the empty set and sets defined algebraically",
+          "file": "lessons/sets-and-venn-diagrams/03-subsets-the-empty-set-and-sets-defined-algebraically.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

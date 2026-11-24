@@ -683,7 +683,7 @@ function ssInit(){ makeSorter('cn',document.getElementById('ssW'),{r:0}); }
 var ZQ=[
  {q:'<i>A</i> = {factors of 12}. List the elements of <i>A</i>.',set:[1,2,3,4,6,12],hint:'Find the factor pairs of 12: 1 × 12, …',slips:{'2,3':'Those are the prime factors. List every number that divides 12 exactly.','12,24,36':'Those are multiples of 12. A factor divides into 12.'}},
  {q:'For the same set, <i>A</i> = {factors of 12}, what is <i>n</i>(<i>A</i>)?',ans:6,hint:'Count the elements you listed.',slips:{12:'12 is the largest element. <i>n</i>(<i>A</i>) counts how many elements there are.'}},
- {q:'<i>B</i> = {multiples of 4}. Which statement is true?',kind:'chip',chips:['12 ∈ '+I('B'),'10 ∈ '+I('B'),'4 ∉ '+I('B')],ans:0,hint:'∈ means “is an element of”. Is 12 a multiple of 4? Is 10?'},
+ {q:'<i>B</i> = {multiples of 4}. Which statement is true?',kind:'chip',chips:['10 ∈ '+I('B'),'4 ∉ '+I('B'),'12 ∈ '+I('B')],ans:2,hint:'∈ means “is an element of”. Is 12 a multiple of 4? Is 10?'},
  {q:'<i>C</i> = {square numbers less than 50}. List the elements of <i>C</i>.',set:[1,4,9,16,25,36,49],hint:'1 × 1, 2 × 2, 3 × 3, …',slips:{'4,9,16,25,36,49':'Is 1 a square number? 1 × 1 = 1.','1,4,9,16,25,36':'49 = 7 × 7 is less than 50.'}},
  {q:'Are {2, 4, 6} and {6, 4, 2, 2} the same set?',kind:'chip',chips:['Yes','No'],ans:0,hint:'In a set, order does not matter, and an element listed twice is still one element.'},
  {q:'<i>D</i> = {multiples of 7 between 50 and 55}. Write <i>D</i>. (Use the ∅ key if it has no elements.)',set:[],hint:'The multiples of 7 near 50 are 49 and 56.',slips:{'49':'49 is less than 50.','56':'56 is more than 55.','49,56':'Neither 49 nor 56 is between 50 and 55.','0':'0 is a number. A set with no elements is written ∅ or { }.'}}
@@ -736,9 +736,9 @@ function tnInit(){ tnRender(); }
 /* ---------------- Proof (stretch): square numbers have an odd number of factors ---------------- */
 var PROOFS={
  pr:{steps:[
-  {q:'The factors of 24 pair up: 1 × 24, 2 × 12, 3 × 8, 4 × 6. How many pairs are there?',chips:['4','8'],ans:0,ok:'24 has 4 factor pairs',hint:'Count the arcs.'},
+  {q:'The factors of 24 pair up: 1 × 24, 2 × 12, 3 × 8, 4 × 6. How many pairs are there?',chips:['8','4'],ans:1,ok:'24 has 4 factor pairs',hint:'Count the arcs.'},
   {q:'Each pair gives two different factors. So <i>n</i>(factors of 24) is…',chips:['8: two from each pair','4'],ans:0,ok:I('n')+'(factors of 24) = 2 × 4 = 8: an even number',hint:'Two factors in each of 4 pairs.'},
-  {q:'The factors of 16 pair up as 1 × 16, 2 × 8 and 4 × 4. How many times is 4 an element of the set of factors?',chips:['Once: a set lists each element once','Twice'],ans:0,ok:'In 4 × 4 the pair is one number, listed once',hint:'{1, 2, 4, 4, 8, 16} and {1, 2, 4, 8, 16} are the same set.'},
+  {q:'The factors of 16 pair up as 1 × 16, 2 × 8 and 4 × 4. How many times is 4 an element of the set of factors?',chips:['Twice','Once: a set lists each element once'],ans:1,ok:'In 4 × 4 the pair is one number, listed once',hint:'{1, 2, 4, 4, 8, 16} and {1, 2, 4, 8, 16} are the same set.'},
   {q:'So <i>n</i>(factors of 16) is…',chips:['5','6'],ans:0,ok:I('n')+'(factors of 16) = 2 + 2 + 1 = 5: an odd number',hint:'Two pairs of different factors, and one factor on its own.'}],
   done:'✓ <b>That is why.</b> Factors come in pairs that multiply to the number, so most numbers have an even number of factors. Only a square number has a pair made of one number twice (4 × 4 = 16), and a set lists that number once. So a square number, and only a square number, has an odd number of factors.'}
 };
