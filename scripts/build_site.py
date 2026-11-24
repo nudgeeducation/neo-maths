@@ -188,6 +188,8 @@ SOURCES = {
         "03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams/Lesson_03_Subsets_Empty_Set_Algebraic/NEO_Maths_Y10_SetsVenn_Lesson_03_Subsets_Empty_Set_Algebraic_v0.1.html",
     "sv-04-three-set-venn-diagrams":
         "03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams/Lesson_04_Three_Set_Venn_Diagrams/NEO_Maths_Y10_SetsVenn_Lesson_04_Three_Set_Venn_Diagrams_v0.1.html",
+    "sv-05-venn-problems-probability":
+        "03_Intermediate/01_Lessons/Sets_and_Venn_Diagrams/Lesson_05_Venn_Problems_Probability/NEO_Maths_Y10_SetsVenn_Lesson_05_Venn_Problems_Probability_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

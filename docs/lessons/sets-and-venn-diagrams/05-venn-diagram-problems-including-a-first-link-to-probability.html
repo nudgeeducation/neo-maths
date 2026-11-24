@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Venn diagram problems, including a first link to probability</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Sets and Venn Diagrams &middot; <strong>Lesson 05 &mdash; Venn diagram problems, including a first link to probability</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.claim{font-size:1.4em;text-align:center;padding:6px 0;font-family:Georgia,'Times New Roman',serif}
+.machine{max-width:420px;margin:8px auto;background:#2f3b45;color:#fff;border-radius:14px;padding:10px 14px;text-align:center}
+.machine .rule{font-family:Georgia,'Times New Roman',serif;font-size:1.5em;margin:4px 0}
+.machine .out{background:#e8efe0;color:#1f2a33;border-radius:8px;padding:6px;font-family:'Courier New',monospace;font-size:1.2em;min-height:1.6em}
+.machine .out.jam{background:#fbe3dc;color:#7a2b1c}
+.exl{color:#7a2b1c;font-size:.95em;text-align:center}
+.mq{border-left:4px solid #c9b48a;background:#fffdf7;border-radius:8px;padding:8px 12px;margin:8px 0}
+.barsvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto}
+.barsvg .blab{font-family:Georgia,serif;font-size:15px;fill:#3f4d42}
+.barsvg .bval{font-family:Georgia,serif;font-size:16px;font-weight:700;fill:#1f2a33}
+.barsvg .ptag{font-family:Georgia,serif;font-size:14px;font-weight:700;fill:#b0412f}
+.psvg{width:100%;max-width:380px;height:auto;display:block;margin:6px auto}
+.psvg .plab{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.psvg .hil{stroke:#b0412f;stroke-width:3.5}
+.swatch{display:flex;align-items:center;justify-content:center;gap:12px;margin:6px 0}
+.swatch i{display:block;flex:0 0 54px;width:54px;height:54px;border-radius:50%;border:3px solid #3f4d42;box-shadow:inset 0 -8px 0 rgba(0,0,0,.08)}
+.stepper{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;align-items:center;margin:6px 0}
+.stepper span{white-space:nowrap}
+.stepper button{min-width:40px}
+.stepper b{display:inline-block;min-width:56px;text-align:center}
+table.label{border-collapse:collapse;margin:8px auto;font-size:.95em;background:#fff}
+table.label .op{color:#b0412f}
+table.label caption{font-weight:700;padding:4px;text-align:left}
+table.label th,table.label td{border:1.5px solid #1f2a33;padding:5px 8px;text-align:right}
+table.label td:first-child,table.label th:first-child{text-align:left}
+table.label th{background:#f3f1ea;font-size:.85em}
+table.label .qm{color:#b0412f;font-weight:700}
+.labelwrap{overflow-x:auto}
+.bowl{max-width:300px;margin:6px auto;height:18px;border:2px solid #3f4d42;border-radius:9px;background:linear-gradient(90deg,#d9c08f 0 var(--fill,40%),#fff var(--fill,40%))}
+@media (max-width:520px){.bsvg .bl{font-size:16px}.bsvg .tk{font-size:14px}.mlsvg .tk{font-size:17px}.mlsvg .mkl{font-size:20px}.mlsvg .bl{font-size:19px}.graphsvg .tick{font-size:16px}.graphsvg .axl{font-size:20px}.graphsvg .note{font-size:16px}table.label{font-size:.85em}table.label th,table.label td{padding:4px 5px}.barsvg .blab{font-size:20px}.barsvg .bval{font-size:21px}.barsvg .ptag{font-size:19px}.psvg .plab{font-size:16px}}
+.graphsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.graphsvg .grid{stroke:#e2e7df;stroke-width:1}
+.graphsvg .ax{stroke:#1f2a33;stroke-width:2}
+.graphsvg .tick{font-family:Georgia,serif;font-size:12px;fill:#3f4d42}
+.graphsvg .axl{font-family:Georgia,serif;font-size:16px;font-weight:700;fill:#1f2a33}
+.graphsvg .crv{fill:none;stroke:#2f6db0;stroke-width:2.5}
+.graphsvg .pt{fill:#2f4f6b;stroke:#fff;stroke-width:1.5}
+.graphsvg .pt.cur{fill:#b0412f}
+.graphsvg .rect{stroke:#8f6a26;stroke-width:1.5}
+.graphsvg .r0{fill:rgba(242,193,78,.35)}.graphsvg .r1{fill:rgba(156,197,154,.4)}.graphsvg .r2{fill:rgba(231,163,196,.4)}
+.graphsvg .hiax{stroke:#b0412f;stroke-width:5}
+.graphsvg .note{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#b0412f}
+.graphsvg .target{fill:none;stroke:#b0412f;stroke-width:2.5;stroke-dasharray:4 3}
+.graphsvg .target.hit{fill:rgba(63,143,79,.35);stroke:#3f8f4f;stroke-dasharray:none}
+.psvg2{max-width:360px}
+table.ptable{border-collapse:collapse;margin:8px auto;background:#fff}
+table.ptable th,table.ptable td{border:1.5px solid #9fb0a3;padding:5px 9px;text-align:center;font-size:.95em}
+table.ptable th{background:#eef4e8;font-weight:600;font-size:.85em}
+table.ptable tr.cur td{background:#fff3d6}
+table.ptable .tt{background:#f6f2fb;font-weight:700}
+table.ptable.small2 td{min-width:44px;font-family:Georgia,serif;font-size:1.15em}
+.twocol{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:flex-start}
+.twocol>div{flex:1 1 300px;min-width:0}
+.mlsvg{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.mlsvg .nl{stroke:#3f4d42;stroke-width:2}.mlsvg .nl.hund,.mlsvg .hundl{stroke:#1f2a33;stroke-width:3}
+.mlsvg .hundl{stroke-dasharray:4 3;stroke-width:2}
+.mlsvg .tk{font-family:Georgia,serif;font-size:12px;fill:#3f4d42}.mlsvg .tk.hund{font-weight:700;fill:#1f2a33}
+.mlsvg .link{stroke:#b0412f;stroke-width:2;stroke-dasharray:3 3}.mlsvg .mk{fill:#b0412f}
+.mlsvg .mkl{font-family:Georgia,serif;font-size:14px;font-weight:700;fill:#b0412f}
+.mlsvg .bar0{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}.mlsvg .bar1{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.5}.mlsvg .bar1.up{fill:#9cc59a;stroke:#3f5f45}.mlsvg .bar1.down{fill:#e7a3a3;stroke:#b0412f}
+.mlsvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.psvg .pb{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}.psvg .pb.on{stroke-width:3}
+.psvg .pup{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.5}.psvg .pdown{fill:#fff;stroke:#b0412f;stroke-width:1.5;stroke-dasharray:4 3}
+.psvg .hl{stroke:#b0412f;stroke-width:3.5}
+.psvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
+.two{color:#5c6b60}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.readline,.card p,.mq,.feedback,.pl,.readout{line-height:1.9}
+.bsvg{width:100%;max-width:440px;height:auto;display:block;margin:4px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.bsvg .bfore{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.bsvg .aftr{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.bsvg .chg.up{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.5}.bsvg .chg.down{fill:#fff;stroke:#b0412f;stroke-width:2;stroke-dasharray:5 3}
+.bsvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.bsvg .tk{font-family:Georgia,serif;font-size:11px;fill:#5c6b60}
+.bsvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
+.boards{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.boards>div{flex:1 1 300px;min-width:0}
+.care{border-left:4px solid #9cc59a;background:#f2f8ef;padding:8px 12px;border-radius:8px;margin:8px 0}
+.umach{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;max-width:560px;margin:8px auto;background:#2f3b45;color:#fff;border-radius:14px;padding:10px 12px}
+.umach .ubox{background:#e8efe0;color:#1f2a33;border-radius:10px;padding:6px 12px;min-width:110px;text-align:center}
+.umach .ubox small{display:block;font-size:.8em;color:#3f4d42}
+.umach .ubox b{font-family:Georgia,'Times New Roman',serif;font-size:1.35em}
+.umach .ubox.q b{color:#b0412f}
+.umach .uarrow{font-family:Georgia,'Times New Roman',serif;font-size:1.25em;text-align:center;min-width:90px}
+.umach .uarrow small{display:block;font-size:.7em;color:#cfd8cf}
+.umach.jam{background:#7a2b1c}
+.usvg{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.usvg .uo{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.usvg .ua{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.5}
+.usvg .uup{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.5}
+.usvg .ugap{fill:#fff;stroke:#b0412f;stroke-width:2;stroke-dasharray:5 3}
+.usvg .uslip{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.5}
+.usvg .ublk{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.2}
+.usvg .ublk.up{fill:#9cc59a;stroke:#3f5f45}
+.usvg .ublk.on,.usvg .uo.on,.usvg .uslip.on{stroke:#b0412f;stroke-width:3.5}
+.usvg .hundl{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:4 3}
+.usvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.usvg .bl.slip{fill:#8f6a26}
+.usvg .bk{font-family:Georgia,serif;font-size:11px;fill:#1f2a33}
+.tag{display:inline-block;background:#fff7e0;border:2px dashed #c9a24a;border-radius:10px;padding:8px 16px;font-family:Georgia,serif;font-size:1.2em;margin:6px auto}
+@media (max-width:520px){.usvg .bl{font-size:17px}.usvg .bk{font-size:13px}.umach .ubox{min-width:92px}}
+.racesvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.racesvg .ax{stroke:#1f2a33;stroke-width:2}.racesvg .grid{stroke:#e2e7df;stroke-width:1}
+.racesvg .tick{font-family:Georgia,serif;font-size:11px;fill:#3f4d42}.racesvg .axl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.racesvg .cs{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1}.racesvg .cc{fill:#9cc59a;stroke:#3f5f45;stroke-width:1}
+.racesvg .cx{fill:#f2c14e;stroke:#8f6a26;stroke-width:1}.racesvg .now{stroke:#b0412f;stroke-width:2.5}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:.9em;margin:4px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid #3f4d42}
+.racetab{max-height:260px;overflow:auto;margin:6px auto;max-width:560px}
+table.rt{border-collapse:collapse;width:100%;background:#fff;font-size:.92em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 6px;text-align:right}
+table.rt th{background:#eef4e8;font-size:.85em;text-align:center;position:sticky;top:0}
+table.rt td:first-child{text-align:center}
+table.rt tr.cur td{background:#fff3d6;font-weight:700}
+.offer{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:6px 0}
+.offer>div{flex:1 1 220px;max-width:280px;background:#fff7e0;border:2px dashed #c9a24a;border-radius:10px;padding:8px 12px;text-align:center}
+.psvg3{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.psvg3 .pb{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.2}.psvg3 .pi{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.2}.psvg3 .px{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.2}
+.psvg3 .on{stroke:#b0412f;stroke-width:3.5}
+.psvg3 .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}.psvg3 .bk{font-family:Georgia,serif;font-size:12px;fill:#1f2a33}
+@media (max-width:520px){.racesvg .tick{font-size:13px}.racesvg .axl{font-size:16px}.psvg3 .bl{font-size:16px}.psvg3 .bk{font-size:14px}table.rt{font-size:.82em}table.rt th,table.rt td{padding:3px 4px}}
+.models{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.models>div{flex:1 1 280px;min-width:0;background:#fff;border-radius:10px;padding:8px 10px;border-left:5px solid #2f6db0}
+.models>div.mB{border-left-color:#3f8f4f}
+.models h4{margin:2px 0 4px}
+.graphsvg .lA{fill:none;stroke:#2f6db0;stroke-width:2.5}.graphsvg .lB{fill:none;stroke:#3f8f4f;stroke-width:2.5}
+.graphsvg .pA{fill:#2f6db0;stroke:#fff;stroke-width:1.2}.graphsvg .pB{fill:#3f8f4f;stroke:#fff;stroke-width:1.2}
+.graphsvg .ovt{fill:none;stroke:#b0412f;stroke-width:2.5}
+table.mt{display:table;border-collapse:collapse;width:100%;background:#fff;font-size:.9em;margin:4px 0}
+table.mt th,table.mt td{border:1.5px solid #9fb0a3;padding:3px 5px;text-align:right}
+table.mt th{background:#eef4e8;font-size:.82em;text-align:center}
+table.mt td:first-child{text-align:center}
+.dsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.dsvg .da{fill:#c9d6e3;stroke:#2f4f6b;stroke-width:1.2}.dsvg .db{fill:#9cc59a;stroke:#3f5f45;stroke-width:1.2}.dsvg .on{stroke:#b0412f;stroke-width:3}
+.dsvg .ten{stroke:#2f4f6b;stroke-width:1.5;stroke-dasharray:4 3}
+.dsvg .bk{font-family:Georgia,serif;font-size:10px;fill:#1f2a33}.dsvg .bl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#1f2a33}
+.seq{font-family:Georgia,serif;font-size:1.35em;text-align:center;letter-spacing:.02em}
+@media (max-width:520px){.dsvg .bk{font-size:12px}.dsvg .bl{font-size:14px}table.mt{font-size:.82em}}
+.zsvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.zsvg .nl{stroke:#1f2a33;stroke-width:2}.zsvg .tk{stroke:#3f4d42;stroke-width:1}.zsvg .tk.maj{stroke-width:2}
+.zsvg .tl{font-family:Georgia,serif;font-size:12px;fill:#3f4d42}.zsvg .tl.r{font-weight:700;fill:#1f2a33;font-size:14px}
+.zsvg .band{fill:rgba(63,143,79,.28);stroke:#3f8f4f;stroke-width:1}.zsvg .band2{fill:rgba(47,109,176,.10);stroke:#9fb0c8;stroke-width:1}
+.zsvg .lo{fill:#3f8f4f;stroke:#1f2a33;stroke-width:1.5}.zsvg .hi{fill:#fff;stroke:#1f2a33;stroke-width:2}
+.zsvg .bl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#3f8f4f}
+.zsvg .pr{fill:#b0412f}.zsvg .pl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#b0412f}
+.zsvg .pf .on{stroke:#b0412f;stroke-width:3.5}
+.zsvg .seg{stroke:#b0412f;stroke-width:5;opacity:.8}
+.zw .stepper b{min-width:76px}
+.zw .stepper span{white-space:normal;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px}
+.zw .zacc .chip{margin:2px}
+@media (max-width:520px){.zw .zlab{flex-basis:100%;text-align:center;font-weight:600}}
+.cands{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+@media (max-width:520px){.zsvg .tl{font-size:15px}.zsvg .tl.r{font-size:17px}.zsvg .bl,.zsvg .pl{font-size:15px}}
+.bc .ins{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.bc .ins>div{flex:1 1 260px;min-width:0;background:#fff;border-radius:10px;padding:8px 10px;border-left:5px solid #2f6db0}
+.bc .ins>div.inB{border-left-color:#8f6a26}
+.bc .ins h4{margin:2px 0 4px}
+.bc .flip .chip.on{background:#2f6db0;color:#fff;border-color:#2f6db0}
+.bc .opbig{font-family:Georgia,serif;font-size:1.25em;text-align:center;margin:6px 0}
+.rsvg{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.rsvg .nl{stroke:#1f2a33;stroke-width:2}.rsvg .mk{fill:#9fb0a3;stroke:#1f2a33;stroke-width:1}.rsvg .mk.cur{fill:#2f6db0}.rsvg .mk.max{fill:#3f8f4f}.rsvg .mk.min{fill:#b0412f}
+.rsvg .rv{stroke:#1f2a33;stroke-width:1.5;stroke-dasharray:3 3}
+.rsvg .ml{font-family:Georgia,serif;font-size:11px;font-weight:700;fill:#1f2a33}.rsvg .ml.max{fill:#2f6b46}.rsvg .ml.min{fill:#7a2b1c}
+table.ct{display:table;border-collapse:collapse;width:100%;background:#fff;font-size:.92em;margin:6px 0}
+table.ct th,table.ct td{border:1.5px solid #9fb0a3;padding:4px 6px;text-align:center}
+table.ct th{background:#eef4e8;font-size:.85em}
+table.ct tr.cur td{background:#e5edf4}table.ct tr.max td:last-child{background:#e3f0df;font-weight:700}table.ct tr.min td:last-child{background:#fbe3dc;font-weight:700}
+.rope{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.rope .pc{fill:#f2c14e;stroke:#8f6a26;stroke-width:1.2}.rope .pc.b{fill:#9cc59a;stroke:#3f5f45}.rope .on{stroke:#b0412f;stroke-width:3}
+.rope .bk{font-family:Georgia,serif;font-size:12px;fill:#1f2a33}.rope .bl{font-family:Georgia,serif;font-size:12px;font-weight:700;fill:#1f2a33}
+@media (max-width:520px){.rsvg .ml{font-size:14px}.rope .bk,.rope .bl{font-size:14px}table.ct{font-size:.82em}}
+.hs2 .ins{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.hs2 .ins>div{flex:1 1 260px;min-width:0;background:#fff;border-radius:10px;padding:8px 10px;border-left:5px solid #2f6db0}
+.hs2 .ins>div.inB{border-left-color:#8f6a26}.hs2 .ins h4{margin:2px 0 4px}
+.hs2 .stepper span{white-space:normal;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px}.hs2 .stepper button{min-width:38px}
+.dsvg2{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.dsvg2 .nl{stroke:#1f2a33;stroke-width:2}.dsvg2 .band{fill:rgba(47,109,176,.25);stroke:#2f6db0;stroke-width:1}
+.dsvg2 .lo{fill:#2f6db0;stroke:#1f2a33;stroke-width:1.5}.dsvg2 .hi{fill:#fff;stroke:#1f2a33;stroke-width:2}
+.dsvg2 .th{stroke:#b0412f;stroke-width:2.5;stroke-dasharray:5 3}.dsvg2 .tl{font-family:Georgia,serif;font-size:12px;fill:#1f2a33}.dsvg2 .tl.th2{fill:#b0412f;font-weight:700}
+.dsvg2 .bd{stroke:#8f6a26;stroke-width:2;stroke-dasharray:3 3}.dsvg2 .on{stroke:#b0412f;stroke-width:4}
+table.ld{display:table;border-collapse:collapse;width:100%;background:#fff;font-size:.92em;margin:6px 0}
+table.ld th,table.ld td{border:1.5px solid #9fb0a3;padding:4px 6px;text-align:center}table.ld th{background:#eef4e8;font-size:.85em}
+table.ld tr.yes td:last-child{background:#e3f0df;font-weight:700}table.ld tr.no td:last-child{background:#fbe3dc}
+.verdict{font-weight:700;text-align:center;padding:6px;border-radius:8px;margin:6px 0}.verdict.yes{background:#e3f0df;color:#2f6b46}.verdict.no{background:#fbe3dc;color:#7a2b1c}.verdict.unsure{background:#fff1cf;color:#6b5320}
+@media (max-width:520px){.dsvg2 .tl{font-size:15px}table.ld{font-size:.82em}}
+.ss .rules{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+.ss .uni{position:relative;border:3px solid #2f4f6b;border-radius:6px;background:#fbfaf5;padding:30px 10px 10px;margin:8px auto;max-width:600px}
+.ss .uni>.ulab{position:absolute;left:8px;top:4px;font-family:Georgia,serif;font-weight:700;font-size:1.2em;color:#2f4f6b}
+.ss .ring{border:3px solid #b0412f;border-radius:50%;background:rgba(176,65,47,.08);min-height:150px;max-width:380px;margin:0 auto 10px;padding:30px 24px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-content:center;position:relative}
+.ss .ring>.rlab{position:absolute;left:50%;top:6px;transform:translateX(-50%);font-family:Georgia,serif;font-weight:700;color:#b0412f}
+.ss .ring .emp{font-family:Georgia,serif;color:#7a8a80;font-size:1.3em}
+.ss .rest{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ss .tile{min-width:42px;height:42px;border-radius:8px;border:2px solid #4a5a66;background:#fff;font-family:Georgia,serif;font-size:1.1em;font-weight:700;cursor:pointer;padding:0 6px}
+.ss .ring .tile{background:#fbe3dc;border-color:#b0412f}
+.ss .tile.sel{box-shadow:0 0 0 3px #f2c14e}
+.ss .tile:disabled{cursor:default;opacity:1;color:inherit}
+.ss .readout2{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0;line-height:1.7}
+.ss .mode .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.mm{font-family:Georgia,serif;font-size:1.25em;text-align:center;margin:8px 0}
+.mm .obj{display:inline-block;min-width:60px;padding:6px 12px;border:2px solid #4a5a66;border-radius:8px;background:#fff;font-weight:700}
+.wd{font-family:Georgia,serif;font-size:1.2em;text-align:center;margin:8px 0}
+.fsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.fsvg .fc{fill:#fff;stroke:#4a5a66;stroke-width:1.5}.fsvg .fc.on{stroke:#b0412f;stroke-width:3.5}
+.fsvg .ft{font-family:Georgia,serif;font-size:15px;font-weight:700;fill:#1f2a33}
+.fsvg .arc{fill:none;stroke:#2f6db0;stroke-width:2}.fsvg .arc.on{stroke:#b0412f;stroke-width:3.5}
+.fsvg .bl{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#1f2a33}
+.same .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.same .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.same .target{font-family:Georgia,serif;font-size:1.35em;text-align:center;margin:6px 0}
+@media (max-width:520px){.ss .tile{min-width:38px;height:38px}.ss .ring{padding:30px 10px}.fsvg .ft{font-size:17px}}
+.vsvg{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border-radius:10px;cursor:pointer;touch-action:manipulation}
+.vsvg .uni{fill:none;stroke:#2f4f6b;stroke-width:2.5}.vsvg .ca{fill:none;stroke:#b0412f;stroke-width:2.5}.vsvg .cb{fill:none;stroke:#2f6db0;stroke-width:2.5}
+.vsvg .lit{fill:#f2c14e;opacity:.6}
+.vsvg .el{font-family:Georgia,serif;font-size:15px;font-weight:700;fill:#1f2a33;pointer-events:none}
+.vsvg .lab{font-family:Georgia,serif;font-size:17px;font-weight:700;font-style:italic;pointer-events:none}
+.vsvg .ul{font-family:Georgia,serif;font-size:16px;font-weight:700;fill:#2f4f6b;pointer-events:none}
+.vsvg .cnt{font-family:Georgia,serif;font-size:20px;font-weight:700;fill:#1f2a33;pointer-events:none}
+.rl .pairs,.rl .cards{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+.rl .mode .chip.on,.rl .rbtn .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.rl .card2{font-family:Georgia,serif;font-size:1.5em;text-align:center;margin:6px 0}
+.rl .rbtn{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.notes2{font-family:Georgia,serif;font-size:1.1em;text-align:center;line-height:1.7;margin:6px 0}
+.pi .next{font-family:Georgia,serif;font-size:1.6em;text-align:center;margin:6px 0}
+.ao .word{font-family:Georgia,serif;font-size:1.25em;text-align:center;margin:8px 0}
+.cr .stepper b{min-width:44px}
+@media (max-width:520px){.vsvg .el{font-size:17px}.vsvg .lab{font-size:19px}.vsvg .cnt{font-size:22px}}
+.dc .rulebig{font-family:Georgia,'Times New Roman',serif;font-size:1.35em;text-align:center;margin:6px 0}
+.dc .dctl{display:flex;flex-wrap:wrap;gap:8px 10px;justify-content:center;align-items:center;margin:6px 0}
+.dc .dctl .grp{white-space:nowrap}
+.dc .dctl b{display:inline-block;min-width:34px;text-align:center;font-family:Georgia,serif;font-size:1.25em}
+.dc .dctl .sym{font-family:Georgia,serif;font-size:1.25em;min-width:48px}
+.dc .dctl .xv{font-family:Georgia,serif;font-size:1.35em}
+.nlsvg{width:100%;max-width:580px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.nlsvg .nl{stroke:#1f2a33;stroke-width:2}.nlsvg .tk{stroke:#3f4d42;stroke-width:1.5}
+.nlsvg .tl{font-family:Georgia,serif;font-size:13px;fill:#3f4d42}
+.nlsvg .seg{stroke:#3f8f4f;stroke-width:7;opacity:.35}
+.nlsvg .ep{stroke:#1f2a33;stroke-width:2}.nlsvg .ep.in{fill:#3f8f4f}.nlsvg .ep.open{fill:#fff}
+.vsvg .cbb{fill:none;stroke:#2f6db0;stroke-width:2.5}
+.nlsvg .dot{fill:#b0412f;stroke:#fff;stroke-width:1.5}
+.ac .tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ac .tiles .chip.on{background:#b0412f;color:#fff;border-color:#b0412f}
+.ac .ask{font-family:Georgia,serif;font-size:1.35em;text-align:center;margin:6px 0}
+.ns .sets{font-family:Georgia,serif;font-size:1.15em;text-align:center;line-height:1.8;margin:6px 0}
+.ns .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ns .why{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:8px 12px;border-radius:8px;margin:8px 0}
+.ns .ph{text-align:center;color:#5c6b60;font-style:italic;margin:10px 0}
+.sc .tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.sc .tiles .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.sc .found{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0;min-height:2em}
+.sc .found span{font-family:Georgia,serif;background:#fff;border:1.5px solid #9fb0a3;border-radius:8px;padding:2px 8px}
+.ssvg{width:100%;max-width:420px;height:auto;display:block;margin:6px auto;background:#fbfaf5;border:2px solid #c9d6bf;border-radius:12px}
+.ssvg .bx{fill:#fff;stroke:#9fb0a3;stroke-width:1.5}.ssvg .hd{fill:#eef4e8;stroke:#3f5f45;stroke-width:1.5}
+.ssvg .tx{font-family:Georgia,serif;font-size:14px;fill:#1f2a33}.ssvg .th{font-family:Georgia,serif;font-size:14px;font-weight:700;fill:#1f2a33}
+.ssvg .ar{stroke:#9fb0a3;stroke-width:1.5}
+.ssvg .on{stroke:#b0412f;stroke-width:3.5}
+@media (max-width:520px){.dc .rulebig{font-size:1.12em}.nlsvg .tl{font-size:19px}.ssvg .tx,.ssvg .th{font-size:16px}.dc .dctl .sym{min-width:44px}}
+.vsvg .ccc{fill:none;stroke:#3f8f4f;stroke-width:2.5}
+.v3{max-width:500px}
+.rs .next{font-family:Georgia,serif;font-size:1.6em;text-align:center;margin:6px 0}
+.rs .buttonrow .chip,.l3 .rbtn .chip{margin:2px}
+.l3 .rbtn{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.l3 .rbtn .chip.on,.l3 .mode .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.l3 .card2{font-family:Georgia,serif;font-size:1.4em;text-align:center;margin:6px 0}
+.pz .ctx{line-height:1.9;text-align:center}
+.pz .clue{display:inline-block;font-family:Georgia,serif;background:#fff;border:1.5px solid #9fb0a3;border-radius:8px;padding:1px 8px;margin:3px 2px;white-space:nowrap}
+.pz .clue.ok{background:#e3f0df;border-color:#3f8f4f}.pz .clue.no{background:#fbe3dc;border-color:#b0412f}
+.pz .grid8{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 12px;max-width:640px;margin:6px auto}
+.pz .grid8>span{display:flex;align-items:center;justify-content:space-between;gap:4px;background:#fff;border-radius:8px;padding:3px 6px}
+.pz .grid8>span>span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pz .grid8 .lb{font-style:normal;background:none;padding:0}
+.pz .grid8 b{min-width:30px;text-align:center;font-family:Georgia,serif;font-size:1.15em}
+.tb .pick{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;margin:6px 0}
+.tb .pick label{font-family:Georgia,serif;font-weight:700;font-size:1.15em}
+.tb select{font-size:1em;padding:5px 8px;border-radius:8px;border:1.5px solid #9fb0a3;background:#fff;max-width:200px}
+.tb .nw{white-space:nowrap}
+.tb .sets{font-family:Georgia,serif;text-align:center;line-height:1.7;margin:4px 0}
+table.nt3{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-size:.88em}
+table.nt3 th,table.nt3 td{border:1.5px solid #9fb0a3;padding:3px 6px;text-align:center}
+table.nt3 th{background:#eef4e8;font-weight:600;font-size:.85em}
+.tbwrap{display:flex;flex-wrap:wrap;gap:4px 6px;justify-content:center;margin:6px 0}
+.tbwrap .cn{font-family:Georgia,serif;background:#fff;border:1.5px solid #9fb0a3;border-radius:8px;padding:1px 8px;white-space:nowrap}
+@media (max-width:520px){.v3 .el{font-size:16px}.v3 .lab{font-size:22px}.v3 .cnt{font-size:25px}}
+.vsvg .cnt.ex{font-size:17px}
+.v3 .cnt.ex{font-size:14px}
+.cc .ask,.pk .read{font-family:Georgia,serif;font-size:1.15em;text-align:center;line-height:1.9;margin:6px 0}
+.pk .rbtn,.sv .rbtn{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+.pk .rbtn .chip.on,.sv .rbtn .chip.on,.we .chip.on,.mp .clues .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.we .werow{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:6px 0;padding:6px 8px;background:#fff;border-radius:8px}
+.we .wl{min-width:96px;font-weight:600}
+.we .opts{display:flex;flex-wrap:wrap;gap:4px}
+.we .opts .chip{font-family:Georgia,serif}
+.sv .ctx{line-height:1.8}
+.sv ul.clues{margin:4px 0 6px 18px;padding:0}
+.sv .regs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 12px;max-width:660px;margin:6px auto}
+.sv .svr{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-radius:8px;padding:4px 8px;border:1.5px solid #e2e7df}
+.sv .svr.ok{border-color:#3f8f4f;background:#f2f8ef}
+.sv .svr input{width:110px;padding:6px 8px;border:1.5px solid #9fb0a3;border-radius:8px;font-family:Georgia,serif;font-size:1.05em}
+.sv .eq{font-family:Georgia,serif;font-size:1.1em;line-height:1.8;text-align:center;background:#f6f2fb;border-left:4px solid #9a7fc1;border-radius:8px;padding:8px 12px;margin:8px 0}
+.mp .clues{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.mp .stepper b{min-width:34px}
+.mp .ptext{line-height:1.8;text-align:center;margin:6px 0}
+@media (max-width:520px){.sv .svr input{width:96px}.vsvg .cnt.ex{font-size:19px}.v3 .cnt.ex{font-size:15px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Sets and Venn Diagrams</h1>
+<h2>Venn diagram problems, including a first link to probability</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>How do sets help us count, and find a chance?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — solving survey problems with an unknown, and reading probabilities from a Venn diagram.</p>
+<p><b>Stepping Stone:</b> solve <b>Venn diagram problems</b>, including with an unknown <i>x</i>, and find <b>probabilities</b> from a Venn diagram.</p>
+<p><b>You will need:</b> Lessons 1 to 4, probability as a fraction, and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 6 · Move 9 · Reflect 7 · Create 6 · Nourish (main) 15 · Rest 2</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y10_SetsVenn_Lesson_05_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y10_SetsVenn_Lesson_05_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw the Venn diagram. Write x in the unknown region, then write every other region in terms of x.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Chance from counts</summary>
+<p><b>Start here:</b> three short probability questions. Answer with a fraction, a decimal or a percentage.</p>
+<p><b>What you are trying to notice:</b> a probability compares the event with <b>everything</b> that could happen: here, everyone in ℰ.</p>
+<div class="toolbox cc">
+<h3 style="margin-top:0">🎲 Chance from counts</h3>
+<b id="ccQn"></b>
+<p id="ccQ" class="ask"></p>
+<div id="ccFig"></div>
+<div id="ccIn" class="buttonrow" style="justify-content:center"><input id="ccA" class="numin neo-mathfield" style="max-width:220px" aria-label="Your answer" onkeydown="if(event.key==='Enter')ccCheck()"><button onclick="ccCheck()">✅ Check</button></div>
+<div id="ccRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">When one region of a Venn diagram is unknown, call it <b><i>x</i></b>. Use the clues to write every other region <b>in terms of <i>x</i></b>, such as 23 − <i>x</i>. All the regions together make ℰ, so their total gives an <b>equation</b> to solve.</p>
+<p style="margin:6px 0">For an element chosen at random, P(event) = <span class="fr"><span>number in the event</span><span><i>n</i>(ℰ)</span></span>.</p>
+</div>
+<p>Today's main activity, the <b>Survey Solver</b>, is in <b>Nutrition</b>.</p>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — The Probability Picker</summary>
+<p><b>What to do:</b> 30 learners were asked whether they play guitar (<i>G</i>) or piano (<i>P</i>). Tap regions to build an event, and watch its probability. Then answer the four questions.</p>
+<p><b>What you are trying to notice:</b> the numerator is the total of the lit regions; the denominator is always <i>n</i>(ℰ) = 30.</p>
+<div class="toolbox pk">
+<h3 style="margin-top:0">🎯 The Probability Picker</h3>
+<div id="pkFig"></div>
+<div id="pkBtns" class="rbtn"></div>
+<p id="pkRead" class="read" aria-live="polite"></p>
+</div>
+<div class="mq"><b id="pqQn"></b><div id="pqQ" style="margin-top:4px"></div><div id="pqIn" class="buttonrow"><input id="pqA" class="numin neo-mathfield" style="max-width:220px" aria-label="Your answer" onkeydown="if(event.key==='Enter')pqCheck()"><button onclick="pqCheck()">✅ Check</button></div></div>
+<div id="pqFb" class="feedback" aria-live="polite"></div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why is P(<i>A</i> ∪ <i>B</i>) = P(<i>A</i>) + P(<i>B</i>) − P(<i>A</i> ∩ <i>B</i>)?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Which expression goes where?</summary>
+<p><b>What to do:</b> choose the expression for each region from the clues. Then choose the right equation.</p>
+<p><b>What you are trying to notice:</b> a clue such as <i>n</i>(<i>A</i>) = 15 counts the whole circle, so the region “only <i>A</i>” is 15 − <i>x</i>, not 15.</p>
+<div class="toolbox we">
+<h3 style="margin-top:0">🧩 Which expression goes where?</h3>
+<p id="weClues" class="ask" style="text-align:center"></p>
+<div id="weFig"></div>
+<div id="weRows"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="weCheck()">✅ Check the regions</button></div>
+<div id="weEq" style="display:none"><p style="text-align:center;margin:6px 0"><b>Which equation do the regions give?</b></p><div id="weEqOpts" class="buttonrow" style="justify-content:center"></div></div>
+<div id="weRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Make your own problem</summary>
+<p><b>What to do:</b> set the counts in a two-set diagram, then choose which clues to give a solver. The tool tells you whether your clues fix the diagram. Meet each brief.</p>
+<p><b>What you are trying to notice:</b> a good problem needs enough clues, and no clue that only repeats the others.</p>
+<div class="toolbox mp">
+<h3 style="margin-top:0">✍️ Make your own problem</h3>
+<div id="mpFig"></div>
+<div class="stepper"><span>only <i>A</i> <button onclick="mpSet('A',-1)">−1</button> <b id="mp_A"></b> <button onclick="mpSet('A',1)">+1</button></span><span>both <button onclick="mpSet('AB',-1)">−1</button> <b id="mp_AB"></b> <button onclick="mpSet('AB',1)">+1</button></span><span>only <i>B</i> <button onclick="mpSet('B',-1)">−1</button> <b id="mp_B"></b> <button onclick="mpSet('B',1)">+1</button></span><span>neither <button onclick="mpSet('out',-1)">−1</button> <b id="mp_out"></b> <button onclick="mpSet('out',1)">+1</button></span></div>
+<p class="small" style="text-align:center;margin:6px 0 0">Clues to give (<i>n</i>(ℰ) is always given):</p>
+<div id="mpClues" class="clues"></div>
+<p id="mpText" class="ptext" aria-live="polite"></p>
+<div id="mpCount" class="small" style="text-align:center"></div>
+<div id="mpQ" class="mq"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="mpCheck()">✅ Check</button><button onclick="mpNext()">Next brief →</button></div>
+<p id="mpFb" class="readline" style="text-align:center"></p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>This is the last lesson of the unit. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> look back at the five lessons. Which idea feels most like yours now: belonging, and or not, subsets, three sets, or solving?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — The Survey Solver (today's main activity)</summary>
+<p><b>Mode: practical.</b> Surveys are how schools, councils and companies find out what people do. Their results often come as overlapping counts, with one number missing.</p>
+<p><b>What to do:</b> for each survey, type an expression for every region (using <i>x</i> where you need it) and check. Then solve the equation from the total, and read a probability from the finished diagram.</p>
+<p><b>What you are trying to notice:</b> once every region is written in terms of <i>x</i>, the total turns the whole survey into one equation.</p>
+<div class="toolbox sv">
+<h3 style="margin-top:0">📋 The Survey Solver</h3>
+<div id="svCount" class="small" style="text-align:center"></div>
+<div id="svCtx" class="ctx"></div>
+<div id="svFig"></div>
+<div id="svRegs" class="regs"></div>
+<div id="svRegBtn" class="buttonrow" style="justify-content:center"><button onclick="svCheck()">✅ Check the regions</button></div>
+<div id="svEq" style="display:none"><p id="svEqText" class="eq"></p>
+<div id="svXrow" class="buttonrow" style="justify-content:center"><label><i>x</i> = <input id="svX" class="numin" style="max-width:120px" aria-label="value of x" onkeydown="if(event.key==='Enter')svSolve()"></label><button onclick="svSolve()">✅ Solve</button></div></div>
+<div id="svRead" class="feedback" aria-live="polite"></div>
+<div id="svProb" style="display:none">
+<p class="small" style="text-align:center;margin:6px 0 0">Tap regions, or use the buttons, to build an event:</p>
+<div id="svPBtns" class="rbtn"></div>
+<p id="svPRead" class="notes2" aria-live="polite"></p>
+<div class="mq"><span id="svAskQ"></span><div class="buttonrow"><input id="svAskA" class="numin neo-mathfield" style="max-width:220px" aria-label="Your probability" onkeydown="if(event.key==='Enter')svAsk()"><button onclick="svAsk()">✅ Check</button></div></div>
+<div id="svAskRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="buttonrow" style="justify-content:center"><button onclick="svNext()">Next survey →</button></div>
+</div>
+<div class="card">
+<p><b>What it feeds:</b> reading survey results exactly. A headline such as “23 use S and 19 use T” does not mean 42 people: some are counted twice. Asking “who is in both?” is how you avoid being misled by overlapping counts.</p>
+<p class="small">Carry one idea forward: name the unknown, then let the total find it.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — My survey problem</summary>
+<p><b>Your task:</b> write a survey problem about two or three sets (for example clubs, music or travel), with one region unknown.</p>
+<ul>
+<li>Give clues that fix the diagram, and call the unknown region <i>x</i>.</li>
+<li>Solve your problem: write each region in terms of <i>x</i>, form the equation from the total, and find <i>x</i>.</li>
+<li>Give two probabilities from your finished diagram, as fractions in their simplest form.</li>
+<li><span class="stretch">stretch</span> Use a three-set diagram, with <i>x</i> in the centre.</li>
+</ul>
+<p><strong>Submission choices:</strong> an annotated Scratchpad image, a photographed page, a short slideshow, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_VENN_SURVEY_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Places some counts in a diagram.</td><td>Knows that a clue such as <i>n</i>(<i>A</i>) counts the whole circle.</td><td>Writes every region in terms of <i>x</i>.</td><td>Explains why the total gives an equation.</td></tr>
+<tr><td><b>Application</b></td><td>Finds a probability from a simple diagram.</td><td>Forms the equation from the total.</td><td>Solves for <i>x</i> and completes the diagram.</td><td>Writes a problem whose clues fix the diagram.</td></tr>
+<tr><td><b>Communication</b></td><td>Writes a probability as a fraction.</td><td>Uses <i>n</i>(ℰ) as the denominator.</td><td>Writes each step clearly, with the equation shown.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one region.</td><td>Checks the regions add up to <i>n</i>(ℰ).</td><td>Checks each clue against the finished diagram.</td><td>Spots and fixes an intersection counted twice.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Venn diagram problems — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Give probabilities as fractions, decimals or percentages. Expressions can use <i>x</i>, such as 12 − <i>x</i>.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer">
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Draw the diagram. Write x in the unknown region, then every other region in terms of x.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["−","/","%","∪","∩","′","ℰ"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function money(v){ var s=String(v).trim().toLowerCase(); var m=s.match(/^(\d+(?:\.\d+)?)\s*(p|pence)$/); if(m) return parseFloat(m[1])/100; return num(s.replace(/^£\s*/,'').replace(/\s*(pounds?|£)\s*$/,'')); }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function I(t){ return '<i>'+t+'</i>'; }
+
+/* ---------------- Reading sets (QA gate 6a) ---------------- */
+// The empty set: ∅, { }, {}, empty, the empty set, none, nothing, no elements
+function isEmptySet(v){ return /^\s*(∅|\{\s*\}|(the\s+)?empty(\s+set)?|none|nothing|no\s+elements?)\s*$/i.test(String(v)); }
+// A list of whole numbers in any order, with commas, spaces, "and" or curly brackets; repeats ignored; number words allowed.
+// Returns a sorted array, [] for the empty set, or null if it cannot be read.
+function setOf(v){ if(isEmptySet(v)) return [];
+  var s=String(v).toLowerCase().replace(/^\s*[a-z]\s*=\s*/,'').replace(/[{}()\[\]]/g,' ').replace(/\band\b|&/g,',').trim(); if(!s) return null;
+  var parts=/,|;/.test(s)?s.split(/[,;]+/):s.split(/\s+/), out=[];
+  for(var i=0;i<parts.length;i++){ var p=parts[i].trim(); if(!p) continue; var n=/^-?\d+$/.test(p)?parseInt(p,10):num(p); if(isNaN(n)||n!==Math.round(n)) return null; if(out.indexOf(n)<0) out.push(n); }
+  return out.length?out.sort(function(a,b){ return a-b; }):null; }
+function sameSet(a,b){ return !!a&&a.length===b.length&&a.every(function(x,i){ return x===b[i]; }); }
+function neg(n){ return n<0?'−'+(-n):String(n); }
+function showSet(L){ return L.length?'{'+L.map(neg).join(', ')+'}':'∅'; }
+
+function isPrime(n){ if(n<2) return false; for(var d=2;d*d<=n;d++) if(n%d===0) return false; return true; }
+function range(n){ var u=[]; for(var i=1;i<=n;i++) u.push(i); return u; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x');
+/* ---------------- A two-set Venn diagram (reusable) ---------------- */
+// Regions by membership: 'A' = only A, 'AB' = both, 'B' = only B, 'out' = neither.
+var VG={W:400,H:260,ax:155,bx:245,cy:135,r:92};
+var vennN=0;
+function regionAt(x,y){ var a=Math.hypot(x-VG.ax,y-VG.cy)<=VG.r, b=Math.hypot(x-VG.bx,y-VG.cy)<=VG.r; return a&&b?'AB':a?'A':b?'B':'out'; }
+// grid slots inside a region, clear of the circle edges, nearest the region's centre first
+var SLOTC={A:[100,135],AB:[200,135],B:[300,135],out:[372,236]};
+function slots(reg){ var out=[]; for(var y=34;y<=238;y+=24) for(var x=26;x<=376;x+=26){ var da=Math.hypot(x-VG.ax,y-VG.cy), db=Math.hypot(x-VG.bx,y-VG.cy);
+    var inA=da<VG.r-15, outA=da>VG.r+13, inB=db<VG.r-15, outB=db>VG.r+13, k=inA&&inB?'AB':inA&&outB?'A':inB&&outA?'B':outA&&outB?'out':null;
+    if(k===reg) out.push([x,y]); }
+  var c=SLOTC[reg]; return out.sort(function(p,q){ return Math.hypot(p[0]-c[0],p[1]-c[1])-Math.hypot(q[0]-c[0],q[1]-c[1]); }); }
+var SLOTS={A:slots('A'),AB:slots('AB'),B:slots('B'),out:slots('out')};
+// o: {elems:{A:[],AB:[],B:[],out:[]}, counts:{...}, lit:{A:true,...}, labels:['A','B'], uni:'ℰ', on:[region keys outlined]}
+function vennSVG(o){ var id='v'+(vennN++), g='', L=o.labels||['A','B'], lit=o.lit||{};
+  g+='<defs><clipPath id="'+id+'cb"><circle cx="'+VG.bx+'" cy="'+VG.cy+'" r="'+VG.r+'"/></clipPath>'
+    +'<mask id="'+id+'na"><rect x="0" y="0" width="400" height="260" fill="#fff"/><circle cx="'+VG.ax+'" cy="'+VG.cy+'" r="'+VG.r+'" fill="#000"/></mask>'
+    +'<mask id="'+id+'nb"><rect x="0" y="0" width="400" height="260" fill="#fff"/><circle cx="'+VG.bx+'" cy="'+VG.cy+'" r="'+VG.r+'" fill="#000"/></mask>'
+    +'<mask id="'+id+'nab"><rect x="0" y="0" width="400" height="260" fill="#fff"/><circle cx="'+VG.ax+'" cy="'+VG.cy+'" r="'+VG.r+'" fill="#000"/><circle cx="'+VG.bx+'" cy="'+VG.cy+'" r="'+VG.r+'" fill="#000"/></mask></defs>';
+  var shape={AB:'<circle cx="'+VG.ax+'" cy="'+VG.cy+'" r="'+VG.r+'" clip-path="url(#'+id+'cb)"',A:'<circle cx="'+VG.ax+'" cy="'+VG.cy+'" r="'+VG.r+'" mask="url(#'+id+'nb)"',B:'<circle cx="'+VG.bx+'" cy="'+VG.cy+'" r="'+VG.r+'" mask="url(#'+id+'na)"',out:'<rect x="10" y="10" width="380" height="240" mask="url(#'+id+'nab)"'};
+  ['out','A','B','AB'].forEach(function(k){ if(lit[k]) g+=shape[k]+' class="lit" data-r="'+k+'"/>'; });
+  g+='<rect x="10" y="10" width="380" height="240" class="uni"/><circle cx="'+VG.ax+'" cy="'+VG.cy+'" r="'+VG.r+'" class="ca"/><circle cx="'+VG.bx+'" cy="'+VG.cy+'" r="'+VG.r+'" class="cb"/>';
+  (o.on||[]).forEach(function(k){ g+=shape[k]+' fill="none" stroke="#b0412f" stroke-width="5" data-on="'+k+'"/>'; });
+  g+='<text x="18" y="30" class="ul">'+(o.uni||'ℰ')+'</text><text x="78" y="52" class="lab" fill="#b0412f">'+L[0]+'</text><text x="322" y="52" class="lab" fill="#2f6db0">'+L[1]+'</text>';
+  if(o.elems) ['A','AB','B','out'].forEach(function(k){ (o.elems[k]||[]).forEach(function(v,i){ var p=SLOTS[k][i]; g+='<text x="'+p[0]+'" y="'+(p[1]+5)+'" text-anchor="middle" class="el" data-v="'+v+'" data-k="'+k+'">'+v+'</text>'; }); });
+  if(o.counts) ['A','AB','B','out'].forEach(function(k){ if(o.counts[k]==null) return; var c=SLOTC[k], p=k==='out'?[360,232]:c; g+='<text x="'+p[0]+'" y="'+(p[1]+7)+'" text-anchor="middle" class="cnt" data-k="'+k+'">'+o.counts[k]+'</text>'; });
+  return '<svg class="vsvg" viewBox="0 0 400 260" role="img" aria-label="'+(o.aria||'A Venn diagram with two overlapping circles inside a rectangle')+'"'+(o.click?' onclick="'+o.click+'(event,this)"':'')+'>'+g+'</svg>'; }
+function svgPoint(ev,svg){ var b=svg.getBoundingClientRect(); return [(ev.clientX-b.left)*400/b.width,(ev.clientY-b.top)*260/b.height]; }
+function sortBy(U,fa,fb){ var e={A:[],AB:[],B:[],out:[]}; U.forEach(function(n){ var a=fa(n), b=fb(n); e[a&&b?'AB':a?'A':b?'B':'out'].push(n); }); return e; }
+function range(n){ var u=[]; for(var i=1;i<=n;i++) u.push(i); return u; }
+
+/* ---------------- A three-set Venn diagram (reusable) ---------------- */
+// Region keys by membership: 'A','B','C' (only that set), 'AB','AC','BC' (exactly those two), 'ABC' (all three), 'out' (none).
+var KEYS3=['ABC','AB','AC','BC','A','B','C','out'];
+var V3={W:440,H:400,A:[172,172,115],B:[268,172,115],C:[220,255,115],la:[70,74],lb:[370,74],lc:[104,374]};
+var v3N=0;
+function inC(k,x,y,m){ var c=V3[k]; return Math.hypot(x-c[0],y-c[1])<c[2]+(m||0); }
+function regionAt3(x,y){ var k=['A','B','C'].filter(function(c){ return inC(c,x,y); }).join(''); return k||'out'; }
+function keyOf3(a,b,c){ return ((a?'A':'')+(b?'B':'')+(c?'C':''))||'out'; }
+function slots3(reg){ var out=[];
+  for(var y=28;y<=V3.H-20;y+=20) for(var x=22;x<=V3.W-22;x+=24){ var k='', ok=true;
+    ['A','B','C'].forEach(function(c){ var d=Math.hypot(x-V3[c][0],y-V3[c][1]); if(d<V3[c][2]-11) k+=c; else if(d<=V3[c][2]+11) ok=false; });
+    if(!ok||(k||'out')!==reg) continue;
+    if([V3.la,V3.lb,V3.lc,[22,24]].some(function(p){ return Math.hypot(x-p[0],y-(p[1]-6))<22; })) continue;
+    out.push([x,y]); }
+  var c; if(reg==='out') c=[420,380]; else { c=[0,0]; out.forEach(function(p){ c[0]+=p[0]/out.length; c[1]+=p[1]/out.length; }); }
+  return out.sort(function(p,q){ return Math.hypot(p[0]-c[0],p[1]-c[1])-Math.hypot(q[0]-c[0],q[1]-c[1]); }); }
+var SLOTS3={}; KEYS3.forEach(function(k){ SLOTS3[k]=slots3(k); });
+// centres for counts: the middle of each region
+var CNT3={}; KEYS3.forEach(function(k){ var S=SLOTS3[k]; if(k==='out'){ CNT3[k]=[398,358]; return; } var c=[0,0]; S.forEach(function(p){ c[0]+=p[0]/S.length; c[1]+=p[1]/S.length; }); var best=S[0]; S.forEach(function(p){ if(Math.hypot(p[0]-c[0],p[1]-c[1])<Math.hypot(best[0]-c[0],best[1]-c[1])) best=p; }); CNT3[k]=best; });
+function circ(k,extra){ var c=V3[k]; return '<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'"'+(extra||'')+'/>'; }
+function regionShape(id,k,attrs){ var inc=k==='out'?[]:k.split(''), exc=['A','B','C'].filter(function(c){ return inc.indexOf(c)<0; });
+  var d='<mask id="'+id+'m'+k+'"><rect x="0" y="0" width="'+V3.W+'" height="'+V3.H+'" fill="#fff"/>'+exc.map(function(c){ return circ(c,' fill="#000"'); }).join('')+'</mask>';
+  var body='<rect x="10" y="10" width="'+(V3.W-20)+'" height="'+(V3.H-20)+'" mask="url(#'+id+'m'+k+')"'+attrs+'/>';
+  inc.forEach(function(c){ d+='<clipPath id="'+id+'c'+k+c+'">'+circ(c)+'</clipPath>'; body='<g clip-path="url(#'+id+'c'+k+c+')">'+body+'</g>'; });
+  return {defs:d,body:body}; }
+// o: {elems:{key:[...]}, counts:{key:n}, lit:{key:true}, on:['A','B','C'] circles outlined, click, aria, labels}
+function venn3(o){ var id='w'+(v3N++), defs='', g='', L=o.labels||['A','B','C'], lit=o.lit||{};
+  KEYS3.forEach(function(k){ if(!lit[k]) return; var s=regionShape(id,k,' class="lit" data-r="'+k+'"'); defs+=s.defs; g+=s.body; });
+  g+='<rect x="10" y="10" width="'+(V3.W-20)+'" height="'+(V3.H-20)+'" class="uni"/>'+circ('A',' class="ca" data-c="A"')+circ('B',' class="cbb" data-c="B"')+circ('C',' class="ccc" data-c="C"');
+  (o.on||[]).forEach(function(c){ g+=circ(c,' fill="none" stroke="#b0412f" stroke-width="5" data-on="'+c+'"'); });
+  g+='<text x="18" y="32" class="ul">'+(o.uni||'ℰ')+'</text><text x="'+V3.la[0]+'" y="'+V3.la[1]+'" text-anchor="middle" class="lab" fill="#b0412f">'+L[0]+'</text><text x="'+V3.lb[0]+'" y="'+V3.lb[1]+'" text-anchor="middle" class="lab" fill="#2f6db0">'+L[1]+'</text><text x="'+V3.lc[0]+'" y="'+V3.lc[1]+'" text-anchor="middle" class="lab" fill="#3f8f4f">'+L[2]+'</text>';
+  if(o.elems) KEYS3.forEach(function(k){ (o.elems[k]||[]).forEach(function(v,i){ var p=SLOTS3[k][i]; g+='<text x="'+p[0]+'" y="'+(p[1]+5)+'" text-anchor="middle" class="el" data-v="'+v+'" data-k="'+k+'">'+v+'</text>'; }); });
+  if(o.counts) KEYS3.forEach(function(k){ if(o.counts[k]==null) return; var p=CNT3[k]; g+='<text x="'+p[0]+'" y="'+(p[1]+7)+'" text-anchor="middle" class="cnt" data-k="'+k+'">'+o.counts[k]+'</text>'; });
+  return '<svg class="vsvg v3" viewBox="0 0 '+V3.W+' '+V3.H+'" role="img" aria-label="'+(o.aria||'A Venn diagram with three overlapping circles inside a rectangle')+'"'+(o.click?' onclick="'+o.click+'(event,this)"':'')+'><defs>'+defs+'</defs>'+g+'</svg>'; }
+function svgPoint3(ev,svg){ var b=svg.getBoundingClientRect(); return [(ev.clientX-b.left)*V3.W/b.width,(ev.clientY-b.top)*V3.H/b.height]; }
+function sort3(U,fa,fb,fc){ var e={}; KEYS3.forEach(function(k){ e[k]=[]; }); U.forEach(function(n){ e[keyOf3(fa(n),fb(n),fc(n))].push(n); }); return e; }
+function counts3(E){ var c={}; KEYS3.forEach(function(k){ c[k]=E[k].length; }); return c; }
+// totals from region counts
+function tot(c,keys){ return keys.reduce(function(s,k){ return s+(c[k]||0); },0); }
+var IN={A:['A','AB','AC','ABC'],B:['B','AB','BC','ABC'],C:['C','AC','BC','ABC']};
+function nOf(c){ return {A:tot(c,IN.A),B:tot(c,IN.B),C:tot(c,IN.C),AB:tot(c,['AB','ABC']),AC:tot(c,['AC','ABC']),BC:tot(c,['BC','ABC']),ABC:c.ABC,U:tot(c,['A','B','C','AB','AC','BC','ABC']),one:tot(c,['A','B','C']),two:tot(c,['AB','AC','BC']),out:c.out}; }
+
+
+/* ---------------- Probability and expressions ---------------- */
+function svgSafe(h){ return h.replace(/class="cnt"/g,'class="cnt ex"').replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>'); }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
+function frac(n,d){ var g=gcd(n,d)||1; return FR(n,d)+(g>1?' = '+FR(n/g,d/g):''); }
+// a probability typed as a fraction, decimal or percentage; recurring decimals accepted when correctly rounded to at least 3 s.f.
+function probOf(v){ var s=String(v).trim().toLowerCase().replace(/\s*out of\s*/,'/'); var pct=/%|per\s*cent/.test(s); s=s.replace(/%|per\s*cent/g,''); var n=num(s); return isNaN(n)?NaN:(pct?n/100:n); }
+function probOK(v,n,d){ var p=probOf(v), t=n/d; if(isNaN(p)) return false; if(Math.abs(p-t)<1e-9) return true;
+  var s=String(v).trim(), m=s.match(/^0?\.(\d+)$/); if(m){ var dp=m[1].length, sf=m[1].replace(/^0+/,'').length; if(sf>=3&&Math.abs(Math.round(t*Math.pow(10,dp))/Math.pow(10,dp)-p)<1e-12) return true; }
+  m=s.match(/^(\d+)\.(\d+)\s*%$/); if(m){ var dp2=m[2].length, sf2=(m[1]+m[2]).replace(/^0+/,'').length; if(sf2>=3&&Math.abs(Math.round(t*100*Math.pow(10,dp2))/Math.pow(10,dp2)-p*100)<1e-9) return true; }
+  return false; }
+// a linear expression in x, such as 12 − x, 2x, x + 5 or 7: returns [coefficient of x, constant] or null
+function linOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'').replace(/[×*]/g,'');
+  if(!s||!/^[+-]?(\d*x|\d+)([+-](\d*x|\d+))*$/.test(s)) return null;
+  var a=0,b=0,re=/([+-]?)(\d*)(x?)/g,m; while((m=re.exec(s))&&m[0]!==''){ var sg=m[1]==='-'?-1:1; if(m[3]) a+=sg*(m[2]===''?1:parseInt(m[2],10)); else b+=sg*parseInt(m[2],10); }
+  return [a,b]; }
+function linStr(a,b){ var cx=function(k){ return (k===1?'':k)+X; };
+  if(a<0) return (b?b+' − ':'−')+cx(-a); if(a>0) return cx(a)+(b>0?' + '+b:b<0?' − '+(-b):''); return String(b); }
+
+/* ---------------- CONNECTION: chance from counts ---------------- */
+var CC=[
+ {q:'A bag holds 3 red and 5 blue counters. One is picked at random. What is the probability that it is red?',n:3,d:8,hint:'How many counters altogether? How many are red?',slip:{0.6:'3 out of 5 compares red with blue. Compare red with <b>all</b> the counters.'}},
+ {q:'20 learners: 6 are in <i>A</i> only, 3 in both, 5 in <i>B</i> only and 6 in neither. One is chosen at random. What is the probability that they are in both?',n:3,d:20,hint:'How many are in both? How many learners altogether?',fig:{A:6,AB:3,B:5,out:6},slip:{0.2:'3 out of 15 compares with the learners in a circle only. Use everyone in ℰ: 20.'}},
+ {q:'Same diagram. What is the probability that the learner is in <i>A</i>?',n:9,d:20,hint:I('A')+' is the whole circle: '+I('A')+' only and both.',fig:{A:6,AB:3,B:5,out:6},slip:{0.3:'6 is only part of '+I('A')+'. Include the 3 in both.'}}];
+var cc={i:0};
+function ccRender(){ var Q=CC[cc.i]; if(cc.i>=CC.length){ document.getElementById('ccQn').textContent='✓ All three done.'; document.getElementById('ccQ').innerHTML='Probability = how many in the event over how many in ℰ.'; document.getElementById('ccFig').innerHTML=''; document.getElementById('ccIn').style.display='none'; return; }
+  document.getElementById('ccQn').textContent='Question '+(cc.i+1)+' of '+CC.length; document.getElementById('ccQ').innerHTML=Q.q;
+  document.getElementById('ccFig').innerHTML=Q.fig?vennSVG({counts:Q.fig,aria:'Venn diagram of counts: '+Q.fig.A+' in A only, '+Q.fig.AB+' in both, '+Q.fig.B+' in B only, '+Q.fig.out+' in neither'}):''; document.getElementById('ccA').value=''; }
+function ccCheck(){ var Q=CC[cc.i], v=document.getElementById('ccA').value; if(!v.trim()){ msg('ccRead','warn','Type an answer: a fraction, a decimal or a percentage.'); return; }
+  if(probOK(v,Q.n,Q.d)){ cc.i++; msg('ccRead','good','✓ Yes: '+frac(Q.n,Q.d)+'.'); ccRender(); return; }
+  var p=probOf(v), s=null; Object.keys(Q.slip||{}).forEach(function(k){ if(Math.abs(p-parseFloat(k))<1e-9) s=Q.slip[k]; });
+  msg('ccRead','warn','Not yet. '+(s||(p>1?'A probability is never more than 1.':Q.hint))); }
+
+/* ---------------- MOVEMENT: the Probability Picker ---------------- */
+var PK={c:{A:9,AB:4,B:7,out:10},U:30,lit:{}};
+function pkToggle(k){ if(PK.lit[k]) delete PK.lit[k]; else PK.lit[k]=true; pkDraw(); }
+function pkTap(ev,svg){ var p=svgPoint(ev,svg); if(p[0]<10||p[0]>390||p[1]<10||p[1]>250) return; pkToggle(regionAt(p[0],p[1])); }
+function pkDraw(){ var n=['A','AB','B','out'].reduce(function(s,k){ return s+(PK.lit[k]?PK.c[k]:0); },0), k=['A','AB','B','out'].filter(function(r){ return PK.lit[r]; }).join('|');
+  var NM={'AB':I('G')+' ∩ '+I('P'),'A|AB':I('G'),'AB|B':I('P'),'A|AB|B':I('G')+' ∪ '+I('P'),'out':'('+I('G')+' ∪ '+I('P')+')′','B|out':I('G')+'′','A|out':I('P')+'′','A':I('G')+' ∩ '+I('P')+'′','B':I('G')+'′ ∩ '+I('P'),'A|B':'exactly one','A|AB|B|out':'ℰ'};
+  document.getElementById('pkFig').innerHTML=vennSVG({counts:PK.c,lit:PK.lit,labels:['G','P'],click:'pkTap',aria:'Venn diagram: 9 play guitar only, 4 play both, 7 play piano only, 10 play neither. Tap regions to choose an event.'});
+  document.getElementById('pkBtns').innerHTML=[['A','guitar only'],['AB','both'],['B','piano only'],['out','neither']].map(function(r){ return '<button class="chip'+(PK.lit[r[0]]?' on':'')+'" data-k="'+r[0]+'" onclick="pkToggle(\''+r[0]+'\')">'+r[1]+'</button>'; }).join('');
+  document.getElementById('pkRead').innerHTML=k?'P('+(NM[k]||'these regions')+') = '+frac(n,PK.U)+'<br><span class="small">'+n+' learner'+(n===1?'':'s')+' in the event, out of '+PK.U+' in ℰ</span>':'Tap regions to build an event.'; }
+var PQS=[
+ {q:'P('+I('G')+'): the probability that a learner plays guitar.',n:13,d:30,hint:'Guitar is the whole circle '+I('G')+': guitar only and both.'},
+ {q:'P(plays exactly one of the two instruments).',n:16,d:30,hint:'Exactly one: guitar only and piano only. Leave out both.'},
+ {q:'P('+I('G')+' ∪ '+I('P')+').',n:20,d:30,hint:'In '+I('G')+' or '+I('P')+' (or both): every region except neither.'},
+ {q:'P('+I('P')+'′).',n:19,d:30,hint:I('P')+'′ is everything outside circle '+I('P')+', including neither.'}];
+var pq={i:0};
+function pqRender(){ if(pq.i>=PQS.length){ document.getElementById('pqQn').textContent='✓ All four done.'; document.getElementById('pqQ').innerHTML='Light the event, count it, and divide by '+I('n')+'(ℰ).'; document.getElementById('pqIn').style.display='none'; return; }
+  document.getElementById('pqQn').textContent='Question '+(pq.i+1)+' of '+PQS.length; document.getElementById('pqQ').innerHTML=PQS[pq.i].q; document.getElementById('pqA').value=''; }
+function pqCheck(){ var Q=PQS[pq.i], v=document.getElementById('pqA').value; if(!v.trim()){ msg('pqFb','warn','Type an answer.'); return; }
+  if(probOK(v,Q.n,Q.d)){ pq.i++; msg('pqFb','good','✓ Yes: '+frac(Q.n,Q.d)+'.'); pqRender(); return; }
+  msg('pqFb','warn','Not yet. '+(probOf(v)>1?'A probability is never more than 1. ':'')+Q.hint); }
+
+/* ---------------- REFLECTION: which expression goes where? ---------------- */
+var WE={U:30,clues:I('n')+'(ℰ) = 30, '+I('n')+'('+I('A')+') = 15, '+I('n')+'('+I('B')+') = 12, and 7 are in neither. Let '+X+' be the number in both.',
+  regs:[['A','only '+I('A'),[-1,15]],['AB','both',[1,0]],['B','only '+I('B'),[-1,12]],['out','neither',[0,7]]],
+  pool:[[-1,15],[1,0],[0,15],[-1,12],[0,7],[-1,30],[0,12]],pick:{},stage:0,eq:null};
+var WE_ORD=null;
+function weOpts(){ if(!WE_ORD){ WE_ORD=shuffle(WE.pool.map(function(p,i){ return i; })); } return WE_ORD; }
+function wePick(k,i){ WE.pick[k]=i; WE.stage=0; document.getElementById('weRead').style.display='none'; weDraw(); }
+function weCounts(){ var c={}; WE.regs.forEach(function(r){ var i=WE.pick[r[0]]; c[r[0]]=i==null?'?':linStr(WE.pool[i][0],WE.pool[i][1]); }); return c; }
+function weDraw(){ document.getElementById('weClues').innerHTML=WE.clues;
+  document.getElementById('weFig').innerHTML=svgSafe(vennSVG({counts:weCounts(),aria:'Venn diagram showing the expressions you have chosen'}));
+  document.getElementById('weRows').innerHTML=WE.regs.map(function(r){ return '<div class="werow"><span class="wl">'+r[1]+'</span><span class="opts">'+weOpts().map(function(i){ var p=WE.pool[i]; return '<button class="chip'+(WE.pick[r[0]]===i?' on':'')+'" data-k="'+r[0]+'" data-i="'+i+'" onclick="wePick(\''+r[0]+'\','+i+')">'+linStr(p[0],p[1])+'</button>'; }).join('')+'</span></div>'; }).join('');
+  document.getElementById('weEq').style.display=WE.stage>=1?'':'none'; }
+function weCheck(){ var bad=WE.regs.filter(function(r){ var i=WE.pick[r[0]]; return i==null||WE.pool[i][0]!==r[2][0]||WE.pool[i][1]!==r[2][1]; });
+  if(!bad.length){ WE.stage=1; weDraw(); msg('weRead','good','✓ Every region is right. Now add them up: they make all of ℰ.'); weEqDraw(); return; }
+  var r=bad[0], i=WE.pick[r[0]], t;
+  if(i==null) t='Choose an expression for '+r[1]+'.';
+  else if(r[0]==='A') t=I('n')+'('+I('A')+') = 15 includes the '+X+' in both. What is left for only '+I('A')+'?';
+  else if(r[0]==='B') t=I('n')+'('+I('B')+') = 12 includes the '+X+' in both. What is left for only '+I('B')+'?';
+  else if(r[0]==='AB') t='The number in both is the unknown we called '+X+'.';
+  else t='The clue says how many are in neither.';
+  msg('weRead','warn','Not yet. '+t); }
+var WE_EQ=[['(15 − '+X+') + '+X+' + (12 − '+X+') + 7 = 30, so 34 − '+X+' = 30',true],['15 + 12 + 7 = 30',false],['(15 − '+X+') + (12 − '+X+') = 30',false]];
+var WE_EQORD=null;
+function weEqDraw(){ if(!WE_EQORD) WE_EQORD=shuffle([0,1,2]); document.getElementById('weEqOpts').innerHTML=WE_EQORD.map(function(i){ return '<button class="chip" data-i="'+i+'" onclick="weEqPick('+i+')">'+WE_EQ[i][0]+'</button>'; }).join(''); }
+function weEqPick(i){ if(WE_EQ[i][1]){ WE.stage=2; msg('weRead','good','✓ Yes. 34 − '+X+' = 30, so '+X+' = 4. Only '+I('A')+': 11, both: 4, only '+I('B')+': 8, neither: 7, and 11 + 4 + 8 + 7 = 30.'); document.getElementById('weFig').innerHTML=vennSVG({counts:{A:11,AB:4,B:8,out:7},aria:'Venn diagram: 11 only A, 4 both, 8 only B, 7 neither'}); }
+  else msg('weRead','warn','Not quite: '+(i===1?'15 + 12 counts the '+X+' in both twice. Add the four <b>regions</b> instead.':'That leaves out the '+X+' in both and the 7 in neither. All four regions make ℰ.')); }
+
+/* ---------------- NUTRITION (main activity): the Survey Solver ---------------- */
+var SVY=[
+ {ctx:'40 learners were asked which of two streaming services they use. '+I('S')+' = {uses service S}, '+I('T')+' = {uses service T}.',clues:['23 use S','19 use T','6 use neither','Let '+X+' be the number who use both'],
+  three:false,labels:['S','T'],U:40,
+  regs:[['A','S only',[-1,23],'23 use S, and that includes the '+X+' who use both.'],['AB','both',[1,0],'The number who use both is '+X+'.'],['B','T only',[-1,19],'19 use T, including the '+X+' who use both.'],['out','neither',[0,6],'The clue says how many use neither.']],
+  ask:{q:'P(a learner chosen at random uses exactly one of the two services)',keys:['A','B']}},
+ {ctx:'32 households were asked about pets. '+I('D')+' = {has a dog}, '+I('C')+' = {has a cat}. Twice as many have only a dog as have only a cat.',clues:['5 have both','9 have neither','Let '+X+' be the number with only a cat'],
+  three:false,labels:['D','C'],U:32,
+  regs:[['A','dog only',[2,0],'Twice as many have only a dog as have only a cat, and only a cat is '+X+'.'],['AB','both',[0,5],'The clue says how many have both.'],['B','cat only',[1,0],'We called the number with only a cat '+X+'.'],['out','neither',[0,9],'The clue says how many have neither.']],
+  ask:{q:'P(a household chosen at random has a dog)',keys:['A','AB']}},
+ {ctx:'50 learners chose after-school activities. '+I('A')+' = {art}, '+I('B')+' = {board games}, '+I('C')+' = {coding}.',clues:[X+' do all three',I('n')+'('+I('A')+' ∩ '+I('B')+') = 8',I('n')+'('+I('A')+' ∩ '+I('C')+') = 6',I('n')+'('+I('B')+' ∩ '+I('C')+') = 7','10 do art only, 9 board games only, 7 coding only','7 do none of them'],
+  three:true,labels:['A','B','C'],U:50,
+  regs:[['ABC','all three',[1,0],'We called the number who do all three '+X+'.'],['AB','A and B only',[-1,8],I('n')+'('+I('A')+' ∩ '+I('B')+') = 8 includes the '+X+' in the centre.'],['AC','A and C only',[-1,6],I('n')+'('+I('A')+' ∩ '+I('C')+') = 6 includes the centre.'],['BC','B and C only',[-1,7],I('n')+'('+I('B')+' ∩ '+I('C')+') = 7 includes the centre.'],['A','A only',[0,10],'The clue gives art only.'],['B','B only',[0,9],'The clue gives board games only.'],['C','C only',[0,7],'The clue gives coding only.'],['out','none',[0,7],'The clue gives how many do none.']],
+  ask:{q:'P(a learner chosen at random does at least two of the activities)',keys:['AB','AC','BC','ABC']}}];
+var sv={i:0,stage:'regions',ok:{},lit:{}};
+function svP(){ return SVY[sv.i]; }
+function svSum(P){ var a=0,b=0; P.regs.forEach(function(r){ a+=r[2][0]; b+=r[2][1]; }); return [a,b]; }
+function svX(P){ var s=svSum(P); return (P.U-s[1])/s[0]; }
+function svVal(P){ var x=svX(P), c={}; P.regs.forEach(function(r){ c[r[0]]=r[2][0]*x+r[2][1]; }); return c; }
+function svDiagram(P,counts,lit,click){ var o={counts:counts,labels:P.labels,lit:lit,click:click,aria:'Venn diagram for the survey'};
+  return svgSafe(P.three?venn3(o):vennSVG(o)); }
+function svRender(){ var P=svP(), done=sv.stage!=='regions'; sv.typed=sv.typed||{}; P.regs.forEach(function(r){ var el=document.getElementById('svIn_'+r[0]); if(el&&!el.disabled) sv.typed[r[0]]=el.value; });
+  document.getElementById('svCount').textContent='Survey '+(sv.i+1)+' of '+SVY.length;
+  document.getElementById('svCtx').innerHTML=P.ctx+'<ul class="clues">'+P.clues.map(function(c){ return '<li>'+c+'</li>'; }).join('')+'</ul>';
+  var counts={}; P.regs.forEach(function(r){ counts[r[0]]=sv.stage==='prob'?svVal(P)[r[0]]:sv.ok[r[0]]?linStr(r[2][0],r[2][1]):'?'; });
+  document.getElementById('svFig').innerHTML=svDiagram(P,counts,sv.stage==='prob'?sv.lit:null,sv.stage==='prob'?'svTap':null);
+  document.getElementById('svRegs').innerHTML=P.regs.map(function(r){ return '<label class="svr'+(sv.ok[r[0]]?' ok':'')+'"><span>'+r[1].replace(/\b([A-Z])\b/g,'<i>$1</i>')+'</span><input id="svIn_'+r[0]+'" data-k="'+r[0]+'" autocomplete="off" aria-label="expression for '+r[1]+'"'+(sv.ok[r[0]]?' value="'+linStr(r[2][0],r[2][1]).replace(/<[^>]+>/g,'')+'" disabled':(sv.typed[r[0]]?' value="'+String(sv.typed[r[0]]).replace(/["<>&]/g,'')+'"':''))+' onkeydown="if(event.key===\'Enter\')svCheck()"></label>'; }).join('');
+  document.getElementById('svRegBtn').style.display=done?'none':'';
+  var s=svSum(P);
+  document.getElementById('svEq').style.display=sv.stage==='solve'||sv.stage==='prob'?'':'none';
+  document.getElementById('svEqText').innerHTML='Add all '+P.regs.length+' regions: '+P.regs.map(function(r){ var t=linStr(r[2][0],r[2][1]); return r[2][0]&&r[2][1]?'('+t+')':t; }).join(' + ')+' = '+linStr(s[0],s[1])+'. Together they make '+I('n')+'(ℰ) = '+P.U+', so <b>'+linStr(s[0],s[1])+' = '+P.U+'</b>.';
+  document.getElementById('svXrow').style.display=sv.stage==='solve'?'':'none';
+  document.getElementById('svProb').style.display=sv.stage==='prob'?'':'none';
+  if(sv.stage==='prob'){ var V=svVal(P), keys=P.regs.map(function(r){ return r[0]; }), n=keys.reduce(function(t,k){ return t+(sv.lit[k]?V[k]:0); },0);
+    document.getElementById('svPBtns').innerHTML=P.regs.map(function(r){ return '<button class="chip'+(sv.lit[r[0]]?' on':'')+'" data-k="'+r[0]+'" onclick="svToggle(\''+r[0]+'\')">'+r[1].replace(/\b([A-Z])\b/g,'<i>$1</i>')+'</button>'; }).join('');
+    document.getElementById('svPRead').innerHTML=keys.some(function(k){ return sv.lit[k]; })?'P(the lit regions) = '+frac(n,P.U):'Tap regions to build an event and see its probability.';
+    document.getElementById('svAskQ').innerHTML=P.ask.q+' = ?'; } }
+function svCheck(){ var P=svP(), bad=null;
+  P.regs.forEach(function(r){ if(sv.ok[r[0]]) return; var el=document.getElementById('svIn_'+r[0]), L=linOf(el.value);
+    if(L&&L[0]===r[2][0]&&L[1]===r[2][1]) sv.ok[r[0]]=true; else if(!bad) bad=[r,el.value]; });
+  if(!bad){ sv.stage='solve'; svRender(); msg('svRead','good','✓ Every region is right. Now use the total.'); return; }
+  svRender();
+  var r=bad[0], v=bad[1], L=linOf(v);
+  msg('svRead','warn','Not yet: '+r[1].replace(/\b([A-Z])\b/g,'<i>$1</i>')+'. '+(!String(v).trim()?'Type an expression, such as 12 − '+X+', or a number.':!L?'Write it using numbers and '+X+' only, such as 12 − '+X+' or 2'+X+'.':(r[2][0]===-1&&L[0]===0&&L[1]===r[2][1])?'That is the whole clue. Take away the '+X+' already counted elsewhere.':r[3])); }
+function svSolve(){ var P=svP(), v=document.getElementById('svX').value, x=svX(P), n=num(String(v).replace(/^\s*x\s*=\s*/i,''));
+  if(!String(v).trim()){ msg('svRead','warn','Type the value of '+X+'.'); return; }
+  if(same(n,x)){ sv.stage='prob'; sv.lit={}; var V=svVal(P); svRender(); msg('svRead','good','✓ '+X+' = '+x+'. The diagram now shows every count: '+P.regs.map(function(r){ return r[1].replace(/\b([A-Z])\b/g,'<i>$1</i>')+' '+V[r[0]]; }).join(', ')+'. They add to '+P.U+'.'); return; }
+  var s=svSum(P); msg('svRead','warn','Not yet. Solve '+linStr(s[0],s[1])+' = '+P.U+': '+(s[0]<0?'what must you take from '+s[1]+' to leave '+P.U+'?':'take '+s[1]+' from both sides first.')); }
+function svToggle(k){ if(sv.lit[k]) delete sv.lit[k]; else sv.lit[k]=true; svRender(); }
+function svTap(ev,svg){ var P=svP(), p; if(P.three){ p=svgPoint3(ev,svg); svToggle(regionAt3(p[0],p[1])); } else { p=svgPoint(ev,svg); svToggle(regionAt(p[0],p[1])); } }
+function svAsk(){ var P=svP(), V=svVal(P), n=P.ask.keys.reduce(function(t,k){ return t+V[k]; },0), v=document.getElementById('svAskA').value;
+  if(!v.trim()){ msg('svAskRead','warn','Type a fraction, a decimal or a percentage.'); return; }
+  if(probOK(v,n,P.U)){ msg('svAskRead','good','✓ Yes: '+frac(n,P.U)+'.'+(sv.i<SVY.length-1?' Try the next survey.':' That is all three surveys.')); return; }
+  msg('svAskRead','warn','Not yet. '+(probOf(v)>1?'A probability is never more than 1. ':'')+'Light the regions in the event: the probability is their total over '+P.U+'.'); }
+function svNext(){ sv.i=(sv.i+1)%SVY.length; sv.stage='regions'; sv.ok={}; sv.lit={}; sv.typed={}; document.getElementById('svRegs').innerHTML=''; ['svRead','svAskRead'].forEach(function(id){ document.getElementById(id).style.display='none'; }); document.getElementById('svX').value=''; document.getElementById('svAskA').value=''; svRender(); }
+
+/* ---------------- CREATIVITY: make your own problem ---------------- */
+var MCL=[['E',I('n')+'(ℰ)',[1,1,1,1]],['A',I('n')+'('+I('A')+')',[1,1,0,0]],['B',I('n')+'('+I('B')+')',[0,1,1,0]],['AB',I('n')+'('+I('A')+' ∩ '+I('B')+')',[0,1,0,0]],['U',I('n')+'('+I('A')+' ∪ '+I('B')+')',[1,1,1,0]],['out',I('n')+'(('+I('A')+' ∪ '+I('B')+')′)',[0,0,0,1]],['oA','only '+I('A'),[1,0,0,0]],['oB','only '+I('B'),[0,0,1,0]]];
+var MP={c:{A:5,AB:3,B:4,out:8},on:{E:true},i:0,done:[],fb:''};
+function mpVec(){ return [MP.c.A,MP.c.AB,MP.c.B,MP.c.out]; }
+function mpVal(row){ var v=mpVec(); return row[0]*v[0]+row[1]*v[1]+row[2]*v[2]+row[3]*v[3]; }
+function mpRows(){ return MCL.filter(function(c){ return MP.on[c[0]]; }); }
+function rank(M){ M=M.map(function(r){ return r.slice(); }); var rk=0, cols=4;
+  for(var c=0;c<cols&&rk<M.length;c++){ var p=-1; for(var r=rk;r<M.length;r++) if(Math.abs(M[r][c])>1e-9){ p=r; break; } if(p<0) continue;
+    var t=M[p]; M[p]=M[rk]; M[rk]=t; for(var r2=0;r2<M.length;r2++) if(r2!==rk){ var f=M[r2][c]/M[rk][c]; for(var k=0;k<cols;k++) M[r2][k]-=f*M[rk][k]; } rk++; }
+  return rk; }
+// fixed: no other diagram with whole-number counts fits every chosen clue
+function mpFixed(){ return !mpOther(); }
+function mpOther(){ var rows=mpRows(), T=MP.c.A+MP.c.AB+MP.c.B+MP.c.out, cur=mpVec();
+  for(var a=0;a<=T;a++) for(var b=0;a+b<=T;b++) for(var c=0;a+b+c<=T;c++){ var v=[a,b,c,T-a-b-c]; if(v.join()===cur.join()) continue;
+    if(rows.every(function(r){ return r[2][0]*v[0]+r[2][1]*v[1]+r[2][2]*v[2]+r[2][3]*v[3]===mpVal(r[2]); })) return v; }
+  return null; }
+function mpSet(k,d){ var v=MP.c[k]+d; if(v<0||v>20) return false; MP.c[k]=v; MP.fb=''; mpDraw(); return true; }
+function mpClue(k){ if(k==='E') return; if(MP.on[k]) delete MP.on[k]; else MP.on[k]=true; MP.fb=''; mpDraw(); }
+var MBRIEFS=[
+ {q:'Make a problem with 6 in both, where the clues fix the diagram but do <b>not</b> include '+I('n')+'('+I('A')+' ∩ '+I('B')+').',test:function(){ if(MP.c.AB!==6) return 'Set both to 6.'; if(MP.on.AB) return 'Leave out the clue '+I('n')+'('+I('A')+' ∩ '+I('B')+'): the solver should have to find it.'; return mpFixed()?'':'These clues do not fix the diagram yet: more than one diagram fits.'; },done:'A solver would call the number in both '+X+' and find it from the other clues.'},
+ {q:'Choose '+I('n')+'(ℰ) and three more clues that do <b>not</b> fix the diagram.',test:function(){ var n=mpRows().length; if(n!==4) return 'Use exactly four clues, including '+I('n')+'(ℰ). You have '+n+'.'; return mpFixed()?'These four clues fix the diagram. Look for a clue that only repeats what the others already say.':''; },done:'One clue repeats information, so more than one diagram fits. For example, with '+I('n')+'(ℰ), '+I('n')+'('+I('A')+' ∪ '+I('B')+') and '+I('n')+'(('+I('A')+' ∪ '+I('B')+')′) together, any one of them follows from the other two.'},
+ {q:'Make P(neither) = '+FR(1,4)+' exactly.',test:function(){ var T=MP.c.A+MP.c.AB+MP.c.B+MP.c.out; return T&&MP.c.out*4===T?'':'At the moment P(neither) = '+FR(MP.c.out,T||1)+'.'; },done:'Neither is a quarter of '+I('n')+'(ℰ).'},
+ {q:'<span class="stretch">stretch</span> Make P('+I('A')+' ∪ '+I('B')+') = '+FR(3,5)+' and P('+I('A')+' ∩ '+I('B')+') = '+FR(1,5)+'.',test:function(){ var T=MP.c.A+MP.c.AB+MP.c.B+MP.c.out; if(!T) return 'Put some elements in the diagram.'; if((MP.c.A+MP.c.AB+MP.c.B)*5!==3*T) return 'P('+I('A')+' ∪ '+I('B')+') = '+FR(MP.c.A+MP.c.AB+MP.c.B,T)+' at the moment.'; return MP.c.AB*5===T?'':'P('+I('A')+' ∩ '+I('B')+') = '+FR(MP.c.AB,T)+' at the moment.'; },done:'n(ℰ) must be a multiple of 5, with three fifths inside the circles and one fifth in both.'}];
+function mpCheck(){ var why=MBRIEFS[MP.i].test(); if(why) MP.fb='<span style="color:#7a2b1c">Not yet. '+why+'</span>'; else { MP.done[MP.i]=true; MP.fb='<span style="color:#2f6b46">✓ '+MBRIEFS[MP.i].done.replace(/n\(ℰ\)/g,I('n')+'(ℰ)')+'</span>'; } mpDraw(); }
+function mpNext(){ MP.i=(MP.i+1)%MBRIEFS.length; MP.fb=''; mpDraw(); }
+function mpDraw(){ ['A','AB','B','out'].forEach(function(k){ document.getElementById('mp_'+k).textContent=MP.c[k]; });
+  document.getElementById('mpFig').innerHTML=vennSVG({counts:MP.c,aria:'Venn diagram of your counts: '+MP.c.A+' only A, '+MP.c.AB+' both, '+MP.c.B+' only B, '+MP.c.out+' neither'});
+  document.getElementById('mpClues').innerHTML=MCL.map(function(c){ return '<button class="chip'+(MP.on[c[0]]?' on':'')+'" data-c="'+c[0]+'" onclick="mpClue(\''+c[0]+'\')"'+(c[0]==='E'?' aria-disabled="true"':'')+'>'+c[1]+'</button>'; }).join('');
+  var rows=mpRows(), fixed=mpFixed(), other=fixed?null:mpOther();
+  document.getElementById('mpText').innerHTML='<b>Your problem:</b> '+rows.map(function(c){ return c[1]+' = '+mpVal(c[2]); }).join(', ')+'. Find every region.'
+   +'<br>'+(fixed?'<span style="color:#2f6b46">✓ These clues fix the diagram: only one diagram fits.</span>':'<span style="color:#7a2b1c">More than one diagram fits these clues'+(other?', for example only '+I('A')+' '+other[0]+', both '+other[1]+', only '+I('B')+' '+other[2]+', neither '+other[3]:'')+'.</span>');
+  document.getElementById('mpCount').innerHTML='Brief '+(MP.i+1)+' of '+MBRIEFS.length+(MP.done[MP.i]?' ✓':''); document.getElementById('mpQ').innerHTML=MBRIEFS[MP.i].q; document.getElementById('mpFb').innerHTML=MP.fb; }
+
+/* ---------------- Proof (stretch): P(A ∪ B) ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'P('+I('G')+') = '+FR(13,30)+'. Which regions does it count?',chips:['guitar only: 9','guitar only and both: 9 + 4'],ans:1,ok:'P('+I('G')+') = '+FR('9 + 4',30)+' = '+FR(13,30),hint:I('G')+' is the whole circle.'},
+  {q:'P('+I('P')+') = '+FR(11,30)+'. So P('+I('G')+') + P('+I('P')+') = '+FR(24,30)+'. Which region is counted twice?',chips:['both: '+I('G')+' ∩ '+I('P'),'neither'],ans:0,ok:'The 4 in '+I('G')+' ∩ '+I('P')+' are counted in both P('+I('G')+') and P('+I('P')+')',hint:'Which region is inside both circles?'},
+  {q:'So P('+I('G')+' ∪ '+I('P')+') = '+FR(24,30)+' − …',chips:[FR(10,30)+', the neither region',FR(4,30)+', once'],ans:1,ok:'P('+I('G')+' ∪ '+I('P')+') = '+FR(24,30)+' − '+FR(4,30)+' = '+FR(20,30),hint:'Take away the extra count of the intersection.'},
+  {q:'Check by counting the three regions directly: 9 + 4 + 7 = …',chips:['20, so '+FR(20,30)+' ✓','24'],ans:0,ok:'9 + 4 + 7 = 20 ✓',hint:'Add the regions inside the circles.'}],
+  done:'✓ <b>That is why.</b> Dividing every count by '+I('n')+'(ℰ) turns the counting rule into a probability rule: P('+I('A')+' ∪ '+I('B')+') = P('+I('A')+') + P('+I('B')+') − P('+I('A')+' ∩ '+I('B')+'). The intersection is taken away once because adding P('+I('A')+') and P('+I('B')+') counts it twice.'}
+};
+var pr={pr:0};
+function prFigure(i){ var on=[['A','AB'],['AB'],['AB'],['A','AB','B']][i]||[]; return vennSVG({counts:PK.c,labels:['G','P'],on:on,aria:'Venn diagram: 9 guitar only, 4 both, 7 piano only, 10 neither; the regions in this step are outlined'}); }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    prob:{title:'Probability as a fraction',prompt:'A bag holds 4 red and 6 blue counters. What is the probability of picking red? (A fraction or a decimal.)',answer:0.4,hint:'Red counters over all the counters: 4 out of 10.'},
+    centre:{title:'From the centre out (Lesson 4)',prompt:'<i>n</i>(<i>A</i> ∩ <i>B</i>) = 7, and 3 of those are also in <i>C</i>. How many are in <i>A</i> and <i>B</i> only?',answer:4,hint:'Take the centre away from the 7.'},
+    rule:{title:'The counting rule (Lesson 2)',prompt:'<i>n</i>(<i>A</i>) = 12, <i>n</i>(<i>B</i>) = 9 and <i>n</i>(<i>A</i> ∩ <i>B</i>) = 4. Find <i>n</i>(<i>A</i> ∪ <i>B</i>).',answer:17,hint:'12 + 9 counts the 4 twice.'}
+  };
+  function matches(r,v){ var n=money(String(v).replace(/\s*(%|per ?cent)\s*$/i,'')); return !isNaN(n)&&Math.abs(n-r.answer)<=1e-9; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pS(L){ return function(v){ return sameSet(setOf(v),L); }; }
+function pV(n){ return function(v){ return same(num(v),n); }; }
+function pProb(n,d){ return function(v){ return probOK(v,n,d); }; }
+function pLin(a,b){ return function(v){ var L=linOf(v); return !!L&&L[0]===a&&L[1]===b; }; }
+var PFIG5=vennSVG({counts:{A:9,AB:3,B:5,out:7},aria:'Venn diagram: 9 in A only, 3 in both, 5 in B only, 7 in neither'});
+var PD="24 people: <div style=\"max-width:320px;margin:4px auto\">"+PFIG5+"</div>";
+var PRACTICE=[
+ {label:"1 of 8 · Find x",q:"<i>n</i>(ℰ) = 36, <i>n</i>(<i>A</i>) = 20, <i>n</i>(<i>B</i>) = 15, and 4 are in neither. Let <i>x</i> be the number in both. Find <i>x</i>.",a:[],eq:pV(3),prompt:"Write only <i>A</i>, both, only <i>B</i> and neither in terms of <i>x</i>.",hint:"(20 − <i>x</i>) + <i>x</i> + (15 − <i>x</i>) + 4 = 36.",sol:"39 − <i>x</i> = 36, so <i>x</i> = 3."},
+ {label:"2 of 8 · Then a probability",q:"Same survey: <i>n</i>(ℰ) = 36, <i>n</i>(<i>A</i>) = 20, <i>n</i>(<i>B</i>) = 15, 4 in neither. One person is chosen at random. Find P(in <i>A</i> only).",a:[],eq:pProb(17,36),prompt:"How many are in <i>A</i> only, once you know <i>x</i>?",hint:"<i>x</i> = 3, so <i>A</i> only = 20 − 3.",sol:"<i>A</i> only = 17, so P = "+FR(17,36)+"."},
+ {label:"3 of 8 · Reading a diagram",q:PD+"One person is chosen at random. Find P(<i>B</i>).",a:[],eq:pProb(8,24),prompt:"Which regions are in <i>B</i>? How many people altogether?",hint:"3 + 5 = 8, out of 24.",sol:"P(<i>B</i>) = "+FR(8,24)+" = "+FR(1,3)+"."},
+ {label:"4 of 8 · Complement",q:PD+"Find P(<i>A</i>′).",a:[],eq:pProb(12,24),prompt:"Which regions are outside circle <i>A</i>?",hint:"<i>B</i> only and neither: 5 + 7.",sol:"P(<i>A</i>′) = "+FR(12,24)+" = "+FR(1,2)+"."},
+ {label:"5 of 8 · An expression",q:"<i>n</i>(<i>A</i>) = 18, and <i>x</i> elements are in both <i>A</i> and <i>B</i>. Write an expression for the number in <i>A</i> only.",a:[],eq:pLin(-1,18),prompt:"Does <i>n</i>(<i>A</i>) = 18 include the ones in both?",hint:"Take the <i>x</i> in both away from 18.",sol:"18 − <i>x</i>."},
+ {label:"6 of 8 · Three sets",q:"<i>n</i>(ℰ) = 40. <i>x</i> are in all three sets. <i>n</i>(<i>A</i> ∩ <i>B</i>) = 7, <i>n</i>(<i>A</i> ∩ <i>C</i>) = 5, <i>n</i>(<i>B</i> ∩ <i>C</i>) = 6. 9 are in <i>A</i> only, 8 in <i>B</i> only, 6 in <i>C</i> only, and 5 in none. Find <i>x</i>.",a:[],eq:pV(3),prompt:"Write the three “two sets only” regions in terms of <i>x</i>.",hint:"<i>x</i> + (7 − <i>x</i>) + (5 − <i>x</i>) + (6 − <i>x</i>) + 9 + 8 + 6 + 5 = 40.",sol:"46 − 2<i>x</i> = 40, so <i>x</i> = 3."},
+ {label:"7 of 8 · Twice as many",q:"27 people. 4 are in both <i>A</i> and <i>B</i>, and 5 in neither. Twice as many are in <i>A</i> only as in <i>B</i> only. How many are in <i>A</i> only?",a:[],eq:pV(12),prompt:"Let <i>x</i> be the number in <i>B</i> only. What is <i>A</i> only?",hint:"2<i>x</i> + 4 + <i>x</i> + 5 = 27.",sol:"3<i>x</i> + 9 = 27, so <i>x</i> = 6 and <i>A</i> only = 2 × 6 = 12."},
+ {label:"8 of 8 · Solve, then chance (stretch)",q:"<i>n</i>(ℰ) = 30, <i>n</i>(<i>A</i>) = 18, <i>n</i>(<i>B</i>) = 14 and 3 are in neither. One is chosen at random. Find P(<i>A</i> ∩ <i>B</i>).",a:[],eq:pProb(5,30),prompt:"Find the number in both first.",hint:"(18 − <i>x</i>) + <i>x</i> + (14 − <i>x</i>) + 3 = 30.",sol:"35 − <i>x</i> = 30, so <i>x</i> = 5, and P(<i>A</i> ∩ <i>B</i>) = "+FR(5,30)+" = "+FR(1,6)+"."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],val=document.getElementById("practiceAnswer").value,fb=document.getElementById("practiceFeedback");
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Write each region in terms of x and check the total — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  ccRender();
+  pkDraw(); pqRender();
+  prRender('pr');
+  weDraw();
+  mpDraw();
+  svRender();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('sv-05-venn-problems-probability');</script>
+
+<script src="../../assets/fieldkits/sets-and-venn-diagrams.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(4);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press xⁿ again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="xⁿ"){ /* power key: the next digits typed become a superscript power, e.g. 1.06⁴ */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+</body>
+</html>

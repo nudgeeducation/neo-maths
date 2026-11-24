@@ -1222,6 +1222,14 @@
           "file": "lessons/sets-and-venn-diagrams/04-three-set-venn-diagrams.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "sv-05-venn-problems-probability",
+          "num": "Lesson 05",
+          "title": "Venn diagram problems, including a first link to probability",
+          "file": "lessons/sets-and-venn-diagrams/05-venn-diagram-problems-including-a-first-link-to-probability.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
