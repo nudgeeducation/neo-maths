@@ -452,6 +452,14 @@
           "file": "lessons/transformations-similarity-and-scale/02-rotation.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-03-translation",
+          "num": "Lesson 03",
+          "title": "Translation and column vectors",
+          "file": "lessons/transformations-similarity-and-scale/03-translation-and-column-vectors.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

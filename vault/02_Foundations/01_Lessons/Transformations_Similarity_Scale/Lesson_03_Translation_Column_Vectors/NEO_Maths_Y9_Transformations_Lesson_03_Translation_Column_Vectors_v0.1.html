@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Translation and column vectors</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+<style>
+.gsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px;touch-action:manipulation}
+.gsvg .gl{stroke:#e2d9c8;stroke-width:1}.gsvg .ax{stroke:#2f3429;stroke-width:1.6}
+.gsvg .tn{font-family:Arial,sans-serif;font-size:11px;fill:#5c6b4f}.gsvg .ti{font-family:Georgia,serif;font-style:italic;font-size:12px}
+.gsvg .axl{font-family:Georgia,serif;font-style:italic;font-size:16px;fill:#2f3429}
+.gsvg .mir{stroke:#7a4fb0;stroke-width:3}.gsvg .mir.try{stroke-dasharray:7 5}
+.gsvg .mlab{font-family:Georgia,serif;font-size:14px;fill:#7a4fb0;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:4}
+.gsvg .obj{fill:rgba(47,109,176,.28);stroke:#2b6cb0;stroke-width:2.2}.gsvg .objv{fill:#2b6cb0;stroke:#fff;stroke-width:1.5}
+.gsvg .img{fill:rgba(242,193,78,.45);stroke:#b8860b;stroke-width:2.2}.gsvg .imgv{fill:#b8860b;stroke:#fff;stroke-width:1.5}
+.gsvg .try{fill:none;stroke:#b0412f;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.gsvg .perp{stroke:#3f7a45;stroke-width:1.6;stroke-dasharray:5 4}
+.gsvg .selv{fill:none;stroke:#c1622e;stroke-width:2;stroke-dasharray:3 3}
+.gsvg .mid{fill:#3f7a45;stroke:#fff;stroke-width:1.5}.gsvg .ra{fill:none;stroke:#3f7a45;stroke-width:1.8}
+.gsvg .hl{stroke:#b0412f;stroke-width:3.5}.gsvg .mid.hl{fill:#b0412f}.gsvg .hlv{stroke:#b0412f;stroke-width:3}
+.lab .row2{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;margin:6px 0}
+.lab .chip.on,.md .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.lab table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}
+.lab table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df}
+.lab table.lt td:not(:last-child){white-space:nowrap}
+@media (max-width:520px){.lab table.lt{font-size:.88em}.lab table.lt td{padding:3px 4px}}
+.arrows button{min-width:38px}
+table.rt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif;font-size:1.05em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 14px;text-align:center}table.rt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.ru .opts,.md .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ru .opts .chip{font-family:Georgia,serif;font-size:1.05em}
+.wl .ask{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0}
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.studio{border:2px solid #365a68;background:#eef3f6}
+@media (max-width:520px){.gsvg .tn{font-size:14px}.gsvg .vl{font-size:17px}.gsvg .mlab{font-size:17px}.gsvg .axl{font-size:19px}}
+.gsvg .cen{fill:#7a4fb0;stroke:#fff;stroke-width:1.5}.gsvg .cenr{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:4 3}
+.gsvg .arc{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .target{fill:none;stroke:#b8860b;stroke-width:2.4;stroke-dasharray:6 4}
+.gsvg .sheet{fill:rgba(255,255,255,.55);stroke:#9fb0a3;stroke-width:1.5}.gsvg .trace{fill:rgba(176,65,47,.18);stroke:#b0412f;stroke-width:2.2}
+.gsvg .ghost{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .badge{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#5a3f10}
+.gsvg .rad{stroke:#3f7a45;stroke-width:2}.gsvg .bis{stroke:#7a4fb0;stroke-width:2;stroke-dasharray:6 4}
+.st .opts,.dz .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.dzscroll{max-width:660px;height:min(620px,88vw);overflow:auto;margin:6px auto;border:2px solid #c9d6bf;border-radius:12px;background:#fbf8f1;-webkit-overflow-scrolling:touch}
+.dzscroll .gsvg.big{max-width:none;width:auto;margin:0;border:none;border-radius:0}
+.dz .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.dz ol{margin:6px 0 6px 22px;font-family:Georgia,serif}
+.tp .turns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.cv{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:1px 7px;margin:0 3px;border-left:2px solid currentColor;border-right:2px solid currentColor;border-radius:9px;line-height:1.15;font-family:Georgia,serif}
+.cv>span{min-width:1.4em;text-align:center}
+.cvin{display:inline-flex;align-items:center;gap:4px;font-size:2.2em;font-family:Georgia,serif;color:#5c6b60;vertical-align:middle}
+.cvin .stack{display:inline-flex;flex-direction:column;gap:4px}
+.cvin input{width:64px;font-size:.42em;padding:5px 6px;text-align:center;border:1.5px solid #9fb0a3;border-radius:8px}
+.gsvg .vec{stroke:#3f7a45;stroke-width:2.2}.gsvg .vec.big{stroke-width:3.2}.gsvg .vec.back{stroke:#b0412f;stroke-dasharray:6 4}.gsvg .vec.sum{stroke:#7a4fb0;stroke-width:3}
+.gsvg .star{font-size:24px;fill:#b8860b}.gsvg .token{fill:#b0412f;stroke:#fff;stroke-width:2}
+.vm .row2,.tt .row2{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;align-items:center;margin:6px 0}
+.vm .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.vm .stepcv{display:inline-flex;align-items:center;gap:10px;font-family:Georgia,serif}
+.vm .stepcv .col{display:inline-flex;flex-direction:column;justify-content:space-around;gap:10px;border-left:2.5px solid #2f3429;border-right:2.5px solid #2f3429;border-radius:16px;padding:6px 14px;min-height:92px}
+.vm .stepcv .btns{display:inline-flex;flex-direction:column;gap:8px}
+.vm .stepcv b{min-width:40px;text-align:center;font-size:1.45em;line-height:1.3}
+.vm table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}.vm table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df;white-space:nowrap}
+.vx .opts,.tt .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.vchip{font-size:1.15em;padding:6px 12px}
+.tt .mv{display:inline-block;margin:2px 6px}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Transformations, Similarity and Scale</h1>
+<h2>Translation and column vectors</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>How do you write down a slide?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — a shape slides across a coordinate grid, and two numbers record the move.</p>
+<p><b>Stepping Stone:</b> <b>translate</b> a shape by a <b>column vector</b>, and write the column vector for a translation.</p>
+<p><b>You will need:</b> Lessons 1 and 2, and moving on a coordinate grid — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 14 · Move 10 · Reflect 7 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_03_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_03_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Draw a shape. Slide every corner the same number of squares across and up or down, then join them.')">✏️ Open Maths Scratchpad</button>
+<button class="guidebtn" onclick="openPractice()">✏️ Open Practice Companion</button>
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — The Vector Mover (today's main activity)</summary>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">A <b>translation</b> slides a shape: every point moves the same distance in the same direction. The image is the same shape and size, facing the same way.</p>
+<p style="margin:6px 0">A <b>column vector</b> records the slide with two numbers, one written above the other: <span class="cv"><span>3</span><span>−2</span></span> means 3 right and 2 down. The <b>first number</b> (written above) is the <b>horizontal move</b>: right +, left −. The <b>second number</b> is the <b>vertical move</b>: up +, down −.</p>
+</div>
+<p><b>What to do:</b> change the two numbers with −1 and +1, and watch the image slide. Read the vector aloud in words. Then switch to <b>Find the vector</b>: slide the shape onto each dashed outline.</p>
+<p><b>What you are trying to notice:</b> every arrow is the same length and points the same way. The first number moves the shape horizontally; the second moves it vertically.</p>
+<div class="toolbox vm">
+<h3 style="margin-top:0">↗️ The Vector Mover</h3>
+<div class="row2"><button class="chip" id="vmM0" onclick="vmMode('slide')">Slide it</button><button class="chip" id="vmM1" onclick="vmMode('find')">Find the vector</button></div>
+<p id="vmCount" class="small" style="text-align:center"></p>
+<div id="vmFig"></div>
+<div class="row2"><span class="stepcv"><span class="btns"><button onclick="vmStep(0,-1)" aria-label="first number down one">−1</button><button onclick="vmStep(1,-1)" aria-label="second number down one">−1</button></span><span class="col"><b id="vmT"></b><b id="vmB"></b></span><span class="btns"><button onclick="vmStep(0,1)" aria-label="first number up one">+1</button><button onclick="vmStep(1,1)" aria-label="second number up one">+1</button></span></span></div>
+<p id="vmWords" style="text-align:center;font-size:1.1em" aria-live="polite"></p>
+<div class="row2" id="vmFindRow"><button onclick="vmNext()">Next target →</button></div>
+<table class="lt" id="vmTable"></table>
+<div id="vmRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Now translate it in the Geometry Studio</h3>
+<p>Slide a shape by a column vector, then slide it straight back. Your task travels with you, and a <b>Return to lesson</b> button brings you straight back.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts03-translate&amp;return=../lessons/transformations-similarity-and-scale/03-translation-and-column-vectors.html">📐 Open in the Geometry Studio →</a>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Vector match</summary>
+<p><b>What to do:</b> each arrow on the grid is a move. Choose the column vector that describes it. Then answer six questions.</p>
+<p><b>What you are trying to notice:</b> count across first, then up or down, from the tail of the arrow to its head.</p>
+<div class="toolbox vx">
+<h3 style="margin-top:0">🎯 Vector match</h3>
+<div id="vxCount" class="small" style="text-align:center"></div>
+<div id="vxFig"></div>
+<div id="vxOpts" class="opts"></div>
+<div id="vxRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="vxNext()">Next arrow →</button></div>
+</div>
+<div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div>
+<div id="zqIn" class="buttonrow"><input id="zqA" class="numin neo-mathfield" style="max-width:240px" aria-label="Your answer" placeholder="coordinates, such as (2, −1)" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div>
+<div id="zqVecRow" class="buttonrow" style="display:none;align-items:center"><span class="cvin">(<span class="stack"><input id="zqVT" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="zqVB" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span><button onclick="zqCheck()">✅ Check</button></div></div>
+<div id="zqRead" class="feedback" aria-live="polite"></div>
+<p><b>Carry this forward:</b> first number, horizontal; second number, vertical. Right and up are positive; left and down are negative.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Undo the move</summary>
+<p><b>What to do:</b> each shape has been translated. Type the column vector that moves the image straight back.</p>
+<p><b>What you are trying to notice:</b> to undo a translation, both numbers change sign.</p>
+<div class="toolbox un">
+<h3 style="margin-top:0">↩️ Undo the move</h3>
+<div id="unCount" class="small" style="text-align:center"></div>
+<p id="unQ" style="text-align:center"></p>
+<div id="unFig"></div>
+<div class="buttonrow" style="justify-content:center;align-items:center"><span class="cvin">(<span class="stack"><input id="unVT" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="unVB" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span><button onclick="unCheck()">✅ Check</button></div>
+<div id="unRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="unNext()">Next move →</button></div>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why do two translations make one, with the vectors added?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The treasure trail</summary>
+<p><b>What to do:</b> move the token from <i>S</i> by typing column vectors, one move at a time. Meet each brief, then check.</p>
+<p><b>What you are trying to notice:</b> however the journey goes, the moves add up to the same single vector from start to finish.</p>
+<div class="toolbox tt">
+<h3 style="margin-top:0">🗺️ The treasure trail</h3>
+<div id="ttFig"></div>
+<div class="row2"><span class="cvin">(<span class="stack"><input id="ttVT" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="ttVB" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span><button onclick="ttMove()">➡️ Move</button><button onclick="ttUndo()">↶ Undo</button><button onclick="ttClear()">Clear</button></div>
+<div id="ttList" style="text-align:center" aria-live="polite"></div>
+<div id="ttCount" class="small" style="text-align:center;margin-top:8px"></div>
+<div id="ttQ" class="mq"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ttCheck()">✅ Check</button><button onclick="ttNext()">Next brief →</button></div>
+<p id="ttFb" class="readline" style="text-align:center"></p>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A slide keeps everything the same, just somewhere else. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> think of something that slides without turning: a drawer, a lift, a sliding door. Which way does it move, and how far?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: practical.</b> Today the mathematics feeds how moves are given to machines.</p>
+<div class="card">
+<p><b>What it feeds:</b> games, animations and robots move things using pairs of numbers like column vectors: “move 3 across and 2 down” each frame or each step. Plotters and embroidery machines follow lists of such moves to draw a design, and a delivery robot's route is a chain of moves added together.</p>
+<p class="small">Carry one idea forward: across first, then up or down.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — A journey of translations</summary>
+<p><b>Your task:</b> move a shape on a journey of three translations, and find the single vector for the whole journey.</p>
+<ul>
+<li>Choose three column vectors, and translate a shape by each in turn.</li>
+<li>Write each move in words and as a column vector.</li>
+<li>Find the single column vector from the start to the finish, and check it.</li>
+<li><span class="stretch">stretch</span> Find the column vector that brings the final image straight back to the start.</li>
+</ul>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build your evidence in the Geometry Studio</h3>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts03-final&amp;return=../lessons/transformations-similarity-and-scale/03-translation-and-column-vectors.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><strong>Submission choices:</strong> a saved Studio sketch with a screenshot, an annotated Scratchpad image, a photographed page, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_TRANSLATION_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Slides a shape without turning it.</td><td>Moves every corner the same way.</td><td>Explains what each number of a column vector means.</td><td>Explains why the vectors of a journey add.</td></tr>
+<tr><td><b>Application</b></td><td>Translates with one slip in sign.</td><td>Translates by any column vector.</td><td>Writes the column vector for a given translation.</td><td>Finds the single vector, and the vector back.</td></tr>
+<tr><td><b>Communication</b></td><td>Describes the move in words.</td><td>Writes a column vector.</td><td>Uses <i>translation</i>, <i>column vector</i> and <i>image</i> precisely.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one corner.</td><td>Checks every corner moved the same.</td><td>Checks the signs against right/left and up/down.</td><td>Spots and fixes a vector with its numbers swapped.</td></tr>
+</table>
+</details>
+
+</div></div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Translation and column vectors — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Type coordinates as (2, −1). For a column vector, fill in its two boxes: the horizontal move in the first and the vertical move in the second. The <b>√ Symbols</b> palette has the minus sign and brackets.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<div id="pTextWrap"><input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer"></div>
+<div id="pVecWrap" style="display:none"><p class="small" style="margin:4px 0">Type the horizontal move in the first box and the vertical move in the second.</p><span class="cvin">(<span class="stack"><input id="pVecT" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left" onkeydown="if(event.key==='Enter')pCheck()"><input id="pVecB" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down" onkeydown="if(event.key==='Enter')pCheck()"></span>)</span></div>
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Mark the point. Count across first, then up or down.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["−","(",")",",","x","y"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function I(t){ return '<i>'+t+'</i>'; }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function neg(n){ n=Math.round(n*1e9)/1e9; return n<0?'−'+(-n):String(n); }
+function pt(p){ return '('+neg(p[0])+', '+neg(p[1])+')'; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x'), Y=I('y');
+// a coordinate pair typed any way: (5, −1), 5,-1, 5 -1, x = 5, y = −1. Returns [x, y] or null.
+function pairOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[,;]?\s*(-?\d+(?:\.\d+)?)$/); if(!m){ var a=s.split(/[\s,;]+/).filter(Boolean); if(a.length===2){ var p=num(a[0]), q=num(a[1]); if(!isNaN(p)&&!isNaN(q)) return [p,q]; } return null; }
+  return [parseFloat(m[1]),parseFloat(m[2])]; }
+function samePair(p,q){ return !!p&&same(p[0],q[0])&&same(p[1],q[1]); }
+// a mirror line typed as an equation: x = 3, y = −1, y = x, y = −x (any spacing; x+y=0 and y−x=0 too). Returns {t,k} or null.
+function lineOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'');
+  var m=s.match(/^x=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=x$/); if(m) return {t:'x',k:parseFloat(m[1])};
+  m=s.match(/^y=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=y$/); if(m) return {t:'y',k:parseFloat(m[1])};
+  if(/^(y=x|x=y|y-x=0|x-y=0)$/.test(s)) return {t:'yx',k:0};
+  if(/^(y=-x|x=-y|y\+x=0|x\+y=0|-x=y)$/.test(s)) return {t:'ynx',k:0};
+  return null; }
+function sameLine(a,b){ return !!a&&a.t===b.t&&same(a.k,b.k); }
+function lineName(L){ return L.t==='x'?X+' = '+neg(L.k):L.t==='y'?Y+' = '+neg(L.k):L.t==='yx'?Y+' = '+X:Y+' = −'+X; }
+// reflection in a line, exactly
+function refl(p,L){ var x=p[0], y=p[1]; return L.t==='x'?[2*L.k-x,y]:L.t==='y'?[x,2*L.k-y]:L.t==='yx'?[y,x]:[-y,-x]; }
+function onLine(p,L){ return samePair(refl(p,L),p); }
+
+/* ---------------- A coordinate grid (numbered, labelled axes; GreenPrint v2.3) ---------------- */
+var G={o:230,s:31,m:7};
+function gx(x){ return G.o+x*G.s; } function gy(y){ return G.o-y*G.s; }
+function gridSvg(){ var h='', k, m=G.m;
+  for(k=-m;k<=m;k++) h+='<line x1="'+gx(k)+'" y1="'+gy(m+0.4)+'" x2="'+gx(k)+'" y2="'+gy(-m-0.4)+'" class="gl"/><line x1="'+gx(-m-0.4)+'" y1="'+gy(k)+'" x2="'+gx(m+0.4)+'" y2="'+gy(k)+'" class="gl"/>';
+  h+='<line x1="'+gx(-m-0.4)+'" y1="'+gy(0)+'" x2="'+gx(m+0.4)+'" y2="'+gy(0)+'" class="ax"/><line x1="'+gx(0)+'" y1="'+gy(m+0.4)+'" x2="'+gx(0)+'" y2="'+gy(-m-0.4)+'" class="ax"/>';
+  for(k=-m;k<=m;k++){ if(!k) continue; h+='<text x="'+gx(k)+'" y="'+(gy(0)+15)+'" class="tn" text-anchor="middle">'+neg(k)+'</text><text x="'+(gx(0)-6)+'" y="'+(gy(k)+4)+'" class="tn" text-anchor="end">'+neg(k)+'</text>'; }
+  h+='<text x="'+(gx(0)-6)+'" y="'+(gy(0)+15)+'" class="tn ti" text-anchor="end">O</text><text x="'+(gx(m+0.4)-2)+'" y="'+(gy(0)-7)+'" class="axl" text-anchor="end">x</text><text x="'+(gx(0)+7)+'" y="'+(gy(m+0.4)+12)+'" class="axl">y</text>';
+  return h; }
+function mirrorSvg(L,cls){ var e=G.m+0.4, a, b; if(L.t==='x'){ a=[L.k,e]; b=[L.k,-e]; } else if(L.t==='y'){ a=[-e,L.k]; b=[e,L.k]; } else if(L.t==='yx'){ a=[-e,-e]; b=[e,e]; } else { a=[-e,e]; b=[e,-e]; }
+  var lp=L.t==='x'?[L.k,G.m-0.2]:L.t==='y'?[G.m-1.2,L.k]:L.t==='yx'?[4.6,4.1]:[-5.4,4.9];
+  return '<line x1="'+gx(a[0])+'" y1="'+gy(a[1])+'" x2="'+gx(b[0])+'" y2="'+gy(b[1])+'" class="'+(cls||'mir')+'"/><text x="'+(gx(lp[0])+(L.t==='x'&&L.k<=0?-6:6))+'" y="'+(gy(lp[1])-6)+'" class="mlab" data-line="1"'+(L.t==='x'&&L.k<=0?' text-anchor="end"':'')+'>'+lineName(L).replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>')+'</text>'; }
+function triSvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl" data-v="'+labs[i]+'">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+function inGrid(p){ return Math.abs(p[0])<=G.m&&Math.abs(p[1])<=G.m; }
+function svgAt(ev,svg){ var b=svg.getBoundingClientRect(); var x=(ev.clientX-b.left)*2*G.o/b.width, y=(ev.clientY-b.top)*2*G.o/b.height; return [Math.round((x-G.o)/G.s),Math.round((G.o-y)/G.s)]; }
+var CLIPN=0;
+function wrap(inner,click,aria){ var cid='gclip'+(CLIPN++); return '<svg class="gsvg'+(G.big?' big':'')+'" viewBox="0 0 '+(2*G.o)+' '+(2*G.o)+'"'+(G.big?' width="'+(2*G.o)+'" height="'+(2*G.o)+'"':'')+' role="img" aria-label="'+aria+'"'+(click?' onclick="'+click+'(event,this)"':'')+'><defs><clipPath id="'+cid+'"><rect x="'+gx(-G.m-0.4)+'" y="'+gy(G.m+0.4)+'" width="'+(G.s*(2*G.m+0.8))+'" height="'+(G.s*(2*G.m+0.8))+'"/></clipPath></defs>'+gridSvg()+'<g clip-path="url(#'+cid+')">'+inner+'</g></svg>'; }
+
+/* ---------------- Column vectors ---------------- */
+function cv(a,b){ return '<span class="cv" aria-label="column vector '+neg(a)+', '+neg(b)+'"><span>'+neg(a)+'</span><span>'+neg(b)+'</span></span>'; }
+function vwords(a,b){ var h=a===0?'':Math.abs(a)+' '+(a>0?'right':'left'), v=b===0?'':Math.abs(b)+' '+(b>0?'up':'down'); return (h&&v?h+', '+v:h||v||'no move at all'); }
+function addv(p,v){ return [p[0]+v[0],p[1]+v[1]]; }
+function cvIn(id){ return '<span class="cvin">(<span class="stack"><input id="'+id+'T" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="'+id+'B" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span>'; }
+function readVec(id){ var t=document.getElementById(id+'T').value, b=document.getElementById(id+'B').value; if(!String(t).trim()||!String(b).trim()) return null; var x=num(t), y=num(b); if(isNaN(x)||isNaN(y)) return null; return [x,y]; }
+function clearVec(id){ document.getElementById(id+'T').value=''; document.getElementById(id+'B').value=''; }
+function arrowSvg(p,q,cls){ if(samePair(p,q)) return ''; return '<line x1="'+gx(p[0])+'" y1="'+gy(p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="'+(cls||'vec')+'" marker-end="url(#vhead)"/>'; }
+var MARK='<defs><marker id="vhead" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" refX="10" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#3f7a45"/></marker></defs>';
+var SHAPE=[[-3,1],[-1,1],[-1,3],[-3,2]], SHAPEL=['A','B','C','D'];
+function polySvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+
+/* ---------------- CONNECTION: the Vector Mover (main activity) ---------------- */
+var VM={v:[2,-1],mode:'slide',r:0,done:{}};
+var VMT=[[4,-3],[-4,0],[0,4],[-2,-5]];
+function vmImg(){ return SHAPE.map(function(p){ return addv(p,VM.v); }); }
+function vmFits(v){ return SHAPE.every(function(p){ return inGrid(addv(p,v)); }); }
+function vmStep(k,d){ var v=VM.v.slice(); v[k]+=d; if(!vmFits(v)){ msg('vmRead','warn','That would slide the shape off the grid. Try a different number.'); return false; } VM.v=v; document.getElementById('vmRead').style.display='none'; vmDraw(); vmCheckTarget(); return true; }
+function vmMode(m){ VM.mode=m; VM.v=[0,0]; document.getElementById('vmRead').style.display='none'; vmDraw(); }
+function vmNext(){ VM.r=(VM.r+1)%VMT.length; VM.v=[0,0]; document.getElementById('vmRead').style.display='none'; vmDraw(); }
+function vmCheckTarget(){ if(VM.mode!=='find') return; var t=VMT[VM.r]; if(VM.v[0]===t[0]&&VM.v[1]===t[1]){ VM.done[VM.r]=true; vmDraw(); msg('vmRead','good','✓ It lands. The column vector is '+cv(t[0],t[1])+': '+vwords(t[0],t[1])+'.'+(t[0]===0||t[1]===0?' A zero means no move that way.':'')); } }
+function vmDraw(){ var I4=vmImg(), find=VM.mode==='find', h=MARK;
+  if(find){ var T=SHAPE.map(function(p){ return addv(p,VMT[VM.r]); }); h+='<polygon points="'+T.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="target"/>'; }
+  SHAPE.forEach(function(p,i){ h+=arrowSvg(p,I4[i]); });
+  h+=polySvg(SHAPE,'obj',SHAPEL)+polySvg(I4,'img',SHAPEL.map(function(l){ return l+'′'; }));
+  document.getElementById('vmFig').innerHTML=wrap(h,null,'Shape ABCD translated by the column vector '+neg(VM.v[0])+', '+neg(VM.v[1])+(find?', and a dashed target':''));
+  document.getElementById('vmT').textContent=neg(VM.v[0]); document.getElementById('vmB').textContent=neg(VM.v[1]);
+  document.getElementById('vmWords').innerHTML=cv(VM.v[0],VM.v[1])+' <span class="small">reads</span> <b>'+vwords(VM.v[0],VM.v[1])+'</b>';
+  document.getElementById('vmM0').classList.toggle('on',!find); document.getElementById('vmM1').classList.toggle('on',find);
+  document.getElementById('vmFindRow').style.display=find?'':'none';
+  document.getElementById('vmCount').innerHTML=find?'Target '+(VM.r+1)+' of '+VMT.length+(VM.done[VM.r]?' ✓':'')+': slide '+I('ABCD')+' onto the dashed outline.':'';
+  document.getElementById('vmTable').innerHTML=SHAPE.map(function(p,i){ return '<tr><td>'+I(SHAPEL[i])+pt(p)+'</td><td>→</td><td>'+I(SHAPEL[i])+'′'+pt(I4[i])+'</td></tr>'; }).join(''); }
+
+/* ---------------- MOVEMENT: vector match ---------------- */
+var VX=[{a:[-4,-2],v:[3,-2],opts:[[-2,3],[3,2],[3,-2]],ans:2},{a:[2,1],v:[-4,1],opts:[[-4,1],[4,-1],[1,-4]],ans:0},{a:[-1,-4],v:[0,5],opts:[[5,0],[0,5],[0,-5]],ans:1},{a:[3,4],v:[-2,-3],opts:[[-3,-2],[2,3],[-2,-3]],ans:2}];
+var vx={i:0};
+function vxRender(){ var X=VX[vx.i], b=addv(X.a,X.v);
+  document.getElementById('vxCount').textContent='Arrow '+(vx.i+1)+' of '+VX.length;
+  document.getElementById('vxFig').innerHTML=wrap(MARK+arrowSvg(X.a,b,'vec big')+'<circle cx="'+gx(X.a[0])+'" cy="'+gy(X.a[1])+'" r="5" class="objv"/>',null,'An arrow on the grid from '+pt(X.a)+' to '+pt(b));
+  document.getElementById('vxOpts').innerHTML=X.opts.map(function(o,k){ return '<button class="chip vchip" data-k="'+k+'" onclick="vxPick('+k+')">'+cv(o[0],o[1])+'</button>'; }).join(''); }
+function vxPick(k){ var X=VX[vx.i], o=X.opts[k];
+  if(k===X.ans){ msg('vxRead','good','✓ Yes: the arrow goes '+vwords(X.v[0],X.v[1])+'.'); return; }
+  var why=(o[0]===X.v[1]&&o[1]===X.v[0])?'The first number is the horizontal move and the second is the vertical move. Those are swapped.':(o[0]===-X.v[0]&&o[1]===-X.v[1])?'That vector goes the opposite way: from the head of the arrow back to its tail.':'Check the signs: right and up are positive; left and down are negative.';
+  msg('vxRead','warn','Not quite: '+cv(o[0],o[1])+' means '+vwords(o[0],o[1])+'. '+why); }
+function vxNext(){ vx.i=(vx.i+1)%VX.length; document.getElementById('vxRead').style.display='none'; vxRender(); }
+
+/* ---------------- MOVEMENT: questions ---------------- */
+var ZQ=[
+ {q:'Translate the point (2, 3) by the column vector '+cv(4,-1)+'.',pair:[6,2],hint:'4 right adds 4 to the '+X+'-coordinate; 1 down takes 1 from the '+Y+'-coordinate.',slips:{'6,4':'−1 means 1 <b>down</b>: take 1 from the '+Y+'-coordinate.','1,7':'The first number changes the '+X+'-coordinate; the second number changes the '+Y+'-coordinate.'}},
+ {q:'Translate the point (−1, 5) by the column vector '+cv(-3,-4)+'.',pair:[-4,1],hint:'3 left and 4 down.',slips:{'2,9':'Negative numbers mean left and down.','-5,2':'The first number goes with the '+X+'-coordinate.'}},
+ {q:'Write the column vector that moves (1, 2) to (5, 0).',vec:[4,-2],hint:'How far across, and how far up or down, from (1, 2) to (5, 0)?',slipsV:{'-4,2':'That goes from (5, 0) back to (1, 2). Go from the start to the end.','4,2':'From 2 to 0 is <b>down</b>: the second number is negative.','-2,4':'The first number is the horizontal move.'}},
+ {q:'A shape is translated by '+cv(-2,6)+'. Which column vector moves it straight back?',vec:[2,-6],hint:'Undo each part: what undoes 2 left? What undoes 6 up?',slipsV:{'-2,6':'That moves it the same way again.','-2,-6':'Undo the move across as well: the opposite of 2 left is 2 right.','2,6':'Undo the move up as well: the opposite of 6 up is 6 down.'}},
+ {q:'Which column vector means “5 left, 1 up”?',kind:'chip',chips:[cv(5,-1),cv(1,-5),cv(-5,1)],ans:2,hint:'Left is negative and up is positive. The horizontal move is the first number.'},
+ {q:'A point '+I('P')+' is translated by '+cv(5,1)+' to '+I('P')+'′(3, −2). Where was '+I('P')+'?',pair:[-2,-3],hint:'Work backwards: undo 5 right and 1 up.',slips:{'8,-1':'That translates '+I('P')+'′ forward again. Work backwards from '+I('P')+'′.'}}];
+var zq={q:0};
+function zqRender(){ var n=ZQ.length;
+  if(zq.q>=n){ document.getElementById('zqQn').textContent='✓ All six questions done.'; document.getElementById('zqQ').innerHTML='First number: horizontal. Second number: vertical.'; document.getElementById('zqAns').innerHTML=''; document.getElementById('zqIn').style.display='none'; document.getElementById('zqVecRow').style.display='none'; return; }
+  var Q=ZQ[zq.q]; document.getElementById('zqQn').textContent='Question '+(zq.q+1)+' of '+n; document.getElementById('zqQ').innerHTML=Q.q;
+  document.getElementById('zqAns').innerHTML=Q.kind==='chip'?Q.chips.map(function(c,k){ return '<button class="chip vchip" onclick="zqChip('+k+')">'+c+'</button>'; }).join(''):'';
+  document.getElementById('zqIn').style.display=(Q.kind==='chip'||Q.vec)?'none':''; document.getElementById('zqVecRow').style.display=Q.vec?'':'none';
+  document.getElementById('zqA').value=''; clearVec('zqV'); }
+function zqRight(){ zq.q++; msg('zqRead','good','✓ Yes.'+(zq.q>=ZQ.length?' That\'s all of them.':'')); zqRender(); }
+function zqChip(k){ var Q=ZQ[zq.q]; if(k===Q.ans) zqRight(); else msg('zqRead','warn','Not yet. '+Q.hint); }
+function zqCheck(){ var Q=ZQ[zq.q];
+  if(Q.vec){ var v=readVec('zqV'); if(!v){ msg('zqRead','warn','Type a number in both boxes: the horizontal move first, then the vertical move.'); return; }
+    if(samePair(v,Q.vec)) return zqRight(); msg('zqRead','warn','Not yet. '+((Q.slipsV&&Q.slipsV[v[0]+','+v[1]])||Q.hint)); return; }
+  var s=document.getElementById('zqA').value; if(!s.trim()){ msg('zqRead','warn','Type an answer.'); return; }
+  var p=pairOf(s); if(samePair(p,Q.pair)) return zqRight();
+  msg('zqRead','warn','Not yet. '+((p&&Q.slips&&Q.slips[p[0]+','+p[1]])||(p?'':'Type the coordinates, such as (2, −1). ')+Q.hint)); }
+
+/* ---------------- REFLECTION: undo the move ---------------- */
+var UN=[[3,2],[-4,1],[0,-5]];
+var un={i:0,done:false};
+function unRender(){ var v=UN[un.i], I4=SHAPE.map(function(p){ return addv(p,v); }), h=MARK+polySvg(SHAPE,'obj',SHAPEL)+polySvg(I4,'img',SHAPEL.map(function(l){ return l+'′'; }));
+  if(un.done) SHAPE.forEach(function(p,i){ h+=arrowSvg(I4[i],p,'vec back'); });
+  document.getElementById('unCount').textContent='Move '+(un.i+1)+' of '+UN.length;
+  document.getElementById('unQ').innerHTML=I('ABCD')+' was translated by '+cv(v[0],v[1])+' onto '+I('A')+'′'+I('B')+'′'+I('C')+'′'+I('D')+'′. Which column vector moves it straight back?';
+  document.getElementById('unFig').innerHTML=wrap(h,null,'Shape ABCD and its image after the translation');
+  clearVec('unV'); }
+function unCheck(){ var v=UN[un.i], g=readVec('unV'); if(!g){ msg('unRead','warn','Type a number in both boxes.'); return; }
+  if(samePair(g,[-v[0],-v[1]])){ un.done=true; unRender(); msg('unRead','good','✓ Yes: '+cv(-v[0],-v[1])+'. Every part of the move is undone, so both numbers change sign.'+(v[0]===0||v[1]===0?' (Zero stays zero: there was no move that way to undo.)':'')); return; }
+  var t=samePair(g,v)?'That repeats the move. Go the opposite way.':(g[0]===-v[0]||g[1]===-v[1])?'One part is undone, but not the other: change the sign of <b>both</b> numbers.':'Undo each part separately: the opposite of right is left, and the opposite of up is down.';
+  msg('unRead','warn','Not yet. '+t); }
+function unNext(){ un.i=(un.i+1)%UN.length; un.done=false; document.getElementById('unRead').style.display='none'; unRender(); }
+
+/* ---------------- Proof (stretch): why do column vectors add? ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'Translate '+I('P')+'(−4, −2) by '+cv(3,1)+'. Where does it go?',chips:['(−1, −1)','(−7, −3)'],ans:0,ok:I('P')+' moves 3 right and 1 up, to (−1, −1)',hint:'3 right adds 3 across; 1 up adds 1.'},
+  {q:'Now translate that point by '+cv(1,3)+'. Where does it end?',chips:['(−2, −4)','(0, 2)'],ans:1,ok:'Then 1 right and 3 up, to (0, 2)',hint:'Start from (−1, −1).'},
+  {q:'Altogether, how far across and how far up did '+I('P')+' move?',chips:['3 + 1 = 4 across and 1 + 3 = 4 up','3 × 1 across and 1 × 3 up'],ans:0,ok:'Altogether 3 + 1 = 4 right and 1 + 3 = 4 up: '+cv(4,4),hint:'Add the moves across, then add the moves up.'},
+  {q:'Does the same total work for <b>every</b> point of a shape?',chips:['Only for '+I('P'),'Yes: a translation moves every point by the same amount'],ans:1,ok:'Every point moves by the same amounts, so every point moves by '+cv(4,4),hint:'What does a translation do to every point?'}],
+  done:'✓ <b>That is why.</b> A translation moves every point by the same amounts, so one translation followed by another moves every point by the totals: add the first numbers and add the second numbers. '+cv(3,1)+' then '+cv(1,3)+' is the single translation '+cv(4,4)+'.'}
+};
+var pr={pr:0};
+function prFigure(i){ var P=[-4,-2], Q=[-1,-1], R=[0,2], h=MARK;
+  h+=arrowSvg(P,Q,'vec'+(i===0?' hl':'')); if(i>=1) h+=arrowSvg(Q,R,'vec'+(i===1?' hl':'')); if(i>=2) h+=arrowSvg(P,R,'vec sum'+(i>=2&&i<4?' hl':''));
+  [[P,'P'],[Q,''],[R,'']].forEach(function(z){ if(z[0]===Q&&i<1) return; if(z[0]===R&&i<2) return; h+='<circle cx="'+gx(z[0][0])+'" cy="'+gy(z[0][1])+'" r="5" class="objv"/>'+(z[1]?'<text x="'+(gx(z[0][0])-16)+'" y="'+(gy(z[0][1])+4)+'" class="vl"><tspan font-style="italic">P</tspan></text>':''); });
+  return wrap(h,null,'Point P moved by one vector, then another, and the single vector for both'); }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CREATIVITY: the treasure trail ---------------- */
+var TT={S:[-5,-4],T:[3,2],moves:[],i:0,done:[],fb:''};
+function ttPos(){ return TT.moves.reduce(function(p,v){ return addv(p,v); },TT.S); }
+function ttTotal(){ return TT.moves.reduce(function(s,v){ return [s[0]+v[0],s[1]+v[1]]; },[0,0]); }
+function ttMove(){ var v=readVec('ttV'); if(!v){ TT.fb='<span style="color:#7a2b1c">Type a number in both boxes, then press Move.</span>'; ttDraw(); return false; }
+  if(v.some(function(n){ return n!==Math.round(n); })){ TT.fb='<span style="color:#7a2b1c">Use whole numbers, so the token lands on a grid point.</span>'; ttDraw(); return false; }
+  var q=addv(ttPos(),v); if(!inGrid(q)){ TT.fb='<span style="color:#7a2b1c">That move would leave the grid: '+pt(q)+'.</span>'; ttDraw(); return false; }
+  TT.moves.push(v); TT.fb=''; clearVec('ttV'); ttDraw(); return true; }
+function ttPush(v){ document.getElementById('ttVT').value=v[0]; document.getElementById('ttVB').value=v[1]; return ttMove(); }
+function ttUndo(){ TT.moves.pop(); TT.fb=''; ttDraw(); } function ttClear(){ TT.moves=[]; TT.fb=''; ttDraw(); }
+function atT(){ return samePair(ttPos(),TT.T); }
+var TBRIEFS=[
+ {q:'Reach the treasure '+I('T')+' in <b>one</b> move.',test:function(){ return TT.moves.length!==1?'Use exactly one move. (Clear, then try again.)':atT()?'':'Not at '+I('T')+' yet.'; },done:'One column vector, '+cv(8,6)+', does the whole journey.'},
+ {q:'Reach '+I('T')+' in exactly <b>two</b> moves, where neither move is straight across or straight up and down.',test:function(){ if(TT.moves.length!==2) return 'Use exactly two moves.'; if(TT.moves.some(function(v){ return v[0]===0||v[1]===0; })) return 'Each move needs two numbers that are not zero.'; return atT()?'':'Not at '+I('T')+' yet.'; },done:'Two different moves, the same total: they add to '+cv(8,6)+'.'},
+ {q:'Reach '+I('T')+' in three moves, where at least one move goes <b>left</b>.',test:function(){ if(TT.moves.length!==3) return 'Use exactly three moves.'; if(!TT.moves.some(function(v){ return v[0]<0; })) return 'One move needs a negative first number.'; return atT()?'':'Not at '+I('T')+' yet.'; },done:'Going left on the way still adds up to '+cv(8,6)+'.'},
+ {q:'Make a journey of three moves that ends back at the start '+I('S')+'.',test:function(){ if(TT.moves.length!==3) return 'Use exactly three moves.'; if(TT.moves.every(function(v){ return v[0]===0&&v[1]===0; })) return 'Make the moves actually go somewhere.'; return samePair(ttPos(),TT.S)?'':'The journey ends at '+pt(ttPos())+', not back at '+I('S')+'.'; },done:'The three vectors add to '+cv(0,0)+': the first numbers add to 0, and so do the second numbers.'},
+ {q:'<span class="stretch">stretch</span> Reach '+I('T')+' using only the moves '+cv(2,2)+' and '+cv(1,0)+', as many times as you like.',test:function(){ if(!TT.moves.length) return 'Make some moves.'; if(TT.moves.some(function(v){ return !((v[0]===2&&v[1]===2)||(v[0]===1&&v[1]===0)); })) return 'Use only '+cv(2,2)+' and '+cv(1,0)+'.'; return atT()?'':'Not at '+I('T')+' yet: you need 8 across and 6 up altogether.'; },done:'Three lots of '+cv(2,2)+' give 6 across and 6 up; two lots of '+cv(1,0)+' add the last 2 across.'}];
+function ttCheck(){ var why=TBRIEFS[TT.i].test(); if(why) TT.fb='<span style="color:#7a2b1c">Not yet. '+why+'</span>'; else { TT.done[TT.i]=true; TT.fb='<span style="color:#2f6b46">✓ '+TBRIEFS[TT.i].done+'</span>'; } ttDraw(); }
+function ttNext(){ TT.i=(TT.i+1)%TBRIEFS.length; TT.moves=[]; TT.fb=''; ttDraw(); }
+function ttDraw(){ var h=MARK, p=TT.S;
+  h+='<text x="'+gx(TT.T[0])+'" y="'+(gy(TT.T[1])+8)+'" class="star" text-anchor="middle">★</text><text x="'+(gx(TT.T[0])+10)+'" y="'+(gy(TT.T[1])-10)+'" class="vl"><tspan font-style="italic">T</tspan></text>';
+  h+='<circle cx="'+gx(TT.S[0])+'" cy="'+gy(TT.S[1])+'" r="5" class="objv"/><text x="'+(gx(TT.S[0])-16)+'" y="'+(gy(TT.S[1])+5)+'" class="vl"><tspan font-style="italic">S</tspan></text>';
+  TT.moves.forEach(function(v){ var q=addv(p,v); h+=arrowSvg(p,q,'vec'); p=q; });
+  h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="8" class="token"/>';
+  document.getElementById('ttFig').innerHTML=wrap(h,null,'Treasure trail: start S'+pt(TT.S)+', treasure T'+pt(TT.T)+', token at '+pt(p));
+  var tot=ttTotal();
+  document.getElementById('ttList').innerHTML=TT.moves.length?TT.moves.map(function(v,k){ return '<span class="mv">'+(k+1)+'. '+cv(v[0],v[1])+'</span>'; }).join(' ')+'<div style="margin-top:6px">Whole journey so far: '+cv(tot[0],tot[1])+' <span class="small">('+vwords(tot[0],tot[1])+')</span>; the token is at '+pt(p)+'.</div>':'<span class="small">No moves yet. The token is at '+I('S')+pt(TT.S)+'.</span>';
+  document.getElementById('ttCount').innerHTML='Brief '+(TT.i+1)+' of '+TBRIEFS.length+(TT.done[TT.i]?' ✓':''); document.getElementById('ttQ').innerHTML=TBRIEFS[TT.i].q; document.getElementById('ttFb').innerHTML=TT.fb; }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    moves:{title:'Moves on a grid',prompt:'From (1, 2), move 4 right and 3 down. Where do you land?',answer:[5,-1],pt:true,hint:'Right adds to the first coordinate; down takes from the second.'},
+    coords:{title:'Coordinates in four quadrants',prompt:'Write the coordinates of the point 3 to the left of the origin and 4 up.',answer:[-3,4],pt:true,hint:'Across first, then up or down. Left is negative.'},
+    rot:{title:'Rotation (Lesson 2)',prompt:'Rotate the point (3, 0) through 180° about the origin.',answer:[-3,0],pt:true,hint:'A half turn sends it to the opposite side of the origin.'}
+  };
+  function matches(r,v){ if(r.pt) return samePair(pairOf(v),r.answer); if(r.line) return sameLine(lineOf(v),lineOf(r.answer)); var t=String(v).trim().toLowerCase().replace(/[.!]$/,''); return t===r.answer||t==='it is '+r.answer||t==='it\'s '+r.answer||t==='a '+r.answer+' line'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pP(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pV(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Translate a point",q:"Translate the point <b>(1, 4)</b> by the column vector "+cv(2,-3)+".",a:[],eq:pP(3,1),prompt:"Which number moves across, and which moves up or down?",hint:"2 right and 3 down.",sol:"(1 + 2, 4 − 3) = (3, 1)."},
+ {label:"2 of 8 · Negative numbers",q:"Translate the point <b>(−2, −1)</b> by the column vector "+cv(-4,5)+".",a:[],eq:pP(-6,4),prompt:"What does a first number of −4 mean?",hint:"4 left and 5 up.",sol:"(−2 − 4, −1 + 5) = (−6, 4)."},
+ {label:"3 of 8 · Write the vector",q:"<i>A</i>(3, 1) is translated to <i>A</i>′(−1, 4). Write the column vector.",vec:true,a:[],eq:pV(-4,3),prompt:"How far across, and how far up or down, from <i>A</i> to <i>A</i>′?",hint:"From 3 to −1 is 4 left; from 1 to 4 is 3 up.",sol:"The column vector is "+cv(-4,3)+": 4 left, 3 up."},
+ {label:"4 of 8 · A zero",q:"<i>B</i>(−2, 5) is translated to <i>B</i>′(−2, −1). Write the column vector.",a:[],vec:true,eq:pV(0,-6),prompt:"Did <i>B</i> move across at all?",hint:"No move across, and 6 down.",sol:"The column vector is "+cv(0,-6)+": no move across, 6 down."},
+ {label:"5 of 8 · From words",q:"Write the column vector for “6 right, and no move up or down”.",a:[],vec:true,eq:pV(6,0),prompt:"Which number is the move across?",hint:"First number 6; second number 0.",sol:cv(6,0)+"."},
+ {label:"6 of 8 · Undo",q:"A shape is translated by "+cv(3,-7)+". Write the column vector that moves it straight back.",a:[],vec:true,eq:pV(-3,7),prompt:"What undoes 3 right? What undoes 7 down?",hint:"Change the sign of both numbers.",sol:cv(-3,7)+": 3 left and 7 up."},
+ {label:"7 of 8 · Two moves",q:"A shape is translated by "+cv(2,1)+" and then by "+cv(-5,3)+". Write the single column vector for both moves.",a:[],vec:true,eq:pV(-3,4),prompt:"Add the moves across, then add the moves up or down.",hint:"2 + (−5) for the horizontal move; 1 + 3 for the vertical move.",sol:cv(-3,4)+"."},
+ {label:"8 of 8 · Work backwards (stretch)",q:"A point <i>P</i> is translated by "+cv(-1,6)+" to <i>P</i>′(4, −3). Find <i>P</i>.",a:[],eq:pP(5,-9),prompt:"Undo the move from <i>P</i>′.",hint:"Undo 1 left and 6 up: go 1 right and 6 down from (4, −3).",sol:"(4 + 1, −3 − 6) = (5, −9)."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  var vq=!!q.vec; document.getElementById("pTextWrap").style.display=vq?"none":""; document.getElementById("pVecWrap").style.display=vq?"":"none"; document.getElementById("pVecT").value=""; document.getElementById("pVecB").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],fb=document.getElementById("practiceFeedback"),val;
+  if(q.vec){ var vt=document.getElementById("pVecT").value.trim(), vb=document.getElementById("pVecB").value.trim(); val=(vt&&vb)?vt+", "+vb:""; if(!val&&(vt||vb)){ fb.style.display="block"; fb.className="feedback warn"; fb.textContent="Fill in both boxes: the horizontal move and the vertical move."; pLock(); return; } }
+  else val=document.getElementById("practiceAnswer").value;
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Across first, then up or down — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  vmDraw();
+  vxRender();
+  zqRender();
+  unRender();
+  prRender('pr');
+  ttDraw();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+</body>
+</html>

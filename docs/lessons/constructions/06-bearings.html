@@ -816,7 +816,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 (function(){
   var KEY='neoReturn:'+location.pathname, p=location.pathname, i=p.indexOf('/lessons/'), rel=i<0?null:'..'+p.slice(i);
   function snap(){ var det=[].slice.call(document.querySelectorAll('details')), pv=document.getElementById('practiceView'), a=document.getElementById('practiceAnswer');
-    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:''}; }
+    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:'',boxes:pv?[].slice.call(pv.querySelectorAll('input[id]')).filter(function(x){return x.value;}).map(function(x){return [x.id,x.value];}):[]}; }
   function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(snap())); }catch(e){} }
   [].slice.call(document.querySelectorAll('a[href*="geometry-studio.html"]')).forEach(function(a){ var h=a.getAttribute('href');
     if(rel&&!/[?&]return=/.test(h)) a.setAttribute('href',h+(h.indexOf('?')<0?'?':'&')+'return='+encodeURIComponent(rel));
@@ -825,7 +825,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   if(!s||Date.now()-s.t>3*3600*1000) return;
   try{ sessionStorage.removeItem(KEY); }catch(e){}
   function restore(){ var det=document.querySelectorAll('details'); (s.open||[]).forEach(function(k){ if(det[k]) det[k].open=true; });
-    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; } }
+    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; (s.boxes||[]).forEach(function(bx){ var el=document.getElementById(bx[0]); if(el) el.value=bx[1]; }); } }
     setTimeout(function(){ window.scrollTo(0,s.y); },s.practice?450:60); }
   if(document.readyState==='complete') setTimeout(restore,80); else window.addEventListener('load',function(){ setTimeout(restore,80); });
 })();

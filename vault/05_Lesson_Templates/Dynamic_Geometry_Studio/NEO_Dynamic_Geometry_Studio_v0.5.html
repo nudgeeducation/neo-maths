@@ -603,7 +603,7 @@ function numIn(v){var t=String(v).trim().replace(/−/g,"-");if(!/^-?\d+(\.\d+)?
 function openRotateDialog(c){openDialog('<h3>Rotate about '+esc(c.label)+'</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Anticlockwise is positive; clockwise is negative. A quarter turn is 90°.</p><div class="row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button data-q="90">90°</button><button data-q="180">180°</button><button data-q="270">270°</button></div><div class="row"><label>Angle <input id="rtAng" type="text" inputmode="decimal" value="90" style="width:80px;padding:7px;border:1px solid #bcae98;border-radius:8px"> °</label></div><div class="row" style="margin-top:8px"><label><input type="radio" name="rtDir" value="1" checked> anticlockwise</label> &nbsp; <label><input type="radio" name="rtDir" value="-1"> clockwise</label></div>',
   [{label:"Rotate",primary:true,fn:function(){var a=numIn(document.getElementById("rtAng").value);if(isNaN(a)){setHint("Type the angle as a number of degrees, such as 90.");return;}var dir=+(dialog.querySelector('input[name=rtDir]:checked')||{value:1}).value;var deg=a*dir;closeDialog();transformSel({id:nextId++,type:"tf",kind:"rotate",c:c.id,deg:deg},"Rotated "+fmtNum(Math.abs(deg))+"° "+(deg>=0?"anticlockwise":"clockwise")+" about "+esc(c.label)+". Drag the centre or the object: the image follows.");}}]);
   dialog.querySelectorAll("button[data-q]").forEach(function(b){b.onclick=function(){document.getElementById("rtAng").value=b.dataset.q;};});}
-function openTranslateDialog(){openDialog('<h3>Translate by a column vector</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Top number: right (+) or left (−). Bottom number: up (+) or down (−). Each unit is one grid square.</p><div style="display:flex;align-items:center;gap:8px;font-size:1.6em"><span>(</span><span style="display:flex;flex-direction:column;gap:6px"><input id="tvX" type="text" inputmode="decimal" value="" aria-label="top number: right or left" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"><input id="tvY" type="text" inputmode="decimal" value="" aria-label="bottom number: up or down" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"></span><span>)</span></div>',
+function openTranslateDialog(){openDialog('<h3>Translate by a column vector</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">First number: the horizontal move, right (+) or left (−). Second number: the vertical move, up (+) or down (−). Each unit is one grid square.</p><div style="display:flex;align-items:center;gap:8px;font-size:1.6em"><span>(</span><span style="display:flex;flex-direction:column;gap:6px"><input id="tvX" type="text" inputmode="decimal" value="" aria-label="first number: horizontal move, right or left" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"><input id="tvY" type="text" inputmode="decimal" value="" aria-label="second number: vertical move, up or down" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"></span><span>)</span></div>',
   [{label:"Translate",primary:true,fn:function(){var dx=numIn(document.getElementById("tvX").value),dy=numIn(document.getElementById("tvY").value);if(isNaN(dx)||isNaN(dy)){setHint("Type a number in both boxes (use − for left or down), such as 3 and −2.");return;}closeDialog();if(!AX.on){AX.on=true;}transformSel({id:nextId++,type:"tf",kind:"translate",dx:dx,dy:dy},"Translated by the column vector ("+fmtNum(dx)+", "+fmtNum(dy)+"): "+(dx>=0?fmtNum(dx)+" right":fmtNum(-dx)+" left")+", "+(dy>=0?fmtNum(dy)+" up":fmtNum(-dy)+" down")+".");}}]);
   setTimeout(function(){var i=document.getElementById("tvX");if(i)i.focus();},20);}
 /* Graph → Plot points: type coordinates, such as A(1, 2), B(4, 2), C(1, 5) */
@@ -1067,11 +1067,11 @@ var TASKS={
    intro:"Slide the shape by a column vector, then undo the move with a second vector.",
    setup:{axes:true,coords:true,pts:[["A",-3,1],["B",-1,1],["C",-1,3],["D",-3,2]],polys:[["A","B","C","D"]],next:4},
    steps:["Choose Select. Drag a box around the shape ABCD.",
-          "Transform → Translate by a column vector…: top 4, bottom −3. Translate.",
+          "Transform → Translate by a column vector…: first number 4, second number −3. Translate.",
           "Compare A and A′: how did the coordinates change?",
           "Drag a box around the image A′B′C′D′. Translate it by the column vector that brings it straight back.",
           "Drag A: every copy moves the same way, by the same amount."],
-   big:"A column vector gives the move: the top number is right (+) or left (−); the bottom number is up (+) or down (−).",
+   big:"A column vector gives the move: the first number is the horizontal move, right (+) or left (−); the second is the vertical move, up (+) or down (−).",
    conj:"What column vector undoes a translation by (4, −3)?"},
  "ts03-final":{
    tag:"Transformations · Lesson 3 · Final Task",
@@ -1082,7 +1082,7 @@ var TASKS={
           "Translate ABC by the first, then the image by the second, then that image by the third.",
           "Work out the single column vector from ABC straight to the final image, and check it with one Translate.",
           "Save your work, with the four column vectors written down."],
-   big:"Save your work and a sentence: the single vector is found by adding the top numbers and adding the bottom numbers.",
+   big:"Save your work and a sentence: the single vector is found by adding the first numbers and adding the second numbers.",
    conj:"Why does adding the column vectors give the whole journey?"},
  "ts04-congruent":{
    tag:"Transformations · Lesson 4 · Reflection",
