@@ -460,6 +460,14 @@
           "file": "lessons/transformations-similarity-and-scale/03-translation-and-column-vectors.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-04-congruence",
+          "num": "Lesson 04",
+          "title": "What transformations keep: congruence",
+          "file": "lessons/transformations-similarity-and-scale/04-congruence.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

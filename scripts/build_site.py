@@ -196,6 +196,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_02_Rotation/NEO_Maths_Y9_Transformations_Lesson_02_Rotation_v0.1.html",
     "ts-03-translation":
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_03_Translation_Column_Vectors/NEO_Maths_Y9_Transformations_Lesson_03_Translation_Column_Vectors_v0.1.html",
+    "ts-04-congruence":
+        "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_04_Congruence/NEO_Maths_Y9_Transformations_Lesson_04_Congruence_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

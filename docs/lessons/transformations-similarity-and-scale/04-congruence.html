@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: What transformations keep: congruence</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Transformations, Similarity and Scale &middot; <strong>Lesson 04 &mdash; What transformations keep: congruence</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.gsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px;touch-action:manipulation}
+.gsvg .gl{stroke:#e2d9c8;stroke-width:1}.gsvg .ax{stroke:#2f3429;stroke-width:1.6}
+.gsvg .tn{font-family:Arial,sans-serif;font-size:11px;fill:#5c6b4f}.gsvg .ti{font-family:Georgia,serif;font-style:italic;font-size:12px}
+.gsvg .axl{font-family:Georgia,serif;font-style:italic;font-size:16px;fill:#2f3429}
+.gsvg .mir{stroke:#7a4fb0;stroke-width:3}.gsvg .mir.try{stroke-dasharray:7 5}
+.gsvg .mlab{font-family:Georgia,serif;font-size:14px;fill:#7a4fb0;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:4}
+.gsvg .obj{fill:rgba(47,109,176,.28);stroke:#2b6cb0;stroke-width:2.2}.gsvg .objv{fill:#2b6cb0;stroke:#fff;stroke-width:1.5}
+.gsvg .img{fill:rgba(242,193,78,.45);stroke:#b8860b;stroke-width:2.2}.gsvg .imgv{fill:#b8860b;stroke:#fff;stroke-width:1.5}
+.gsvg .try{fill:none;stroke:#b0412f;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.gsvg .perp{stroke:#3f7a45;stroke-width:1.6;stroke-dasharray:5 4}
+.gsvg .selv{fill:none;stroke:#c1622e;stroke-width:2;stroke-dasharray:3 3}
+.gsvg .mid{fill:#3f7a45;stroke:#fff;stroke-width:1.5}.gsvg .ra{fill:none;stroke:#3f7a45;stroke-width:1.8}
+.gsvg .hl{stroke:#b0412f;stroke-width:3.5}.gsvg .mid.hl{fill:#b0412f}.gsvg .hlv{stroke:#b0412f;stroke-width:3}
+.lab .row2{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;margin:6px 0}
+.lab .chip.on,.md .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.lab table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}
+.lab table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df}
+.lab table.lt td:not(:last-child){white-space:nowrap}
+@media (max-width:520px){.lab table.lt{font-size:.88em}.lab table.lt td{padding:3px 4px}}
+.arrows button{min-width:38px}
+table.rt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif;font-size:1.05em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 14px;text-align:center}table.rt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.ru .opts,.md .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ru .opts .chip{font-family:Georgia,serif;font-size:1.05em}
+.wl .ask{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0}
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.studio{border:2px solid #365a68;background:#eef3f6}
+@media (max-width:520px){.gsvg .tn{font-size:14px}.gsvg .vl{font-size:17px}.gsvg .mlab{font-size:17px}.gsvg .axl{font-size:19px}}
+.gsvg .cen{fill:#7a4fb0;stroke:#fff;stroke-width:1.5}.gsvg .cenr{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:4 3}
+.gsvg .arc{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .target{fill:none;stroke:#b8860b;stroke-width:2.4;stroke-dasharray:6 4}
+.gsvg .sheet{fill:rgba(255,255,255,.55);stroke:#9fb0a3;stroke-width:1.5}.gsvg .trace{fill:rgba(176,65,47,.18);stroke:#b0412f;stroke-width:2.2}
+.gsvg .ghost{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .badge{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#5a3f10}
+.gsvg .rad{stroke:#3f7a45;stroke-width:2}.gsvg .bis{stroke:#7a4fb0;stroke-width:2;stroke-dasharray:6 4}
+.st .opts,.dz .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.dzscroll{max-width:660px;height:min(620px,88vw);overflow:auto;margin:6px auto;border:2px solid #c9d6bf;border-radius:12px;background:#fbf8f1;-webkit-overflow-scrolling:touch}
+.dzscroll .gsvg.big{max-width:none;width:auto;margin:0;border:none;border-radius:0}
+.dz .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.dz ol{margin:6px 0 6px 22px;font-family:Georgia,serif}
+.tp .turns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.cv{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:1px 7px;margin:0 3px;border-left:2px solid currentColor;border-right:2px solid currentColor;border-radius:9px;line-height:1.15;font-family:Georgia,serif}
+.cv>span{min-width:1.4em;text-align:center}
+.cvin{display:inline-flex;align-items:center;gap:4px;font-size:2.2em;font-family:Georgia,serif;color:#5c6b60;vertical-align:middle}
+.cvin .stack{display:inline-flex;flex-direction:column;gap:4px}
+.cvin input{width:64px;font-size:.42em;padding:5px 6px;text-align:center;border:1.5px solid #9fb0a3;border-radius:8px}
+.gsvg .vec{stroke:#3f7a45;stroke-width:2.2}.gsvg .vec.big{stroke-width:3.2}.gsvg .vec.back{stroke:#b0412f;stroke-dasharray:6 4}.gsvg .vec.sum{stroke:#7a4fb0;stroke-width:3}
+.gsvg .star{font-size:24px;fill:#b8860b}.gsvg .token{fill:#b0412f;stroke:#fff;stroke-width:2}
+.vm .row2,.tt .row2{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;align-items:center;margin:6px 0}
+.vm .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.vm .stepcv{display:inline-flex;align-items:center;gap:10px;font-family:Georgia,serif}
+.vm .stepcv .col{display:inline-flex;flex-direction:column;justify-content:space-around;gap:10px;border-left:2.5px solid #2f3429;border-right:2.5px solid #2f3429;border-radius:16px;padding:6px 14px;min-height:92px}
+.vm .stepcv .btns{display:inline-flex;flex-direction:column;gap:8px}
+.vm .stepcv b{min-width:40px;text-align:center;font-size:1.45em;line-height:1.3}
+.vm table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}.vm table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df;white-space:nowrap}
+.vx .opts,.tt .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.vchip{font-size:1.15em;padding:6px 12px}
+.tt .mv{display:inline-block;margin:2px 6px}
+.gsvg .img2{fill:rgba(63,143,79,.28);stroke:#3f7a45;stroke-width:2.2}.gsvg .img2v{fill:#3f7a45;stroke:#fff;stroke-width:1.5}
+.gsvg .vl.big{font-size:20px;font-weight:700}
+.gsvg .target2{fill:rgba(63,143,79,.2);stroke:#3f7a45;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .pinv{fill:#b0412f;stroke:#fff;stroke-width:1.5}
+.gsvg .ghost2{fill:none;stroke:#9fb0a3;stroke-width:1.5;stroke-dasharray:3 4}
+.gsvg .seg{stroke:#2b6cb0;stroke-width:3}.gsvg .legs{fill:none;stroke:#3f7a45;stroke-width:2;stroke-dasharray:5 4}
+.kl .kprow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;justify-content:center;margin:4px 0;padding:4px 8px;border-radius:8px;background:#fff}
+.kl .kprow.ok{background:#e3f0df}.kl .kprow.no{background:#fbe3dc}
+.kl .kpl{min-width:170px;font-weight:600}.kl .kpr{font-family:Georgia,serif;min-width:90px}
+.kl .chip.on,.cs .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.kl .types{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+table.kt{display:table;border-collapse:collapse;margin:8px auto;background:#fff;font-family:Georgia,serif}
+table.kt th,table.kt td{border:1.5px solid #9fb0a3;padding:4px 10px;text-align:center}table.kt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.tr .moves{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.mm .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+@media(max-width:600px){.kl .kpl{flex-basis:100%;min-width:0;text-align:center}.kl .kpr{min-width:0}table.kt th,table.kt td{padding:4px 6px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Transformations, Similarity and Scale</h1>
+<h2>What transformations keep: congruence</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>What stays the same when a shape moves?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — what reflections, rotations and translations keep, and what that means.</p>
+<p><b>Stepping Stone:</b> explain why reflections, rotations and translations give <b>congruent</b> images, and recognise congruent shapes.</p>
+<p><b>You will need:</b> Lessons 1 to 3, and equal sides and angles — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 7 · Move 9 · Reflect 15 · Create 9 · Rest/Nourish 5</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_04_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_04_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Draw a triangle and its reflection. Count the squares along each side of both.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Congruent or not?</summary>
+<p><b>Start here:</b> is the green triangle exactly the same shape <b>and</b> size as triangle <i>A</i>? It might be turned, flipped or slid.</p>
+<p><b>What you are trying to notice:</b> turning, flipping and sliding never change the lengths; making it bigger, or changing its shape, does.</p>
+<div class="toolbox cs">
+<h3 style="margin-top:0">🔍 Congruent or not?</h3>
+<div id="csCount" class="small" style="text-align:center"></div>
+<div id="csFig"></div>
+<div class="buttonrow" style="justify-content:center"><button class="chip" onclick="csPick(true)">congruent to <i>A</i></button><button class="chip" onclick="csPick(false)">not congruent</button></div>
+<div id="csRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="csNext()">Next card →</button></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">Two shapes are <b>congruent</b> if they are exactly the same shape and the same size: every side and every angle of one matches a side and an angle of the other. One may be turned over or moved somewhere else.</p>
+<p style="margin:6px 0">Reflections, rotations and translations keep every length and every angle, so the image is always <b>congruent</b> to the object.</p>
+</div>
+<p>Today's main activity, the <b>Keep or change lab</b>, is in <b>Reflection</b>.</p>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — The tracing test</summary>
+<p><b>What to do:</b> the red outline is a tracing of triangle <i>A</i>. Slide it, turn it and flip it until it fits exactly over the green shape. If it can never fit, say so. Then answer five questions.</p>
+<p><b>What you are trying to notice:</b> if a tracing fits exactly, the shapes are congruent; turning it over is allowed.</p>
+<div class="toolbox tr">
+<h3 style="margin-top:0">📄 The tracing test</h3>
+<div id="trCount" class="small" style="text-align:center"></div>
+<div id="trFig"></div>
+<div class="moves"><button onclick="trOp('L')" aria-label="slide left">←</button><button onclick="trOp('U')" aria-label="slide up">↑</button><button onclick="trOp('D')" aria-label="slide down">↓</button><button onclick="trOp('R')" aria-label="slide right">→</button><button onclick="trOp('turn')">↺ turn a quarter turn</button><button onclick="trOp('flip')">⇋ flip over</button></div>
+<div class="moves"><button onclick="trCant()">It can never fit</button><button onclick="trReset()">Start again</button><button onclick="trNext()">Next shape →</button></div>
+<p id="trMoves" class="small" style="text-align:center"></p>
+<div id="trRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="mq"><b id="zqQn"></b><div id="zqQ" style="margin-top:4px"></div><div id="zqAns" class="buttonrow"></div><div id="zqIn" class="buttonrow"><input id="zqA" class="numin neo-mathfield" style="max-width:220px" aria-label="Your answer" onkeydown="if(event.key==='Enter')zqCheck()"><button onclick="zqCheck()">✅ Check</button></div></div>
+<div id="zqRead" class="feedback" aria-live="polite"></div>
+<p><b>Carry this forward:</b> slide, turn and flip keep every length and angle.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — The Keep or change lab (today's main activity)</summary>
+<p><b>What to do:</b> choose a transformation. Before you see the image, predict for each property whether it is <b>kept</b> or <b>changed</b>. Then reveal the image and the measurements, and compare.</p>
+<p><b>What you are trying to notice:</b> reflections, rotations and translations keep every length and angle (and so the area). Only a reflection turns the shape over. An enlargement keeps the angles but not the lengths.</p>
+<div class="toolbox kl">
+<h3 style="margin-top:0">⚖️ The Keep or change lab</h3>
+<div id="klTypes" class="types"></div>
+<div id="klFig"></div>
+<div id="klPreds"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="klReveal()">👁 Reveal the image</button></div>
+<div id="klTableWrap" style="display:none"><table class="kt" id="klTable"></table></div>
+<div id="klRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Measure it yourself in the Geometry Studio</h3>
+<p>Reflect, rotate and translate one triangle, then measure the sides and angles of every image.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts04-congruent&amp;return=../lessons/transformations-similarity-and-scale/04-congruence.html">📐 Open in the Geometry Studio →</a>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why does a reflection keep every length?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Match by moves</summary>
+<p><b>What to do:</b> triangle <i>ABC</i> and a congruent triangle <i>A</i>′<i>B</i>′<i>C</i>′ are drawn. Choose the transformation that maps one exactly onto the other, corner to corner. Your choice is drawn dashed.</p>
+<p><b>What you are trying to notice:</b> congruent shapes can always be matched by moves that keep lengths and angles; the corners must match too.</p>
+<div class="toolbox mm">
+<h3 style="margin-top:0">🧩 Match by moves</h3>
+<div id="mmCount" class="small" style="text-align:center"></div>
+<div id="mmFig"></div>
+<div id="mmOpts" class="opts"></div>
+<div id="mmRead" class="feedback" aria-live="polite"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="mmNext()">Next puzzle →</button></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A shape can move a long way and still be exactly itself. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> find two objects near you that are congruent: two keys from the same set, two tiles, two coins. What would you check to be sure?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: practical.</b> Today the mathematics feeds how things are made to fit.</p>
+<div class="card">
+<p><b>What it feeds:</b> factories make parts that must be congruent, so that any one fits where it is needed: bricks, screws, tiles, phone cases. A machine that cuts the same shape again and again is making congruent copies; a part that is “turned over” still fits a mirror-image slot, which is why left and right shoes are different.</p>
+<p class="small">Carry one idea forward: same lengths, same angles, same shape and size.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Congruent images</summary>
+<p><b>Your task:</b> make three congruent images of one shape, one by each transformation, and show the evidence.</p>
+<ul>
+<li>Reflect, rotate and translate the same shape, describing each transformation fully.</li>
+<li>Measure one side and one angle on the shape and on each image.</li>
+<li>Explain in a sentence why all three images are congruent to the shape.</li>
+<li><span class="stretch">stretch</span> Say which image could be slid onto the shape without turning it over, and why.</li>
+</ul>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build your evidence in the Geometry Studio</h3>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts04-final&amp;return=../lessons/transformations-similarity-and-scale/04-congruence.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><strong>Submission choices:</strong> a saved Studio sketch with a screenshot, an annotated Scratchpad image, a photographed page, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_CONGRUENCE_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Says congruent shapes look the same.</td><td>Knows congruent means the same shape and size.</td><td>Explains that reflections, rotations and translations keep lengths and angles.</td><td>Explains why a reflection keeps lengths.</td></tr>
+<tr><td><b>Application</b></td><td>Makes one image.</td><td>Makes images by all three transformations.</td><td>Measures to show each image is congruent.</td><td>Finds the transformation that maps one congruent shape onto another.</td></tr>
+<tr><td><b>Communication</b></td><td>Labels the shapes.</td><td>Labels images with primes.</td><td>Uses <i>congruent</i> precisely, with evidence.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks one side.</td><td>Checks every side.</td><td>Checks sides and angles.</td><td>Spots and explains why an enlargement is not congruent.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>What transformations keep: congruence — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Answer with a number, or with yes or no, or with the name of a transformation.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<div id="pTextWrap"><input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer"></div>
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Draw both shapes. Compare each side and each angle.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["°","²","−"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function I(t){ return '<i>'+t+'</i>'; }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function neg(n){ n=Math.round(n*1e9)/1e9; return n<0?'−'+(-n):String(n); }
+function pt(p){ return '('+neg(p[0])+', '+neg(p[1])+')'; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x'), Y=I('y');
+// a coordinate pair typed any way: (5, −1), 5,-1, 5 -1, x = 5, y = −1. Returns [x, y] or null.
+function pairOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[,;]?\s*(-?\d+(?:\.\d+)?)$/); if(!m){ var a=s.split(/[\s,;]+/).filter(Boolean); if(a.length===2){ var p=num(a[0]), q=num(a[1]); if(!isNaN(p)&&!isNaN(q)) return [p,q]; } return null; }
+  return [parseFloat(m[1]),parseFloat(m[2])]; }
+function samePair(p,q){ return !!p&&same(p[0],q[0])&&same(p[1],q[1]); }
+// a mirror line typed as an equation: x = 3, y = −1, y = x, y = −x (any spacing; x+y=0 and y−x=0 too). Returns {t,k} or null.
+function lineOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'');
+  var m=s.match(/^x=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=x$/); if(m) return {t:'x',k:parseFloat(m[1])};
+  m=s.match(/^y=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=y$/); if(m) return {t:'y',k:parseFloat(m[1])};
+  if(/^(y=x|x=y|y-x=0|x-y=0)$/.test(s)) return {t:'yx',k:0};
+  if(/^(y=-x|x=-y|y\+x=0|x\+y=0|-x=y)$/.test(s)) return {t:'ynx',k:0};
+  return null; }
+function sameLine(a,b){ return !!a&&a.t===b.t&&same(a.k,b.k); }
+function lineName(L){ return L.t==='x'?X+' = '+neg(L.k):L.t==='y'?Y+' = '+neg(L.k):L.t==='yx'?Y+' = '+X:Y+' = −'+X; }
+// reflection in a line, exactly
+function refl(p,L){ var x=p[0], y=p[1]; return L.t==='x'?[2*L.k-x,y]:L.t==='y'?[x,2*L.k-y]:L.t==='yx'?[y,x]:[-y,-x]; }
+function onLine(p,L){ return samePair(refl(p,L),p); }
+
+/* ---------------- A coordinate grid (numbered, labelled axes; GreenPrint v2.3) ---------------- */
+var G={o:230,s:31,m:7};
+function gx(x){ return G.o+x*G.s; } function gy(y){ return G.o-y*G.s; }
+function gridSvg(){ var h='', k, m=G.m;
+  for(k=-m;k<=m;k++) h+='<line x1="'+gx(k)+'" y1="'+gy(m+0.4)+'" x2="'+gx(k)+'" y2="'+gy(-m-0.4)+'" class="gl"/><line x1="'+gx(-m-0.4)+'" y1="'+gy(k)+'" x2="'+gx(m+0.4)+'" y2="'+gy(k)+'" class="gl"/>';
+  h+='<line x1="'+gx(-m-0.4)+'" y1="'+gy(0)+'" x2="'+gx(m+0.4)+'" y2="'+gy(0)+'" class="ax"/><line x1="'+gx(0)+'" y1="'+gy(m+0.4)+'" x2="'+gx(0)+'" y2="'+gy(-m-0.4)+'" class="ax"/>';
+  for(k=-m;k<=m;k++){ if(!k) continue; h+='<text x="'+gx(k)+'" y="'+(gy(0)+15)+'" class="tn" text-anchor="middle">'+neg(k)+'</text><text x="'+(gx(0)-6)+'" y="'+(gy(k)+4)+'" class="tn" text-anchor="end">'+neg(k)+'</text>'; }
+  h+='<text x="'+(gx(0)-6)+'" y="'+(gy(0)+15)+'" class="tn ti" text-anchor="end">O</text><text x="'+(gx(m+0.4)-2)+'" y="'+(gy(0)-7)+'" class="axl" text-anchor="end">x</text><text x="'+(gx(0)+7)+'" y="'+(gy(m+0.4)+12)+'" class="axl">y</text>';
+  return h; }
+function mirrorSvg(L,cls){ var e=G.m+0.4, a, b; if(L.t==='x'){ a=[L.k,e]; b=[L.k,-e]; } else if(L.t==='y'){ a=[-e,L.k]; b=[e,L.k]; } else if(L.t==='yx'){ a=[-e,-e]; b=[e,e]; } else { a=[-e,e]; b=[e,-e]; }
+  var lp=L.t==='x'?[L.k,G.m-0.2]:L.t==='y'?[G.m-1.2,L.k]:L.t==='yx'?[4.6,4.1]:[-5.4,4.9];
+  return '<line x1="'+gx(a[0])+'" y1="'+gy(a[1])+'" x2="'+gx(b[0])+'" y2="'+gy(b[1])+'" class="'+(cls||'mir')+'"/><text x="'+(gx(lp[0])+(L.t==='x'&&L.k<=0?-6:6))+'" y="'+(gy(lp[1])-6)+'" class="mlab" data-line="1"'+(L.t==='x'&&L.k<=0?' text-anchor="end"':'')+'>'+lineName(L).replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>')+'</text>'; }
+function triSvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl" data-v="'+labs[i]+'">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+function inGrid(p){ return Math.abs(p[0])<=G.m&&Math.abs(p[1])<=G.m; }
+function svgAt(ev,svg){ var b=svg.getBoundingClientRect(); var x=(ev.clientX-b.left)*2*G.o/b.width, y=(ev.clientY-b.top)*2*G.o/b.height; return [Math.round((x-G.o)/G.s),Math.round((G.o-y)/G.s)]; }
+var CLIPN=0;
+function wrap(inner,click,aria){ var cid='gclip'+(CLIPN++); return '<svg class="gsvg'+(G.big?' big':'')+'" viewBox="0 0 '+(2*G.o)+' '+(2*G.o)+'"'+(G.big?' width="'+(2*G.o)+'" height="'+(2*G.o)+'"':'')+' role="img" aria-label="'+aria+'"'+(click?' onclick="'+click+'(event,this)"':'')+'><defs><clipPath id="'+cid+'"><rect x="'+gx(-G.m-0.4)+'" y="'+gy(G.m+0.4)+'" width="'+(G.s*(2*G.m+0.8))+'" height="'+(G.s*(2*G.m+0.8))+'"/></clipPath></defs>'+gridSvg()+'<g clip-path="url(#'+cid+')">'+inner+'</g></svg>'; }
+
+/* ---------------- Column vectors ---------------- */
+function cv(a,b){ return '<span class="cv" aria-label="column vector '+neg(a)+', '+neg(b)+'"><span>'+neg(a)+'</span><span>'+neg(b)+'</span></span>'; }
+function vwords(a,b){ var h=a===0?'':Math.abs(a)+' '+(a>0?'right':'left'), v=b===0?'':Math.abs(b)+' '+(b>0?'up':'down'); return (h&&v?h+', '+v:h||v||'no move at all'); }
+function addv(p,v){ return [p[0]+v[0],p[1]+v[1]]; }
+function cvIn(id){ return '<span class="cvin">(<span class="stack"><input id="'+id+'T" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="'+id+'B" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span>'; }
+function readVec(id){ var t=document.getElementById(id+'T').value, b=document.getElementById(id+'B').value; if(!String(t).trim()||!String(b).trim()) return null; var x=num(t), y=num(b); if(isNaN(x)||isNaN(y)) return null; return [x,y]; }
+function clearVec(id){ document.getElementById(id+'T').value=''; document.getElementById(id+'B').value=''; }
+function arrowSvg(p,q,cls){ if(samePair(p,q)) return ''; return '<line x1="'+gx(p[0])+'" y1="'+gy(p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="'+(cls||'vec')+'" marker-end="url(#vhead)"/>'; }
+var MARK='<defs><marker id="vhead" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" refX="10" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#3f7a45"/></marker></defs>';
+var SHAPE=[[-3,1],[-1,1],[-1,3],[-3,2]], SHAPEL=['A','B','C','D'];
+function polySvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+
+/* ---------------- Measuring, exactly ---------------- */
+function d2(p,q){ return (p[0]-q[0])*(p[0]-q[0])+(p[1]-q[1])*(p[1]-q[1]); }
+// a length shown exactly: whole numbers and short decimals as they are, otherwise a simplified surd such as 3√5
+function lenStr(p,q){ var s=d2(p,q), r=Math.sqrt(s);
+  if(Math.abs(r*100-Math.round(r*100))<1e-6) return neg(Math.round(r*100)/100);
+  var n=Math.round(4*s); if(Math.abs(n-4*s)>1e-9) return (Math.round(r*10)/10)+' (to 1 d.p.)';
+  var k=1, m=n; for(var f=2;f*f<=m;f++) while(m%(f*f)===0){ k*=f; m/=f*f; }   // √s = k√m ÷ 2
+  return k%2===0?((k/2===1?'':k/2)+'√'+m):FR((k===1?'':k)+'√'+m,'2'); }
+function angAt(a,v,b){ var u=[a[0]-v[0],a[1]-v[1]], w=[b[0]-v[0],b[1]-v[1]]; var c=(u[0]*w[0]+u[1]*w[1])/Math.sqrt((u[0]*u[0]+u[1]*u[1])*(w[0]*w[0]+w[1]*w[1])); return Math.acos(Math.max(-1,Math.min(1,c)))*180/Math.PI; }
+function angStr(x){ return Math.abs(x-Math.round(x))<1e-6?Math.round(x)+'°':(Math.round(x*10)/10)+'° <span class="small">(to 1 d.p.)</span>'; }
+function area(P){ var s=0; for(var i=0;i<P.length;i++){ var a=P[i], b=P[(i+1)%P.length]; s+=a[0]*b[1]-b[0]*a[1]; } return s/2; }
+function sameShape(P,Q){ // congruent with matching corners in order (P[i] ↔ Q[i])
+  for(var i=0;i<P.length;i++) for(var j=i+1;j<P.length;j++) if(Math.abs(d2(P[i],P[j])-d2(Q[i],Q[j]))>1e-9) return false; return true; }
+function sameSet(P,Q){ return P.length===Q.length&&P.every(function(p){ return Q.some(function(q){ return samePair(p,q); }); }); }
+function congruentAny(P,Q){ // some matching of corners keeps every distance
+  var perm=function(a){ if(a.length<2) return [a]; var o=[]; a.forEach(function(x,i){ perm(a.slice(0,i).concat(a.slice(i+1))).forEach(function(r){ o.push([x].concat(r)); }); }); return o; };
+  return perm(Q.map(function(q,i){ return i; })).some(function(ix){ return sameShape(P,ix.map(function(i){ return Q[i]; })); }); }
+// transformations on grid points
+function reflX(p,k){ return [2*k-p[0],p[1]]; } function reflY(p,k){ return [p[0],2*k-p[1]]; }
+function rot90(p,c){ return [c[0]-(p[1]-c[1]),c[1]+(p[0]-c[0])]; }
+function rotN(p,c,n){ for(var i=0;i<((n%4)+4)%4;i++) p=rot90(p,c); return p; }
+
+/* ---------------- CONNECTION: congruence sorter ---------------- */
+var CA=[[-5,1],[-2,1],[-5,3]];
+var CS=[
+ {B:[[2,5],[2,2],[4,5]],yes:true,how:'turned through 90°'},
+ {B:[[5,1],[2,1],[5,3]],yes:true,how:'flipped over (reflected in the '+Y+'-axis)'},
+ {B:[[1,-6],[7,-6],[1,-2]],yes:false,how:'twice as long in every direction: the same shape, but bigger'},
+ {B:[[-6,-6],[-3,-6],[-6,-4]],yes:true,how:'slid (translated)'},
+ {B:[[-6,-2],[0,-2],[-6,-1]],yes:false,how:'the same area, but a different shape'},
+ {B:[[2,1],[6,1],[2,3]],yes:false,how:'one side is longer: 4 squares instead of 3'}];
+var cs={i:0};
+function csSides(P){ return [lenStr(P[0],P[1]),lenStr(P[1],P[2]),lenStr(P[2],P[0])]; }
+function csRender(){ var C=CS[cs.i], h=polySvg(CA,'obj')+polySvg(C.B,'img2');
+  h+='<text x="'+gx(CA[0][0]-0.9)+'" y="'+gy(CA[0][1]-0.2)+'" class="vl big">A</text>';
+  document.getElementById('csCount').textContent='Card '+(cs.i+1)+' of '+CS.length;
+  document.getElementById('csFig').innerHTML=wrap(h,null,'Shape A and another triangle on the grid');
+  document.getElementById('csRead').style.display='none'; }
+function csPick(yes){ var C=CS[cs.i], sA=csSides(CA), sB=csSides(C.B);
+  var detail='Sides of '+I('A')+': '+sA.join(', ')+'. Sides of this one: '+sB.join(', ')+'.';
+  if(yes===C.yes) msg('csRead','good','✓ Yes: it is '+C.how+'. '+(C.yes?'Every side and every angle matches, so it is <b>congruent</b> to '+I('A')+'.':'So it is <b>not congruent</b> to '+I('A')+'.')+' <span class="small">'+detail+'</span>');
+  else msg('csRead','warn','Look again: it is '+C.how+'. '+(C.yes?'Turning, flipping or sliding does not change any length or angle.':'Congruent shapes have exactly the same lengths and angles.')+' <span class="small">'+detail+'</span>'); }
+function csNext(){ cs.i=(cs.i+1)%CS.length; csRender(); }
+
+/* ---------------- MOVEMENT: the tracing test ---------------- */
+var TA=[[-6,2],[-3,2],[-6,4]];
+var TR=[{T:[[2,5],[2,2],[4,5]],fits:true},{T:[[5,-2],[2,-2],[5,0]],fits:true},{T:[[0,-1],[6,-1],[0,3]],fits:false}];
+// turn or flip in place: keep the lowest-left corner of the surrounding box where it was
+function boxMin(P){ return [Math.min.apply(null,P.map(function(p){ return p[0]; })),Math.min.apply(null,P.map(function(p){ return p[1]; }))]; }
+function inPlace(n,P){ var a=boxMin(P), b=boxMin(n); return n.map(function(p){ return [p[0]+a[0]-b[0],p[1]+a[1]-b[1]]; }); }
+var tr={i:0,P:TA.map(function(p){ return p.slice(); }),moves:0,done:false};
+function trOp(op){ if(tr.done) return; var P=tr.P, c=P[0], n;
+  if(op==='L') n=P.map(function(p){ return [p[0]-1,p[1]]; }); else if(op==='R') n=P.map(function(p){ return [p[0]+1,p[1]]; });
+  else if(op==='U') n=P.map(function(p){ return [p[0],p[1]+1]; }); else if(op==='D') n=P.map(function(p){ return [p[0],p[1]-1]; });
+  else if(op==='turn'||op==='flip'){ n=P.map(function(p){ return op==='turn'?rot90(p,c):reflX(p,c[0]); }); n=inPlace(n,P); }
+  if(!n.every(inGrid)){ msg('trRead','warn','That would take the tracing off the grid.'); return; }
+  tr.P=n; tr.moves++; document.getElementById('trRead').style.display='none'; trDraw();
+  if(sameSet(tr.P,TR[tr.i].T)){ tr.done=true; trDraw(); msg('trRead','good','✓ It fits exactly over the shape, so the two shapes are <b>congruent</b>.'+(TR[tr.i].fits?'':'')); } }
+function trCant(){ var R=TR[tr.i]; if(!R.fits){ tr.done=true; trDraw(); msg('trRead','good','✓ Right: however you slide, turn or flip the tracing, its sides stay 3, 2 and √13 long, but this shape has sides 6, 4 and 2√13. It is <b>not congruent</b>: it is bigger.'); }
+  else msg('trRead','warn','This one can be made to fit. Try turning or flipping the tracing, then sliding it.'); }
+function trReset(){ tr.P=TA.map(function(p){ return p.slice(); }); tr.moves=0; tr.done=false; document.getElementById('trRead').style.display='none'; trDraw(); }
+function trNext(){ tr.i=(tr.i+1)%TR.length; trReset(); }
+function trDraw(){ var R=TR[tr.i], h='<polygon points="'+R.T.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="target2"/>';
+  h+='<polygon points="'+tr.P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="trace"/><circle cx="'+gx(tr.P[0][0])+'" cy="'+gy(tr.P[0][1])+'" r="5" class="pinv"/>';
+  document.getElementById('trCount').textContent='Shape '+(tr.i+1)+' of '+TR.length;
+  document.getElementById('trFig').innerHTML=wrap(h,null,'A tracing of shape A and a target shape');
+  document.getElementById('trMoves').textContent=tr.moves?'Moves so far: '+tr.moves:''; }
+
+/* ---------------- MOVEMENT: questions ---------------- */
+var ZQ=[
+ {q:'A square with sides of 7 cm is rotated through 90°. How long are the sides of the image?',ans:7,hint:'Does a rotation change any length?',slips:{14:'A rotation does not make a shape bigger.',28:'That is the perimeter. Each side keeps its length.'}},
+ {q:'An angle of 35° in a triangle is reflected in a mirror line. What is the matching angle in the image?',ans:35,hint:'Does a reflection change any angle?',slips:{145:'A reflection keeps every angle exactly the same.',55:'A reflection keeps every angle exactly the same.'}},
+ {q:'Which transformation can change the <b>size</b> of a shape?',kind:'chip',chips:['a translation','a reflection','an enlargement'],ans:2,hint:'Translations, rotations and reflections keep every length.'},
+ {q:'After a reflection, the image is …',kind:'chip',chips:['congruent, and the same way round','congruent, but turned over','not congruent'],ans:1,hint:'A reflection keeps lengths and angles, but swaps left and right.'},
+ {q:'A triangle with an area of 12 cm² is translated. What is the area of its image, in cm²?',ans:12,hint:'If every length and angle is the same, what about the area?',slips:{24:'Sliding a shape does not change its size.'}}];
+var zq={q:0};
+function zqRender(){ var n=ZQ.length;
+  if(zq.q>=n){ document.getElementById('zqQn').textContent='✓ All five questions done.'; document.getElementById('zqQ').innerHTML='Slide, turn, flip: every length and angle is kept.'; document.getElementById('zqAns').innerHTML=''; document.getElementById('zqIn').style.display='none'; return; }
+  var Q=ZQ[zq.q]; document.getElementById('zqQn').textContent='Question '+(zq.q+1)+' of '+n; document.getElementById('zqQ').innerHTML=Q.q;
+  document.getElementById('zqAns').innerHTML=Q.kind==='chip'?chipsHtml(Q.chips,'zqChip'):'';
+  document.getElementById('zqIn').style.display=Q.kind==='chip'?'none':''; document.getElementById('zqA').value=''; }
+function zqRight(){ zq.q++; msg('zqRead','good','✓ Yes.'+(zq.q>=ZQ.length?' That\'s all of them.':'')); zqRender(); }
+function zqChip(k){ var Q=ZQ[zq.q]; if(k===Q.ans) zqRight(); else msg('zqRead','warn','Not yet. '+Q.hint); }
+function zqCheck(){ var Q=ZQ[zq.q], v=document.getElementById('zqA').value; if(!v.trim()){ msg('zqRead','warn','Type an answer.'); return; }
+  var n=num(String(v).replace(/cm²|cm2|cm|°|degrees?/gi,'')); if(same(n,Q.ans)) return zqRight(); msg('zqRead','warn','Not yet. '+((Q.slips&&Q.slips[n])||Q.hint)); }
+
+/* ---------------- REFLECTION: the Keep or Change Lab (main activity) ---------------- */
+var KP=[[1,1],[5,1],[1,4]], KPL=['P','Q','R'];
+var KT=[
+ {id:'refl',name:'Reflect in the '+Y+'-axis',f:function(p){ return reflX(p,0); }},
+ {id:'rot',name:'Rotate 90° anticlockwise about '+I('O'),f:function(p){ return rot90(p,[0,0]); }},
+ {id:'tr',name:'Translate by '+cv(-6,-5),f:function(p){ return [p[0]-6,p[1]-5]; }},
+ {id:'enl',name:'Enlarge by 1.5 from (3, 1)',f:function(p){ return [3+1.5*(p[0]-3),1+1.5*(p[1]-1)]; }},
+ {id:'str',name:'Stretch sideways by 1.5 from the line '+X+' = 3',f:function(p){ return [3+1.5*(p[0]-3),p[1]]; }}];
+var KPROPS=[['len','the side lengths'],['ang','the angles'],['area','the area'],['pos','the position'],['way','which way round it is']];
+var kl={t:0,pred:{},shown:false};
+function klImg(){ return KP.map(KT[kl.t].f); }
+function klFacts(P){ return {len:[lenStr(P[0],P[1]),lenStr(P[1],P[2]),lenStr(P[2],P[0])],ang:[angAt(P[2],P[0],P[1]),angAt(P[0],P[1],P[2]),angAt(P[1],P[2],P[0])],area:Math.abs(area(P)),way:area(P)>0?'anticlockwise':'clockwise'}; }
+function klTruth(){ var a=klFacts(KP), b=klFacts(klImg());
+  return {len:a.len.join()===b.len.join(),ang:a.ang.every(function(x,i){ return Math.abs(x-b.ang[i])<1e-6; }),area:Math.abs(a.area-b.area)<1e-9,pos:!sameSet(KP,klImg()),way:a.way===b.way}; }
+function klSet(t){ kl.t=t; kl.pred={}; kl.shown=false; document.getElementById('klRead').style.display='none'; klDraw(); }
+function klPred(k,v){ if(kl.shown) return; kl.pred[k]=v; klDraw(); }
+function klReveal(){ var miss=KPROPS.filter(function(p){ return kl.pred[p[0]]===undefined; });
+  if(miss.length){ msg('klRead','warn','Predict each one first: kept or changed? Still to do: '+miss.map(function(p){ return p[1]; }).join(', ')+'.'); return; }
+  kl.shown=true; klDraw(); var T=klTruth(), right=KPROPS.filter(function(p){ var kept=p[0]==='pos'?!T.pos:T[p[0]]; return kl.pred[p[0]]===kept; }).length, cong=T.len&&T.ang;
+  msg('klRead',cong?'good':'warn',right+' of 5 predictions matched. '+(cong?'Every length and every angle is kept, so the image is <b>congruent</b> to the triangle'+(T.way?'.':', even though it has been turned over.'):(T.ang?'The angles are kept but the lengths are not: the image is the same shape but a different size, so it is <b>not congruent</b>. (It is <b>similar</b>: more in Lesson 7.)':'Lengths <b>and</b> angles change: the image is a different shape, so it is <b>not congruent</b>.'))); }
+function klDraw(){ var I3=klImg(), T=klTruth(), h=polySvg(KP,'obj',KPL)+(kl.shown?polySvg(I3,'img',KPL.map(function(l){ return l+'′'; })):'');
+  document.getElementById('klFig').innerHTML=wrap(h,null,'Triangle PQR'+(kl.shown?' and its image':'; the image is hidden until you reveal it'));
+  document.getElementById('klTypes').innerHTML=KT.map(function(t,i){ return '<button class="chip'+(kl.t===i?' on':'')+'" onclick="klSet('+i+')">'+t.name+'</button>'; }).join('');
+  document.getElementById('klPreds').innerHTML=KPROPS.map(function(p){ var k=p[0], v=kl.pred[k], truth=kl.shown?(k==='pos'?!T.pos:T[k]):null;
+    return '<div class="kprow'+(kl.shown?(v===truth?' ok':' no'):'')+'"><span class="kpl">'+p[1]+'</span><button class="chip'+(v===true?' on':'')+'" data-k="'+k+'" data-v="1" onclick="klPred(\''+k+'\',true)">kept</button><button class="chip'+(v===false?' on':'')+'" data-k="'+k+'" data-v="0" onclick="klPred(\''+k+'\',false)">changed</button>'+(kl.shown?'<span class="kpr">'+(truth?'kept':'changed')+(v===truth?' ✓':'')+'</span>':'')+'</div>'; }).join('');
+  if(kl.shown){ var a=klFacts(KP), b=klFacts(I3);
+    document.getElementById('klTable').innerHTML='<tr><th></th><th>Triangle '+I('PQR')+'</th><th>Image '+I('P')+'′'+I('Q')+'′'+I('R')+'′</th></tr>'
+     +['PQ','QR','RP'].map(function(s,i){ return '<tr><td>'+I(s.charAt(0))+I(s.charAt(1))+'</td><td>'+a.len[i]+'</td><td>'+b.len[i]+'</td></tr>'; }).join('')
+     +['P','Q','R'].map(function(s,i){ return '<tr><td>angle at '+I(s)+'</td><td>'+angStr(a.ang[i])+'</td><td>'+angStr(b.ang[i])+'</td></tr>'; }).join('')
+     +'<tr><td>area</td><td>'+neg(a.area)+'</td><td>'+neg(b.area)+'</td></tr><tr><td>'+I('P')+', '+I('Q')+', '+I('R')+' go round</td><td>'+a.way+'</td><td>'+b.way+'</td></tr>'; }
+  else document.getElementById('klTable').innerHTML='';
+  document.getElementById('klTableWrap').style.display=kl.shown?'':'none'; }
+
+/* ---------------- Proof (stretch): why does a reflection keep lengths? ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'Reflect '+I('A')+'(2, 1) and '+I('B')+'(5, 3) in the '+Y+'-axis. Where do they go?',chips:['(−2, 1) and (−5, 3)','(2, −1) and (5, −3)'],ans:0,ok:I('A')+'′(−2, 1) and '+I('B')+'′(−5, 3)',hint:'Reflecting in the '+Y+'-axis changes the sign of the '+X+'-coordinate only.'},
+  {q:'From '+I('A')+' to '+I('B')+' is 3 right and 2 up. What is it from '+I('A')+'′ to '+I('B')+'′?',chips:['3 right and 2 up','3 left and 2 up'],ans:1,ok:'From '+I('A')+'′ to '+I('B')+'′ is 3 left and 2 up',hint:'Count from (−2, 1) to (−5, 3).'},
+  {q:'Both are 3 across and 2 up or down. What does that make the two lengths?',chips:['equal: each is the long side of a right-angled triangle with legs 3 and 2','different, because one goes left'],ans:0,ok:I('AB')+' = '+I('A')+'′'+I('B')+'′ = √13, by Pythagoras',hint:'The length only depends on how far across and how far up, not which way.'}],
+  done:'✓ <b>That is why.</b> A reflection in the '+Y+'-axis keeps every horizontal distance and every vertical distance (it only reverses left and right), so by Pythagoras every length is kept. The same reasoning, with the right triangle turned, works for every mirror line.'}
+};
+var pr={pr:0};
+function prFigure(i){ var A=[2,1], B=[5,3], A1=[-2,1], B1=[-5,3], h='';
+  h+='<line x1="'+gx(0)+'" y1="'+gy(7.4)+'" x2="'+gx(0)+'" y2="'+gy(-7.4)+'" class="mir"/>';
+  h+='<line x1="'+gx(A[0])+'" y1="'+gy(A[1])+'" x2="'+gx(B[0])+'" y2="'+gy(B[1])+'" class="seg'+(i===2?' hl':'')+'"/>';
+  if(i>=1) h+='<polyline points="'+gx(A[0])+','+gy(A[1])+' '+gx(B[0])+','+gy(A[1])+' '+gx(B[0])+','+gy(B[1])+'" class="legs'+(i===1?' hl':'')+'"/><polyline points="'+gx(A1[0])+','+gy(A1[1])+' '+gx(B1[0])+','+gy(A1[1])+' '+gx(B1[0])+','+gy(B1[1])+'" class="legs'+(i===1?' hl':'')+'"/>';
+  if(i>=1) h+='<line x1="'+gx(A1[0])+'" y1="'+gy(A1[1])+'" x2="'+gx(B1[0])+'" y2="'+gy(B1[1])+'" class="seg'+(i===2?' hl':'')+'"/>';
+  [[A,'A'],[B,'B'],[A1,'A′'],[B1,'B′']].filter(function(z){ return i>=1||z[1].length===1; }).forEach(function(z){ h+='<circle cx="'+gx(z[0][0])+'" cy="'+gy(z[0][1])+'" r="'+(i===0?7:5)+'" class="'+(z[1].length>1?'imgv':'objv')+(i===0?' hl':'')+'"/><text x="'+(gx(z[0][0])+7)+'" y="'+(gy(z[0][1])-7)+'" class="vl"><tspan font-style="italic">'+z[1].charAt(0)+'</tspan>'+z[1].slice(1)+'</text>'; });
+  return wrap(h,null,'Segment AB and its reflection A′B′ in the y-axis, with right-angled triangles drawn under each'); }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CREATIVITY: match by moves ---------------- */
+var MA=[[1,2],[4,2],[1,4]];
+var MM=[
+ {B:[[-1,2],[-4,2],[-1,4]],opts:[['translate by '+cv(-5,0),function(p){ return [p[0]-5,p[1]]; }],['reflect in the '+Y+'-axis',function(p){ return reflX(p,0); }],['rotate 180° about '+I('O'),function(p){ return rotN(p,[0,0],2); }]],ans:1},
+ {B:[[-2,1],[-2,4],[-4,1]],opts:[['rotate 90° anticlockwise about '+I('O'),function(p){ return rot90(p,[0,0]); }],['reflect in '+Y+' = '+X,function(p){ return [p[1],p[0]]; }],['rotate 90° clockwise about '+I('O'),function(p){ return rotN(p,[0,0],3); }]],ans:0},
+ {B:[[-3,-4],[0,-4],[-3,-2]],opts:[['reflect in the '+X+'-axis',function(p){ return reflY(p,0); }],['rotate 180° about '+I('O'),function(p){ return rotN(p,[0,0],2); }],['translate by '+cv(-4,-6),function(p){ return [p[0]-4,p[1]-6]; }]],ans:2},
+ {B:[[-1,-2],[-4,-2],[-1,-4]],opts:[['rotate 180° about '+I('O'),function(p){ return rotN(p,[0,0],2); }],['reflect in the '+X+'-axis',function(p){ return reflY(p,0); }],['reflect in the '+Y+'-axis',function(p){ return reflX(p,0); }]],ans:0},
+ {B:[[2,-1],[2,-4],[4,-1]],stretch:true,opts:[['reflect in '+Y+' = '+X+', then reflect in the '+X+'-axis',function(p){ return reflY([p[1],p[0]],0); }],['reflect in the '+X+'-axis, then translate by '+cv(1,0),function(p){ var q=reflY(p,0); return [q[0]+1,q[1]]; }],['rotate 90° anticlockwise about '+I('O'),function(p){ return rot90(p,[0,0]); }]],ans:0}];
+var mm={i:0,tried:null};
+function mmRender(){ var M=MM[mm.i], h=polySvg(MA,'obj',['A','B','C'])+polySvg(M.B,'img',['A′','B′','C′']);
+  if(mm.tried!==null){ var q=MA.map(M.opts[mm.tried][1]); h+='<polygon points="'+q.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="try"/>'; }
+  document.getElementById('mmCount').innerHTML=(M.stretch?'<span class="stretch">stretch</span> ':'')+'Puzzle '+(mm.i+1)+' of '+MM.length;
+  document.getElementById('mmFig').innerHTML=wrap(h,null,'Triangle ABC and a congruent triangle A′B′C′');
+  document.getElementById('mmOpts').innerHTML=M.opts.map(function(o,k){ return '<button class="chip" data-k="'+k+'" onclick="mmPick('+k+')">'+o[0]+'</button>'; }).join(''); }
+function mmPick(k){ var M=MM[mm.i], q=MA.map(M.opts[k][1]); mm.tried=k; mmRender();
+  var hit=q.every(function(p,i){ return samePair(p,M.B[i]); });
+  if(hit) msg('mmRead','good','✓ Yes: '+M.opts[k][0]+' sends '+I('A')+' to '+I('A')+'′, '+I('B')+' to '+I('B')+'′ and '+I('C')+' to '+I('C')+'′. The dashed outline lands exactly on the image.');
+  else msg('mmRead','warn','Not quite: the dashed outline shows where '+M.opts[k][0]+' takes the triangle. '+(sameSet(q,M.B)?'It covers the image, but the corners land in the wrong places: check where '+I('A')+' goes.':'It does not land on '+I('A')+'′'+I('B')+'′'+I('C')+'′.')); }
+function mmNext(){ mm.i=(mm.i+1)%MM.length; mm.tried=null; document.getElementById('mmRead').style.display='none'; mmRender(); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    sides:{title:'Equal sides and angles',prompt:'A rectangle is 3 cm by 5 cm. How long is its longest side, in cm?',answer:5,hint:'The sides are 3, 5, 3 and 5.'},
+    refl:{title:'Reflection (Lesson 1)',prompt:'Reflect the point (4, 1) in the <i>y</i>-axis.',answer:[-4,1],pt:true,hint:'Same distance from the <i>y</i>-axis, on the other side.'},
+    trans:{title:'Translation (Lesson 3)',prompt:'Translate the point (2, 2) 3 left and 1 down.',answer:[-1,1],pt:true,hint:'Left takes from the first coordinate; down takes from the second.'}
+  };
+  function matches(r,v){ if(typeof r.answer==='number') return same(num(String(v).replace(/cm|°/gi,'')),r.answer); if(r.pt) return samePair(pairOf(v),r.answer); if(r.line) return sameLine(lineOf(v),lineOf(r.answer)); var t=String(v).trim().toLowerCase().replace(/[.!]$/,''); return t===r.answer||t==='it is '+r.answer||t==='it\'s '+r.answer||t==='a '+r.answer+' line'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pP(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pN(n){ return function(v){ return same(num(String(v).replace(/cm²|cm2|cm|°|degrees?|units?/gi,'')),n); }; }
+var YES=["yes","y","yes it is","yes, it is","yes they are","yes, they are","congruent","they are congruent"], NO=["no","n","no it is not","no, it is not","no it isn't","no they are not","not congruent","no, they are not"];
+var PRACTICE=[
+ {label:"1 of 8 · A length",q:"A triangle has sides of 3 cm, 4 cm and 5 cm. It is reflected in a mirror line. How long is the longest side of the image, in cm?",a:[],eq:pN(5),prompt:"Does a reflection change any length?",hint:"Every length is kept.",sol:"5 cm: a reflection keeps every length."},
+ {label:"2 of 8 · An angle",q:"An angle of 72° in a shape is rotated through 90°. What is the size of the matching angle in the image?",a:[],eq:pN(72),prompt:"Does a rotation change any angle?",hint:"The angle of rotation is not the angle in the shape.",sol:"72°: a rotation keeps every angle."},
+ {label:"3 of 8 · Translation",q:"Is the image of a shape after a translation congruent to the shape? Answer yes or no.",a:YES,eq:null,prompt:"Does sliding change any length or angle?",hint:"Every point moves by the same amount.",sol:"Yes: a translation keeps every length and angle, so the image is congruent."},
+ {label:"4 of 8 · Enlargement",q:"A shape is enlarged with scale factor 2. Is the image congruent to the shape? Answer yes or no.",a:NO,eq:null,prompt:"What happens to the lengths?",hint:"Every length doubles.",sol:"No: the lengths change, so the image is not congruent (it is the same shape, but bigger)."},
+ {label:"5 of 8 · Turned over",q:"Which of the three transformations, reflection, rotation or translation, turns a shape over?",a:["reflection","a reflection","reflect","reflecting","reflections"],eq:null,prompt:"Which one makes a mirror image?",hint:"Left and right are swapped.",sol:"A reflection. The image is still congruent."},
+ {label:"6 of 8 · Two triangles",q:"Triangle <i>ABC</i> has sides 3 cm, 4 cm and 5 cm. Triangle <i>DEF</i> has sides 4 cm, 5 cm and 3 cm. Are they congruent? Answer yes or no.",a:YES,eq:null,prompt:"Does the order the sides are listed in matter?",hint:"Match each side to a side of the same length.",sol:"Yes: the three sides match in length (a triangle is fixed by its three sides)."},
+ {label:"7 of 8 · Same area",q:"A rectangle 2 cm by 6 cm and a rectangle 3 cm by 4 cm both have an area of 12 cm². Are they congruent? Answer yes or no.",a:NO,eq:null,prompt:"Do the sides match?",hint:"Compare the lengths, not the areas.",sol:"No: the same area, but the sides are different lengths, so they are not the same shape and size."},
+ {label:"8 of 8 · Two moves (stretch)",q:"A triangle with vertices (0, 0), (4, 0) and (0, 3) is reflected in the <i>y</i>-axis, then translated 5 right. What is the perimeter of the final image?",a:[],eq:pN(12),prompt:"What do the two moves keep?",hint:"The sides are 4, 3 and 5.",sol:"Both moves keep every length, so the perimeter is still 4 + 3 + 5 = 12."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],fb=document.getElementById("practiceFeedback"),val;
+  if(q.vec){ var vt=document.getElementById("pVecT").value.trim(), vb=document.getElementById("pVecB").value.trim(); val=(vt&&vb)?vt+", "+vb:""; if(!val&&(vt||vb)){ fb.style.display="block"; fb.className="feedback warn"; fb.textContent="Fill in both boxes: the horizontal move and the vertical move."; pLock(); return; } }
+  else val=document.getElementById("practiceAnswer").value;
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Compare the lengths and the angles — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  csRender();
+  trDraw();
+  zqRender();
+  klDraw();
+  prRender('pr');
+  mmRender();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('ts-04-congruence');</script>
+
+<script src="../../assets/fieldkits/transformations-similarity-and-scale.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(3);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press xⁿ again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="xⁿ"){ /* power key: the next digits typed become a superscript power, e.g. 1.06⁴ */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+
+<script>/* NEO: return to the exact place after the Geometry Studio */
+(function(){
+  var KEY='neoReturn:'+location.pathname, p=location.pathname, i=p.indexOf('/lessons/'), rel=i<0?null:'..'+p.slice(i);
+  function snap(){ var det=[].slice.call(document.querySelectorAll('details')), pv=document.getElementById('practiceView'), a=document.getElementById('practiceAnswer');
+    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:'',boxes:pv?[].slice.call(pv.querySelectorAll('input[id]')).filter(function(x){return x.value;}).map(function(x){return [x.id,x.value];}):[]}; }
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(snap())); }catch(e){} }
+  [].slice.call(document.querySelectorAll('a[href*="geometry-studio.html"]')).forEach(function(a){ var h=a.getAttribute('href');
+    if(rel&&!/[?&]return=/.test(h)) a.setAttribute('href',h+(h.indexOf('?')<0?'?':'&')+'return='+encodeURIComponent(rel));
+    a.addEventListener('click',save); });
+  var s=null; try{ s=JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){}
+  if(!s||Date.now()-s.t>3*3600*1000) return;
+  try{ sessionStorage.removeItem(KEY); }catch(e){}
+  function restore(){ var det=document.querySelectorAll('details'); (s.open||[]).forEach(function(k){ if(det[k]) det[k].open=true; });
+    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; (s.boxes||[]).forEach(function(bx){ var el=document.getElementById(bx[0]); if(el) el.value=bx[1]; }); } }
+    setTimeout(function(){ window.scrollTo(0,s.y); },s.practice?450:60); }
+  if(document.readyState==='complete') setTimeout(restore,80); else window.addEventListener('load',function(){ setTimeout(restore,80); });
+})();
+</script>
+</body>
+</html>
