@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Dynamic Geometry Studio — v0.6</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif}
+.wrap{max-width:1040px;margin:auto;padding:14px}
+h1{color:#3f5f45;margin:0 0 2px;font-size:1.3em}.sub{color:#6a7f4e;margin:0 0 10px;font-size:.9em}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.returnbtn{flex:0 0 auto;background:#5c6b4f;color:#fff;border:none;border-radius:9px;padding:9px 14px;font-weight:700;text-decoration:none;font-size:.92em;cursor:pointer;white-space:nowrap}
+.returnbtn:hover{background:#4d5942}
+/* lesson task lane */
+.tasklane{flex:0 0 250px;background:#eef3e8;border-left:1px solid #cdbfa9;padding:12px 13px;overflow:auto;max-height:560px}
+.tasklane .tl-tag{font-size:.7em;text-transform:uppercase;letter-spacing:.06em;color:#6a7f4e;font-weight:700}
+.tasklane h2{font-size:1.02em;color:#3f5f45;margin:3px 0 7px}
+.tasklane p{font-size:.86em;margin:0 0 8px;line-height:1.45}
+.tasklane ol{margin:0 0 10px;padding-left:20px;font-size:.86em;line-height:1.5}
+.tasklane ol li{margin:3px 0}
+.tasklane .tl-big{background:#fffaf0;border:1px solid #e2d4bb;border-radius:9px;padding:8px 10px;font-size:.82em;margin:0 0 10px}
+.tasklane .tl-tip{background:#eef3f6;border:1px solid #b9cdd6;border-radius:9px;padding:8px 10px;font-size:.8em;line-height:1.45;margin:0 0 10px}
+.tasklane .tl-tip b{color:#2b5566}
+.tasklane label{display:block;font-weight:700;font-size:.82em;color:#4f554b;margin:6px 0 4px}
+.tasklane textarea{width:100%;box-sizing:border-box;min-height:66px;border:1px solid #bcae98;border-radius:8px;padding:8px;font-family:inherit;font-size:.85em;resize:vertical}
+.tasklane .tl-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tasklane .tl-actions button{flex:1 1 auto;padding:8px 9px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;font-size:.8em}
+.tasklane .tl-actions button.primary{background:#365a68;color:#fff;border:none}
+.tasklane .tl-check{font-size:.85em;background:#fff;border:1px solid #d8d0c0;border-left:4px solid #b8860b;border-radius:8px;padding:8px 10px;margin-top:8px;line-height:1.45}
+.tasklane .tl-check.good{border-left-color:#3f7a45}
+.tasklane .tl-status{font-size:.8em;color:#3f5f45;margin-top:8px;min-height:1em}
+@media (max-width:760px){.studio{flex-direction:column}.toolbox{flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid #cdbfa9}.tasklane{flex-basis:auto;border-left:none;border-top:1px solid #cdbfa9;max-height:none}}
+/* menu bar */
+.menubar{display:flex;gap:2px;background:#3f5f45;border-radius:10px 10px 0 0;padding:4px 6px;position:relative;z-index:20}
+.menubar>.menu{position:relative}
+.menubar>.menu>button{background:transparent;color:#fff;border:none;padding:7px 12px;font-weight:700;border-radius:7px;cursor:pointer;font-size:.95em}
+.menubar>.menu.open>button,.menubar>.menu>button:hover{background:#5c7a54}
+.dropdown{display:none;position:absolute;top:100%;left:0;min-width:210px;background:#fff;border:1px solid #cdbfa9;border-radius:0 8px 8px 8px;box-shadow:0 8px 22px rgba(0,0,0,.18);padding:5px;z-index:30}
+.menu.open .dropdown{display:block}
+.dropdown button{display:block;width:100%;text-align:left;background:transparent;border:none;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:.92em;color:#2f3429}
+.dropdown button:hover{background:#eef3e8}
+.dropdown button.disabled{color:#a9a293;cursor:default}
+.dropdown button.disabled:hover{background:transparent}
+.dropdown .sep{height:1px;background:#e6ddcb;margin:4px 2px}
+.dropdown .lbl{font-size:.72em;text-transform:uppercase;letter-spacing:.05em;color:#9a917f;padding:5px 10px 2px}
+/* body: toolbox + stage */
+.studio{display:flex;border:1px solid #cdbfa9;border-top:none;border-radius:0 0 12px 12px;overflow:hidden}
+.toolbox{display:flex;flex-direction:column;gap:6px;background:#f2ecdf;padding:8px;border-right:1px solid #cdbfa9}
+.toolbox button{width:52px;height:46px;border-radius:9px;border:1px solid #b7bda9;background:#fff;cursor:pointer;font-size:1.15em;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.toolbox button .cap{font-size:.55em;font-weight:700;color:#5c6b4f}
+.toolbox button.active{background:#3f5f45;border-color:#3f5f45;color:#fff}
+.toolbox button.active .cap{color:#eaf0e4}
+.toolbox .toolsep{height:1px;background:#cdbfa9;margin:4px 2px}
+.toolbox button.act{background:#eef3e8}
+.toolbox button.act[disabled]{opacity:.4;cursor:default}
+.stage{position:relative;background:#fbf7ef;flex:1;min-width:0}
+.canvasscroll{overflow:auto;width:100%;height:min(560px,72vh);background:#fbf7ef;overscroll-behavior:contain}
+.canvasscroll svg#canvas{width:2580px;height:1680px;max-width:none}
+svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+.hint{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:.92em;min-height:1.2em}
+.legend{font-size:.82em;color:#6a6157;margin-top:8px}
+/* dialog */
+.overlay{display:none;position:fixed;inset:0;background:rgba(39,45,35,.55);z-index:50;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.dialog{background:#f7f3ea;border-radius:14px;padding:18px 20px;max-width:460px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.dialog h3{margin:0 0 8px;color:#3f5f45}
+.dialog .row{margin:8px 0}
+.dialog button{padding:8px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;margin-right:6px}
+.dialog button.primary{background:#5c6b4f;color:#fff;border:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+  <div class="titleblock">
+    <h1>Dynamic Geometry Studio <span id="sketchName" style="font-size:.62em;font-weight:normal;color:#6a7f4e">— (unsaved)</span></h1>
+    <p class="sub">v0.6 — a coordinate grid and transformations, now with Enlarge and a task checker. Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
+  </div>
+  <a id="returnBtn" class="returnbtn" href="#" hidden>← Return to lesson</a>
+</div>
+
+<div class="menubar" id="menubar">
+  <div class="menu"><button data-menu="file">File</button>
+    <div class="dropdown">
+      <button data-act="newsketch">New sketch</button>
+      <button data-act="opendlg">Open…</button>
+      <div class="sep"></div>
+      <button data-act="save">Save</button>
+      <button data-act="saveas">Save as…</button>
+      <div class="sep"></div>
+      <button data-act="exportfile">Export to file…</button>
+      <button data-act="importfile">Import from file…</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="edit">Edit</button>
+    <div class="dropdown">
+      <button data-act="undo">Undo</button>
+      <button data-act="redo">Redo</button>
+      <button data-act="delete">Delete selection</button>
+      <button data-act="relabel">Rename / edit label…</button>
+      <div class="sep"></div>
+      <button data-act="selectall">Select all</button>
+      <button data-act="deselect">Deselect all</button>
+      <button data-act="clear">Clear all</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="display">Display</button>
+    <div class="dropdown">
+      <button data-act="colour">Colour…</button>
+      <div class="sep"></div>
+      <button data-act="labels">Show / hide labels</button>
+      <button data-act="hide">Hide selection</button>
+      <button data-act="showall">Show all hidden</button>
+      <div class="sep"></div>
+      <button data-act="trace">Trace selection (on/off)</button>
+      <button data-act="erasetrace">Erase traces</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="construct">Construct</button>
+    <div class="dropdown">
+      <div class="lbl">from selected points</div>
+      <button data-act="segment">Segment</button>
+      <button data-act="ray">Ray</button>
+      <button data-act="line">Line</button>
+      <button data-act="midpoint">Midpoint</button>
+      <button data-act="circlecp">Circle by centre + point</button>
+      <button data-act="pointon">Point on object (circle/line)</button>
+      <button data-act="polygon">Polygon interior (3+ points)</button>
+      <div class="sep"></div>
+      <div class="lbl">loci &amp; relations</div>
+      <button data-act="intersection">Intersection(s)</button>
+      <button data-act="perpbis">Perpendicular bisector</button>
+      <button data-act="anglebis">Angle bisector</button>
+      <button data-act="perpendicular">Perpendicular line</button>
+      <button data-act="parallel">Parallel line</button>
+      <button data-act="locus" class="disabled">Locus — soon</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="transform">Transform</button>
+    <div class="dropdown">
+      <div class="lbl">mark first</div>
+      <button data-act="markmirror">Mark mirror (select 1 line or segment)</button>
+      <button data-act="mirrorline">Mirror line by equation… (x = a, y = b, y = x, y = −x)</button>
+      <button data-act="markcentre">Mark centre (select 1 point)</button>
+      <div class="sep"></div>
+      <div class="lbl">then transform the selection</div>
+      <button data-act="reflect">Reflect in the marked mirror</button>
+      <button data-act="rotate">Rotate about the marked centre…</button>
+      <button data-act="translate">Translate by a column vector…</button>
+      <button data-act="enlarge">Enlarge from the marked centre…</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="measure">Measure</button>
+    <div class="dropdown">
+      <button data-act="mlength">Length (segment)</button>
+      <button data-act="mdistance">Distance (2 points)</button>
+      <button data-act="mangle">Angle (3 points)</button>
+      <button data-act="mbearing">Bearing (of 2nd point from 1st)</button>
+      <button data-act="mradius">Radius (circle)</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="number">Number</button>
+    <div class="dropdown">
+      <button class="disabled">Calculator… — soon</button>
+      <button class="disabled">New parameter… — soon</button>
+      <button class="disabled">New function… — soon</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="graph">Graph</button>
+    <div class="dropdown">
+      <button data-act="axes">Coordinate grid on / off</button>
+      <button data-act="snap">Snap points to the grid on / off</button>
+      <button data-act="coords">Show coordinates on / off</button>
+      <button data-act="plotpoints">Plot points… (type coordinates)</button>
+      <button data-act="centreview">Centre the view on the origin</button>
+      <div class="sep"></div>
+      <button class="disabled">Plot function… — soon</button>
+      <button class="disabled">Bearings → use Measure → Bearing</button>
+    </div>
+  </div>
+  <div class="menu"><button data-menu="help">Help</button>
+    <div class="dropdown">
+      <button data-act="help">Quick reference</button>
+    </div>
+  </div>
+</div>
+
+<div class="studio">
+  <div class="toolbox" id="toolbox">
+    <button class="tool active" data-tool="select" title="Select &amp; drag (click objects to build a selection)"><span>🖐</span><span class="cap">Select</span></button>
+    <button class="tool" data-tool="point" title="Place points"><span>•</span><span class="cap">Point</span></button>
+    <button class="tool" data-tool="segment" title="Straightedge — draw a segment between two points"><span>╱</span><span class="cap">Segment</span></button>
+    <button class="tool" data-tool="circle" title="Circle — centre then a point on it"><span>◯</span><span class="cap">Circle</span></button>
+    <button class="tool" data-tool="compass" title="Compass — click a centre, click to set the radius, then swing the arc"><span>◜</span><span class="cap">Compass</span></button>
+    <button class="tool" data-tool="text" title="Text — click to place a caption; double-click any text or point to rename"><span>🅰</span><span class="cap">Text</span></button>
+    <button class="tool" data-tool="pencil" title="Pencil — draw or handwrite freehand"><span>✎</span><span class="cap">Pencil</span></button>
+    <div class="toolsep"></div>
+    <button class="tool act" id="tbUndo" title="Undo (Ctrl/Cmd+Z)"><span>↶</span><span class="cap">Undo</span></button>
+    <button class="tool act" id="tbRedo" title="Redo (Ctrl/Cmd+Y or Shift+Ctrl/Cmd+Z)"><span>↷</span><span class="cap">Redo</span></button>
+  </div>
+  <div class="stage">
+    <div class="canvasscroll" id="canvasScroll" tabindex="0" aria-label="Drawing area: scroll to look around"><svg id="canvas" viewBox="-860 -560 2580 1680" width="2580" height="1680" role="img" aria-label="Dynamic geometry construction area"></svg></div>
+  </div>
+  <aside class="tasklane" id="taskLane" hidden aria-label="Lesson task">
+    <div class="tl-tag" id="tlTag"></div>
+    <h2 id="tlTitle"></h2>
+    <p id="tlIntro"></p>
+    <ol id="tlSteps"></ol>
+    <div class="tl-big" id="tlBig" hidden></div>
+    <div class="tl-tip"><b>💡 How constructions work here:</b> build corners with <b>Construct → Point on object</b> or <b>Construct → Intersection(s)</b> — never the plain Point tool. A point built by a command stays attached to its arcs, so your construction holds together when you drag. A point dropped by eye is free and will drift.</div>
+    <label for="tlConj">What do you notice?</label>
+    <textarea id="tlConj" placeholder="Keep an idea you want to test, break or improve…"></textarea>
+    <div class="tl-actions">
+      <button class="primary" id="tlSaveWork">💾 Save my construction</button>
+      <button id="tlSaveConj">💾 Save what I notice</button>
+    </div>
+    <div class="tl-actions" id="tlCheckRow" hidden><button class="primary" id="tlCheck">✔ Check my image</button></div>
+    <div class="tl-check" id="tlCheckOut" aria-live="polite" hidden></div>
+    <div class="tl-status" id="tlStatus" aria-live="polite"></div>
+  </aside>
+</div>
+<div class="hint" id="hint">Pick an instrument on the left to draw, or use <b>Select</b> to choose objects then apply a menu action. Try: Point ×3, then Select all three and Construct → Angle bisector.</div>
+<p class="legend">v0.5 — instruments create objects; menus act on the current selection (highlighted). Everything stays dynamic: drag a free point and all dependents follow, images included. Graph turns on a coordinate grid; Transform reflects, rotates, translates and enlarges. In a task with targets, “Check my image” says what matches.</p>
+</div>
+
+<input type="file" id="fileInput" accept="application/json,.json" style="display:none">
+<input type="color" id="colourPicker" value="#3f7a45" style="position:fixed;left:-9999px">
+<div class="overlay" id="overlay"><div class="dialog" id="dialog"></div></div>
+
+<script>
+(function(){
+"use strict";
+var svg=document.getElementById("canvas"), hint=document.getElementById("hint");
+var VW=860, VH=560;
+/* the world is larger than the window: x from WX0 to WX0+WW, y from WY0 to WY0+WH (the original 860 x 560 area is in the middle) */
+var WX0=-860, WY0=-560, WW=2580, WH=1680;
+var objects=[], nextId=1, pointLabel=0;
+var tool="select";
+var sel=[];               // selection: array of object ids (Sketchpad-style)
+var pending=[];           // ids collected mid draw-gesture
+var drag=null, compass=null, hover=null;
+var labelsShown=true, currentName=null;
+/* v0.5: coordinate grid. 1 unit = 30 px (the same as 1 cm on the plain grid); origin at the centre. */
+var AX={on:false,snap:true,coords:false,ox:430,oy:280,u:30};
+function toU(p){return {x:(p.x-AX.ox)/AX.u,y:(AX.oy-p.y)/AX.u};}
+function fromU(x,y){return {x:AX.ox+x*AX.u,y:AX.oy-y*AX.u};}
+function snapPos(p){if(!AX.on||!AX.snap)return p;var q=toU(p);return fromU(Math.round(q.x),Math.round(q.y));}
+function fmtNum(v){var r=Math.round(v*100)/100;if(Math.abs(r)<1e-9)r=0;var t=String(r);return t.charAt(0)==="-"?"−"+t.slice(1):t;}
+var PALETTE=[["Charcoal","#2f3429"],["Ocean","#2b6cb0"],["Moss","#3f7a45"],["Berry","#b24c4c"],["Plum","#7a4fb0"],["Rust","#c1622e"],["Teal","#2f8f8f"],["Gold","#b8860b"]];
+var LSKEY="neoDGS_sketches_v1";
+
+/* ---------- geometry helpers ---------- */
+function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y);}
+function ang(c,p){return Math.atan2(p.y-c.y,p.x-c.x);}
+function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+function unit(v){var m=Math.hypot(v.x,v.y)||1;return {x:v.x/m,y:v.y/m};}
+function segLen(id){var o=byId(id);if(o&&o.type==="segment")return dist(P(o.a),P(o.b));return 0;}
+function esc(t){return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function distToSeg(p,a,b){var vx=b.x-a.x,vy=b.y-a.y,wx=p.x-a.x,wy=p.y-a.y,c1=vx*wx+vy*wy;if(c1<=0)return Math.hypot(p.x-a.x,p.y-a.y);var c2=vx*vx+vy*vy;if(c2<=c1)return Math.hypot(p.x-b.x,p.y-b.y);var t=c1/c2;return Math.hypot(p.x-(a.x+t*vx),p.y-(a.y+t*vy));}
+function circleCircle(c1,r1,c2,r2){var d=Math.hypot(c2.x-c1.x,c2.y-c1.y);if(d<1e-9||d>r1+r2||d<Math.abs(r1-r2))return[];var a=(r1*r1-r2*r2+d*d)/(2*d),h2=r1*r1-a*a;if(h2<0)h2=0;var h=Math.sqrt(h2);var xm=c1.x+a*(c2.x-c1.x)/d,ym=c1.y+a*(c2.y-c1.y)/d;var rx=-(c2.y-c1.y)*(h/d),ry=(c2.x-c1.x)*(h/d);return[{x:xm+rx,y:ym+ry},{x:xm-rx,y:ym-ry}];}
+function lineLine(p1,d1,p2,d2){var den=d1.x*d2.y-d1.y*d2.x;if(Math.abs(den)<1e-9)return[];var t=((p2.x-p1.x)*d2.y-(p2.y-p1.y)*d2.x)/den;return[{x:p1.x+t*d1.x,y:p1.y+t*d1.y}];}
+function lineCircle(p,d,c,r){var f=sub(p,c),a=d.x*d.x+d.y*d.y,b=2*(f.x*d.x+f.y*d.y),cc=f.x*f.x+f.y*f.y-r*r;var disc=b*b-4*a*cc;if(disc<0)return[];disc=Math.sqrt(disc);var t1=(-b-disc)/(2*a),t2=(-b+disc)/(2*a);return[{x:p.x+t1*d.x,y:p.y+t1*d.y},{x:p.x+t2*d.x,y:p.y+t2*d.y}];}
+
+/* ---------- resolve from dependency graph ---------- */
+function byId(id){for(var i=0;i<objects.length;i++)if(objects[i].id===id)return objects[i];return null;}
+function P(id){var o=byId(id);if(!o||o.type!=="point")return {x:0,y:0};
+  if(o.kind==="free")return {x:o.x,y:o.y};
+  if(o.kind==="mid"){var a=P(o.a),b=P(o.b);return {x:(a.x+b.x)/2,y:(a.y+b.y)/2};}
+  if(o.kind==="intersect"){var pts=intersectGeom(o.o1,o.o2);if(!pts.length)return o._last||{x:0,y:0};var pick=pts[Math.min(o.which,pts.length-1)];o._last=pick;return pick;}
+  if(o.kind==="arcend"){var ce=P(o.c),rpe=P(o.rp),re=dist(ce,rpe),ae=ang(ce,rpe)+o.swept;return {x:ce.x+re*Math.cos(ae),y:ce.y+re*Math.sin(ae)};}
+  if(o.kind==="polar"){var cp=P(o.c),rr=segLen(o.seg);return {x:cp.x+rr*Math.cos(o.ang),y:cp.y+rr*Math.sin(o.ang)};}
+  if(o.kind==="fixed")return {x:o.x,y:o.y};
+  if(o.kind==="image"){var tf=byId(o.tf);return tf?applyTf(tf,P(o.of)):P(o.of);}
+  if(o.kind==="on"){var host=byId(o.on);if(isCircleish(host)){var g=circGeom(host);return {x:g.c.x+g.r*Math.cos(o.ang),y:g.c.y+g.r*Math.sin(o.ang)};}if(isLineish(host)){var lg=lineGeom(host);return {x:lg.p.x+o.t*lg.d.x,y:lg.p.y+o.t*lg.d.y};}return {x:0,y:0};}
+  return {x:0,y:0};}
+function applyTf(t,p){
+  if(t.kind==="reflect"){var L=byId(t.line);if(!L)return p;var g=lineGeom(L),dd=g.d.x*g.d.x+g.d.y*g.d.y||1,k=((p.x-g.p.x)*g.d.x+(p.y-g.p.y)*g.d.y)/dd,f={x:g.p.x+k*g.d.x,y:g.p.y+k*g.d.y};return {x:2*f.x-p.x,y:2*f.y-p.y};}
+  if(t.kind==="rotate"){var c=P(t.c),a=t.deg*Math.PI/180,dx=p.x-c.x,dy=c.y-p.y,X=dx*Math.cos(a)-dy*Math.sin(a),Y=dx*Math.sin(a)+dy*Math.cos(a);return {x:c.x+X,y:c.y-Y};}
+  if(t.kind==="translate"){return {x:p.x+t.dx*AX.u,y:p.y-t.dy*AX.u};}
+  if(t.kind==="enlarge"){var c2=P(t.c);return {x:c2.x+t.k*(p.x-c2.x),y:c2.y+t.k*(p.y-c2.y)};}
+  return p;}
+function lineGeom(o){
+  if(o.type==="line"&&(o.kind==="through"||o.kind==="ray")){var a=P(o.a),b=P(o.b);return {p:a,d:sub(b,a)};}
+  if(o.type==="line"&&o.kind==="eq"){if(o.eq==="x")return {p:fromU(o.k,0),d:{x:0,y:1}};if(o.eq==="y")return {p:fromU(0,o.k),d:{x:1,y:0}};if(o.eq==="yx")return {p:fromU(0,0),d:{x:1,y:-1}};return {p:fromU(0,0),d:{x:1,y:1}};}
+  if(o.type==="segment"){var a2=P(o.a),b2=P(o.b);return {p:a2,d:sub(b2,a2)};}
+  if(o.type==="perpbis"){var a3=P(o.a),b3=P(o.b);var m={x:(a3.x+b3.x)/2,y:(a3.y+b3.y)/2};var ab=sub(b3,a3);return {p:m,d:{x:-ab.y,y:ab.x}};}
+  if(o.type==="perp"){var bp=lineGeom(byId(o.base));return {p:P(o.thru),d:{x:-bp.d.y,y:bp.d.x}};}
+  if(o.type==="parallel"){var bq=lineGeom(byId(o.base));return {p:P(o.thru),d:bq.d};}
+  if(o.type==="anglebis"){var va=P(o.v),u1=unit(sub(P(o.a),va)),u2=unit(sub(P(o.b),va));var dd={x:u1.x+u2.x,y:u1.y+u2.y};if(Math.hypot(dd.x,dd.y)<1e-6)dd={x:-u1.y,y:u1.x};return {p:va,d:dd};}
+  return null;}
+function circGeom(o){if(o.type==="circle"){var c=P(o.c),t=P(o.thru);return {c:c,r:dist(c,t)};}if(o.type==="arc"){var c2=P(o.c),rp=P(o.rp);return {c:c2,r:dist(c2,rp)};}return null;}
+function isLineish(o){return o&&(o.type==="line"||o.type==="segment"||o.type==="perpbis"||o.type==="perp"||o.type==="parallel"||o.type==="anglebis");}
+function isCircleish(o){return o&&(o.type==="circle"||o.type==="arc");}
+function intersectGeom(id1,id2){var o1=byId(id1),o2=byId(id2);if(!o1||!o2)return[];
+  if(isCircleish(o1)&&isCircleish(o2)){var a=circGeom(o1),b=circGeom(o2);return circleCircle(a.c,a.r,b.c,b.r);}
+  if(isLineish(o1)&&isLineish(o2)){var l1=lineGeom(o1),l2=lineGeom(o2);return lineLine(l1.p,l1.d,l2.p,l2.d);}
+  var L=isLineish(o1)?lineGeom(o1):lineGeom(o2),C=isCircleish(o1)?circGeom(o1):circGeom(o2);return lineCircle(L.p,L.d,C.c,C.r);}
+
+/* ---------- create / pick ---------- */
+function nextLabel(){return String.fromCharCode(65+(pointLabel++%26));}
+function addFreePoint(x,y){var sp=snapPos({x:x,y:y});var o={id:nextId++,type:"point",kind:"free",x:sp.x,y:sp.y,label:nextLabel()};objects.push(o);return o.id;}
+function nearestPoint(x,y,thr){var best=null,bd=thr||16;objects.forEach(function(o){if(o.type==="point"&&!o.hidden){var p=P(o.id),d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;best=o.id;}}});return best;}
+function nearestCurve(x,y,thr){var best=null,bd=thr||12;objects.forEach(function(o){if(o.hidden)return;var d=null;
+  if(isCircleish(o)){var g=circGeom(o);d=Math.abs(Math.hypot(x-g.c.x,y-g.c.y)-g.r);}
+  else if(isLineish(o)){var l=lineGeom(o),nn=unit({x:-l.d.y,y:l.d.x});d=Math.abs((x-l.p.x)*nn.x+(y-l.p.y)*nn.y);}
+  else if(o.type==="ink"&&o.pts.length>1){var md=1e9;for(var k=0;k<o.pts.length-1;k++)md=Math.min(md,distToSeg({x:x,y:y},{x:o.pts[k][0],y:o.pts[k][1]},{x:o.pts[k+1][0],y:o.pts[k+1][1]}));d=md;}
+  if(d!=null&&d<bd){bd=d;best=o.id;}});return best;}
+function nearestCaption(x,y){for(var i=objects.length-1;i>=0;i--){var o=objects[i];if(o.type==="caption"&&!o.hidden){var w=(o.text||"").length*8+10;if(x>=o.x-4&&x<=o.x+w&&y>=o.y-16&&y<=o.y+6)return o.id;}}return null;}
+function pickOrCreatePoint(x,y){var id=nearestPoint(x,y);return id!=null?id:addFreePoint(x,y);}
+function pickAny(x,y){var id=nearestPoint(x,y);if(id!=null)return id;var cap=nearestCaption(x,y);if(cap!=null)return cap;var c=nearestCurve(x,y);if(c!=null)return c;return nearestPolygon(x,y);}
+function freeAncestors(id){var out={};(function walk(x){var o=byId(x);if(!o)return;if(o.type==="point"&&(o.kind==="free"||o.kind==="fixed")){out[x]=1;return;}["a","b","c","v","thru","base","o1","o2","rp","seg","at","of","on","tf","line"].forEach(function(f){if(typeof o[f]==="number")walk(o[f]);});if(Array.isArray(o.pts))o.pts.forEach(walk);})(id);return Object.keys(out).map(Number);}
+function pointInPoly(pt,verts){var inside=false;for(var i=0,j=verts.length-1;i<verts.length;j=i++){var a=verts[i],b=verts[j];if(((a.y>pt.y)!==(b.y>pt.y))&&(pt.x<(b.x-a.x)*(pt.y-a.y)/((b.y-a.y)||1e-9)+a.x))inside=!inside;}return inside;}
+function nearestPolygon(x,y){for(var i=objects.length-1;i>=0;i--){var o=objects[i];if(o.type==="polygon"&&!o.hidden&&pointInPoly({x:x,y:y},o.pts.map(P)))return o.id;}return null;}
+function enclosed(x0,y0,x1,y1){var lo={x:Math.min(x0,x1),y:Math.min(y0,y1)},hi={x:Math.max(x0,x1),y:Math.max(y0,y1)};var out=[];objects.forEach(function(o){if(o.hidden)return;if(o.type==="measlen"||o.type==="measang"||o.type==="meastext"||o.type==="measbear"||o.type==="tf")return;var anc=freeAncestors(o.id);if(!anc.length)return;var all=anc.every(function(pid){var q=P(pid);return q.x>=lo.x&&q.x<=hi.x&&q.y>=lo.y&&q.y<=hi.y;});if(all)out.push(o.id);});return out;}
+function updateOnPoint(o,pos){var host=byId(o.on);if(isCircleish(host)){o.ang=ang(circGeom(host).c,pos);}else if(isLineish(host)){var lg=lineGeom(host);var dd=lg.d.x*lg.d.x+lg.d.y*lg.d.y||1;o.t=((pos.x-lg.p.x)*lg.d.x+(pos.y-lg.p.y)*lg.d.y)/dd;}}
+
+/* ---------- rendering ---------- */
+function arcPath(c,r,a0,swept){var a1=a0+swept;var s={x:c.x+r*Math.cos(a0),y:c.y+r*Math.sin(a0)},e={x:c.x+r*Math.cos(a1),y:c.y+r*Math.sin(a1)};var large=Math.abs(swept)>Math.PI?1:0,sweep=swept>=0?1:0;return "M"+s.x.toFixed(1)+" "+s.y.toFixed(1)+" A"+r.toFixed(1)+" "+r.toFixed(1)+" 0 "+large+" "+sweep+" "+e.x.toFixed(1)+" "+e.y.toFixed(1);}
+function normAng(x){while(x>Math.PI)x-=2*Math.PI;while(x<-Math.PI)x+=2*Math.PI;return x;}
+function isSel(id){return sel.indexOf(id)>=0;}
+function lineEndpoints(o){var l=lineGeom(o),u=unit(l.d),ext=6000;
+  if(o.type==="segment")return [P(o.a),P(o.b)];
+  if(o.type==="line"&&o.kind==="ray")return [P(o.a),{x:P(o.a).x+u.x*ext,y:P(o.a).y+u.y*ext}];
+  return [{x:l.p.x-u.x*ext,y:l.p.y-u.y*ext},{x:l.p.x+u.x*ext,y:l.p.y+u.y*ext}];}
+function highlightSVG(o){var col="#e79b5a",w=9,op="0.45";
+  if(isLineish(o)){var e=lineEndpoints(o);return '<line x1="'+e[0].x.toFixed(1)+'" y1="'+e[0].y.toFixed(1)+'" x2="'+e[1].x.toFixed(1)+'" y2="'+e[1].y.toFixed(1)+'" stroke="'+col+'" stroke-width="'+w+'" stroke-opacity="'+op+'" stroke-linecap="round"/>';}
+  if(o.type==="circle"){var g=circGeom(o);return '<circle cx="'+g.c.x.toFixed(1)+'" cy="'+g.c.y.toFixed(1)+'" r="'+g.r.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-opacity="'+op+'"/>';}
+  if(o.type==="arc"){var ga=circGeom(o),a0=ang(ga.c,P(o.rp));return '<path d="'+arcPath(ga.c,ga.r,a0,o.swept)+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-opacity="'+op+'" stroke-linecap="round"/>';}
+  return "";}
+/* numbered, labelled axes (GreenPrint v2.3): every unit numbered, italic x and y, O at the origin */
+function axesSVG(){var s="",u=AX.u,ox=AX.ox,oy=AX.oy,xmin=Math.ceil((WX0-ox)/u),xmax=Math.floor((WX0+WW-ox)/u),ymin=Math.ceil(-(WY0+WH-oy)/u),ymax=Math.floor((oy-WY0)/u);
+  for(var i=xmin;i<=xmax;i++){var X=ox+i*u;s+='<line x1="'+X+'" y1="'+WY0+'" x2="'+X+'" y2="'+(WY0+WH)+'" stroke="#e2d9c6" stroke-width="1"/>';}
+  for(var j=ymin;j<=ymax;j++){var Y=oy-j*u;s+='<line x1="'+WX0+'" y1="'+Y+'" x2="'+(WX0+WW)+'" y2="'+Y+'" stroke="#e2d9c6" stroke-width="1"/>';}
+  s+='<line x1="'+WX0+'" y1="'+oy+'" x2="'+(WX0+WW-4)+'" y2="'+oy+'" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/><line x1="'+ox+'" y1="'+(WY0+WH)+'" x2="'+ox+'" y2="'+(WY0+4)+'" stroke="#2f3429" stroke-width="1.8" marker-end="url(#axArr)"/>';
+  s+='<defs><marker id="axArr" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f3429"/></marker></defs>';
+  for(var a=xmin;a<=xmax;a++){if(a===0)continue;var XX=ox+a*u;s+='<line x1="'+XX+'" y1="'+(oy-4)+'" x2="'+XX+'" y2="'+(oy+4)+'" stroke="#2f3429" stroke-width="1"/><text class="axnum" x="'+XX+'" y="'+(oy+16)+'" font-size="11" text-anchor="middle" fill="#4a4f45">'+fmtNum(a)+'</text>';}
+  for(var b=ymin;b<=ymax;b++){if(b===0)continue;var YY=oy-b*u;s+='<line x1="'+(ox-4)+'" y1="'+YY+'" x2="'+(ox+4)+'" y2="'+YY+'" stroke="#2f3429" stroke-width="1"/><text class="axnum" x="'+(ox-7)+'" y="'+(YY+4)+'" font-size="11" text-anchor="end" fill="#4a4f45">'+fmtNum(b)+'</text>';}
+  s+='<text x="'+(ox-7)+'" y="'+(oy+16)+'" font-size="12" text-anchor="end" font-family="Georgia,serif" font-style="italic" fill="#2f3429">O</text>';
+  s+='<text x="'+(WX0+WW-14)+'" y="'+(oy-8)+'" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">x</text><text x="'+(ox+9)+'" y="'+(WY0+16)+'" font-size="16" font-family="Georgia,serif" font-style="italic" fill="#2f3429">y</text>';
+  return s;}
+function eqLabel(o){if(o.eq==="x")return "x = "+fmtNum(o.k);if(o.eq==="y")return "y = "+fmtNum(o.k);if(o.eq==="yx")return "y = x";return "y = −x";}
+function render(){
+  var s="";
+  if(AX.on){s+=axesSVG();}else{
+  for(var gx=WX0;gx<=WX0+WW;gx+=30)s+='<line x1="'+gx+'" y1="'+WY0+'" x2="'+gx+'" y2="'+(WY0+WH)+'" stroke="#efe7d7" stroke-width="1"/>';
+  for(var gy=WY0;gy<=WY0+WH;gy+=30)s+='<line x1="'+WX0+'" y1="'+gy+'" x2="'+(WX0+WW)+'" y2="'+gy+'" stroke="#efe7d7" stroke-width="1"/>';}
+  // traces
+  objects.forEach(function(o){if(o.trace&&o._trail)o._trail.forEach(function(p){s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="1.6" fill="#9a6fbf"/>';});});
+  // filled polygons (behind lines/points)
+  objects.forEach(function(o){if(o.hidden||o.type!=="polygon")return;var dd=o.pts.map(P).map(function(p){return p.x.toFixed(1)+","+p.y.toFixed(1);}).join(" ");var fill=o.fill||(o.img?"#f2c14e":"#9ec7e8");s+='<polygon points="'+dd+'" fill="'+fill+'" fill-opacity="'+(fill==="none"?0:0.45)+'" stroke="none"/>';if(isSel(o.id))s+='<polygon points="'+dd+'" fill="#e79b5a" fill-opacity="0.35" stroke="#c1622e" stroke-width="3" stroke-dasharray="8 5"/>';});
+  // selection glow
+  sel.forEach(function(id){var so=byId(id);if(so&&so.type!=="point"&&so.type!=="polygon"&&!so.hidden)s+=highlightSVG(so);});
+  // curves/lines
+  objects.forEach(function(o){if(o.hidden)return;
+    if(o.type==="circle"){var g=circGeom(o);s+='<circle cx="'+g.c.x.toFixed(1)+'" cy="'+g.c.y.toFixed(1)+'" r="'+g.r.toFixed(1)+'" fill="none" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||"#2b6cb0"))+'" stroke-width="1.8"/>';}
+    else if(o.type==="arc"){var ga=circGeom(o),a0=ang(ga.c,P(o.rp));s+='<path d="'+arcPath(ga.c,ga.r,a0,o.swept)+'" fill="none" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||"#2b6cb0"))+'" stroke-width="1.8"/>';}
+    else if(isLineish(o)&&o.isMirror){var em=lineEndpoints(o);s+='<line x1="'+em[0].x.toFixed(1)+'" y1="'+em[0].y.toFixed(1)+'" x2="'+em[1].x.toFixed(1)+'" y2="'+em[1].y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="9" stroke-opacity="0.32"/>';}
+    if(o.type==="line"&&o.kind==="eq"){var le=lineGeom(o),lp=o.eq==="x"?fromU(o.k,6.5):o.eq==="y"?fromU(11.5,o.k):o.eq==="yx"?fromU(6.6,6.6):fromU(-6.6,6.6),la=(o.eq==="x"&&o.k<=0)||o.eq==="ynx"?"end":"start",lx=lp.x+(la==="end"?-7:7);s+='<rect x="'+(la==="end"?lx-58:lx-2).toFixed(1)+'" y="'+(lp.y-22).toFixed(1)+'" width="60" height="19" rx="4" fill="#fbf8f1" fill-opacity="0.9"/><text x="'+lx.toFixed(1)+'" y="'+(lp.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" text-anchor="'+la+'" fill="#3f5f45">'+eqLabel(o)+'</text>';}
+    if(o.type==="circle"&&false){}
+    else if(isLineish(o)){var e=lineEndpoints(o);var col=o.img?"#b25f2e":(o.type==="line"||o.type==="segment")?"#2f3429":"#3f7a45";s+='<line x1="'+e[0].x.toFixed(1)+'" y1="'+e[0].y.toFixed(1)+'" x2="'+e[1].x.toFixed(1)+'" y2="'+e[1].y.toFixed(1)+'" stroke="'+(isSel(o.id)?"#c1622e":(o.ray?"#8a6fb0":(o.colour||col)))+'" stroke-width="'+(o.ray?"1.3":o.type==="segment"?"2":o.type==="line"?"1.6":"2")+'"'+(o.ray?' stroke-dasharray="6 4" data-ray="1"':'')+'/>';}
+    else if(o.type==="measlen"){var ma=P(o.a),mb=P(o.b);var mx=(ma.x+mb.x)/2,my=(ma.y+mb.y)/2;s+='<line x1="'+ma.x.toFixed(1)+'" y1="'+ma.y.toFixed(1)+'" x2="'+mb.x.toFixed(1)+'" y2="'+mb.y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="1" stroke-dasharray="4 3"/><text x="'+mx.toFixed(1)+'" y="'+(my-6).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+(dist(ma,mb)/30).toFixed(1)+(AX.on?' units':' cm')+'</text>';}
+    else if(o.type==="measang"){var qa=P(o.a),qv=P(o.v),qb=P(o.b);var a1=ang(qv,qa),da=normAng(ang(qv,qb)-a1);var midA=a1+da/2;s+='<path d="'+arcPath(qv,26,a1,da)+'" fill="none" stroke="#7a4fb0" stroke-width="1.5"/><text x="'+(qv.x+46*Math.cos(midA)).toFixed(1)+'" y="'+(qv.y+46*Math.sin(midA)+4).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+Math.abs(da*180/Math.PI).toFixed(0)+'°</text>';}
+    else if(o.type==="meastext"){var pp=P(o.at);var txt="";if(o.kind==="radius"){var host=byId(o.of);if(host)txt="r = "+(circGeom(host).r/30).toFixed(1)+" cm";}s+='<text x="'+(pp.x+10).toFixed(1)+'" y="'+(pp.y+18).toFixed(1)+'" font-size="12" fill="#7a4fb0" font-weight="bold">'+txt+'</text>';}
+    else if(o.type==="measbear"){var ba=P(o.a),bb=P(o.b);var dx=bb.x-ba.x,dy=bb.y-ba.y;var brg=(Math.atan2(dx,-dy)*180/Math.PI+360)%360;var north=-Math.PI/2,dir=Math.atan2(dy,dx);var da=(((dir-north)%(2*Math.PI))+2*Math.PI)%(2*Math.PI);var mid=north+da/2;var lbl=("00"+Math.round(brg)%360).slice(-3)+"°";
+      s+='<line x1="'+ba.x.toFixed(1)+'" y1="'+ba.y.toFixed(1)+'" x2="'+ba.x.toFixed(1)+'" y2="'+(ba.y-42).toFixed(1)+'" stroke="#7a4fb0" stroke-width="1.5"/><text x="'+ba.x.toFixed(1)+'" y="'+(ba.y-46).toFixed(1)+'" font-size="11" fill="#7a4fb0" text-anchor="middle" font-weight="bold">N</text>';
+      s+='<line x1="'+ba.x.toFixed(1)+'" y1="'+ba.y.toFixed(1)+'" x2="'+bb.x.toFixed(1)+'" y2="'+bb.y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="1" stroke-dasharray="4 3"/>';
+      s+='<path d="'+arcPath(ba,22,north,da)+'" fill="none" stroke="#7a4fb0" stroke-width="1.5"/><text x="'+(ba.x+46*Math.cos(mid)).toFixed(1)+'" y="'+(ba.y+46*Math.sin(mid)+4).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+lbl+'</text>';}
+    else if(o.type==="ink"&&o.pts.length){var dp=o.pts.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");s+='<polyline points="'+dp+'" fill="none" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||"#2f3429"))+'" stroke-width="'+(o.width||2.5)+'" stroke-linecap="round" stroke-linejoin="round"/>';}
+    else if(o.type==="caption"){s+='<text x="'+o.x.toFixed(1)+'" y="'+o.y.toFixed(1)+'" font-size="15" font-family="Arial" fill="'+(isSel(o.id)?"#c1622e":(o.colour||"#2f3429"))+'">'+esc(o.text)+'</text>';if(isSel(o.id))s+='<circle cx="'+o.x.toFixed(1)+'" cy="'+o.y.toFixed(1)+'" r="3" fill="#c1622e"/>';}
+  });
+  // compass preview
+  if(tool==="compass"&&compass&&hover){var cc=P(compass.c);
+    s+='<circle cx="'+cc.x.toFixed(1)+'" cy="'+cc.y.toFixed(1)+'" r="4" fill="none" stroke="#c1622e" stroke-width="1.5"/>';
+    if(compass.stage==="radius"){var r=Math.hypot(hover.x-cc.x,hover.y-cc.y);s+='<circle cx="'+cc.x.toFixed(1)+'" cy="'+cc.y.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="none" stroke="#b9a05f" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="'+cc.x.toFixed(1)+'" y1="'+cc.y.toFixed(1)+'" x2="'+hover.x.toFixed(1)+'" y2="'+hover.y.toFixed(1)+'" stroke="#b9a05f" stroke-width="1" stroke-dasharray="3 3"/>';}
+    else if(compass.stage==="swing"){var r2=(compass.mode==="len")?segLen(compass.seg):dist(cc,P(compass.rp));s+='<circle cx="'+cc.x.toFixed(1)+'" cy="'+cc.y.toFixed(1)+'" r="'+r2.toFixed(1)+'" fill="none" stroke="#ddd0b5" stroke-width="1" stroke-dasharray="2 5"/><path d="'+arcPath(cc,r2,compass.start,compass.swept)+'" fill="none" stroke="#2b6cb0" stroke-width="1.8"/>';var tip={x:cc.x+r2*Math.cos(compass.start+compass.swept),y:cc.y+r2*Math.sin(compass.start+compass.swept)};s+='<circle cx="'+tip.x.toFixed(1)+'" cy="'+tip.y.toFixed(1)+'" r="3.5" fill="#2b6cb0"/>';}
+  }
+  // points
+  objects.forEach(function(o){if(o.type==="point"&&!o.hidden){var p=P(o.id),free=o.kind==="free";
+    if(isSel(o.id))s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="10" fill="#e79b5a" fill-opacity="0.35" stroke="#c1622e" stroke-width="2"/>';
+    if(o.kind==="fixed")s+='<rect x="'+(p.x-5).toFixed(1)+'" y="'+(p.y-5).toFixed(1)+'" width="10" height="10" fill="'+(o.colour||"#2f3429")+'" stroke="#fff" stroke-width="1.5" data-fixed="1"/>';
+    else s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(free?5:4)+'" fill="'+(o.colour||(free?"#2f3429":"#b25f2e"))+'" stroke="#fff" stroke-width="1.5"/>';
+    if(o.isCentre)s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="13" fill="none" stroke="#7a4fb0" stroke-width="2" stroke-dasharray="4 3"/>';
+    if(labelsShown){var lt=esc(o.label);if(AX.on&&AX.coords){var q=toU(p);lt+=' <tspan font-style="normal">('+fmtNum(q.x)+', '+fmtNum(q.y)+')</tspan>';}s+='<text x="'+(p.x+8).toFixed(1)+'" y="'+(p.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" fill="#2f3429">'+lt+'</text>';}}});
+  pending.forEach(function(id){if(typeof id!=="number")return;var p=P(id);s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="9" fill="none" stroke="#c1622e" stroke-width="1.5" stroke-dasharray="3 3"/>';});
+  if(drag&&drag.kind==="marquee"&&drag.moved){var x0=Math.min(drag.start.x,drag.last.x),y0=Math.min(drag.start.y,drag.last.y),ww=Math.abs(drag.last.x-drag.start.x),hh=Math.abs(drag.last.y-drag.start.y);s+='<rect x="'+x0.toFixed(1)+'" y="'+y0.toFixed(1)+'" width="'+ww.toFixed(1)+'" height="'+hh.toFixed(1)+'" fill="#3f5f45" fill-opacity="0.08" stroke="#3f5f45" stroke-width="1" stroke-dasharray="5 4"/>';}
+  svg.innerHTML=s;
+  recordHistory();
+}
+
+/* ---------- undo / redo history (snapshot-based) ---------- */
+var history=[], future=[], lastState=null;
+function snapState(){return {objs:JSON.parse(JSON.stringify(objects)),pl:pointLabel,ni:nextId};}
+function sigOf(st){return JSON.stringify(st.objs)+"|"+st.pl+"|"+st.ni;}
+function restoreState(st){objects=JSON.parse(JSON.stringify(st.objs));pointLabel=st.pl;nextId=st.ni;sel=[];pending=[];compass=null;}
+function recordHistory(){
+  if(drag||(tool==="compass"&&compass))return;      // don't snapshot mid-gesture
+  var st=snapState();
+  if(lastState&&sigOf(st)===sigOf(lastState))return; // no change since last record
+  if(lastState){history.push(lastState);if(history.length>60)history.shift();future=[];}
+  lastState=st;updateUndoRedo();
+}
+function updateUndoRedo(){var u=document.getElementById("tbUndo"),r=document.getElementById("tbRedo");if(u)u.disabled=!history.length;if(r)r.disabled=!future.length;}
+function doUndo(){if(!history.length){setHint("Nothing to undo.");return;}future.push(lastState);lastState=history.pop();restoreState(lastState);render();updateUndoRedo();setHint("Undone.");}
+function doRedo(){if(!future.length){setHint("Nothing to redo.");return;}history.push(lastState);lastState=future.pop();restoreState(lastState);render();updateUndoRedo();setHint("Redone.");}
+
+/* ---------- pointer / instruments ---------- */
+function toXY(e){var r=svg.getBoundingClientRect();return {x:WX0+(e.clientX-r.left)*WW/r.width,y:WY0+(e.clientY-r.top)*WH/r.height};}
+function setHint(t){hint.innerHTML=t;}
+function toggleSel(id){var i=sel.indexOf(id);if(i>=0)sel.splice(i,1);else sel.push(id);}
+function commitCompass(){if(!compass)return;var _c=compass.c,_sw=compass.swept,_rp;if(compass.mode==="len"){var pol={id:nextId++,type:"point",kind:"polar",c:_c,seg:compass.seg,ang:compass.start,label:nextLabel()};objects.push(pol);_rp=pol.id;}else{_rp=compass.rp;}objects.push({id:nextId++,type:"arc",c:_c,rp:_rp,swept:_sw});objects.push({id:nextId++,type:"point",kind:"arcend",c:_c,rp:_rp,swept:_sw,label:nextLabel()});compass=null;setHint("Arc drawn with a fixed end point. Click a new centre for another.");}
+
+svg.addEventListener("pointerdown",function(e){var pos=toXY(e);try{svg.setPointerCapture(e.pointerId);}catch(err){}
+  if(tool==="select"){var id=pickAny(pos.x,pos.y);
+    if(id==null){drag={kind:"marquee",start:pos,last:pos,total:0,moved:false,candidate:null};render();return;}
+    var o=byId(id);var st={candidate:id,last:pos,total:0,moved:false,kind:"none"};
+    if(o.type==="point"){if(o.kind==="free")st.kind="point";else if(o.kind==="on")st.kind="on";}
+    else if(o.type==="caption")st.kind="caption";
+    else if(o.type==="ink")st.kind="ink";
+    else if(isLineish(o)||isCircleish(o)||o.type==="polygon"){st.kind="obj";st.ids=freeAncestors(id);}
+    drag=st;render();return;}
+  if(tool==="text"){var t=window.prompt("Text to place:","");if(t)objects.push({id:nextId++,type:"caption",x:pos.x,y:pos.y,text:t});render();return;}
+  if(tool==="pencil"){var ink={id:nextId++,type:"ink",pts:[[pos.x,pos.y]],colour:"#2f3429",width:2.5};objects.push(ink);drag={kind:"ink-draw",candidate:ink.id,last:pos,moved:false};render();return;}
+  if(tool==="point"){var np=addFreePoint(pos.x,pos.y);sel=[np];render();return;}
+  if(tool==="compass"){
+    if(!compass){compass={stage:"radius",c:pickOrCreatePoint(pos.x,pos.y),mode:"pt"};setHint("Compass placed. Click where the <b>radius</b> should reach — an existing point, or anywhere (it snaps to a nearby point). The radius is the distance from the centre to that click.");}
+    else if(compass.stage==="radius"){var cc=P(compass.c);
+      var pid=nearestPoint(pos.x,pos.y);var rid=(pid!=null)?pid:addFreePoint(pos.x,pos.y);
+      compass.rp=rid;compass.mode="pt";compass.start=ang(cc,P(rid));
+      compass.swept=0;compass.lastAng=compass.start;compass.stage="swing";setHint("Now <b>swing</b>: move to sweep the arc, then click to leave the mark.");}
+    else{commitCompass();}
+    render();return;}
+  // segment / circle instruments (two clicks)
+  var pid=pickOrCreatePoint(pos.x,pos.y);pending.push(pid);
+  if(tool==="segment"&&pending.length===2){objects.push({id:nextId++,type:"segment",a:pending[0],b:pending[1]});pending=[];setHint("Segment drawn.");}
+  else if(tool==="circle"&&pending.length===2){objects.push({id:nextId++,type:"circle",c:pending[0],thru:pending[1]});pending=[];setHint("Circle drawn.");}
+  else if(pending.length===1&&tool==="segment")setHint("Click the second point.");
+  else if(pending.length===1&&tool==="circle")setHint("Click a point the circle passes through.");
+  render();
+});
+svg.addEventListener("pointermove",function(e){var pos=toXY(e);hover=pos;
+  if(drag&&drag.kind==="ink-draw"){var io=byId(drag.candidate);if(io)io.pts.push([pos.x,pos.y]);drag.moved=true;render();return;}
+  if(drag){var dx=pos.x-drag.last.x,dy=pos.y-drag.last.y;drag.total+=Math.hypot(dx,dy);if(drag.total>8)drag.moved=true;
+    if(drag.kind==="point"){var o=byId(drag.candidate),sp=snapPos(pos);o.x=sp.x;o.y=sp.y;}
+    else if(drag.kind==="none"&&drag.moved&&!drag.warned){var fo=byId(drag.candidate);if(fo&&fo.kind==="fixed"){drag.warned=true;setHint("This point was plotted at fixed coordinates, so it does not move. (Graph → Plot points… → tick “Let me drag them afterwards” to plot points you can drag.)");}}
+    else if(drag.kind==="on"){updateOnPoint(byId(drag.candidate),pos);}
+    else if(drag.kind==="caption"){var oc=byId(drag.candidate);oc.x=pos.x;oc.y=pos.y;}
+    else if(drag.kind==="ink"){var oi=byId(drag.candidate);oi.pts=oi.pts.map(function(p){return [p[0]+dx,p[1]+dy];});}
+    else if(drag.kind==="obj"){if(!drag.orig){drag.orig={};drag.acc={x:0,y:0};drag.ids.forEach(function(pid){var fp=byId(pid);if(fp&&fp.kind==="free")drag.orig[pid]={x:fp.x,y:fp.y};});}if(!Object.keys(drag.orig).length&&drag.moved&&!drag.warned){drag.warned=true;setHint("These points were plotted at fixed coordinates, so the shape does not move.");}drag.acc.x+=dx;drag.acc.y+=dy;
+      var off={x:drag.acc.x,y:drag.acc.y};if(AX.on&&AX.snap){off.x=Math.round(off.x/AX.u)*AX.u;off.y=Math.round(off.y/AX.u)*AX.u;}
+      drag.ids.forEach(function(pid){var fp=byId(pid),o0=drag.orig[pid];if(fp&&o0){fp.x=o0.x+off.x;fp.y=o0.y+off.y;}});}
+    drag.last=pos;
+    objects.forEach(function(t){if(t.trace&&t.type==="point"){t._trail=t._trail||[];t._trail.push(P(t.id));if(t._trail.length>400)t._trail.shift();}});
+    render();return;}
+  if(tool==="compass"&&compass){if(compass.stage==="swing"){var cc=P(compass.c);var cur=ang(cc,pos);compass.swept+=normAng(cur-compass.lastAng);var lim=2*Math.PI-0.01;if(compass.swept>lim)compass.swept=lim;if(compass.swept<-lim)compass.swept=-lim;compass.lastAng=cur;}render();}
+});
+svg.addEventListener("pointerup",function(e){
+  if(tool==="compass"&&compass&&compass.stage==="swing"&&Math.abs(compass.swept)>0.15){commitCompass();try{svg.releasePointerCapture(e.pointerId);}catch(err){}render();return;}
+  if(drag){
+    if(drag.kind==="ink-draw"){var io=byId(drag.candidate);if(io&&io.pts.length<2)objects=objects.filter(function(x){return x.id!==io.id;});setHint("Freehand stroke drawn. Undo removes the last stroke.");}
+    else if(drag.kind==="marquee"){if(drag.moved){sel=enclosed(drag.start.x,drag.start.y,drag.last.x,drag.last.y);setHint(sel.length?selSummary():"Nothing enclosed.");}else{sel=[];setHint("Selection cleared.");}}
+    else if(!drag.moved&&drag.candidate!=null){toggleSel(drag.candidate);setHint(selSummary());}
+  }
+  drag=null;try{svg.releasePointerCapture(e.pointerId);}catch(err){}render();});
+svg.addEventListener("dblclick",function(e){var pos=toXY(e);var pid=nearestPoint(pos.x,pos.y);if(pid!=null){var o=byId(pid);var nl=window.prompt("Label for this point:",o.label||"");if(nl!=null){o.label=nl;render();}return;}var cid=nearestCaption(pos.x,pos.y);if(cid!=null){var oc=byId(cid);var nt=window.prompt("Edit text:",oc.text||"");if(nt!=null){oc.text=nt;render();}}});
+
+/* ---------- selection helpers ---------- */
+function selObjs(){return sel.map(byId).filter(Boolean);}
+function selPoints(){return selObjs().filter(function(o){return o.type==="point";});}
+function selLines(){return selObjs().filter(isLineish);}
+function selCircles(){return selObjs().filter(isCircleish);}
+function selSummary(){var o=selObjs();if(!o.length)return "Nothing selected.";var pts=selPoints().length,ln=selLines().length,ci=selCircles().length;var parts=[];if(pts)parts.push(pts+" point"+(pts>1?"s":""));if(ln)parts.push(ln+" line/segment"+(ln>1?"s":""));if(ci)parts.push(ci+" circle/arc"+(ci>1?"s":""));return "Selected: "+parts.join(", ")+". Choose a menu action.";}
+
+/* ---------- menu actions ---------- */
+function need(msg){setHint('<b>Select needed:</b> '+msg);}
+var ACT={
+  undo:function(){doUndo();},
+  redo:function(){doRedo();},
+  clear:function(){AX.coords=false;objects=[];sel=[];pending=[];compass=null;pointLabel=0;nextId=1;render();setHint("Cleared.");},
+  selectall:function(){sel=objects.filter(function(o){return !o.hidden;}).map(function(o){return o.id;});render();setHint(selSummary());},
+  deselect:function(){sel=[];render();setHint("Deselected.");},
+  relabel:function(){var o=selObjs();if(o.length!==1||(o[0].type!=="point"&&o[0].type!=="caption")){need("exactly 1 point or text label.");return;}var it=o[0],cur=it.type==="caption"?it.text:it.label;var v=window.prompt(it.type==="caption"?"Edit text:":"Label for this point:",cur||"");if(v!=null){if(it.type==="caption")it.text=v;else it.label=v;render();setHint("Renamed.");}},
+  delete:function(){if(!sel.length){need("objects to delete.");return;}var dead={};sel.forEach(function(id){dead[id]=1;});var changed=true;while(changed){changed=false;objects.forEach(function(o){if(dead[o.id])return;["a","b","c","v","thru","base","o1","o2","rp","seg","at","of","on","tf","line"].forEach(function(f){if(o[f]!=null&&dead[o[f]]){if(!dead[o.id]){dead[o.id]=1;changed=true;}}});if(Array.isArray(o.pts)&&o.pts.some(function(p){return dead[p];})&&!dead[o.id]){dead[o.id]=1;changed=true;}});}objects=objects.filter(function(o){return !dead[o.id];});sel=[];render();setHint("Deleted.");},
+  labels:function(){labelsShown=!labelsShown;render();},
+  hide:function(){if(!sel.length){need("objects to hide.");return;}selObjs().forEach(function(o){o.hidden=true;});sel=[];render();setHint("Hidden (Display → Show all hidden to restore).");},
+  showall:function(){objects.forEach(function(o){o.hidden=false;});render();setHint("All objects shown.");},
+  trace:function(){var p=selPoints();if(!p.length){need("a point to trace.");return;}p.forEach(function(o){o.trace=!o.trace;if(!o.trace)o._trail=[];else o._trail=[];});render();setHint("Trace toggled — drag a base point to leave a locus trail.");},
+  erasetrace:function(){objects.forEach(function(o){o._trail=[];});render();setHint("Traces erased.");},
+  segment:function(){var p=selPoints();if(p.length!==2){need("exactly 2 points.");return;}objects.push({id:nextId++,type:"segment",a:p[0].id,b:p[1].id});sel=[];render();setHint("Segment constructed.");},
+  ray:function(){var p=selPoints();if(p.length!==2){need("2 points (start, then a point it passes through).");return;}objects.push({id:nextId++,type:"line",kind:"ray",a:p[0].id,b:p[1].id});sel=[];render();setHint("Ray constructed.");},
+  line:function(){var p=selPoints();if(p.length!==2){need("exactly 2 points.");return;}objects.push({id:nextId++,type:"line",kind:"through",a:p[0].id,b:p[1].id});sel=[];render();setHint("Line constructed.");},
+  midpoint:function(){var p=selPoints();var seg=selObjs().filter(function(o){return o.type==="segment";});
+    if(p.length===2){objects.push({id:nextId++,type:"point",kind:"mid",a:p[0].id,b:p[1].id,label:nextLabel()});}
+    else if(seg.length===1){objects.push({id:nextId++,type:"point",kind:"mid",a:seg[0].a,b:seg[0].b,label:nextLabel()});}
+    else{need("2 points, or 1 segment.");return;}sel=[];render();setHint("Midpoint constructed.");},
+  circlecp:function(){var p=selPoints();if(p.length!==2){need("2 points (centre first, then a point on the circle).");return;}objects.push({id:nextId++,type:"circle",c:p[0].id,thru:p[1].id});sel=[];render();setHint("Circle constructed.");},
+  intersection:function(){var c=selObjs().filter(function(o){return isLineish(o)||isCircleish(o);});if(c.length!==2){need("exactly 2 lines/circles/arcs.");return;}var pts=intersectGeom(c[0].id,c[1].id);if(!pts.length){setHint("Those two do not meet.");return;}for(var k=0;k<pts.length;k++)objects.push({id:nextId++,type:"point",kind:"intersect",o1:c[0].id,o2:c[1].id,which:k,label:nextLabel()});sel=[];render();setHint(pts.length>1?"Two intersection points constructed.":"Intersection constructed.");},
+  perpbis:function(){var p=selPoints();var seg=selObjs().filter(function(o){return o.type==="segment";});
+    if(p.length===2){objects.push({id:nextId++,type:"perpbis",a:p[0].id,b:p[1].id});}
+    else if(seg.length===1){objects.push({id:nextId++,type:"perpbis",a:seg[0].a,b:seg[0].b});}
+    else{need("2 points, or 1 segment.");return;}sel=[];render();setHint("Perpendicular bisector constructed — the locus of points equidistant from the two ends.");},
+  anglebis:function(){var p=selPoints();if(p.length!==3){need("exactly 3 points, in order: arm, vertex, arm.");return;}objects.push({id:nextId++,type:"anglebis",a:p[0].id,v:p[1].id,b:p[2].id});sel=[];render();setHint("Angle bisector constructed — the locus of points equidistant from the two arms.");},
+  perpendicular:function(){var l=selLines(),p=selPoints();if(l.length!==1||p.length!==1){need("1 line/segment and 1 point.");return;}objects.push({id:nextId++,type:"perp",base:l[0].id,thru:p[0].id});sel=[];render();setHint("Perpendicular line constructed.");},
+  parallel:function(){var l=selLines(),p=selPoints();if(l.length!==1||p.length!==1){need("1 line/segment and 1 point.");return;}objects.push({id:nextId++,type:"parallel",base:l[0].id,thru:p[0].id});sel=[];render();setHint("Parallel line constructed.");},
+  mlength:function(){var seg=selObjs().filter(function(o){return o.type==="segment";});var p=selPoints();
+    if(seg.length===1){objects.push({id:nextId++,type:"measlen",a:seg[0].a,b:seg[0].b});}
+    else if(p.length===2){objects.push({id:nextId++,type:"measlen",a:p[0].id,b:p[1].id});}
+    else{need("1 segment, or 2 points.");return;}sel=[];render();setHint("Length measured.");},
+  mdistance:function(){var p=selPoints();if(p.length!==2){need("2 points.");return;}objects.push({id:nextId++,type:"measlen",a:p[0].id,b:p[1].id});sel=[];render();setHint("Distance measured.");},
+  mangle:function(){var p=selPoints();if(p.length!==3){need("3 points (arm, vertex, arm).");return;}objects.push({id:nextId++,type:"measang",a:p[0].id,v:p[1].id,b:p[2].id});sel=[];render();setHint("Angle measured.");},
+  mbearing:function(){var p=selPoints();if(p.length!==2){need("2 points, in order: the station first, then the target.");return;}objects.push({id:nextId++,type:"measbear",a:p[0].id,b:p[1].id});sel=[];render();setHint("Bearing measured — of the second point from the first, clockwise from North.");},
+  mradius:function(){var c=selCircles();if(c.length!==1){need("1 circle or arc.");return;}objects.push({id:nextId++,type:"meastext",kind:"radius",of:c[0].id,at:c[0].c});sel=[];render();setHint("Radius measured.");},
+  pointon:function(){var c=selCircles(),l=selLines();
+    if(c.length===1){objects.push({id:nextId++,type:"point",kind:"on",on:c[0].id,ang:-Math.PI/2,label:nextLabel()});}
+    else if(l.length===1){objects.push({id:nextId++,type:"point",kind:"on",on:l[0].id,t:0.5,label:nextLabel()});}
+    else{need("1 circle, or 1 line/segment.");return;}sel=[];render();setHint("Point placed on the object — switch to Select and drag it; it slides along and stays on the object.");},
+  newsketch:function(){if(objects.length&&!window.confirm("Start a new sketch? This clears the current one."))return;ACT.clear();currentName=null;updateTitle();setHint("New sketch.");},
+  save:function(){if(!currentName){openSaveAsDialog();return;}storeSave(currentName);setHint('Saved changes to "'+currentName+'".');},
+  saveas:function(){openSaveAsDialog();},
+  opendlg:function(){openOpenDialog();},
+  exportfile:function(){var blob=new Blob([JSON.stringify(serialize(),null,1)],{type:"application/json"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;a.download=(currentName||"NEO_sketch")+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);setHint("Exported to a downloadable file.");},
+  importfile:function(){document.getElementById("fileInput").click();},
+  polygon:function(){var p=selPoints();if(p.length<3){need("3 or more points (the vertices, in order).");return;}objects.push({id:nextId++,type:"polygon",pts:p.map(function(o){return o.id;}),fill:"#9ec7e8"});sel=[];render();setHint("Polygon interior constructed — select it, then Display → Colour… to fill it.");},
+  colour:function(){openColourDialog();},
+  axes:function(){AX.on=!AX.on;render();setHint(AX.on?"Coordinate grid on: 1 square = 1 unit. New points snap to grid points (Graph → Snap to turn it off).":"Coordinate grid off.");},
+  snap:function(){AX.snap=!AX.snap;setHint(AX.snap?"Points snap to grid points.":"Points no longer snap.");render();},
+  coords:function(){if(!AX.on){AX.on=true;}AX.coords=!AX.coords;render();setHint(AX.coords?"Coordinates shown beside each point.":"Coordinates hidden.");},
+  plotpoints:function(){openPlotDialog();},
+  centreview:function(){viewCentreOn(AX.ox,AX.oy);setHint("View centred on the origin. Scroll to look around: the drawing area is much larger than the window.");},
+  markmirror:function(){var l=selLines();if(l.length!==1||selObjs().length!==1){need("exactly 1 line or segment: the mirror. Switch to Select, click an empty space, then click the line.");return;}objects.forEach(function(o){delete o.isMirror;});l[0].isMirror=true;sel=[];render();setHint("Mirror marked (shown with a purple glow). Now select what to reflect, then Transform → Reflect.");},
+  markcentre:function(){var p=selPoints();if(p.length!==1||selObjs().length!==1){need("exactly 1 point: the centre of rotation.");return;}objects.forEach(function(o){delete o.isCentre;});p[0].isCentre=true;sel=[];render();setHint("Centre marked (purple ring). Now select what to rotate, then Transform → Rotate….");},
+  mirrorline:function(){openMirrorDialog();},
+  reflect:function(){var m=objects.filter(function(o){return o.isMirror&&isLineish(o);})[0];if(!m){need("a mirror first: select a line, then Transform → Mark mirror (or Transform → Mirror line by equation…).");return;}transformSel({id:nextId++,type:"tf",kind:"reflect",line:m.id},"Reflected in the mirror. Drag the object: its image follows.");},
+  rotate:function(){var c=objects.filter(function(o){return o.isCentre&&o.type==="point";})[0];if(!c){need("a centre first: select a point, then Transform → Mark centre.");return;}if(!transformable().length){need("something to rotate: points, segments or a polygon (drag a box around a shape).");return;}openRotateDialog(c);},
+  enlarge:function(){var c=objects.filter(function(o){return o.isCentre&&o.type==="point";})[0];if(!c){need("a centre of enlargement first: select a point, then Transform → Mark centre.");return;}if(!transformable().length){need("something to enlarge: points, segments or a polygon (drag a box around a shape).");return;}openEnlargeDialog(c);},
+  translate:function(){if(!transformable().length){need("something to translate: points, segments or a polygon (drag a box around a shape).");return;}openTranslateDialog();},
+  help:function(){openDialog("<h3>Quick reference</h3><p style='max-width:400px'>Left toolbox = <b>instruments</b> (draw points, segments, circles, and swing the compass). The top menus <b>act on the current selection</b>: switch to <b>Select</b>, click objects to build a selection, then choose an action.</p><ul style='max-width:400px'><li><b>Construct</b> builds dependent objects (midpoints, bisectors, perpendiculars, intersections).</li><li><b>Measure</b> reports lengths and angles.</li><li><b>Display</b> hides objects, toggles labels, and traces a point to reveal a locus.</li></ul><ul style='max-width:400px'><li><b>Graph</b> turns on a coordinate grid: 1 square is 1 unit, and points snap to grid points. <b>Graph → Plot points…</b> places points at coordinates you type, such as A(1, 2), B(4, 2), C(1, 5); they stay fixed (small squares) unless you tick “Let me drag them afterwards”.</li><li><b>Transform</b>: mark a mirror or a centre first, then select a shape and Reflect, Rotate or Translate. Images are labelled with a prime (A′) and follow the object when you drag it.</li></ul><p style='color:#6a6157'><b>Transform → Enlarge…</b> uses the marked centre and a scale factor, such as 2, 1/2 or 1.5. In a task with target shapes, <b>✔ Check my image</b> compares your newest image with the targets. Number/Calculator and Plot function are coming in later versions.</p>");}
+};
+
+/* ---------- menu bar wiring ---------- */
+var menubar=document.getElementById("menubar");
+function closeMenus(){menubar.querySelectorAll(".menu.open").forEach(function(m){m.classList.remove("open");});}
+menubar.addEventListener("click",function(e){
+  var top=e.target.closest("button[data-menu]");
+  if(top){var m=top.parentNode,wasOpen=m.classList.contains("open");closeMenus();if(!wasOpen)m.classList.add("open");e.stopPropagation();return;}
+  var item=e.target.closest("button[data-act]");
+  if(item&&!item.classList.contains("disabled")){var act=item.dataset.act;closeMenus();if(ACT[act])ACT[act]();}
+});
+document.addEventListener("click",function(e){if(!e.target.closest("#menubar"))closeMenus();});
+
+/* ---------- toolbox wiring ---------- */
+document.getElementById("tbUndo").addEventListener("click",doUndo);
+document.getElementById("tbRedo").addEventListener("click",doRedo);
+document.addEventListener("keydown",function(e){
+  var a=document.activeElement;if(a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA"||a.isContentEditable))return;
+  if(overlay.classList.contains("open"))return;
+  var k=(e.key||"").toLowerCase();
+  if((e.ctrlKey||e.metaKey)&&k==="z"){e.preventDefault();if(e.shiftKey)doRedo();else doUndo();return;}
+  if((e.ctrlKey||e.metaKey)&&k==="y"){e.preventDefault();doRedo();return;}
+  if(e.key==="Delete"||e.key==="Backspace"){if(sel.length){e.preventDefault();ACT.delete();}}
+});
+document.getElementById("toolbox").addEventListener("click",function(e){var b=e.target.closest("button.tool");if(!b||!b.dataset.tool)return;
+  tool=b.dataset.tool;pending=[];compass=null;
+  document.querySelectorAll("#toolbox button.tool").forEach(function(x){x.classList.toggle("active",x===b);});
+  var hints={select:"Click objects to build a selection, then choose a menu action. Drag a free point to move it.",point:"Click to drop points.",segment:"Click two points to draw a segment.",circle:"Click a centre, then a point on the circle.",compass:"Click a centre, set the radius (a point, or a segment to copy its length), then swing.",text:"Click to place a caption. Double-click any caption or point to rename it.",pencil:"Press and drag to draw freehand. Undo removes the last stroke."};
+  setHint(hints[tool]||"");render();
+});
+
+/* ---------- serialisation + named-sketch store ---------- */
+function serialize(){return {version:"NEO-DGS-0.6",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
+function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;if(data.axes){AX.on=!!data.axes.on;AX.snap=data.axes.snap!==false;AX.coords=!!data.axes.coords;}sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
+function storeMap(){try{return JSON.parse(localStorage.getItem(LSKEY)||"{}");}catch(e){return {};}}
+function storeSet(m){try{localStorage.setItem(LSKEY,JSON.stringify(m));}catch(e){}}
+function storeSave(name){var m=storeMap();currentName=name;m[name]=serialize();storeSet(m);updateTitle();}
+function updateTitle(){var el=document.getElementById("sketchName");if(el)el.textContent=currentName?("— "+currentName):"— (unsaved)";}
+
+/* ---------- dialog ---------- */
+var overlay=document.getElementById("overlay"),dialog=document.getElementById("dialog");
+function closeDialog(){overlay.classList.remove("open");}
+function openDialog(html,buttons){var b='<div class="row" style="text-align:right;margin-top:16px">';(buttons||[]).forEach(function(x,i){b+='<button class="'+(x.primary?"primary":"")+'" data-i="'+i+'">'+x.label+'</button> ';});b+='<button data-close="1">Close</button></div>';dialog.innerHTML=html+b;overlay.classList.add("open");dialog.querySelectorAll("button[data-i]").forEach(function(btn){btn.onclick=function(){buttons[+btn.dataset.i].fn();};});dialog.querySelector("button[data-close]").onclick=closeDialog;}
+overlay.addEventListener("click",function(e){if(e.target===overlay)closeDialog();});
+function openSaveAsDialog(){openDialog('<h3>Save sketch as…</h3><div class="row"><input id="saName" type="text" placeholder="Sketch name" value="'+(currentName||"")+'" style="width:100%;box-sizing:border-box;padding:9px;border:1px solid #bcae98;border-radius:8px"></div><p style="color:#6a6157;font-size:.85em">Saved inside this page. Use File → Export to keep a copy as a file.</p>',[{label:"Save",primary:true,fn:function(){var n=(document.getElementById("saName").value||"").trim();if(!n)return;storeSave(n);setHint('Saved as "'+n+'".');closeDialog();}}]);setTimeout(function(){var i=document.getElementById("saName");if(i)i.focus();},20);}
+function openOpenDialog(){var m=storeMap();var names=Object.keys(m).sort();var h='<h3>Open sketch</h3>';if(!names.length)h+='<p style="color:#6a6157">No saved sketches yet — use “Save as…”, or Import from file.</p>';else{h+='<div style="max-height:260px;overflow:auto">';names.forEach(function(n){h+='<div style="display:flex;gap:8px;align-items:center;margin:5px 0"><button data-open="'+encodeURIComponent(n)+'" style="flex:1;text-align:left;padding:8px 10px">'+n+'</button><button data-del="'+encodeURIComponent(n)+'" title="Delete" style="padding:8px 10px">🗑</button></div>';});h+='</div>';}h+='<div class="row" style="margin-top:6px"><button data-import="1">Import from file…</button></div>';openDialog(h,[]);dialog.querySelectorAll("button[data-open]").forEach(function(b){b.onclick=function(){try{loadData(storeMap()[decodeURIComponent(b.dataset.open)]);setHint("Opened.");}catch(e){setHint("Could not open that sketch.");}closeDialog();};});dialog.querySelectorAll("button[data-del]").forEach(function(b){b.onclick=function(){var mm=storeMap();delete mm[decodeURIComponent(b.dataset.del)];storeSet(mm);openOpenDialog();};});var imp=dialog.querySelector("button[data-import]");if(imp)imp.onclick=function(){closeDialog();document.getElementById("fileInput").click();};}
+function openColourDialog(){if(!sel.length){need("objects to colour first (switch to Select and click some).");return;}var h='<h3>Colour</h3><p style="color:#6a6157;margin:0 0 8px;max-width:360px">Applies to the '+sel.length+' selected object(s). Polygons are <b>filled</b>; lines, circles and points are recoloured.</p><div style="display:flex;flex-wrap:wrap;gap:8px">';PALETTE.forEach(function(c){h+='<button data-col="'+c[1]+'" title="'+c[0]+'" style="width:44px;height:34px;background:'+c[1]+';border:1px solid #999;border-radius:7px"></button>';});h+='</div><div class="row" style="margin-top:12px"><button data-col="none">No fill (polygon)</button> <button data-col="default">Default colour</button> <label style="display:inline-flex;align-items:center;gap:6px;border:1px solid #738697;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:600">More colours… <input type="color" id="moreCol" value="#3f7a45" style="width:30px;height:24px;padding:0;border:none;background:none;cursor:pointer"></label></div>';openDialog(h,[]);dialog.querySelectorAll("button[data-col]").forEach(function(b){b.onclick=function(){applyColour(b.dataset.col);closeDialog();};});var mc=dialog.querySelector("#moreCol");if(mc){mc.addEventListener("input",function(){applyColour(mc.value);});mc.addEventListener("change",function(){applyColour(mc.value);closeDialog();});}}
+function applyColour(col){selObjs().forEach(function(o){if(o.type==="polygon"){o.fill=(col==="default")?"#9ec7e8":col;}else{if(col==="default"||col==="none")delete o.colour;else o.colour=col;}});render();setHint("Colour applied.");}
+
+/* ---------- transformations (v0.5) ---------- */
+function transformable(){return selObjs().filter(function(o){return !o.hidden&&!o.isMirror&&!o.isCentre&&(o.type==="point"||o.type==="segment"||o.type==="polygon"||o.type==="circle"||(o.type==="line"&&o.kind!=="eq"));});}
+function primeOf(l){var base=String(l||"").replace(/[′″‴⁗]+$/,""),cur=String(l||"").slice(base.length),order=["","′","″","‴","⁗"],taken={};objects.forEach(function(o){if(o.type==="point")taken[o.label]=1;});
+  var i=Math.max(1,order.indexOf(cur)+1);while(i<order.length-1&&taken[base+order[i]])i++;return base+order[Math.min(i,order.length-1)];}
+function transformSel(tf,msg){var objs=transformable();if(!objs.length){need("something to transform: points, segments or a polygon (drag a box around a shape).");return false;}
+  objects.push(tf);var map={};
+  function img(pid){if(map[pid])return map[pid];var o=byId(pid);var im={id:nextId++,type:"point",kind:"image",of:pid,tf:tf.id,label:primeOf(o&&o.label)};objects.push(im);map[pid]=im.id;return im.id;}
+  objs.forEach(function(o){
+    if(o.type==="point")img(o.id);
+    else if(o.type==="segment")objects.push({id:nextId++,type:"segment",a:img(o.a),b:img(o.b),img:true});
+    else if(o.type==="line")objects.push({id:nextId++,type:"line",kind:o.kind,a:img(o.a),b:img(o.b),img:true});
+    else if(o.type==="circle")objects.push({id:nextId++,type:"circle",c:img(o.c),thru:img(o.thru),img:true});
+    else if(o.type==="polygon"){var np=o.pts.map(img);objects.push({id:nextId++,type:"polygon",pts:np,fill:o.img?o.fill:undefined,img:true});
+      var have={};objs.forEach(function(q){if(q.type==="segment")have[q.a+"-"+q.b]=have[q.b+"-"+q.a]=1;});
+      o.pts.forEach(function(a,i){var b=o.pts[(i+1)%o.pts.length];if(have[a+"-"+b])return;var edge=objects.filter(function(q){return q.type==="segment"&&((q.a===a&&q.b===b)||(q.a===b&&q.b===a));})[0];if(edge){have[a+"-"+b]=have[b+"-"+a]=1;objects.push({id:nextId++,type:"segment",a:img(a),b:img(b),img:true});}});}
+  });
+  lastMap=map;sel=[];render();followPts(Object.keys(map).map(function(k){return P(map[k]);}));setHint(msg);return true;}
+var lastMap={};
+/* a scale factor: 2, 1.5, 1/2, ½, ⅓, ¼, ¾, −2 */
+function sfIn(v){var t=String(v).trim().replace(/[−–—]/g,"-").replace(/\s+/g,"").replace(/½/g,"1/2").replace(/⅓/g,"1/3").replace(/⅔/g,"2/3").replace(/¼/g,"1/4").replace(/¾/g,"3/4");
+  var m=t.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);if(m){var d=parseFloat(m[2]);return d?parseFloat(m[1])/d:NaN;}
+  return /^-?\d+(\.\d+)?$/.test(t)?parseFloat(t):NaN;}
+function sfText(k,raw){var r=String(raw).trim();return /\/|½|⅓|⅔|¼|¾/.test(r)?r.replace(/-/g,"−"):fmtNum(k);}
+function openEnlargeDialog(c){openDialog('<h3>Enlarge from '+esc(c.label)+'</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Every point moves along the line from the centre, so that its distance from the centre is multiplied by the scale factor. A scale factor between 0 and 1 makes the shape smaller.</p><div class="row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button data-q="2">2</button><button data-q="3">3</button><button data-q="1/2">1/2</button><button data-q="1/3">1/3</button></div><div class="row"><label>Scale factor <input id="enK" type="text" inputmode="decimal" value="" style="width:90px;padding:7px;border:1px solid #bcae98;border-radius:8px" aria-label="scale factor"></label></div><div class="row" style="margin-top:8px"><label><input type="checkbox" id="enRays" checked> Draw rays from the centre through each corner</label></div><p id="enMsg" style="color:#7a2b1c;min-height:1.2em;margin:6px 0 0"></p>',
+  [{label:"Enlarge",primary:true,fn:function(){var raw=document.getElementById("enK").value,k=sfIn(raw);if(isNaN(k)||k===0){document.getElementById("enMsg").textContent="Type the scale factor as a number or a fraction, such as 3 or 1/4.";return;}var rays=document.getElementById("enRays").checked;closeDialog();
+    if(transformSel({id:nextId++,type:"tf",kind:"enlarge",c:c.id,k:k,kText:sfText(k,raw)},"Enlarged by scale factor "+sfText(k,raw)+" from "+esc(c.label)+". Every distance from the centre is multiplied by the scale factor."+(rays?" The rays from the centre pass through each corner and its image.":""))&&rays){
+      Object.keys(lastMap).forEach(function(pid){var far=Math.abs(k)>=1?lastMap[pid]:+pid;objects.push({id:nextId++,type:"segment",a:c.id,b:far,ray:true});});render();}}}]);
+  dialog.querySelectorAll("button[data-q]").forEach(function(b){b.onclick=function(){document.getElementById("enK").value=b.dataset.q;};});
+  setTimeout(function(){var i=document.getElementById("enK");if(i)i.focus();},20);}
+/* scrolling: show points that are out of view; centre the view on a point */
+var scroller=document.getElementById("canvasScroll");
+function viewCentreOn(x,y){if(!scroller)return;scroller.scrollLeft=Math.max(0,(x-WX0)-scroller.clientWidth/2);scroller.scrollTop=Math.max(0,(y-WY0)-scroller.clientHeight/2);}
+function followPts(pts){if(!scroller||!pts.length)return;var xs=pts.map(function(p){return p.x;}),ys=pts.map(function(p){return p.y;}),x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
+  var L=WX0+scroller.scrollLeft,T=WY0+scroller.scrollTop,R=L+scroller.clientWidth,B=T+scroller.clientHeight;if(x0>=L+20&&x1<=R-20&&y0>=T+20&&y1<=B-20)return;viewCentreOn((x0+x1)/2,(y0+y1)/2);}
+function numIn(v){var t=String(v).trim().replace(/−/g,"-");if(!/^-?\d+(\.\d+)?$/.test(t))return NaN;return parseFloat(t);}
+function openRotateDialog(c){openDialog('<h3>Rotate about '+esc(c.label)+'</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Anticlockwise is positive; clockwise is negative. A quarter turn is 90°.</p><div class="row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button data-q="90">90°</button><button data-q="180">180°</button><button data-q="270">270°</button></div><div class="row"><label>Angle <input id="rtAng" type="text" inputmode="decimal" value="90" style="width:80px;padding:7px;border:1px solid #bcae98;border-radius:8px"> °</label></div><div class="row" style="margin-top:8px"><label><input type="radio" name="rtDir" value="1" checked> anticlockwise</label> &nbsp; <label><input type="radio" name="rtDir" value="-1"> clockwise</label></div>',
+  [{label:"Rotate",primary:true,fn:function(){var a=numIn(document.getElementById("rtAng").value);if(isNaN(a)){setHint("Type the angle as a number of degrees, such as 90.");return;}var dir=+(dialog.querySelector('input[name=rtDir]:checked')||{value:1}).value;var deg=a*dir;closeDialog();transformSel({id:nextId++,type:"tf",kind:"rotate",c:c.id,deg:deg},"Rotated "+fmtNum(Math.abs(deg))+"° "+(deg>=0?"anticlockwise":"clockwise")+" about "+esc(c.label)+". Drag the centre or the object: the image follows.");}}]);
+  dialog.querySelectorAll("button[data-q]").forEach(function(b){b.onclick=function(){document.getElementById("rtAng").value=b.dataset.q;};});}
+function openTranslateDialog(){openDialog('<h3>Translate by a column vector</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">First number: the horizontal move, right (+) or left (−). Second number: the vertical move, up (+) or down (−). Each unit is one grid square.</p><div style="display:flex;align-items:center;gap:8px;font-size:1.6em"><span>(</span><span style="display:flex;flex-direction:column;gap:6px"><input id="tvX" type="text" inputmode="decimal" value="" aria-label="first number: horizontal move, right or left" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"><input id="tvY" type="text" inputmode="decimal" value="" aria-label="second number: vertical move, up or down" style="width:70px;padding:6px;font-size:.7em;border:1px solid #bcae98;border-radius:8px;text-align:center"></span><span>)</span></div>',
+  [{label:"Translate",primary:true,fn:function(){var dx=numIn(document.getElementById("tvX").value),dy=numIn(document.getElementById("tvY").value);if(isNaN(dx)||isNaN(dy)){setHint("Type a number in both boxes (use − for left or down), such as 3 and −2.");return;}closeDialog();if(!AX.on){AX.on=true;}transformSel({id:nextId++,type:"tf",kind:"translate",dx:dx,dy:dy},"Translated by the column vector ("+fmtNum(dx)+", "+fmtNum(dy)+"): "+(dx>=0?fmtNum(dx)+" right":fmtNum(-dx)+" left")+", "+(dy>=0?fmtNum(dy)+" up":fmtNum(-dy)+" down")+".");}}]);
+  setTimeout(function(){var i=document.getElementById("tvX");if(i)i.focus();},20);}
+/* Graph → Plot points: type coordinates, such as A(1, 2), B(4, 2), C(1, 5) */
+function parsePoints(text){var t=String(text).replace(/[−–—]/g,"-").replace(/′/g,"'"),re=/([A-Za-z][A-Za-z0-9']*)?\s*\(\s*(-?\d+(?:\.\d+)?)\s*[,;]\s*(-?\d+(?:\.\d+)?)\s*\)/g,m,out=[],rest=t;
+  while((m=re.exec(t))){out.push({label:m[1]?m[1].replace(/'/g,"′"):null,x:parseFloat(m[2]),y:parseFloat(m[3])});}
+  rest=t.replace(re,"").replace(/[\s,;]+/g,"");return {pts:out,leftover:rest};}
+function plotPoints(text,join,free){var r=parsePoints(text);if(!r.pts.length)return {ok:false,msg:"Type each point as coordinates in brackets, such as A(1, 2) or (1, 2)."};
+  if(r.leftover)return {ok:false,msg:"Some of that could not be read: “"+esc(r.leftover.slice(0,20))+"”. Type each point as A(1, 2) or (1, 2), separated by commas or spaces."};
+  var xmax=Math.floor((WX0+WW-AX.ox)/AX.u-0.5),ymax=Math.floor((AX.oy-WY0)/AX.u-0.5),off=r.pts.filter(function(q){return Math.abs(q.x)>xmax||Math.abs(q.y)>ymax;});
+  if(off.length)return {ok:false,msg:"("+fmtNum(off[0].x)+", "+fmtNum(off[0].y)+") is beyond the edge of the grid, which shows x from −"+Math.floor(xmax)+" to "+Math.floor(xmax)+" and y from −"+Math.floor(ymax)+" to "+Math.floor(ymax)+"."};
+  AX.on=true;var ids=r.pts.map(function(q){var p=fromU(q.x,q.y);var o={id:nextId++,type:"point",kind:free?"free":"fixed",x:p.x,y:p.y,label:q.label||nextLabel()};objects.push(o);return o.id;});
+  followPts(ids.map(P));if(join&&ids.length>=2){if(ids.length>=3)objects.push({id:nextId++,type:"polygon",pts:ids.slice(),fill:"#9ec7e8"});ids.forEach(function(a,i){if(i===ids.length-1&&ids.length<3)return;objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});}
+  sel=[];render();return {ok:true,n:ids.length};}
+function openPlotDialog(){openDialog('<h3>Plot points</h3><p style="max-width:400px;color:#6a6157;margin:0 0 8px">Type each point as coordinates in brackets, with a name if you like: <b>A(1, 2), B(4, 2), C(1, 5)</b>. Points without a name get the next letter. They go exactly where you type and stay fixed there (shown as small squares).</p><textarea id="ppText" rows="3" style="width:100%;box-sizing:border-box;padding:9px;border:1px solid #bcae98;border-radius:8px;font-size:1em" aria-label="coordinates of the points"></textarea><div class="row" style="margin-top:8px"><label><input type="checkbox" id="ppJoin" checked> Join them in order to make a shape</label></div><div class="row" style="margin-top:4px"><label><input type="checkbox" id="ppFree"> Let me drag them afterwards</label></div><p id="ppMsg" style="color:#7a2b1c;min-height:1.2em;margin:6px 0 0"></p>',
+  [{label:"Plot",primary:true,fn:function(){var free=document.getElementById("ppFree").checked,res=plotPoints(document.getElementById("ppText").value,document.getElementById("ppJoin").checked,free);if(!res.ok){document.getElementById("ppMsg").innerHTML=res.msg;return;}closeDialog();setHint(res.n+" point"+(res.n>1?"s":"")+" plotted"+(free?" (you can drag them)":" at fixed coordinates")+". Drag a box around the shape to select it for a transformation.");}}]);
+  setTimeout(function(){var i=document.getElementById("ppText");if(i)i.focus();},20);}
+function addEqLine(eq,k){var o={id:nextId++,type:"line",kind:"eq",eq:eq,k:k||0};objects.push(o);return o;}
+function openMirrorDialog(){openDialog('<h3>Mirror line by equation</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Turns on the coordinate grid, draws the line and marks it as the mirror.</p><div class="row"><select id="mlEq" style="padding:7px;border:1px solid #bcae98;border-radius:8px"><option value="x">x = a (vertical)</option><option value="y">y = b (horizontal)</option><option value="yx">y = x</option><option value="ynx">y = −x</option></select> <label>number <input id="mlK" type="text" inputmode="decimal" value="1" style="width:70px;padding:7px;border:1px solid #bcae98;border-radius:8px"></label></div>',
+  [{label:"Draw and mark",primary:true,fn:function(){var eq=document.getElementById("mlEq").value,k=numIn(document.getElementById("mlK").value);if((eq==="x"||eq==="y")&&isNaN(k)){setHint("Type the number for the line, such as 2 or −1.");return;}closeDialog();AX.on=true;var o=addEqLine(eq,(eq==="x"||eq==="y")?k:0);objects.forEach(function(q){delete q.isMirror;});o.isMirror=true;render();setHint("Mirror line "+eqLabel(o)+" drawn and marked. Select a shape, then Transform → Reflect.");}}]);}
+
+/* ---------- file import ---------- */
+document.getElementById("fileInput").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{loadData(JSON.parse(rd.result));setHint("Imported from file.");}catch(err){setHint("That file could not be read as a sketch.");}};rd.readAsText(f);e.target.value="";});
+document.getElementById("colourPicker").addEventListener("change",function(e){applyColour(e.target.value);});
+
+/* ---------- lesson task context (v0.4) ---------- */
+/* Registry of construction tasks a lesson can hand to the Studio. One source of truth;
+   lessons launch with ?task=<id>&return=<relative-lesson-url>. */
+var TASKS={
+ "gc01-equilateral":{
+   tag:"Constructions · Lesson 1 · Movement",
+   title:"Construct an equilateral triangle",
+   intro:"Build it for real with the compass — no measuring. Leave your arcs showing, just as in an exam.",
+   steps:["Use Segment to draw a base AB (two points, then join them).",
+          "Choose Circle: centre A, through B — that circle has radius AB.",
+          "Choose Compass (or another Circle): centre B, radius AB.",
+          "Select BOTH circles, then Construct → Intersection(s) to mark where they cross — call it C. Use the command, not a free point placed by eye, or C will drift when you drag.",
+          "Use Segment to join A–C and B–C."],
+   big:"Both arcs have radius AB, so C is AB from both A and B — all three sides equal, with no measuring.",
+   conj:"Drag A or B. What stays true about the three sides?"},
+ "gc01-sss":{
+   tag:"Constructions · Lesson 1 · Creativity",
+   title:"A triangle from three given sides (SSS)",
+   intro:"Pick three lengths and construct the triangle. Then try three lengths that cannot make one.",
+   steps:["Draw a base AB with the length you want for one side.",
+          "Circle: centre A, radius = your second side.",
+          "Circle: centre B, radius = your third side.",
+          "Select BOTH circles, then Construct → Intersection(s) to fix the third corner C (not a free point placed by eye). Join A–C and B–C with the Segment tool.",
+          "Try sides where two together are shorter than the third — what happens to the circles?"],
+   big:"If two sides together are shorter than the third, the circles never meet: no triangle exists (the triangle inequality).",
+   conj:"Which sets of three lengths make a triangle, and which cannot? Why?"},
+ "gc01-final":{
+   tag:"Constructions · Lesson 1 · Final Task",
+   title:"Your evidence: an exact equilateral triangle",
+   intro:"Construct an equilateral triangle on a base AB and be ready to explain why it is exact. Leave the arcs showing.",
+   steps:["Draw a base AB.",
+          "Swing an arc (circle) of radius AB from A, and another from B.",
+          "Select both circles, then mark the crossing C with Construct → Intersection(s) — not a free point placed by eye.",
+          "Join A–C and B–C with the Segment tool.",
+          "Stretch: construct a triangle from three different side lengths (SSS)."],
+   big:"Save your construction and a sentence on why all three sides must be equal — that is your evidence.",
+   conj:"In one sentence: why are all three sides equal, using the idea that both arcs have radius AB?"},
+ "gc02-triangle":{
+   tag:"Constructions · Lesson 2 · Movement",
+   title:"Construct a triangle from three sides",
+   intro:"Build a triangle from three chosen side lengths with the compass — the shape its three sides fix.",
+   steps:["Segment tool: draw the base (your first side).",
+          "Circle tool: a circle centred on one end of the base, with a radius equal to your second side.",
+          "Circle tool: a circle centred on the other end, with a radius equal to your third side.",
+          "Select BOTH circles, then Construct → Intersection(s) to fix the third corner. Do NOT drop a free point where they look to cross — a free point drifts when you drag.",
+          "Segment tool: join each end of the base to that corner. Now drag a corner — the construction holds together."],
+   big:"Three sides fix a triangle completely (SSS) — there is no other shape it can take.",
+   conj:"Could two different triangles ever have exactly these same three side lengths?"},
+ "gc02-rhombus":{
+   tag:"Constructions · Lesson 2 · Creativity",
+   title:"Construct a rhombus (four equal sides)",
+   intro:"Use equal compass arcs to build a rhombus — a quadrilateral whose four sides are all equal.",
+   steps:["Segment tool: draw side AB — the length every side will share.",
+          "Circle tool: click A then B to draw a circle centred A through B (radius AB).",
+          "Select that circle, then Construct → Point on object to add D ON it — this ties D to the circle so AD always equals AB (do NOT free-place D with the Point tool). Segment tool: join A–D.",
+          "Circle tool: draw a circle centred B through A, and a circle centred D through A (each has radius AB).",
+          "Select BOTH new circles, then Construct → Intersection(s). Keep the crossing that is NOT A — that is C. Do NOT drop a free point by eye, or it will drift when you drag.",
+          "Segment tool: join B–C and D–C. ABCD is a rhombus. Add a diagonal (select A and C → Construct → Segment) to split it into two triangles."],
+   big:"A quadrilateral can flex even with fixed sides; a diagonal splits it into triangles and locks it (triangulation).",
+   conj:"Why does adding one diagonal stop the quadrilateral changing shape?"},
+ "gc02-final":{
+   tag:"Constructions · Lesson 2 · Final Task",
+   title:"Rigid or not? Build the evidence",
+   intro:"Construct a triangle and a quadrilateral, then add a diagonal to the quadrilateral to split it into triangles.",
+   steps:["Construct a triangle: two circles, then select both and Construct → Intersection(s) for the third corner (not a free point). Join with the Segment tool.",
+          "Build a quadrilateral: four corners joined by four segments with the Segment tool.",
+          "Add a diagonal: select two opposite corners, then Construct → Segment. It splits the quadrilateral into two triangles.",
+          "Save your construction, and write which shape is rigid and why."],
+   big:"Save your work and a sentence: a triangle is fixed by its sides; a quadrilateral needs a diagonal brace to become rigid.",
+   conj:"In one sentence: why is a triangle rigid but a four-sided shape is not?"},
+ "gc03-bisector":{
+   tag:"Constructions · Lesson 3 · Movement",
+   title:"Construct the perpendicular bisector",
+   intro:"Build the line of all points equidistant from A and B, using equal compass arcs.",
+   steps:["Segment tool: draw AB.",
+          "Circle tool: a circle centred A through B (radius AB).",
+          "Circle tool: a circle centred B through A (radius AB).",
+          "Select BOTH circles, then Construct → Intersection(s) to mark the two crossings (above and below AB). Do NOT drop free points by eye.",
+          "Select those two crossings, then Construct → Line — that line is the perpendicular bisector of AB.",
+          "Check: select the line, Construct → Point on object to add a point on it, then measure its distance to A and to B. They stay equal wherever it sits."],
+   big:"Every point on the perpendicular bisector is the same distance from A and from B — that is what the line is.",
+   conj:"Why is each crossing of the two circles the same distance from A and from B?"},
+ "gc03-circle":{
+   tag:"Constructions · Lesson 3 · Creativity",
+   title:"A circle through both A and B",
+   intro:"The centre of any circle through A and B sits on their perpendicular bisector — see why.",
+   steps:["Construct the perpendicular bisector of AB (as in the Movement task).",
+          "Select the bisector line, then Construct → Point on object to add a centre O on it.",
+          "Circle tool: draw a circle centred O through A.",
+          "Notice the circle also passes through B. Drag O along the line — it always catches both.",
+          "Because O is equidistant from A and B, OA and OB are always equal radii."],
+   big:"Any centre equidistant from A and B lies on the perpendicular bisector — so its circle passes through both.",
+   conj:"Where would the centre go to make the smallest circle through A and B?"},
+ "gc03-final":{
+   tag:"Constructions · Lesson 3 · Final Task",
+   title:"Bisector and midpoint: your evidence",
+   intro:"Construct the perpendicular bisector of a segment and use it to find the exact midpoint.",
+   steps:["Construct the perpendicular bisector of AB (two circles → select both → Construct → Intersection(s) → select the two crossings → Construct → Line).",
+          "The bisector crosses AB at the midpoint: select the bisector line and AB, then Construct → Intersection(s) to mark M.",
+          "Measure MA and MB (select two points → Measure → Distance) to confirm they are equal.",
+          "Save your construction, and write one sentence on what every point of the bisector has in common."],
+   big:"Save your work and a sentence: the perpendicular bisector is every point equidistant from the two ends, and it meets AB at the midpoint.",
+   conj:"How does the perpendicular bisector give you the exact midpoint without measuring?"},
+ "gc04-bisector":{
+   tag:"Constructions · Lesson 4 · Movement",
+   title:"Construct the angle bisector",
+   intro:"Split an angle into two exactly equal halves with compass and straightedge.",
+   steps:["Segment tool: draw two arms from a shared vertex — V–A and V–B — making an angle.",
+          "Circle tool: draw a circle centred V that crosses both arms.",
+          "Select the circle AND arm V–A, then Construct → Intersection(s) to mark P. Do the same with the circle and arm V–B to mark Q. Use the command — not free points.",
+          "Circle tool: a circle centred P through Q, and a circle centred Q through P (equal radius).",
+          "Select BOTH of those circles, then Construct → Intersection(s). Take the crossing R inside the angle (the one away from V).",
+          "Segment tool: join V–R. The ray V–R is the angle bisector — it splits the angle into two equal halves."],
+   big:"Every point on the angle bisector is the same distance from the two arms of the angle.",
+   conj:"Why is the crossing R the same distance from both arms of the angle?"},
+ "gc04-incircle":{
+   tag:"Constructions · Lesson 4 · Creativity",
+   title:"A circle touching both arms",
+   intro:"A point on the bisector is equidistant from both arms — so a circle centred there touches both.",
+   steps:["Construct the angle bisector V–R (as in the Movement task).",
+          "Select the bisector line, then Construct → Point on object to add a centre O on it.",
+          "Select O and arm V–A, then Construct → Perpendicular line; select that line and arm V–A, Construct → Intersection(s) to mark the foot F.",
+          "Circle tool: draw a circle centred O through F. It touches both arms.",
+          "Drag O along the bisector — the circle stays touching both arms, because O is equidistant from them."],
+   big:"Any centre equidistant from the two arms lies on the bisector — so its circle touches both arms.",
+   conj:"Where would O sit to make the circle touch the arms as close to the vertex as possible?"},
+ "gc04-final":{
+   tag:"Constructions · Lesson 4 · Final Task",
+   title:"Bisect an angle: your evidence",
+   intro:"Construct the bisector of an angle and check that the two halves are equal.",
+   steps:["Construct the angle bisector V–R (arc from V cuts both arms → equal arcs from P and Q → Construct → Intersection(s) → join V–R). Use commands, not free points.",
+          "Measure the two halves: Measure → Angle on A–V–R and on R–V–B (three points each).",
+          "Confirm the two measured angles are equal.",
+          "Save your construction, and write one sentence on what every point of the bisector is equidistant from."],
+   big:"Save your work and a sentence: the angle bisector is every point equidistant from the two arms, and it halves the angle.",
+   conj:"How does the construction guarantee the two halves are exactly equal, without a protractor?"},
+ "gc05-circle":{
+   tag:"Constructions · Lesson 5 · Movement",
+   title:"The locus a fixed distance from a point",
+   intro:"Show that all the points a fixed distance from a point O form a circle.",
+   steps:["Point tool: place a point O (the fixed point).",
+          "Circle tool: click O, then click a little away — the circle you draw is the locus of all points that fixed distance from O.",
+          "Select the circle, then Construct → Point on object to add a point P ON it (not a free point placed by eye).",
+          "Measure OP (select O and P → Measure → Distance). Drag P around the circle — OP never changes.",
+          "Every point on the circle is the same distance from O: the locus is a circle."],
+   big:"The locus of points a fixed distance from a single point is a circle.",
+   conj:"What is the locus of points a fixed distance from a straight line instead?"},
+ "gc05-region":{
+   tag:"Constructions · Lesson 5 · Creativity",
+   title:"A region from two rules",
+   intro:"Combine two loci: 'within a distance of A' and 'closer to A than to B'.",
+   steps:["Point tool: place two points A and B.",
+          "Select A and B, then Construct → Perpendicular bisector. Points on A's side are closer to A than to B.",
+          "Circle tool: draw a circle centred A through a point the chosen distance away — points inside are within that distance of A.",
+          "The region that is BOTH inside the circle AND on A's side of the bisector satisfies both rules.",
+          "Drag A or B — the two boundaries move and the region updates."],
+   big:"Combining loci: the region that answers two rules is bounded by the two loci and lies where they overlap.",
+   conj:"How would the region change if the rule were 'more than that distance from A'?"},
+ "gc05-final":{
+   tag:"Constructions · Lesson 5 · Final Task",
+   title:"A compound locus: your evidence",
+   intro:"Construct the boundaries of a compound locus problem and identify the region.",
+   steps:["Pick a compound rule (for example: within 4 cm of A, and closer to A than to B).",
+          "Construct each boundary with the RIGHT command: a Circle for 'a fixed distance from a point'; Construct → Perpendicular bisector for 'equidistant from two points'; Construct → Angle bisector for 'equidistant from two lines'.",
+          "Identify the region that satisfies every rule (shade it on paper, or describe it).",
+          "Save your construction, and write one sentence naming the locus for each rule."],
+   big:"Save your work and a sentence: each rule is a locus; the answer is the region where the loci overlap.",
+   conj:"Which single locus would you construct for 'equidistant from two roads'?"},
+ "gc06-bearing":{
+   tag:"Constructions · Lesson 6 · Movement",
+   title:"Measure a bearing",
+   intro:"State the three-figure bearing of a target from a station — clockwise from North.",
+   steps:["Point tool: place a station A, then the target B.",
+          "Switch to Select. Click an empty part of the canvas to clear any selection, then click A and then B (in that order).",
+          "Measure → Bearing — it shows the three-figure bearing of B from A, clockwise from North (North reads 000°, East 090°).",
+          "Drag B around A and watch the bearing change through 000° → 090° → 180° → 270°."],
+   big:"A bearing is the clockwise angle from North to the target, always written with three figures.",
+   conj:"What bearing would B need so that it is exactly North-East of A?"},
+ "gc06-backbearing":{
+   tag:"Constructions · Lesson 6 · Reflection",
+   title:"Forward and back bearings",
+   intro:"Compare the bearing of B from A with the bearing of A from B.",
+   steps:["Point tool: place two points A and B.",
+          "Select (click empty space first, then A then B) → Measure → Bearing: the bearing of B from A.",
+          "Now select B then A → Measure → Bearing: the bearing of A from B.",
+          "Compare the two — they always differ by 180°. Drag B and check it stays true."],
+   big:"The back bearing (A from B) is the forward bearing (B from A) plus or minus 180°.",
+   conj:"If the bearing of B from A is 210°, what is the bearing of A from B?"},
+ "gc06-fix":{
+   tag:"Constructions · Lesson 6 · Creativity",
+   title:"Fix a position from two bearings",
+   intro:"Two stations each report a bearing to a ship — find where it is.",
+   steps:["Point tool: place two stations A and B.",
+          "From A, use the Segment tool to draw a long line; drag its far end until Measure → Bearing (of that end from A) shows A's reported bearing.",
+          "Do the same from B for B's reported bearing.",
+          "Select BOTH lines, then Construct → Intersection(s) — the crossing is the ship's position (use the command, not a free point)."],
+   big:"Two bearings fix a position: the ship is where the two bearing lines cross.",
+   conj:"Why do you need two bearings, not one, to pin down a position?"},
+ "gc06-final":{
+   tag:"Constructions · Lesson 6 · Final Task",
+   title:"Bearings: your evidence",
+   intro:"Use bearings to state a direction and to fix a position.",
+   steps:["State a bearing: place a station and a target, then Measure → Bearing (clear the selection, click station then target).",
+          "Find a back bearing by measuring the reverse direction — check it differs by 180°.",
+          "Fix a position: draw two bearing lines from two stations and use Construct → Intersection(s) for the crossing.",
+          "Save your construction, and write one sentence on how a bearing describes a direction exactly."],
+   big:"Save your work and a sentence: a bearing is a clockwise, three-figure angle from North; two of them fix a position.",
+   conj:"How is a bearing line like a locus?"},
+ "gc07-scale":{
+   tag:"Constructions · Lesson 7 · Connection",
+   title:"Build to a scale",
+   intro:"At a scale of 1 cm : 5 m, show everywhere within 20 m of a point. (20 m = 4 cm on the plan.)",
+   steps:["Point tool: place the point A.",
+          "Work out the plan distance: 20 m ÷ 5 = 4 cm. The Studio grid is 1 cm per square.",
+          "Circle tool: draw a circle centred A with a radius of 4 grid squares (4 cm).",
+          "Check it: select A and a point on the circle, Measure → Length — it should read 4.0 cm (= 20 m real)."],
+   big:"On a scale plan every length is divided by the scale: 20 m at 1 cm : 5 m becomes 4 cm.",
+   conj:"At the same scale, how many centimetres would a 35 m path be on the plan?"},
+ "gc07-region":{
+   tag:"Constructions · Lesson 7 · Movement",
+   title:"A region from two rules",
+   intro:"Find the region that is within a distance of A and closer to A than to B.",
+   steps:["Point tool: place two points A and B.",
+          "Circle tool: draw a circle centred A through a point the chosen distance away (inside = within that distance of A).",
+          "Select A and B, then Construct → Perpendicular bisector (points on A's side are closer to A than to B). Not a free point.",
+          "The region inside the circle AND on A's side of the bisector satisfies both rules — trace or describe it.",
+          "Drag A or B; the two boundaries move and the region updates."],
+   big:"A compound problem is solved by drawing each rule's boundary and taking the region where they overlap.",
+   conj:"How would you add a third rule: 'more than a set distance from a straight fence'?"},
+ "gc07-final":{
+   tag:"Constructions · Lesson 7 · Final Task",
+   title:"A scale plan: your evidence",
+   intro:"Solve a compound plan problem, choosing the right construction for each rule.",
+   steps:["Decide the scale and convert each real distance to a plan length (divide by the scale).",
+          "Choose the RIGHT construction for each rule: a Circle for 'a fixed distance from a point'; Construct → Perpendicular bisector for 'equidistant from two points'; Construct → Angle bisector for 'equidistant from two lines'.",
+          "Build every boundary, then identify (shade or describe) the region that satisfies all the rules.",
+          "Save your construction, and write one sentence naming the locus for each rule and the scale you used."],
+   big:"Save your work and a sentence: at a chosen scale, each rule is a construction; the answer is the region where they all overlap.",
+   conj:"Which single lesson from this unit did each part of your plan come from?"},
+ "ct01-parts":{
+   tag:"Circle Theorems · Lesson 1 · Movement",
+   title:"Draw a circle and label its parts",
+   intro:"Build a circle and label every part for real — the vocabulary the whole unit stands on.",
+   steps:["Point tool: place a centre O. Circle tool: click O then click outwards to draw the circle.",
+          "Segment tool: draw a radius from O to a point on the circle; label it 'radius'.",
+          "Segment tool: draw a diameter right across through O; label it 'diameter'. Notice it is two radii in a line.",
+          "Segment tool: draw a chord joining two points on the circle WITHOUT going through O; label it 'chord'.",
+          "Add a tangent that touches the circle at just one point, and shade one sector (between two radii) and one segment (between a chord and its arc)."],
+   big:"Every part is fixed by a property: a radius runs centre-to-curve; a diameter is a chord through the centre; a tangent touches at one point.",
+   conj:"Which of your parts are lines, which are curves, and which are regions?"},
+ "ct01-final":{
+   tag:"Circle Theorems · Lesson 1 · Final Task",
+   title:"Your evidence: a fully labelled circle",
+   intro:"Produce a labelled circle showing you can tell the parts apart, and mark the arc an angle stands on.",
+   steps:["Draw a circle and mark the centre O.",
+          "Label a radius, a diameter, a chord (not through O), an arc, a tangent and the circumference.",
+          "Shade and label one sector and one segment.",
+          "Mark points A and B on the circle and a third point P; draw ∠APB and note which arc AB it stands on (the arc NOT containing P).",
+          "Stretch: write one sentence on why the diameter is the longest possible chord."],
+   big:"Save your labelled circle and your sentences — that is your evidence that you can name and distinguish every part.",
+   conj:"In one sentence each: how is a chord different from a diameter, and a sector from a segment?"},
+ "ct02-final":{
+   tag:"Circle Theorems · Lesson 2 · Final Task",
+   title:"Verify the angle at the centre",
+   intro:"Construct the two angles on the same arc and measure them to confirm the 2 : 1, then explain why.",
+   steps:["Circle tool: draw a circle and keep its centre O.",
+          "Construct → Point on object: add A, B and P ON the circle (so they stay on it when dragged).",
+          "Segment tool: join O–A and O–B (the centre angle ∠AOB), and P–A and P–B (the circumference angle ∠APB).",
+          "Measure → Angle: measure ∠AOB (click A, O, B) and ∠APB (click A, P, B). Read both values.",
+          "Drag P to two or three new places on the same arc, re-measuring each time. Record the pairs."],
+   big:"Save your measurements and a sentence: ∠AOB is always twice ∠APB, because OA = OB = OP are radii (isosceles triangles).",
+   conj:"As you drag P along its arc, what happens to ∠APB — and why must ∠AOB be exactly double it?"},
+ "ct03-final":{
+   tag:"Circle Theorems · Lesson 3 · Final Task",
+   title:"The right angle in a semicircle",
+   intro:"Build a triangle on a diameter and measure the right angle, then explain why it is 90°.",
+   steps:["Circle tool: draw a circle and keep its centre O.",
+          "Draw a diameter: use the Line/Segment tool from one side of the circle through O to the other — mark the ends A and B (Construct → Intersection with the circle so they stay on it).",
+          "Construct → Point on object: add P on the circle. Segment tool: join P–A and P–B.",
+          "Measure → Angle: measure ∠APB (click A, P, B). Drag P to two or three new places and re-measure.",
+          "Note that ∠APB stays 90°."],
+   big:"Save your measurements and a sentence: the angle in a semicircle is 90°, because a diameter subtends 180° at the centre and the circumference angle is half.",
+   conj:"Why must the angle at P be exactly 90°, however you move P along the semicircle?"},
+ "ct04-final":{
+   tag:"Circle Theorems · Lesson 4 · Final Task",
+   title:"Angles in the same segment",
+   intro:"Build two angles on the same arc and measure them to confirm they are equal, then explain why.",
+   steps:["Circle tool: draw a circle. Construct → Point on object: add A and B on it (a chord AB).",
+          "Add two more points P and Q ON the circle, both on the SAME arc (same side of AB).",
+          "Segment tool: join P–A, P–B, Q–A and Q–B.",
+          "Measure → Angle: measure ∠APB (A, P, B) and ∠AQB (A, Q, B). Read both.",
+          "Drag P and Q along their arc, re-measuring. Record the pairs."],
+   big:"Save your measurements and a sentence: ∠APB = ∠AQB, because each is half the same central angle ∠AOB — angles in the same segment are equal.",
+   conj:"Why must ∠APB and ∠AQB always be equal, wherever P and Q sit on that arc?"},
+ "ct05-final":{
+   tag:"Circle Theorems · Lesson 5 · Final Task",
+   title:"Opposite angles of a cyclic quadrilateral",
+   intro:"Build a cyclic quadrilateral and measure its angles to confirm opposite pairs add to 180°, then explain why.",
+   steps:["Circle tool: draw a circle. Construct → Point on object: add four points A, B, C, D in order around it.",
+          "Segment tool: join A–B, B–C, C–D and D–A to make the quadrilateral.",
+          "Measure → Angle: measure all four interior angles (∠DAB, ∠ABC, ∠BCD, ∠CDA).",
+          "Add the opposite pairs: ∠A + ∠C and ∠B + ∠D.",
+          "Drag a vertex and re-measure. Record the sums."],
+   big:"Save your measurements and a sentence: opposite angles add to 180°, because each pair is half of the full 360° turn at the centre.",
+   conj:"Why must both opposite pairs always add to 180°, whatever the shape?"},
+ "ct06-final":{
+   tag:"Circle Theorems · Lesson 6 · Final Task",
+   title:"Tangents from a point",
+   intro:"Construct the two tangents from an external point and check the right angles and equal lengths.",
+   steps:["Circle tool: draw a circle, keep centre O. Point tool: place a point P outside it.",
+          "Construct the two tangents from P (touching at A and B) and draw radii OA, OB.",
+          "Measure → Angle: check ∠OAP and ∠OBP are each 90°.",
+          "Compare the lengths PA and PB. Drag P and re-check.",
+          "Note that the right angles stay 90° and PA = PB throughout."],
+   big:"Save your work and a sentence: a tangent meets the radius at 90°, and the two tangents from a point are equal (congruent right triangles).",
+   conj:"Why must PA = PB, and why is each tangent perpendicular to its radius?"},
+ "ct07-final":{
+   tag:"Circle Theorems · Lesson 7 · Final Task",
+   title:"The alternate segment theorem",
+   intro:"Build a tangent and chord at T, and an angle in the alternate segment at P, and check they stay equal.",
+   steps:["Circle tool: draw a circle. Point tool: place T on the circle and draw the tangent there.",
+          "Draw a chord TB from the point of contact, and place a point P on the arc on the far side of TB.",
+          "Draw PT and PB. Measure → Angle: the tangent–chord angle at T, and ∠TPB at P.",
+          "Drag P along its arc: ∠TPB stays the same (same segment) and matches the tangent–chord angle.",
+          "Drag B to reshape the chord: both angles change together, but stay equal."],
+   big:"Save your work and a sentence: the angle between a tangent and a chord equals the angle in the alternate segment.",
+   conj:"Why does adding the diameter from T, then using the semicircle right angle, force the two angles to be equal?"},
+ "ct08-final":{
+   tag:"Circle Theorems · Lesson 8 · Final Task",
+   title:"The perpendicular from the centre to a chord",
+   intro:"Draw a chord, drop the perpendicular from the centre, and check it bisects the chord.",
+   steps:["Circle tool: draw a circle, keep centre O. Draw a chord AB across it.",
+          "Construct the perpendicular from O to the chord and mark the foot M.",
+          "Measure → Angle: check ∠OMA (or ∠OMB) is 90°.",
+          "Measure → Distance: compare AM and MB. Drag A or B and re-check.",
+          "Note that OM stays perpendicular and AM = MB throughout."],
+   big:"Save your work and a sentence: the perpendicular from the centre to a chord bisects the chord (two congruent right triangles).",
+   conj:"Why must AM = MB, and how could two chords locate the centre of the circle?"},
+ "ct09-final":{
+   tag:"Circle Theorems · Lesson 9 · Final Task",
+   title:"Combining the theorems",
+   intro:"Build a cyclic figure, then confirm by measuring the angles you found by reasoning.",
+   steps:["Circle tool: draw a circle, keep centre O. Place four points A, B, C, D on it, with A and C opposite (AC a diameter through O).",
+          "Draw the chords you need, and the radii OA, OB.",
+          "Reason out the angles ∠ACB, ∠ABC and ∠ADB, writing the theorem for each step.",
+          "Measure → Angle: confirm each angle matches your reasoning.",
+          "Drag a point and watch which angles stay fixed and which change."],
+   big:"Save your work with your reasons: name the theorem that justifies each angle in the chase.",
+   conj:"What made a good first move, and where did one answer become the tool for the next?"},
+ "ct10-final":{
+   tag:"Circle Theorems · Lesson 10 · Final Task",
+   title:"Proof and problem-solving",
+   intro:"Build the angle-at-the-centre construction and confirm the doubling as you drag — a check on the proof you have written.",
+   steps:["Circle tool: draw a circle, keep centre O. Place P on the circle, and points A and B on the circle.",
+          "Draw PA and PB, the radii OA and OB, and extend PO to meet the circle again at Q.",
+          "Measure → Angle: measure ∠AOB (at the centre) and ∠APB (at the circumference).",
+          "Drag P around its arc and confirm ∠AOB stays twice ∠APB.",
+          "Remember: this measurement checks your proof — it does not replace it."],
+   big:"Save your work with your written proof: state each step of the angle-at-the-centre argument with its reason.",
+   conj:"Why is a measured example not a proof, and what does the proof add that measuring cannot?"},
+ "ts01-reflect":{
+   tag:"Transformations · Lesson 1 · Movement",
+   title:"Reflect a triangle in a mirror line",
+   intro:"The grid is on and the mirror line x = −1 is drawn. Reflect triangle ABC in it, then test what the reflection does.",
+   setup:{axes:true,pts:[["A",1,1],["B",4,1],["C",1,3]],polys:[["A","B","C"]],eq:[["x",-1]],next:3},
+   steps:["Choose the Select tool (🖐). Click an empty part of the grid, then click the line x = −1 so it glows.",
+          "Transform → Mark mirror. The line gets a purple glow.",
+          "Drag a box around the whole triangle (press on an empty part of the grid near it and drag across it), so its corners and sides are selected.",
+          "Transform → Reflect in the marked mirror. The image A′B′C′ appears on the other side.",
+          "Drag A, B or C. Watch A′, B′ and C′: they follow, always the same distance from the mirror.",
+          "Check one pair: select A and A′, then Construct → Midpoint. Where does the midpoint land?"],
+   big:"Each image point is the same distance from the mirror as its object, on the other side, along a line at right angles to the mirror.",
+   conj:"Which points would not move at all if you reflected them in x = −1?"},
+ "ts01-mirror":{
+   tag:"Transformations · Lesson 1 · Creativity",
+   title:"Find the mirror line",
+   intro:"Triangle PQR and its reflection P′Q′R′ are drawn. Find the mirror line, then prove it by reflecting.",
+   setup:{axes:true,coords:true,pts:[["P",-4,1],["Q",-2,1],["R",-4,4],["P′",1,-4],["Q′",1,-2],["R′",4,-4]],polys:[["P","Q","R"],["P′","Q′","R′"]],fill:"#9ec7e8",next:18},
+   steps:["Choose Select. Click an empty part of the grid, then click P and then P′.",
+          "Construct → Perpendicular bisector. Every point on it is the same distance from P and P′: it is the mirror line.",
+          "Read its equation from the coordinates it passes through, such as (0, 0) and (2, 2).",
+          "Check: click the new line, Transform → Mark mirror. Drag a box around triangle PQR, then Transform → Reflect in the marked mirror.",
+          "The image lands exactly on P′Q′R′ if your mirror line is right."],
+   big:"The mirror line is the perpendicular bisector of the line joining any point to its image.",
+   conj:"What is the equation of the mirror line, and how do the coordinates of P and P′ show it?"},
+ "ts01-final":{
+   tag:"Transformations · Lesson 1 · Final Task",
+   title:"Your evidence: two reflections",
+   intro:"Reflect a shape in y = x, and in a vertical or horizontal line of your choice.",
+   setup:{axes:true,coords:true,pts:[["A",1,3],["B",3,3],["C",3,4]],polys:[["A","B","C"]],next:3},
+   steps:["Transform → Mirror line by equation…: choose y = x, then Draw and mark.",
+          "Drag a box around triangle ABC, then Transform → Reflect in the marked mirror.",
+          "Graph → Show coordinates is on: compare the coordinates of A and A′. What do you notice?",
+          "Transform → Mirror line by equation… again: choose x = a or y = b with a number of your own, then reflect ABC in that line too.",
+          "Make a shape of your own: Graph → Plot points…, type its corners, such as P(−5, −1), Q(−2, −1), R(−2, −3), and reflect it too.",
+          "Save your work, and write one sentence about each reflection."],
+   big:"Save your work and a sentence: a reflection is fully described by its mirror line.",
+   conj:"Reflecting in y = x, what happens to the coordinates of every point?"},
+ "ts02-rotate":{
+   tag:"Transformations · Lesson 2 · Movement",
+   title:"Rotate a shape about a centre",
+   intro:"Rotate the flag about the marked centre O, then change the angle and the direction.",
+   setup:{axes:true,pts:[["O",0,0],["A",1,1],["B",1,4],["C",3,3]],polys:[["A","B","C"]],centre:"O",next:3},
+   steps:["The centre O is already marked (purple ring). To mark a different centre: select one point, then Transform → Mark centre.",
+          "Choose Select. Drag a box around the flag ABC (not including O).",
+          "Transform → Rotate about the marked centre…: choose 90°, anticlockwise, then Rotate.",
+          "Select the flag again and rotate it 90° clockwise. Compare the two images.",
+          "Drag O to a new grid point. Both images move: a rotation depends on its centre."],
+   big:"A rotation is described by its centre, its angle and its direction. Anticlockwise is positive and clockwise is negative.",
+   conj:"Which single rotation would do the same as rotating 90° anticlockwise twice?"},
+ "ts02-design":{
+   tag:"Transformations · Lesson 2 · Creativity",
+   title:"A design with rotational symmetry",
+   intro:"Rotate one shape again and again about the same centre to build a pattern.",
+   setup:{axes:true,pts:[["O",0,0],["A",1,0],["B",3,1],["C",2,2]],polys:[["A","B","C"]],centre:"O",next:3},
+   steps:["Choose Select and drag a box around the shape ABC.",
+          "Transform → Rotate about the marked centre…: 90°, anticlockwise. Rotate.",
+          "Drag a box around the new image, and rotate it 90° anticlockwise again. Repeat once more.",
+          "You now have four copies. Drag A, B or C: every copy changes together.",
+          "Try 120° three times instead. How many copies does it take to come back to the start?"],
+   big:"Turning a shape by 360° ÷ n, n times, builds a design with rotational symmetry of order n.",
+   conj:"Which angle would make a design with six copies?"},
+ "ts02-final":{
+   tag:"Transformations · Lesson 2 · Final Task",
+   title:"Your evidence: rotations described fully",
+   intro:"Rotate a shape about a centre of your choice, twice, and describe each rotation fully.",
+   setup:{axes:true,coords:true,pts:[["A",2,1],["B",4,1],["C",4,2]],polys:[["A","B","C"]],next:3},
+   steps:["Point tool: place a centre on a grid point. Select it, then Transform → Mark centre.",
+          "Drag a box around ABC, then Transform → Rotate about the marked centre…: choose an angle and a direction.",
+          "Rotate ABC again with a different angle or direction.",
+          "Save your work, and write a full description of each rotation: the centre, the angle and the direction."],
+   big:"Save your work and two full descriptions: centre (as coordinates), angle, and direction.",
+   conj:"Why is “a rotation of 90°” not a full description?"},
+ "ts03-translate":{
+   tag:"Transformations · Lesson 3 · Movement",
+   title:"Translate by a column vector",
+   intro:"Slide the shape by a column vector, then undo the move with a second vector.",
+   setup:{axes:true,coords:true,pts:[["A",-3,1],["B",-1,1],["C",-1,3],["D",-3,2]],polys:[["A","B","C","D"]],next:4},
+   steps:["Choose Select. Drag a box around the shape ABCD.",
+          "Transform → Translate by a column vector…: first number 4, second number −3. Translate.",
+          "Compare A and A′: how did the coordinates change?",
+          "Drag a box around the image A′B′C′D′. Translate it by the column vector that brings it straight back.",
+          "Drag A: every copy moves the same way, by the same amount."],
+   big:"A column vector gives the move: the first number is the horizontal move, right (+) or left (−); the second is the vertical move, up (+) or down (−).",
+   conj:"What column vector undoes a translation by (4, −3)?"},
+ "ts03-final":{
+   tag:"Transformations · Lesson 3 · Final Task",
+   title:"Your evidence: a journey of translations",
+   intro:"Move a shape on a journey of three translations, and find the single vector for the whole journey.",
+   setup:{axes:true,coords:true,pts:[["A",-5,-3],["B",-4,-3],["C",-4,-1]],polys:[["A","B","C"]],next:3},
+   steps:["Choose three column vectors of your own.",
+          "Translate ABC by the first, then the image by the second, then that image by the third.",
+          "Work out the single column vector from ABC straight to the final image, and check it with one Translate.",
+          "Save your work, with the four column vectors written down."],
+   big:"Save your work and a sentence: the single vector is found by adding the first numbers and adding the second numbers.",
+   conj:"Why does adding the column vectors give the whole journey?"},
+ "ts04-congruent":{
+   tag:"Transformations · Lesson 4 · Reflection",
+   title:"What stays the same?",
+   intro:"Reflect, rotate and translate the same triangle, then measure the sides and angles of every image.",
+   setup:{axes:true,pts:[["A",1,1],["B",5,1],["C",2,4],["O",0,0]],polys:[["A","B","C"]],eq:[["y",-1,1]],centre:"O",next:3},
+   steps:["The mirror y = −1 and the centre O are already marked. Drag a box around ABC, then Transform → Reflect in the marked mirror.",
+          "Drag a box around ABC again, then Transform → Rotate about the marked centre…: 90° anticlockwise.",
+          "Drag a box around ABC again, then Transform → Translate by a column vector…: choose your own vector.",
+          "Measure: select two points, then Measure → Distance, for side AB and for the matching side of each image. Then Measure → Angle (arm, vertex, arm) for angle ABC and its images.",
+          "Drag A, B or C. Do the matching lengths and angles stay equal?"],
+   big:"Reflections, rotations and translations keep every length and every angle, so each image is congruent to the object.",
+   conj:"Which transformation turns the triangle over, and does that change whether it is congruent?"},
+ "ts04-final":{
+   tag:"Transformations · Lesson 4 · Final Task",
+   title:"Your evidence: congruent images",
+   intro:"Make three congruent images of one shape, one by each transformation, and show the evidence.",
+   setup:{axes:true,coords:true,pts:[["A",1,2],["B",3,2],["C",3,3],["D",2,4]],polys:[["A","B","C","D"]],next:4},
+   steps:["Reflect ABCD in a mirror line of your choice (Transform → Mirror line by equation…).",
+          "Rotate ABCD about a centre of your choice (select a point → Transform → Mark centre).",
+          "Translate ABCD by a column vector of your choice.",
+          "Measure one side and one angle on the object and on each image.",
+          "Save your work, with a sentence explaining why all three images are congruent to ABCD."],
+   big:"Save your work and a sentence: these transformations keep lengths and angles, so every image is congruent.",
+   conj:"Which of the three images could be slid onto ABCD without turning it over?"},
+ "ts05-describe":{
+   tag:"Transformations · Lesson 5 · Movement",
+   title:"Describe it, then check it",
+   intro:"Triangle ABC is fixed. Three targets are drawn in gold. Find the single transformation that maps ABC onto each target, carry it out, and check it.",
+   setup:{axes:true,coords:true,fixed:true,pts:[["A",1,1],["B",3,1],["C",1,4]],polys:[["A","B","C"]],
+     targets:[{pts:[["A₁",-3,1],["B₁",-5,1],["C₁",-3,4]]},{pts:[["A₂",2,-2],["B₂",2,-4],["C₂",5,-2]]},{pts:[["A₃",-4,-5],["B₃",-2,-5],["C₃",-4,-2]]}],next:3},
+   check:{obj:["A","B","C"],targets:[{name:"Target 1",labs:["A₁","B₁","C₁"],ans:{kind:"reflect"}},{name:"Target 2",labs:["A₂","B₂","C₂"],ans:{kind:"rotate",deg:-90}},{name:"Target 3",labs:["A₃","B₃","C₃"],ans:{kind:"translate"}}]},
+   steps:["Look at Target 1 (A₁B₁C₁): was it reflected, rotated or translated? Is it turned over, turned, or slid with every side pointing the same way?",
+          "Mark what you need. For a mirror: Transform → Mirror line by equation…. For a centre: Graph → Plot points… to place the point, select it, then Transform → Mark centre.",
+          "Drag a box around ABC, then Reflect, Rotate or Translate.",
+          "Press ✔ Check my image. It says what matches and what does not. Use Undo and try again if you need to.",
+          "Do the same for Targets 2 and 3, and write a full description of each in “What do you notice?”."],
+   big:"A full description: a reflection needs its mirror line; a rotation needs its centre, angle and direction; a translation needs its column vector.",
+   conj:"Write a full description of each target."},
+ "ts05-final":{
+   tag:"Transformations · Lesson 5 · Final Task",
+   title:"Your full description file",
+   intro:"Make three moves of one shape, one of each type, and write a full description of each.",
+   setup:{axes:true,coords:true,pts:[["A",-2,1],["B",1,1],["C",-2,3]],polys:[["A","B","C"]],next:3},
+   steps:["Reflect ABC in a mirror line of your choice (Transform → Mirror line by equation…).",
+          "Rotate ABC about a centre of your choice: plot it with Graph → Plot points…, then Transform → Mark centre.",
+          "Translate ABC by a column vector of your choice.",
+          "Write a full description of each image, and how you would find each detail if you only had the picture.",
+          "Stretch: write a vague description that fits two of your images, and say which detail would tell them apart."],
+   big:"Save your work and your three full descriptions.",
+   conj:"Which detail is the easiest to leave out by mistake, and why?"},
+ "studio-open":{
+   tag:"Open workspace",
+   title:"Your construction space",
+   intro:"Try things, undo them, move points and start again. Rough geometry is welcome here.",
+   steps:[],big:"",conj:"Keep a mathematical idea you want to test, break or improve."}
+};
+var TKEY="neoDGS_taskwork_v1";
+function twMap(){try{return JSON.parse(localStorage.getItem(TKEY)||"{}");}catch(e){return {};}}
+function twSet(m){try{localStorage.setItem(TKEY,JSON.stringify(m));}catch(e){}}
+function qparam(name){var m=new RegExp("[?&]"+name+"=([^&]*)").exec(window.location.search);return m?decodeURIComponent(m[1].replace(/\+/g," ")):null;}
+function safeReturn(u){ if(!u) return null; if(/^[a-z][a-z0-9+.-]*:/i.test(u)||u.indexOf("//")===0) return null; return u; } /* relative same-site only */
+function buildSetup(su){if(su.axes)AX.on=true;if(su.coords)AX.coords=true;var byLab={};
+  (su.pts||[]).forEach(function(q){var p=fromU(q[1],q[2]);var o={id:nextId++,type:"point",kind:su.fixed?"fixed":"free",x:p.x,y:p.y,label:q[0]};objects.push(o);byLab[q[0]]=o.id;});
+  (su.targets||[]).forEach(function(T){var ids=T.pts.map(function(q){var p=fromU(q[1],q[2]);var o={id:nextId++,type:"point",kind:"fixed",x:p.x,y:p.y,label:q[0],colour:"#9a6b12"};objects.push(o);byLab[q[0]]=o.id;return o.id;});
+    objects.push({id:nextId++,type:"polygon",pts:ids,fill:"#f2c14e",target:true});ids.forEach(function(a,i){objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length],colour:"#b8860b"});});});
+  (su.polys||[]).forEach(function(L){var ids=L.map(function(l){return byLab[l];});objects.push({id:nextId++,type:"polygon",pts:ids,fill:su.fill||"#9ec7e8"});ids.forEach(function(a,i){objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});});
+  (su.segs||[]).forEach(function(L){objects.push({id:nextId++,type:"segment",a:byLab[L[0]],b:byLab[L[1]]});});
+  (su.eq||[]).forEach(function(e){var o=addEqLine(e[0],e[1]);if(e[2])o.isMirror=true;});
+  if(su.centre&&byLab[su.centre])byId(byLab[su.centre]).isCentre=true;
+  pointLabel=su.next||pointLabel;}
+/* ---------- v0.6 task checker: compares the newest image of the object with each target ---------- */
+function ptByLabel(l){return objects.filter(function(o){return o.type==="point"&&o.label===l;})[0];}
+function uPt(id){var q=toU(P(id));return [Math.round(q.x*1e6)/1e6,Math.round(q.y*1e6)/1e6];}
+function cName(c){return "("+fmtNum(c[0])+", "+fmtNum(c[1])+")";}
+function d2u(a,b){return (a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1]);}
+function sides(Q){return Q.map(function(p,i){return d2u(p,Q[(i+1)%Q.length]);});}
+function orientU(Q){return Math.sign((Q[1][0]-Q[0][0])*(Q[2][1]-Q[0][1])-(Q[2][0]-Q[0][0])*(Q[1][1]-Q[0][1]));}
+function normDeg(d){return ((Math.round(d)%360)+360)%360;}
+function tfText(tf){if(tf.kind==="reflect"){var L=byId(tf.line);return "a reflection in "+(L&&L.kind==="eq"?"the line "+eqLabel(L):"the marked mirror");}
+  if(tf.kind==="rotate"){var d=normDeg(tf.deg);return "a rotation of "+(d===180?"180°":fmtNum(Math.abs(tf.deg))+"° "+(tf.deg>=0?"anticlockwise":"clockwise"))+" about "+cName(uPt(tf.c));}
+  if(tf.kind==="translate")return "a translation by the column vector with first number "+fmtNum(tf.dx)+" and second number "+fmtNum(tf.dy);
+  if(tf.kind==="enlarge")return "an enlargement with scale factor "+(tf.kText||fmtNum(tf.k))+" from "+cName(uPt(tf.c));return "a transformation";}
+function ansText(a){return a.kind==="reflect"?"a reflection":a.kind==="rotate"?"a rotation":a.kind==="translate"?"a translation":"an enlargement";}
+function checkTask(t){var C=t.check,objIds=C.obj.map(function(l){var o=ptByLabel(l);return o&&o.id;});
+  if(objIds.some(function(x){return !x;}))return {ok:false,msg:"The shape "+C.obj.join("")+" is missing. Use Undo, or reload the task."};
+  var groups=objects.filter(function(o){return o.type==="tf";}).map(function(tf){var ims=objIds.map(function(oid){var im=objects.filter(function(q){return q.type==="point"&&q.kind==="image"&&q.tf===tf.id&&q.of===oid;})[0];return im&&im.id;});return ims.every(Boolean)?{tf:tf,Q:ims.map(uPt)}:null;}).filter(Boolean);
+  if(!groups.length)return {ok:false,msg:"Make an image first: drag a box around "+C.obj.join("")+", then choose a transformation from the Transform menu."};
+  var targets=C.targets.map(function(T){return {name:T.name,labs:T.labs,ans:T.ans,Q:T.labs.map(function(l){return uPt(ptByLabel(l).id);})};});
+  var same=function(A,B){return A.every(function(p,i){return d2u(p,B[i])<1e-9;});};
+  var matched=targets.filter(function(T){return groups.some(function(g){return same(g.Q,T.Q);});}).map(function(T){return T.name;});
+  var g=groups[groups.length-1],A0=C.obj[0],hit=targets.filter(function(T){return same(g.Q,T.Q);})[0];
+  var tally=targets.length>1?"<br><span style='color:#6a6157'>Targets reached so far: "+(matched.length?matched.join(", "):"none")+" ("+matched.length+" of "+targets.length+").</span>":"";
+  if(hit)return {ok:true,msg:"✓ Your newest image lands exactly on "+hit.name+" ("+hit.labs.join("")+"). It is <b>"+tfText(g.tf)+"</b>."+tally};
+  var pool=targets.filter(function(X){return X.ans.kind===g.tf.kind&&matched.indexOf(X.name)<0;});if(!pool.length)pool=targets.filter(function(X){return matched.indexOf(X.name)<0;});if(!pool.length)pool=targets;
+  var T=pool.slice().sort(function(a,b){var s=function(X){return X.Q.reduce(function(t,p,i){return t+d2u(p,g.Q[i]);},0);};return s(a)-s(b);})[0];
+  var num=function(a,b){return a-b;},sa=sides(g.Q).slice().sort(num),sb=sides(T.Q).slice().sort(num),congr=sa.every(function(v,i){return Math.abs(v-sb[i])<1e-9;}),
+      sim=sa.every(function(v,i){return Math.abs(v*sb[0]-sb[i]*sa[0])<1e-9;}),m="Compared with "+T.name+" ("+T.labs.join("")+"): ";
+  m+=congr?"same size and shape":(sim?"the same shape, but a different size":"a different shape");
+  var tk=g.tf.kind,a=T.ans;
+  if(orientU(g.Q)!==orientU(T.Q)&&congr)m+=", but it faces the other way: "+(a.kind==="reflect"?"the target has been turned over, so it needs a reflection.":"the target has not been turned over, so it does not need a reflection.");
+  else if(tk!==a.kind)m+=", but "+ansText(a)+" is needed, not "+ansText(g.tf)+".";
+  else if(tk==="reflect"){var L=byId(g.tf.line);m+=", turned over like the target, but the mirror line is not "+(L&&L.kind==="eq"?eqLabel(L):"the one you marked")+". The mirror line is halfway between "+A0+" and "+T.labs[0]+".";}
+  else if(tk==="rotate"){if(normDeg(g.tf.deg)===normDeg(a.deg))m+=": the angle and direction are right, but the centre is not "+cName(uPt(g.tf.c))+".";else if(normDeg(-g.tf.deg)===normDeg(a.deg))m+=", but the direction is reversed.";else m+=", but the angle is not right: how far has side "+C.obj[0]+C.obj[1]+" turned?";}
+  else if(tk==="translate")m+=", but the column vector is not right: "+A0+" goes to "+cName(g.Q[0])+", not to "+T.labs[0]+" "+cName(T.Q[0])+".";
+  else if(tk==="enlarge")m+=Math.abs(g.tf.k-a.k)<1e-9?": the scale factor is right, but the centre is not "+cName(uPt(g.tf.c))+".":", but the scale factor is not "+(g.tf.kText||fmtNum(g.tf.k))+".";
+  return {ok:false,msg:m+tally};}
+function tlStatus(msg){var s=document.getElementById("tlStatus");if(s)s.textContent=msg||"";}
+function bootTaskContext(){
+  var ret=safeReturn(qparam("return"));
+  var rb=document.getElementById("returnBtn");
+  if(ret){rb.href=ret;rb.hidden=false;}
+  var id=qparam("task");
+  if(!id||!TASKS[id]) return;
+  var t=TASKS[id], lane=document.getElementById("taskLane");
+  document.getElementById("tlTag").textContent=t.tag||"";
+  document.getElementById("tlTitle").textContent=t.title||"Task";
+  document.getElementById("tlIntro").textContent=t.intro||"";
+  var ol=document.getElementById("tlSteps");ol.innerHTML="";
+  (t.steps||[]).forEach(function(st){var li=document.createElement("li");li.textContent=st;ol.appendChild(li);});
+  ol.hidden=!(t.steps&&t.steps.length);
+  var big=document.getElementById("tlBig");if(t.big){big.textContent=t.big;big.hidden=false;}else{big.hidden=true;}
+  var conj=document.getElementById("tlConj");if(t.conj)conj.placeholder=t.conj;
+  lane.hidden=false;
+  /* restore any earlier work for this task on this device; otherwise build its starting sketch */
+  var saved=twMap()[id];
+  if(t.setup&&!(saved&&saved.sketch))buildSetup(t.setup);
+  if(saved){ if(saved.conjecture)conj.value=saved.conjecture;
+    if(saved.sketch){try{loadData(saved.sketch);tlStatus("Restored your earlier work on this task.");}catch(e){}}
+  }
+  if(t.check){document.getElementById("tlCheckRow").hidden=false;document.getElementById("tlCheck").onclick=function(){var r=checkTask(t);var box=document.getElementById("tlCheckOut");box.hidden=false;box.className="tl-check"+(r.ok?" good":"");box.innerHTML=r.msg;};}
+  document.getElementById("tlSaveWork").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].sketch=serialize();twSet(m);tlStatus("Construction saved on this device. It will be here when you return.");};
+  document.getElementById("tlSaveConj").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].conjecture=conj.value;twSet(m);tlStatus("Saved what you noticed.");};
+}
+window.NEO_DGS={objects:function(){return objects;},P:P,ACT:ACT,AX:AX,toU:toU,fromU:fromU,byId:byId,setSel:function(a){sel=a.slice();},getSel:function(){return sel.slice();},transformSel:transformSel,TASKS:TASKS,checkTask:checkTask,sfIn:sfIn,render:render,snapPos:snapPos,undo:doUndo,serialize:serialize,loadData:loadData,lineGeom:lineGeom,addFreePoint:addFreePoint,plotPoints:plotPoints,parsePoints:parsePoints,enclosed:enclosed,world:{x0:WX0,y0:WY0,w:WW,h:WH},scroller:function(){return scroller;}};
+if(scroller){scroller.scrollLeft=-WX0;scroller.scrollTop=-WY0;}
+bootTaskContext();
+
+updateTitle();
+render();
+})();
+</script>
+</body>
+</html>

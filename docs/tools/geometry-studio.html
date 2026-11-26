@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEO Dynamic Geometry Studio — v0.5</title>
+<title>NEO Dynamic Geometry Studio — v0.6</title>
 <style>
 body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif}
 .wrap{max-width:1040px;margin:auto;padding:14px}
@@ -26,6 +26,8 @@ h1{color:#3f5f45;margin:0 0 2px;font-size:1.3em}.sub{color:#6a7f4e;margin:0 0 10
 .tasklane .tl-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tasklane .tl-actions button{flex:1 1 auto;padding:8px 9px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;font-size:.8em}
 .tasklane .tl-actions button.primary{background:#365a68;color:#fff;border:none}
+.tasklane .tl-check{font-size:.85em;background:#fff;border:1px solid #d8d0c0;border-left:4px solid #b8860b;border-radius:8px;padding:8px 10px;margin-top:8px;line-height:1.45}
+.tasklane .tl-check.good{border-left-color:#3f7a45}
 .tasklane .tl-status{font-size:.8em;color:#3f5f45;margin-top:8px;min-height:1em}
 @media (max-width:760px){.studio{flex-direction:column}.toolbox{flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid #cdbfa9}.tasklane{flex-basis:auto;border-left:none;border-top:1px solid #cdbfa9;max-height:none}}
 /* menu bar */
@@ -72,7 +74,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 <div class="topbar">
   <div class="titleblock">
     <h1>Dynamic Geometry Studio <span id="sketchName" style="font-size:.62em;font-weight:normal;color:#6a7f4e">— (unsaved)</span></h1>
-    <p class="sub">v0.5 — now with a coordinate grid and transformations (Graph and Transform menus). Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
+    <p class="sub">v0.6 — a coordinate grid and transformations, now with Enlarge and a task checker. Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
   </div>
   <a id="returnBtn" class="returnbtn" href="#" hidden>← Return to lesson</a>
 </div>
@@ -145,7 +147,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
       <button data-act="reflect">Reflect in the marked mirror</button>
       <button data-act="rotate">Rotate about the marked centre…</button>
       <button data-act="translate">Translate by a column vector…</button>
-      <button class="disabled">Enlarge… — coming in v0.6</button>
+      <button data-act="enlarge">Enlarge from the marked centre…</button>
     </div>
   </div>
   <div class="menu"><button data-menu="measure">Measure</button>
@@ -212,11 +214,13 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
       <button class="primary" id="tlSaveWork">💾 Save my construction</button>
       <button id="tlSaveConj">💾 Save what I notice</button>
     </div>
+    <div class="tl-actions" id="tlCheckRow" hidden><button class="primary" id="tlCheck">✔ Check my image</button></div>
+    <div class="tl-check" id="tlCheckOut" aria-live="polite" hidden></div>
     <div class="tl-status" id="tlStatus" aria-live="polite"></div>
   </aside>
 </div>
 <div class="hint" id="hint">Pick an instrument on the left to draw, or use <b>Select</b> to choose objects then apply a menu action. Try: Point ×3, then Select all three and Construct → Angle bisector.</div>
-<p class="legend">v0.5 — instruments create objects; menus act on the current selection (highlighted). Everything stays dynamic: drag a free point and all dependents follow, images included. Graph turns on a coordinate grid; Transform reflects, rotates and translates. Coming next: Enlarge and a task checker (v0.6).</p>
+<p class="legend">v0.5 — instruments create objects; menus act on the current selection (highlighted). Everything stays dynamic: drag a free point and all dependents follow, images included. Graph turns on a coordinate grid; Transform reflects, rotates, translates and enlarges. In a task with targets, “Check my image” says what matches.</p>
 </div>
 
 <input type="file" id="fileInput" accept="application/json,.json" style="display:none">
@@ -273,6 +277,7 @@ function applyTf(t,p){
   if(t.kind==="reflect"){var L=byId(t.line);if(!L)return p;var g=lineGeom(L),dd=g.d.x*g.d.x+g.d.y*g.d.y||1,k=((p.x-g.p.x)*g.d.x+(p.y-g.p.y)*g.d.y)/dd,f={x:g.p.x+k*g.d.x,y:g.p.y+k*g.d.y};return {x:2*f.x-p.x,y:2*f.y-p.y};}
   if(t.kind==="rotate"){var c=P(t.c),a=t.deg*Math.PI/180,dx=p.x-c.x,dy=c.y-p.y,X=dx*Math.cos(a)-dy*Math.sin(a),Y=dx*Math.sin(a)+dy*Math.cos(a);return {x:c.x+X,y:c.y-Y};}
   if(t.kind==="translate"){return {x:p.x+t.dx*AX.u,y:p.y-t.dy*AX.u};}
+  if(t.kind==="enlarge"){var c2=P(t.c);return {x:c2.x+t.k*(p.x-c2.x),y:c2.y+t.k*(p.y-c2.y)};}
   return p;}
 function lineGeom(o){
   if(o.type==="line"&&(o.kind==="through"||o.kind==="ray")){var a=P(o.a),b=P(o.b);return {p:a,d:sub(b,a)};}
@@ -352,7 +357,7 @@ function render(){
     else if(isLineish(o)&&o.isMirror){var em=lineEndpoints(o);s+='<line x1="'+em[0].x.toFixed(1)+'" y1="'+em[0].y.toFixed(1)+'" x2="'+em[1].x.toFixed(1)+'" y2="'+em[1].y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="9" stroke-opacity="0.32"/>';}
     if(o.type==="line"&&o.kind==="eq"){var le=lineGeom(o),lp=o.eq==="x"?fromU(o.k,6.5):o.eq==="y"?fromU(11.5,o.k):o.eq==="yx"?fromU(6.6,6.6):fromU(-6.6,6.6),la=(o.eq==="x"&&o.k<=0)||o.eq==="ynx"?"end":"start",lx=lp.x+(la==="end"?-7:7);s+='<rect x="'+(la==="end"?lx-58:lx-2).toFixed(1)+'" y="'+(lp.y-22).toFixed(1)+'" width="60" height="19" rx="4" fill="#fbf8f1" fill-opacity="0.9"/><text x="'+lx.toFixed(1)+'" y="'+(lp.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" text-anchor="'+la+'" fill="#3f5f45">'+eqLabel(o)+'</text>';}
     if(o.type==="circle"&&false){}
-    else if(isLineish(o)){var e=lineEndpoints(o);var col=o.img?"#b25f2e":(o.type==="line"||o.type==="segment")?"#2f3429":"#3f7a45";s+='<line x1="'+e[0].x.toFixed(1)+'" y1="'+e[0].y.toFixed(1)+'" x2="'+e[1].x.toFixed(1)+'" y2="'+e[1].y.toFixed(1)+'" stroke="'+(isSel(o.id)?"#c1622e":(o.colour||col))+'" stroke-width="'+(o.type==="segment"?"2":o.type==="line"?"1.6":"2")+'"/>';}
+    else if(isLineish(o)){var e=lineEndpoints(o);var col=o.img?"#b25f2e":(o.type==="line"||o.type==="segment")?"#2f3429":"#3f7a45";s+='<line x1="'+e[0].x.toFixed(1)+'" y1="'+e[0].y.toFixed(1)+'" x2="'+e[1].x.toFixed(1)+'" y2="'+e[1].y.toFixed(1)+'" stroke="'+(isSel(o.id)?"#c1622e":(o.ray?"#8a6fb0":(o.colour||col)))+'" stroke-width="'+(o.ray?"1.3":o.type==="segment"?"2":o.type==="line"?"1.6":"2")+'"'+(o.ray?' stroke-dasharray="6 4" data-ray="1"':'')+'/>';}
     else if(o.type==="measlen"){var ma=P(o.a),mb=P(o.b);var mx=(ma.x+mb.x)/2,my=(ma.y+mb.y)/2;s+='<line x1="'+ma.x.toFixed(1)+'" y1="'+ma.y.toFixed(1)+'" x2="'+mb.x.toFixed(1)+'" y2="'+mb.y.toFixed(1)+'" stroke="#7a4fb0" stroke-width="1" stroke-dasharray="4 3"/><text x="'+mx.toFixed(1)+'" y="'+(my-6).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+(dist(ma,mb)/30).toFixed(1)+(AX.on?' units':' cm')+'</text>';}
     else if(o.type==="measang"){var qa=P(o.a),qv=P(o.v),qb=P(o.b);var a1=ang(qv,qa),da=normAng(ang(qv,qb)-a1);var midA=a1+da/2;s+='<path d="'+arcPath(qv,26,a1,da)+'" fill="none" stroke="#7a4fb0" stroke-width="1.5"/><text x="'+(qv.x+46*Math.cos(midA)).toFixed(1)+'" y="'+(qv.y+46*Math.sin(midA)+4).toFixed(1)+'" font-size="12" fill="#7a4fb0" text-anchor="middle" font-weight="bold">'+Math.abs(da*180/Math.PI).toFixed(0)+'°</text>';}
     else if(o.type==="meastext"){var pp=P(o.at);var txt="";if(o.kind==="radius"){var host=byId(o.of);if(host)txt="r = "+(circGeom(host).r/30).toFixed(1)+" cm";}s+='<text x="'+(pp.x+10).toFixed(1)+'" y="'+(pp.y+18).toFixed(1)+'" font-size="12" fill="#7a4fb0" font-weight="bold">'+txt+'</text>';}
@@ -526,8 +531,9 @@ var ACT={
   mirrorline:function(){openMirrorDialog();},
   reflect:function(){var m=objects.filter(function(o){return o.isMirror&&isLineish(o);})[0];if(!m){need("a mirror first: select a line, then Transform → Mark mirror (or Transform → Mirror line by equation…).");return;}transformSel({id:nextId++,type:"tf",kind:"reflect",line:m.id},"Reflected in the mirror. Drag the object: its image follows.");},
   rotate:function(){var c=objects.filter(function(o){return o.isCentre&&o.type==="point";})[0];if(!c){need("a centre first: select a point, then Transform → Mark centre.");return;}if(!transformable().length){need("something to rotate: points, segments or a polygon (drag a box around a shape).");return;}openRotateDialog(c);},
+  enlarge:function(){var c=objects.filter(function(o){return o.isCentre&&o.type==="point";})[0];if(!c){need("a centre of enlargement first: select a point, then Transform → Mark centre.");return;}if(!transformable().length){need("something to enlarge: points, segments or a polygon (drag a box around a shape).");return;}openEnlargeDialog(c);},
   translate:function(){if(!transformable().length){need("something to translate: points, segments or a polygon (drag a box around a shape).");return;}openTranslateDialog();},
-  help:function(){openDialog("<h3>Quick reference</h3><p style='max-width:400px'>Left toolbox = <b>instruments</b> (draw points, segments, circles, and swing the compass). The top menus <b>act on the current selection</b>: switch to <b>Select</b>, click objects to build a selection, then choose an action.</p><ul style='max-width:400px'><li><b>Construct</b> builds dependent objects (midpoints, bisectors, perpendiculars, intersections).</li><li><b>Measure</b> reports lengths and angles.</li><li><b>Display</b> hides objects, toggles labels, and traces a point to reveal a locus.</li></ul><ul style='max-width:400px'><li><b>Graph</b> turns on a coordinate grid: 1 square is 1 unit, and points snap to grid points. <b>Graph → Plot points…</b> places points at coordinates you type, such as A(1, 2), B(4, 2), C(1, 5); they stay fixed (small squares) unless you tick “Let me drag them afterwards”.</li><li><b>Transform</b>: mark a mirror or a centre first, then select a shape and Reflect, Rotate or Translate. Images are labelled with a prime (A′) and follow the object when you drag it.</li></ul><p style='color:#6a6157'>Enlarge, Number/Calculator and Plot function are coming in later versions.</p>");}
+  help:function(){openDialog("<h3>Quick reference</h3><p style='max-width:400px'>Left toolbox = <b>instruments</b> (draw points, segments, circles, and swing the compass). The top menus <b>act on the current selection</b>: switch to <b>Select</b>, click objects to build a selection, then choose an action.</p><ul style='max-width:400px'><li><b>Construct</b> builds dependent objects (midpoints, bisectors, perpendiculars, intersections).</li><li><b>Measure</b> reports lengths and angles.</li><li><b>Display</b> hides objects, toggles labels, and traces a point to reveal a locus.</li></ul><ul style='max-width:400px'><li><b>Graph</b> turns on a coordinate grid: 1 square is 1 unit, and points snap to grid points. <b>Graph → Plot points…</b> places points at coordinates you type, such as A(1, 2), B(4, 2), C(1, 5); they stay fixed (small squares) unless you tick “Let me drag them afterwards”.</li><li><b>Transform</b>: mark a mirror or a centre first, then select a shape and Reflect, Rotate or Translate. Images are labelled with a prime (A′) and follow the object when you drag it.</li></ul><p style='color:#6a6157'><b>Transform → Enlarge…</b> uses the marked centre and a scale factor, such as 2, 1/2 or 1.5. In a task with target shapes, <b>✔ Check my image</b> compares your newest image with the targets. Number/Calculator and Plot function are coming in later versions.</p>");}
 };
 
 /* ---------- menu bar wiring ---------- */
@@ -560,7 +566,7 @@ document.getElementById("toolbox").addEventListener("click",function(e){var b=e.
 });
 
 /* ---------- serialisation + named-sketch store ---------- */
-function serialize(){return {version:"NEO-DGS-0.5",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
+function serialize(){return {version:"NEO-DGS-0.6",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
 function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;if(data.axes){AX.on=!!data.axes.on;AX.snap=data.axes.snap!==false;AX.coords=!!data.axes.coords;}sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
 function storeMap(){try{return JSON.parse(localStorage.getItem(LSKEY)||"{}");}catch(e){return {};}}
 function storeSet(m){try{localStorage.setItem(LSKEY,JSON.stringify(m));}catch(e){}}
@@ -593,7 +599,19 @@ function transformSel(tf,msg){var objs=transformable();if(!objs.length){need("so
       var have={};objs.forEach(function(q){if(q.type==="segment")have[q.a+"-"+q.b]=have[q.b+"-"+q.a]=1;});
       o.pts.forEach(function(a,i){var b=o.pts[(i+1)%o.pts.length];if(have[a+"-"+b])return;var edge=objects.filter(function(q){return q.type==="segment"&&((q.a===a&&q.b===b)||(q.a===b&&q.b===a));})[0];if(edge){have[a+"-"+b]=have[b+"-"+a]=1;objects.push({id:nextId++,type:"segment",a:img(a),b:img(b),img:true});}});}
   });
-  sel=[];render();followPts(Object.keys(map).map(function(k){return P(map[k]);}));setHint(msg);return true;}
+  lastMap=map;sel=[];render();followPts(Object.keys(map).map(function(k){return P(map[k]);}));setHint(msg);return true;}
+var lastMap={};
+/* a scale factor: 2, 1.5, 1/2, ½, ⅓, ¼, ¾, −2 */
+function sfIn(v){var t=String(v).trim().replace(/[−–—]/g,"-").replace(/\s+/g,"").replace(/½/g,"1/2").replace(/⅓/g,"1/3").replace(/⅔/g,"2/3").replace(/¼/g,"1/4").replace(/¾/g,"3/4");
+  var m=t.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);if(m){var d=parseFloat(m[2]);return d?parseFloat(m[1])/d:NaN;}
+  return /^-?\d+(\.\d+)?$/.test(t)?parseFloat(t):NaN;}
+function sfText(k,raw){var r=String(raw).trim();return /\/|½|⅓|⅔|¼|¾/.test(r)?r.replace(/-/g,"−"):fmtNum(k);}
+function openEnlargeDialog(c){openDialog('<h3>Enlarge from '+esc(c.label)+'</h3><p style="max-width:380px;color:#6a6157;margin:0 0 8px">Every point moves along the line from the centre, so that its distance from the centre is multiplied by the scale factor. A scale factor between 0 and 1 makes the shape smaller.</p><div class="row" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button data-q="2">2</button><button data-q="3">3</button><button data-q="1/2">1/2</button><button data-q="1/3">1/3</button></div><div class="row"><label>Scale factor <input id="enK" type="text" inputmode="decimal" value="" style="width:90px;padding:7px;border:1px solid #bcae98;border-radius:8px" aria-label="scale factor"></label></div><div class="row" style="margin-top:8px"><label><input type="checkbox" id="enRays" checked> Draw rays from the centre through each corner</label></div><p id="enMsg" style="color:#7a2b1c;min-height:1.2em;margin:6px 0 0"></p>',
+  [{label:"Enlarge",primary:true,fn:function(){var raw=document.getElementById("enK").value,k=sfIn(raw);if(isNaN(k)||k===0){document.getElementById("enMsg").textContent="Type the scale factor as a number or a fraction, such as 3 or 1/4.";return;}var rays=document.getElementById("enRays").checked;closeDialog();
+    if(transformSel({id:nextId++,type:"tf",kind:"enlarge",c:c.id,k:k,kText:sfText(k,raw)},"Enlarged by scale factor "+sfText(k,raw)+" from "+esc(c.label)+". Every distance from the centre is multiplied by the scale factor."+(rays?" The rays from the centre pass through each corner and its image.":""))&&rays){
+      Object.keys(lastMap).forEach(function(pid){var far=Math.abs(k)>=1?lastMap[pid]:+pid;objects.push({id:nextId++,type:"segment",a:c.id,b:far,ray:true});});render();}}}]);
+  dialog.querySelectorAll("button[data-q]").forEach(function(b){b.onclick=function(){document.getElementById("enK").value=b.dataset.q;};});
+  setTimeout(function(){var i=document.getElementById("enK");if(i)i.focus();},20);}
 /* scrolling: show points that are out of view; centre the view on a point */
 var scroller=document.getElementById("canvasScroll");
 function viewCentreOn(x,y){if(!scroller)return;scroller.scrollLeft=Math.max(0,(x-WX0)-scroller.clientWidth/2);scroller.scrollTop=Math.max(0,(y-WY0)-scroller.clientHeight/2);}
@@ -1108,6 +1126,32 @@ var TASKS={
           "Save your work, with a sentence explaining why all three images are congruent to ABCD."],
    big:"Save your work and a sentence: these transformations keep lengths and angles, so every image is congruent.",
    conj:"Which of the three images could be slid onto ABCD without turning it over?"},
+ "ts05-describe":{
+   tag:"Transformations · Lesson 5 · Movement",
+   title:"Describe it, then check it",
+   intro:"Triangle ABC is fixed. Three targets are drawn in gold. Find the single transformation that maps ABC onto each target, carry it out, and check it.",
+   setup:{axes:true,coords:true,fixed:true,pts:[["A",1,1],["B",3,1],["C",1,4]],polys:[["A","B","C"]],
+     targets:[{pts:[["A₁",-3,1],["B₁",-5,1],["C₁",-3,4]]},{pts:[["A₂",2,-2],["B₂",2,-4],["C₂",5,-2]]},{pts:[["A₃",-4,-5],["B₃",-2,-5],["C₃",-4,-2]]}],next:3},
+   check:{obj:["A","B","C"],targets:[{name:"Target 1",labs:["A₁","B₁","C₁"],ans:{kind:"reflect"}},{name:"Target 2",labs:["A₂","B₂","C₂"],ans:{kind:"rotate",deg:-90}},{name:"Target 3",labs:["A₃","B₃","C₃"],ans:{kind:"translate"}}]},
+   steps:["Look at Target 1 (A₁B₁C₁): was it reflected, rotated or translated? Is it turned over, turned, or slid with every side pointing the same way?",
+          "Mark what you need. For a mirror: Transform → Mirror line by equation…. For a centre: Graph → Plot points… to place the point, select it, then Transform → Mark centre.",
+          "Drag a box around ABC, then Reflect, Rotate or Translate.",
+          "Press ✔ Check my image. It says what matches and what does not. Use Undo and try again if you need to.",
+          "Do the same for Targets 2 and 3, and write a full description of each in “What do you notice?”."],
+   big:"A full description: a reflection needs its mirror line; a rotation needs its centre, angle and direction; a translation needs its column vector.",
+   conj:"Write a full description of each target."},
+ "ts05-final":{
+   tag:"Transformations · Lesson 5 · Final Task",
+   title:"Your full description file",
+   intro:"Make three moves of one shape, one of each type, and write a full description of each.",
+   setup:{axes:true,coords:true,pts:[["A",-2,1],["B",1,1],["C",-2,3]],polys:[["A","B","C"]],next:3},
+   steps:["Reflect ABC in a mirror line of your choice (Transform → Mirror line by equation…).",
+          "Rotate ABC about a centre of your choice: plot it with Graph → Plot points…, then Transform → Mark centre.",
+          "Translate ABC by a column vector of your choice.",
+          "Write a full description of each image, and how you would find each detail if you only had the picture.",
+          "Stretch: write a vague description that fits two of your images, and say which detail would tell them apart."],
+   big:"Save your work and your three full descriptions.",
+   conj:"Which detail is the easiest to leave out by mistake, and why?"},
  "studio-open":{
    tag:"Open workspace",
    title:"Your construction space",
@@ -1120,12 +1164,50 @@ function twSet(m){try{localStorage.setItem(TKEY,JSON.stringify(m));}catch(e){}}
 function qparam(name){var m=new RegExp("[?&]"+name+"=([^&]*)").exec(window.location.search);return m?decodeURIComponent(m[1].replace(/\+/g," ")):null;}
 function safeReturn(u){ if(!u) return null; if(/^[a-z][a-z0-9+.-]*:/i.test(u)||u.indexOf("//")===0) return null; return u; } /* relative same-site only */
 function buildSetup(su){if(su.axes)AX.on=true;if(su.coords)AX.coords=true;var byLab={};
-  (su.pts||[]).forEach(function(q){var p=fromU(q[1],q[2]);var o={id:nextId++,type:"point",kind:"free",x:p.x,y:p.y,label:q[0]};objects.push(o);byLab[q[0]]=o.id;});
+  (su.pts||[]).forEach(function(q){var p=fromU(q[1],q[2]);var o={id:nextId++,type:"point",kind:su.fixed?"fixed":"free",x:p.x,y:p.y,label:q[0]};objects.push(o);byLab[q[0]]=o.id;});
+  (su.targets||[]).forEach(function(T){var ids=T.pts.map(function(q){var p=fromU(q[1],q[2]);var o={id:nextId++,type:"point",kind:"fixed",x:p.x,y:p.y,label:q[0],colour:"#9a6b12"};objects.push(o);byLab[q[0]]=o.id;return o.id;});
+    objects.push({id:nextId++,type:"polygon",pts:ids,fill:"#f2c14e",target:true});ids.forEach(function(a,i){objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length],colour:"#b8860b"});});});
   (su.polys||[]).forEach(function(L){var ids=L.map(function(l){return byLab[l];});objects.push({id:nextId++,type:"polygon",pts:ids,fill:su.fill||"#9ec7e8"});ids.forEach(function(a,i){objects.push({id:nextId++,type:"segment",a:a,b:ids[(i+1)%ids.length]});});});
   (su.segs||[]).forEach(function(L){objects.push({id:nextId++,type:"segment",a:byLab[L[0]],b:byLab[L[1]]});});
   (su.eq||[]).forEach(function(e){var o=addEqLine(e[0],e[1]);if(e[2])o.isMirror=true;});
   if(su.centre&&byLab[su.centre])byId(byLab[su.centre]).isCentre=true;
   pointLabel=su.next||pointLabel;}
+/* ---------- v0.6 task checker: compares the newest image of the object with each target ---------- */
+function ptByLabel(l){return objects.filter(function(o){return o.type==="point"&&o.label===l;})[0];}
+function uPt(id){var q=toU(P(id));return [Math.round(q.x*1e6)/1e6,Math.round(q.y*1e6)/1e6];}
+function cName(c){return "("+fmtNum(c[0])+", "+fmtNum(c[1])+")";}
+function d2u(a,b){return (a[0]-b[0])*(a[0]-b[0])+(a[1]-b[1])*(a[1]-b[1]);}
+function sides(Q){return Q.map(function(p,i){return d2u(p,Q[(i+1)%Q.length]);});}
+function orientU(Q){return Math.sign((Q[1][0]-Q[0][0])*(Q[2][1]-Q[0][1])-(Q[2][0]-Q[0][0])*(Q[1][1]-Q[0][1]));}
+function normDeg(d){return ((Math.round(d)%360)+360)%360;}
+function tfText(tf){if(tf.kind==="reflect"){var L=byId(tf.line);return "a reflection in "+(L&&L.kind==="eq"?"the line "+eqLabel(L):"the marked mirror");}
+  if(tf.kind==="rotate"){var d=normDeg(tf.deg);return "a rotation of "+(d===180?"180°":fmtNum(Math.abs(tf.deg))+"° "+(tf.deg>=0?"anticlockwise":"clockwise"))+" about "+cName(uPt(tf.c));}
+  if(tf.kind==="translate")return "a translation by the column vector with first number "+fmtNum(tf.dx)+" and second number "+fmtNum(tf.dy);
+  if(tf.kind==="enlarge")return "an enlargement with scale factor "+(tf.kText||fmtNum(tf.k))+" from "+cName(uPt(tf.c));return "a transformation";}
+function ansText(a){return a.kind==="reflect"?"a reflection":a.kind==="rotate"?"a rotation":a.kind==="translate"?"a translation":"an enlargement";}
+function checkTask(t){var C=t.check,objIds=C.obj.map(function(l){var o=ptByLabel(l);return o&&o.id;});
+  if(objIds.some(function(x){return !x;}))return {ok:false,msg:"The shape "+C.obj.join("")+" is missing. Use Undo, or reload the task."};
+  var groups=objects.filter(function(o){return o.type==="tf";}).map(function(tf){var ims=objIds.map(function(oid){var im=objects.filter(function(q){return q.type==="point"&&q.kind==="image"&&q.tf===tf.id&&q.of===oid;})[0];return im&&im.id;});return ims.every(Boolean)?{tf:tf,Q:ims.map(uPt)}:null;}).filter(Boolean);
+  if(!groups.length)return {ok:false,msg:"Make an image first: drag a box around "+C.obj.join("")+", then choose a transformation from the Transform menu."};
+  var targets=C.targets.map(function(T){return {name:T.name,labs:T.labs,ans:T.ans,Q:T.labs.map(function(l){return uPt(ptByLabel(l).id);})};});
+  var same=function(A,B){return A.every(function(p,i){return d2u(p,B[i])<1e-9;});};
+  var matched=targets.filter(function(T){return groups.some(function(g){return same(g.Q,T.Q);});}).map(function(T){return T.name;});
+  var g=groups[groups.length-1],A0=C.obj[0],hit=targets.filter(function(T){return same(g.Q,T.Q);})[0];
+  var tally=targets.length>1?"<br><span style='color:#6a6157'>Targets reached so far: "+(matched.length?matched.join(", "):"none")+" ("+matched.length+" of "+targets.length+").</span>":"";
+  if(hit)return {ok:true,msg:"✓ Your newest image lands exactly on "+hit.name+" ("+hit.labs.join("")+"). It is <b>"+tfText(g.tf)+"</b>."+tally};
+  var pool=targets.filter(function(X){return X.ans.kind===g.tf.kind&&matched.indexOf(X.name)<0;});if(!pool.length)pool=targets.filter(function(X){return matched.indexOf(X.name)<0;});if(!pool.length)pool=targets;
+  var T=pool.slice().sort(function(a,b){var s=function(X){return X.Q.reduce(function(t,p,i){return t+d2u(p,g.Q[i]);},0);};return s(a)-s(b);})[0];
+  var num=function(a,b){return a-b;},sa=sides(g.Q).slice().sort(num),sb=sides(T.Q).slice().sort(num),congr=sa.every(function(v,i){return Math.abs(v-sb[i])<1e-9;}),
+      sim=sa.every(function(v,i){return Math.abs(v*sb[0]-sb[i]*sa[0])<1e-9;}),m="Compared with "+T.name+" ("+T.labs.join("")+"): ";
+  m+=congr?"same size and shape":(sim?"the same shape, but a different size":"a different shape");
+  var tk=g.tf.kind,a=T.ans;
+  if(orientU(g.Q)!==orientU(T.Q)&&congr)m+=", but it faces the other way: "+(a.kind==="reflect"?"the target has been turned over, so it needs a reflection.":"the target has not been turned over, so it does not need a reflection.");
+  else if(tk!==a.kind)m+=", but "+ansText(a)+" is needed, not "+ansText(g.tf)+".";
+  else if(tk==="reflect"){var L=byId(g.tf.line);m+=", turned over like the target, but the mirror line is not "+(L&&L.kind==="eq"?eqLabel(L):"the one you marked")+". The mirror line is halfway between "+A0+" and "+T.labs[0]+".";}
+  else if(tk==="rotate"){if(normDeg(g.tf.deg)===normDeg(a.deg))m+=": the angle and direction are right, but the centre is not "+cName(uPt(g.tf.c))+".";else if(normDeg(-g.tf.deg)===normDeg(a.deg))m+=", but the direction is reversed.";else m+=", but the angle is not right: how far has side "+C.obj[0]+C.obj[1]+" turned?";}
+  else if(tk==="translate")m+=", but the column vector is not right: "+A0+" goes to "+cName(g.Q[0])+", not to "+T.labs[0]+" "+cName(T.Q[0])+".";
+  else if(tk==="enlarge")m+=Math.abs(g.tf.k-a.k)<1e-9?": the scale factor is right, but the centre is not "+cName(uPt(g.tf.c))+".":", but the scale factor is not "+(g.tf.kText||fmtNum(g.tf.k))+".";
+  return {ok:false,msg:m+tally};}
 function tlStatus(msg){var s=document.getElementById("tlStatus");if(s)s.textContent=msg||"";}
 function bootTaskContext(){
   var ret=safeReturn(qparam("return"));
@@ -1149,10 +1231,11 @@ function bootTaskContext(){
   if(saved){ if(saved.conjecture)conj.value=saved.conjecture;
     if(saved.sketch){try{loadData(saved.sketch);tlStatus("Restored your earlier work on this task.");}catch(e){}}
   }
+  if(t.check){document.getElementById("tlCheckRow").hidden=false;document.getElementById("tlCheck").onclick=function(){var r=checkTask(t);var box=document.getElementById("tlCheckOut");box.hidden=false;box.className="tl-check"+(r.ok?" good":"");box.innerHTML=r.msg;};}
   document.getElementById("tlSaveWork").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].sketch=serialize();twSet(m);tlStatus("Construction saved on this device. It will be here when you return.");};
   document.getElementById("tlSaveConj").onclick=function(){var m=twMap();m[id]=m[id]||{};m[id].conjecture=conj.value;twSet(m);tlStatus("Saved what you noticed.");};
 }
-window.NEO_DGS={objects:function(){return objects;},P:P,ACT:ACT,AX:AX,toU:toU,fromU:fromU,byId:byId,setSel:function(a){sel=a.slice();},getSel:function(){return sel.slice();},transformSel:transformSel,TASKS:TASKS,render:render,snapPos:snapPos,undo:doUndo,serialize:serialize,loadData:loadData,lineGeom:lineGeom,addFreePoint:addFreePoint,plotPoints:plotPoints,parsePoints:parsePoints,enclosed:enclosed,world:{x0:WX0,y0:WY0,w:WW,h:WH},scroller:function(){return scroller;}};
+window.NEO_DGS={objects:function(){return objects;},P:P,ACT:ACT,AX:AX,toU:toU,fromU:fromU,byId:byId,setSel:function(a){sel=a.slice();},getSel:function(){return sel.slice();},transformSel:transformSel,TASKS:TASKS,checkTask:checkTask,sfIn:sfIn,render:render,snapPos:snapPos,undo:doUndo,serialize:serialize,loadData:loadData,lineGeom:lineGeom,addFreePoint:addFreePoint,plotPoints:plotPoints,parsePoints:parsePoints,enclosed:enclosed,world:{x0:WX0,y0:WY0,w:WW,h:WH},scroller:function(){return scroller;}};
 if(scroller){scroller.scrollLeft=-WX0;scroller.scrollTop=-WY0;}
 bootTaskContext();
 

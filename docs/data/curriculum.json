@@ -468,6 +468,14 @@
           "file": "lessons/transformations-similarity-and-scale/04-congruence.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-05-describing",
+          "num": "Lesson 05",
+          "title": "Describing transformations fully",
+          "file": "lessons/transformations-similarity-and-scale/05-describing-transformations.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
