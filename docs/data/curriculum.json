@@ -476,6 +476,14 @@
           "file": "lessons/transformations-similarity-and-scale/05-describing-transformations.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-06-enlargement",
+          "num": "Lesson 06",
+          "title": "Enlargement",
+          "file": "lessons/transformations-similarity-and-scale/06-enlargement.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEO Dynamic Geometry Studio — v0.6</title>
+<title>NEO Dynamic Geometry Studio — v0.6.1</title>
 <style>
 body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif}
 .wrap{max-width:1040px;margin:auto;padding:14px}
@@ -74,7 +74,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 <div class="topbar">
   <div class="titleblock">
     <h1>Dynamic Geometry Studio <span id="sketchName" style="font-size:.62em;font-weight:normal;color:#6a7f4e">— (unsaved)</span></h1>
-    <p class="sub">v0.6 — a coordinate grid and transformations, now with Enlarge and a task checker. Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
+    <p class="sub">v0.6.1 — a coordinate grid and transformations, now with Enlarge and a task checker. Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
   </div>
   <a id="returnBtn" class="returnbtn" href="#" hidden>← Return to lesson</a>
 </div>
@@ -374,13 +374,37 @@ function render(){
     if(compass.stage==="radius"){var r=Math.hypot(hover.x-cc.x,hover.y-cc.y);s+='<circle cx="'+cc.x.toFixed(1)+'" cy="'+cc.y.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="none" stroke="#b9a05f" stroke-width="1.2" stroke-dasharray="4 4"/><line x1="'+cc.x.toFixed(1)+'" y1="'+cc.y.toFixed(1)+'" x2="'+hover.x.toFixed(1)+'" y2="'+hover.y.toFixed(1)+'" stroke="#b9a05f" stroke-width="1" stroke-dasharray="3 3"/>';}
     else if(compass.stage==="swing"){var r2=(compass.mode==="len")?segLen(compass.seg):dist(cc,P(compass.rp));s+='<circle cx="'+cc.x.toFixed(1)+'" cy="'+cc.y.toFixed(1)+'" r="'+r2.toFixed(1)+'" fill="none" stroke="#ddd0b5" stroke-width="1" stroke-dasharray="2 5"/><path d="'+arcPath(cc,r2,compass.start,compass.swept)+'" fill="none" stroke="#2b6cb0" stroke-width="1.8"/>';var tip={x:cc.x+r2*Math.cos(compass.start+compass.swept),y:cc.y+r2*Math.sin(compass.start+compass.swept)};s+='<circle cx="'+tip.x.toFixed(1)+'" cy="'+tip.y.toFixed(1)+'" r="3.5" fill="#2b6cb0"/>';}
   }
-  // points
+  // points: each label sits outside its shape, away from the shape's centre, and clear of other labels
+  var LBA={},LBL=[];objects.forEach(function(o){if(o.hidden)return;var ids=o.type==="polygon"?o.pts:(o.type==="segment"&&o.a!=null&&o.b!=null)?[o.a,o.b]:null;if(!ids)return;
+    var cx=0,cy=0;ids.forEach(function(i){var q=P(i);cx+=q.x;cy+=q.y;});cx/=ids.length;cy/=ids.length;
+    ids.forEach(function(i){if(o.type==="polygon"||!LBA[i]){var q=P(i);LBA[i]={x:q.x-cx,y:q.y-cy};}});});
   objects.forEach(function(o){if(o.type==="point"&&!o.hidden){var p=P(o.id),free=o.kind==="free";
     if(isSel(o.id))s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="10" fill="#e79b5a" fill-opacity="0.35" stroke="#c1622e" stroke-width="2"/>';
     if(o.kind==="fixed")s+='<rect x="'+(p.x-5).toFixed(1)+'" y="'+(p.y-5).toFixed(1)+'" width="10" height="10" fill="'+(o.colour||"#2f3429")+'" stroke="#fff" stroke-width="1.5" data-fixed="1"/>';
     else s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(free?5:4)+'" fill="'+(o.colour||(free?"#2f3429":"#b25f2e"))+'" stroke="#fff" stroke-width="1.5"/>';
     if(o.isCentre)s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="13" fill="none" stroke="#7a4fb0" stroke-width="2" stroke-dasharray="4 3"/>';
-    if(labelsShown){var lt=esc(o.label);if(AX.on&&AX.coords){var q=toU(p);lt+=' <tspan font-style="normal">('+fmtNum(q.x)+', '+fmtNum(q.y)+')</tspan>';}s+='<text x="'+(p.x+8).toFixed(1)+'" y="'+(p.y-8).toFixed(1)+'" font-size="14" font-family="Georgia,serif" font-style="italic" fill="#2f3429">'+lt+'</text>';}}});
+    if(labelsShown){var lt=esc(o.label);if(AX.on&&AX.coords){var q=toU(p);lt+=' <tspan font-style="normal">('+fmtNum(q.x)+', '+fmtNum(q.y)+')</tspan>';}LBL.push({id:o.id,p:p,lt:lt,n:String(o.label||"").length+(AX.on&&AX.coords?String(fmtNum(toU(p).x)).length+String(fmtNum(toU(p).y)).length+5:0),lab:o.label});}}});
+  if(LBL.length){var DIRS=[[1,-1],[-1,-1],[1,1],[-1,1],[1,0],[-1,0],[0,-1],[0,1]],placed=[],dots=LBL.map(function(L){return{x0:L.p.x-6,x1:L.p.x+6,y0:L.p.y-6,y1:L.p.y+6};});
+    // what a label should keep clear of: other labels, points, the axes and their numbers, shapes and their sides
+    var polys=objects.filter(function(o){return o.type==="polygon"&&!o.hidden;}).map(function(o){return o.pts.map(P);}),edges=[];
+    polys.forEach(function(V){V.forEach(function(v,i){edges.push([v,V[(i+1)%V.length]]);});});
+    objects.forEach(function(o){if(o.type==="segment"&&!o.hidden&&o.a!=null&&o.b!=null)edges.push([P(o.a),P(o.b)]);});
+    var O=AX.on?fromU(0,0):null;
+    function bx(L,d){var w=L.n*7.6+2,x=L.p.x+(d[0]>0?9:d[0]<0?-9:0),y=L.p.y+(d[1]>0?20:d[1]<0?-9:5),a=d[0]>0?"start":d[0]<0?"end":"middle",x0=a==="end"?x-w:a==="middle"?x-w/2:x;return{x:x,y:y,a:a,x0:x0,x1:x0+w,y0:y-13,y1:y+3};}
+    function hit(b,list){return list.filter(function(c){return b.x0<c.x1&&c.x0<b.x1&&b.y0<c.y1&&c.y0<b.y1;}).length;}
+    function cost(b,k){var c=100*hit(b,placed)+60*hit(b,dots.filter(function(_,j){return j!==k;}));
+      if(O){if(b.y0<O.y+20&&b.y1>O.y-3)c+=30;if(b.x0<O.x+3&&b.x1>O.x-28)c+=30;}
+      var S=[];for(var i=0;i<=4;i++)for(var j=0;j<=2;j++)S.push({x:b.x0+(b.x1-b.x0)*i/4,y:b.y0+(b.y1-b.y0)*j/2});
+      polys.forEach(function(V){S.forEach(function(q){if(pointInPoly(q,V))c+=3;});});
+      edges.forEach(function(e){for(var t=0.04;t<0.97;t+=0.06){var q={x:e[0].x+(e[1].x-e[0].x)*t,y:e[0].y+(e[1].y-e[0].y)*t};if(q.x>b.x0&&q.x<b.x1&&q.y>b.y0&&q.y<b.y1){c+=12;break;}}});
+      return c;}
+    LBL.forEach(function(L,k){var v=LBA[L.id],len=v?Math.hypot(v.x,v.y):0,pref=[1,-1];
+      if(len){var ux=v.x/len,uy=v.y/len;pref=[ux>0.3?1:ux<-0.3?-1:0,uy>0.3?1:uy<-0.3?-1:0];if(!pref[0]&&!pref[1])pref=[1,-1];}
+      else{var nb=null,bd=1e9;LBL.forEach(function(M){if(M!==L){var dd=Math.hypot(M.p.x-L.p.x,M.p.y-L.p.y);if(dd<bd){bd=dd;nb=M;}}});if(nb&&bd<160){var ax=L.p.x-nb.p.x,ay=L.p.y-nb.p.y,al=Math.hypot(ax,ay)||1;pref=[ax/al>0.3?1:ax/al<-0.3?-1:0,ay/al>0.3?1:ay/al<-0.3?-1:0];if(!pref[0]&&!pref[1])pref=[1,-1];}}
+      var cands=[pref].concat(DIRS.slice().sort(function(a,b){return (Math.abs(a[0]-pref[0])+Math.abs(a[1]-pref[1]))-(Math.abs(b[0]-pref[0])+Math.abs(b[1]-pref[1]));})),best=null,bc=1e9;
+      cands.forEach(function(d,i){var b=bx(L,d),c=cost(b,k)+i*0.5;if(c<bc){bc=c;best=b;}});
+      placed.push(best);
+      s+='<text x="'+best.x.toFixed(1)+'" y="'+best.y.toFixed(1)+'" text-anchor="'+best.a+'" font-size="14" font-family="Georgia,serif" font-style="italic" fill="#2f3429" stroke="#fbf8f1" stroke-width="4" stroke-linejoin="round" paint-order="stroke" data-plabel="'+esc(L.lab)+'">'+L.lt+'</text>';});}
   pending.forEach(function(id){if(typeof id!=="number")return;var p=P(id);s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="9" fill="none" stroke="#c1622e" stroke-width="1.5" stroke-dasharray="3 3"/>';});
   if(drag&&drag.kind==="marquee"&&drag.moved){var x0=Math.min(drag.start.x,drag.last.x),y0=Math.min(drag.start.y,drag.last.y),ww=Math.abs(drag.last.x-drag.start.x),hh=Math.abs(drag.last.y-drag.start.y);s+='<rect x="'+x0.toFixed(1)+'" y="'+y0.toFixed(1)+'" width="'+ww.toFixed(1)+'" height="'+hh.toFixed(1)+'" fill="#3f5f45" fill-opacity="0.08" stroke="#3f5f45" stroke-width="1" stroke-dasharray="5 4"/>';}
   svg.innerHTML=s;
@@ -566,7 +590,7 @@ document.getElementById("toolbox").addEventListener("click",function(e){var b=e.
 });
 
 /* ---------- serialisation + named-sketch store ---------- */
-function serialize(){return {version:"NEO-DGS-0.6",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
+function serialize(){return {version:"NEO-DGS-0.6.1",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
 function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;if(data.axes){AX.on=!!data.axes.on;AX.snap=data.axes.snap!==false;AX.coords=!!data.axes.coords;}sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
 function storeMap(){try{return JSON.parse(localStorage.getItem(LSKEY)||"{}");}catch(e){return {};}}
 function storeSet(m){try{localStorage.setItem(LSKEY,JSON.stringify(m));}catch(e){}}
@@ -1152,6 +1176,32 @@ var TASKS={
           "Stretch: write a vague description that fits two of your images, and say which detail would tell them apart."],
    big:"Save your work and your three full descriptions.",
    conj:"Which detail is the easiest to leave out by mistake, and why?"},
+ "ts06-enlarge":{
+   tag:"Transformations · Lesson 6 · Movement",
+   title:"Enlarge onto the targets",
+   intro:"Triangle ABC is fixed. Two targets are drawn in gold: each is an enlargement of ABC. Find the scale factor and the centre for each, carry it out, and check it.",
+   setup:{axes:true,coords:true,fixed:true,pts:[["A",1,1],["B",3,1],["C",1,3]],polys:[["A","B","C"]],
+     targets:[{pts:[["A₁",3,2],["B₁",7,2],["C₁",3,6]]},{pts:[["A₂",3,-2],["B₂",4,-2],["C₂",3,-1]]}],next:3},
+   check:{obj:["A","B","C"],targets:[{name:"Target 1",labs:["A₁","B₁","C₁"],ans:{kind:"enlarge",k:2}},{name:"Target 2",labs:["A₂","B₂","C₂"],ans:{kind:"enlarge",k:0.5}}]},
+   steps:["Find the scale factor for Target 1: how many times as long as AB is A₁B₁?",
+          "Find the centre: it is on the line through A and A₁, and on the line through B and B₁. Place it with Graph → Plot points…, select it, then Transform → Mark centre.",
+          "Drag a box around ABC, then Transform → Enlarge from the marked centre…, and type the scale factor (fractions such as 1/2 are fine).",
+          "Press ✔ Check my image. It says what matches: the size, the centre, or both.",
+          "Do the same for Target 2, and write a full description of each enlargement in “What do you notice?”."],
+   big:"An enlargement is described fully by its scale factor and its centre.",
+   conj:"Write a full description of each target."},
+ "ts06-final":{
+   tag:"Transformations · Lesson 6 · Final Task",
+   title:"Grow and shrink",
+   intro:"Make two enlargements of one shape, one with a whole-number scale factor and one with a fractional scale factor, and show the evidence.",
+   setup:{axes:true,coords:true,pts:[["A",-2,-2],["B",2,-2],["C",2,0],["D",-2,2]],polys:[["A","B","C","D"]],next:4},
+   steps:["Plot a centre of enlargement with Graph → Plot points…, select it, then Transform → Mark centre.",
+          "Drag a box around ABCD, then Transform → Enlarge… with a whole-number scale factor. Keep the rays.",
+          "Do it again with a fractional scale factor, such as 1/2.",
+          "Measure one side and one angle of ABCD and of each image (Measure → Distance and Measure → Angle).",
+          "Save your work, with a full description of each enlargement."],
+   big:"Save your work and a sentence: every length is multiplied by the scale factor, and every angle stays the same.",
+   conj:"What happens to the image when you drag the centre?"},
  "studio-open":{
    tag:"Open workspace",
    title:"Your construction space",
