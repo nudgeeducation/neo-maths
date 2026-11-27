@@ -492,6 +492,14 @@
           "file": "lessons/transformations-similarity-and-scale/07-similar-shapes.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-08-missing-lengths",
+          "num": "Lesson 08",
+          "title": "Missing lengths in similar shapes",
+          "file": "lessons/transformations-similarity-and-scale/08-missing-lengths.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
