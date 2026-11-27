@@ -484,6 +484,14 @@
           "file": "lessons/transformations-similarity-and-scale/06-enlargement.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-07-similar",
+          "num": "Lesson 07",
+          "title": "Similar shapes",
+          "file": "lessons/transformations-similarity-and-scale/07-similar-shapes.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },

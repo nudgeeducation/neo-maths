@@ -202,6 +202,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_05_Describing_Transformations/NEO_Maths_Y9_Transformations_Lesson_05_Describing_Transformations_v0.1.html",
     "ts-06-enlargement":
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_06_Enlargement/NEO_Maths_Y9_Transformations_Lesson_06_Enlargement_v0.1.html",
+    "ts-07-similar":
+        "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_07_Similar_Shapes/NEO_Maths_Y9_Transformations_Lesson_07_Similar_Shapes_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

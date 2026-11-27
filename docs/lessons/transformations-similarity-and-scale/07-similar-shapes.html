@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Similar shapes</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Transformations, Similarity and Scale &middot; <strong>Lesson 07 &mdash; Similar shapes</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.gsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px;touch-action:manipulation}
+.gsvg .gl{stroke:#e2d9c8;stroke-width:1}.gsvg .ax{stroke:#2f3429;stroke-width:1.6}
+.gsvg .tn{font-family:Arial,sans-serif;font-size:11px;fill:#5c6b4f}.gsvg .ti{font-family:Georgia,serif;font-style:italic;font-size:12px}
+.gsvg .axl{font-family:Georgia,serif;font-style:italic;font-size:16px;fill:#2f3429}
+.gsvg .mir{stroke:#7a4fb0;stroke-width:3}.gsvg .mir.try{stroke-dasharray:7 5}
+.gsvg .mlab{font-family:Georgia,serif;font-size:14px;fill:#7a4fb0;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:4}
+.gsvg .obj{fill:rgba(47,109,176,.28);stroke:#2b6cb0;stroke-width:2.2}.gsvg .objv{fill:#2b6cb0;stroke:#fff;stroke-width:1.5}
+.gsvg .img{fill:rgba(242,193,78,.45);stroke:#b8860b;stroke-width:2.2}.gsvg .imgv{fill:#b8860b;stroke:#fff;stroke-width:1.5}
+.gsvg .try{fill:none;stroke:#b0412f;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.gsvg .perp{stroke:#3f7a45;stroke-width:1.6;stroke-dasharray:5 4}
+.gsvg .selv{fill:none;stroke:#c1622e;stroke-width:2;stroke-dasharray:3 3}
+.gsvg .mid{fill:#3f7a45;stroke:#fff;stroke-width:1.5}.gsvg .ra{fill:none;stroke:#3f7a45;stroke-width:1.8}
+.gsvg .hl{stroke:#b0412f;stroke-width:3.5}.gsvg .mid.hl{fill:#b0412f}.gsvg .hlv{stroke:#b0412f;stroke-width:3}
+.lab .row2{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;margin:6px 0}
+.lab .chip.on,.md .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.lab table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}
+.lab table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df}
+.lab table.lt td:not(:last-child){white-space:nowrap}
+@media (max-width:520px){.lab table.lt{font-size:.88em}.lab table.lt td{padding:3px 4px}}
+.arrows button{min-width:38px}
+table.rt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif;font-size:1.05em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 14px;text-align:center}table.rt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.ru .opts,.md .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ru .opts .chip{font-family:Georgia,serif;font-size:1.05em}
+.wl .ask{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0}
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.studio{border:2px solid #365a68;background:#eef3f6}
+@media (max-width:520px){.gsvg .tn{font-size:14px}.gsvg .vl{font-size:17px}.gsvg .mlab{font-size:17px}.gsvg .axl{font-size:19px}}
+.gsvg .cen{fill:#7a4fb0;stroke:#fff;stroke-width:1.5}.gsvg .cenr{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:4 3}
+.gsvg .arc{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .target{fill:none;stroke:#b8860b;stroke-width:2.4;stroke-dasharray:6 4}
+.gsvg .sheet{fill:rgba(255,255,255,.55);stroke:#9fb0a3;stroke-width:1.5}.gsvg .trace{fill:rgba(176,65,47,.18);stroke:#b0412f;stroke-width:2.2}
+.gsvg .ghost{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .badge{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#5a3f10}
+.gsvg .rad{stroke:#3f7a45;stroke-width:2}.gsvg .bis{stroke:#7a4fb0;stroke-width:2;stroke-dasharray:6 4}
+.st .opts,.dz .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.dzscroll{max-width:660px;height:min(620px,88vw);overflow:auto;margin:6px auto;border:2px solid #c9d6bf;border-radius:12px;background:#fbf8f1;-webkit-overflow-scrolling:touch}
+.dzscroll .gsvg.big{max-width:none;width:auto;margin:0;border:none;border-radius:0}
+.dz .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.dz ol{margin:6px 0 6px 22px;font-family:Georgia,serif}
+.tp .turns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.cv{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:1px 7px;margin:0 3px;border-left:2px solid currentColor;border-right:2px solid currentColor;border-radius:9px;line-height:1.15;font-family:Georgia,serif}
+.cv>span{min-width:1.4em;text-align:center}
+.cvin{display:inline-flex;align-items:center;gap:4px;font-size:2.2em;font-family:Georgia,serif;color:#5c6b60;vertical-align:middle}
+.cvin .stack{display:inline-flex;flex-direction:column;gap:4px}
+.cvin input{width:64px;font-size:.42em;padding:5px 6px;text-align:center;border:1.5px solid #9fb0a3;border-radius:8px}
+.gsvg .vec{stroke:#3f7a45;stroke-width:2.2}.gsvg .vec.big{stroke-width:3.2}.gsvg .vec.back{stroke:#b0412f;stroke-dasharray:6 4}.gsvg .vec.sum{stroke:#7a4fb0;stroke-width:3}
+.gsvg .star{font-size:24px;fill:#b8860b}.gsvg .token{fill:#b0412f;stroke:#fff;stroke-width:2}
+.vm .row2,.tt .row2{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;align-items:center;margin:6px 0}
+.vm .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.vm .stepcv{display:inline-flex;align-items:center;gap:10px;font-family:Georgia,serif}
+.vm .stepcv .col{display:inline-flex;flex-direction:column;justify-content:space-around;gap:10px;border-left:2.5px solid #2f3429;border-right:2.5px solid #2f3429;border-radius:16px;padding:6px 14px;min-height:92px}
+.vm .stepcv .btns{display:inline-flex;flex-direction:column;gap:8px}
+.vm .stepcv b{min-width:40px;text-align:center;font-size:1.45em;line-height:1.3}
+.vm table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}.vm table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df;white-space:nowrap}
+.vx .opts,.tt .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.vchip{font-size:1.15em;padding:6px 12px}
+.tt .mv{display:inline-block;margin:2px 6px}
+.gsvg .img2{fill:rgba(63,143,79,.28);stroke:#3f7a45;stroke-width:2.2}.gsvg .img2v{fill:#3f7a45;stroke:#fff;stroke-width:1.5}
+.gsvg .vl.big{font-size:20px;font-weight:700}
+.gsvg .target2{fill:rgba(63,143,79,.2);stroke:#3f7a45;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .pinv{fill:#b0412f;stroke:#fff;stroke-width:1.5}
+.gsvg .ghost2{fill:none;stroke:#9fb0a3;stroke-width:1.5;stroke-dasharray:3 4}
+.gsvg .seg{stroke:#2b6cb0;stroke-width:3}.gsvg .legs{fill:none;stroke:#3f7a45;stroke-width:2;stroke-dasharray:5 4}
+.kl .kprow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;justify-content:center;margin:4px 0;padding:4px 8px;border-radius:8px;background:#fff}
+.kl .kprow.ok{background:#e3f0df}.kl .kprow.no{background:#fbe3dc}
+.kl .kpl{min-width:170px;font-weight:600}.kl .kpr{font-family:Georgia,serif;min-width:90px}
+.kl .chip.on,.cs .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.kl .types{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+table.kt{display:table;border-collapse:collapse;margin:8px auto;background:#fff;font-family:Georgia,serif}
+table.kt th,table.kt td{border:1.5px solid #9fb0a3;padding:4px 10px;text-align:center}table.kt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.tr .moves{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.mm .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+@media(max-width:600px){.kl .kpl{flex-basis:100%;min-width:0;text-align:center}.kl .kpr{min-width:0}table.kt th,table.kt td{padding:4px 6px}}
+.dform{background:#fff;border:1px solid #d8d0c0;border-radius:10px;padding:8px 10px;margin:8px auto;max-width:560px}
+.drow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:6px 0}.dlab{min-width:140px;font-weight:600}
+.dform .chip.on,.vg .chip.on,.mk .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.vg .gsvg .ghost2{stroke:#b8860b;stroke-width:1.8;fill:rgba(242,193,78,.14)}
+.vg .desc{font-family:Georgia,serif;font-size:1.1em;text-align:center;margin:6px 0}
+@media(max-width:600px){.dlab{min-width:0;flex-basis:100%}}
+.gsvg .ray{stroke:#8a6fb0;stroke-width:1.4;stroke-dasharray:6 4}
+.gsvg .frame{fill:rgba(47,79,107,.05);stroke:#2f4f6b;stroke-width:2.5}
+.gsvg .tn{font-size:9px}
+.kstep{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;margin:6px 0;font-family:Georgia,serif;font-size:1.1em}
+.kstep .kgrp{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.kstep b{min-width:34px;text-align:center;display:inline-block}
+.lab .chip.on,.gs .chip.on,.rf .chip.on,.lr .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.ss .chip.on,.ph .chip.on,.ck .chip.on,.as .chip.on,.fb .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.phsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto}
+.phsvg .phA{fill:rgba(47,109,176,.25);stroke:#2b6cb0;stroke-width:2}.phsvg .phB{fill:rgba(63,143,79,.25);stroke:#3f7a45;stroke-width:2}
+.phsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429}
+.ck .drow{justify-content:center}.ck .dlab{min-width:150px;text-align:right}
+table.ckt td:first-child{text-align:left}table.ckt td:last-child{white-space:nowrap}
+.ascard{background:#fff;border:1px solid #d8d0c0;border-radius:10px;padding:6px 10px;margin:6px 0}
+.ascard.ok{background:#e3f0df}.ascard.no{background:#fbe3dc}
+.ascard .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+@media(max-width:600px){.ck .dlab{min-width:0;flex-basis:100%;text-align:center}table.ckt{font-size:.85em}table.ckt th,table.ckt td{padding:3px 4px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Transformations, Similarity and Scale</h1>
+<h2>Similar shapes</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>Same shape, different size: how can we be sure?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — what makes two shapes similar, and how to check.</p>
+<p><b>Stepping Stone:</b> recognise similar shapes: corresponding angles are equal and corresponding sides are in the same ratio; match corresponding corners, even when a shape is turned or flipped; find the scale factor between similar shapes.</p>
+<p><b>You will need:</b> Lesson 6 (enlargement), and ratios as fractions — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 6 · Move 6 · Reflect 18 · Create 9 · Rest/Nourish 6</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_07_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_07_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Sketch both shapes. Mark the corners that match, then write each ratio as a fraction.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — Stretch or scale?</summary>
+<p><b>Start here:</b> resize the house. Change the multiplier across and the multiplier up, and watch the angle at the peak of the roof. Find <b>three</b> resized houses that are exactly the same shape as the house, but a different size.</p>
+<p><b>What you are trying to notice:</b> when does resizing keep the shape, and when does it stretch it?</p>
+<div class="toolbox ss">
+<h3 style="margin-top:0">🏠 Stretch or scale?</h3>
+<div class="kstep"><span class="kgrp"><button onclick="ssStep('w',-1)" aria-label="smaller multiplier across">−</button><span>across × <b id="ssW"></b></span><button onclick="ssStep('w',1)" aria-label="larger multiplier across">+</button></span><span class="kgrp"><button onclick="ssStep('h',-1)" aria-label="smaller multiplier up">−</button><span>up × <b id="ssH"></b></span><button onclick="ssStep('h',1)" aria-label="larger multiplier up">+</button></span></div>
+<div id="ssFig"></div>
+<p class="small" style="text-align:center;margin:2px 0">Dashed: the house. Gold: the resized house.</p>
+<table class="kt" id="ssTable"></table>
+<p id="ssFound" class="small" style="text-align:center"></p>
+<div id="ssRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">Two shapes are <b>similar</b> when one is an enlargement of the other, perhaps also turned or flipped: the same shape, possibly a different size.</p>
+<p style="margin:6px 0">To be sure, check both: <b>every pair of corresponding angles is equal</b>, and <b>every pair of corresponding sides is in the same ratio</b>. That ratio is the scale factor.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — Same shape? Photo prints</summary>
+<p><b>What to do:</b> two photo prints are shown with their sizes. Decide: similar or not similar? Then read the ratios.</p>
+<p><b>What you are trying to notice:</b> every corner of a rectangle is 90°, so for rectangles the ratios of the sides decide.</p>
+<div class="toolbox ph">
+<h3 style="margin-top:0">🖼️ Same shape?</h3>
+<div id="phCount" class="small" style="text-align:center"></div>
+<div id="phFig"></div>
+<div id="phOpts" class="buttonrow" style="justify-content:center"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="phNext()">Next card →</button></div>
+<div id="phRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Make a similar shape in the Geometry Studio</h3>
+<p>Enlarge a shape, then turn the image. Measure to show the final shape is similar to the first.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts07-similar&amp;return=../lessons/transformations-similarity-and-scale/07-similar-shapes.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><b>Carry this forward:</b> same ratio for every pair of sides; for shapes other than rectangles, check the angles as well.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — The Similarity Checker (today's main activity)</summary>
+<p><b>What to do:</b> for each pair of shapes, first match each corner of the first shape with its corresponding corner in the second; the second shape may be turned or flipped. The Checker then lines up the evidence. Decide: similar or not similar? If similar, give the scale factor.</p>
+<p><b>What you are trying to notice:</b> for shapes with four or more sides you need <b>both</b> tests: equal angles alone are not enough, and equal ratios alone are not enough. (Triangles are special: for them, either test on its own is enough. You will use that later in the unit.)</p>
+<div class="toolbox ck">
+<h3 style="margin-top:0">🔍 The Similarity Checker</h3>
+<div id="ckCount" class="small" style="text-align:center"></div>
+<div id="ckFig"></div>
+<p class="small" style="text-align:center;margin:2px 0">Tip: corresponding corners have equal angles. Start with a corner that stands out, such as a right angle or the sharpest corner.</p>
+<div id="ckMatch"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ckMatch()">🔗 Check the match</button><button onclick="ckNext()">Next pair →</button></div>
+<div id="ckEvidence"></div>
+<div id="ckVerdictBox" style="display:none">
+<div class="drow" style="justify-content:center"><span class="dlab">Verdict</span><span id="ckOpts"></span></div>
+<div class="drow" style="justify-content:center"><span class="dlab">scale factor, if similar</span><input id="ckK" class="numin neo-mathfield" style="max-width:90px" aria-label="the scale factor from the first shape to the second" onkeydown="if(event.key==='Enter')ckCheck()"></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="ckCheck()">✅ Check my verdict</button></div>
+</div>
+<div id="ckRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why are any two squares similar?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="toolbox as">
+<h3 style="margin-top:0">🤔 Always, sometimes or never?</h3>
+<p class="small" style="margin:2px 0">Choose, then read the example or the reason.</p>
+<div id="asCards"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — The shape family builder</summary>
+<p><b>What to do:</b> choose a brief. Click four corners on the grid, in order round your shape, then check it. Each shape that meets a brief joins the family.</p>
+<p><b>What you are trying to notice:</b> a similar shape can be bigger or smaller, turned or flipped; a shape with the same angles may still not be similar.</p>
+<div class="toolbox fb">
+<h3 style="margin-top:0">👪 The shape family builder</h3>
+<div id="fbBriefs" class="buttonrow" style="justify-content:center"></div>
+<p id="fbBrief" style="text-align:center"></p>
+<div id="fbFig"></div>
+<p id="fbN" class="small" style="text-align:center;margin:2px 0"></p>
+<div class="buttonrow" style="justify-content:center"><button onclick="fbCheck()">✅ Check my shape</button><button onclick="fbUndo()">↩ Undo a corner</button><button onclick="fbClear()">Start again</button></div>
+<div id="fbRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>Same shape, different size. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> look for two things near you that are the same shape but different sizes: two mugs from a set, a photo and its thumbnail on a screen, or a leaf and a smaller leaf from the same plant. Are they exactly similar, or only nearly?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — What this feeds</summary>
+<p><b>Mode: practical.</b> Today the mathematics feeds how models and screens keep their shape.</p>
+<div class="card">
+<p><b>What it feeds:</b> a model railway at scale 1 : 76 is similar to the real train: every length is divided by 76, and every angle is the same. A widescreen picture is 16 by 9 at every size, so a phone, a laptop and a cinema screen show similar rectangles. Resizing a photo with its proportions locked keeps it similar; unlocking them stretches it.</p>
+<p class="small">Carry one idea forward: equal angles <b>and</b> one ratio for every pair of sides.</p>
+</div>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Similar or not: show the evidence</summary>
+<p><b>Your task:</b> make a shape, a similar copy of it and a copy that is not similar, and show the evidence for each.</p>
+<ul>
+<li>Draw a shape with four corners.</li>
+<li>Make a similar copy: enlarge it, then turn or flip the image.</li>
+<li>Make a copy that has the same angles but is <b>not</b> similar, such as a rectangle stretched in one direction.</li>
+<li>For each copy, match corresponding corners, compare corresponding angles, and work out the ratio of each pair of corresponding sides.</li>
+<li><span class="stretch">stretch</span> Explain why, for shapes with four or more sides, checking only the angles, or only the ratios, is not enough.</li>
+</ul>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build your evidence in the Geometry Studio</h3>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts07-final&amp;return=../lessons/transformations-similarity-and-scale/07-similar-shapes.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><strong>Submission choices:</strong> a saved Studio sketch with a screenshot, an annotated Scratchpad image, a photographed page, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_SIMILAR_SHAPES_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows similar shapes look the same but differ in size.</td><td>Knows corresponding angles of similar shapes are equal.</td><td>Knows similar shapes need equal angles and sides in the same ratio.</td><td>Explains why one test on its own is not enough for shapes with four or more sides.</td></tr>
+<tr><td><b>Application</b></td><td>Makes an enlarged copy.</td><td>Matches corresponding corners when the copy faces the same way.</td><td>Matches corresponding corners when the copy is turned or flipped.</td><td>Finds the scale factor, including a fraction, and makes a non-similar copy with the same angles.</td></tr>
+<tr><td><b>Communication</b></td><td>Labels the shapes.</td><td>Uses <i>similar</i> and <i>scale factor</i>.</td><td>Writes ratios of corresponding sides as fractions.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Compares one pair of sides.</td><td>Compares every pair of sides.</td><td>Checks the angles and the ratios.</td><td>Spots a scale factor that has been inverted.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Similar shapes — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Answer with a number, or with yes or no. Fractions such as 3/2 are fine.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<div id="pTextWrap"><input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer"></div>
+<div id="pVecWrap" style="display:none"><p class="small" style="margin:4px 0">Type the horizontal move in the first box and the vertical move in the second.</p><span class="cvin">(<span class="stack"><input id="pVecT" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left" onkeydown="if(event.key==='Enter')pCheck()"><input id="pVecB" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down" onkeydown="if(event.key==='Enter')pCheck()"></span>)</span></div>
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('coordinate-grid','Sketch both shapes. Match the corners, then write each ratio as a fraction.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["−","(",")",",","/","½","⅓","°"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function I(t){ return '<i>'+t+'</i>'; }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function neg(n){ n=Math.round(n*1e9)/1e9; return n<0?'−'+(-n):String(n); }
+function pt(p){ return '('+neg(p[0])+', '+neg(p[1])+')'; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x'), Y=I('y');
+// a coordinate pair typed any way: (5, −1), 5,-1, 5 -1, x = 5, y = −1. Returns [x, y] or null.
+function pairOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[,;]?\s*(-?\d+(?:\.\d+)?)$/); if(!m){ var a=s.split(/[\s,;]+/).filter(Boolean); if(a.length===2){ var p=num(a[0]), q=num(a[1]); if(!isNaN(p)&&!isNaN(q)) return [p,q]; } return null; }
+  return [parseFloat(m[1]),parseFloat(m[2])]; }
+function samePair(p,q){ return !!p&&same(p[0],q[0])&&same(p[1],q[1]); }
+// a mirror line typed as an equation: x = 3, y = −1, y = x, y = −x (any spacing; x+y=0 and y−x=0 too). Returns {t,k} or null.
+function lineOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'');
+  var m=s.match(/^x=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=x$/); if(m) return {t:'x',k:parseFloat(m[1])};
+  m=s.match(/^y=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=y$/); if(m) return {t:'y',k:parseFloat(m[1])};
+  if(/^(y=x|x=y|y-x=0|x-y=0)$/.test(s)) return {t:'yx',k:0};
+  if(/^(y=-x|x=-y|y\+x=0|x\+y=0|-x=y)$/.test(s)) return {t:'ynx',k:0};
+  return null; }
+function sameLine(a,b){ return !!a&&a.t===b.t&&same(a.k,b.k); }
+function lineName(L){ return L.t==='x'?X+' = '+neg(L.k):L.t==='y'?Y+' = '+neg(L.k):L.t==='yx'?Y+' = '+X:Y+' = −'+X; }
+// reflection in a line, exactly
+function refl(p,L){ var x=p[0], y=p[1]; return L.t==='x'?[2*L.k-x,y]:L.t==='y'?[x,2*L.k-y]:L.t==='yx'?[y,x]:[-y,-x]; }
+function onLine(p,L){ return samePair(refl(p,L),p); }
+
+/* ---------------- A coordinate grid (numbered, labelled axes; GreenPrint v2.3) ---------------- */
+var G={o:230,s:21,m:10};
+function gx(x){ return G.o+x*G.s; } function gy(y){ return G.o-y*G.s; }
+function gridSvg(){ var h='', k, m=G.m;
+  for(k=-m;k<=m;k++) h+='<line x1="'+gx(k)+'" y1="'+gy(m+0.4)+'" x2="'+gx(k)+'" y2="'+gy(-m-0.4)+'" class="gl"/><line x1="'+gx(-m-0.4)+'" y1="'+gy(k)+'" x2="'+gx(m+0.4)+'" y2="'+gy(k)+'" class="gl"/>';
+  h+='<line x1="'+gx(-m-0.4)+'" y1="'+gy(0)+'" x2="'+gx(m+0.4)+'" y2="'+gy(0)+'" class="ax"/><line x1="'+gx(0)+'" y1="'+gy(m+0.4)+'" x2="'+gx(0)+'" y2="'+gy(-m-0.4)+'" class="ax"/>';
+  for(k=-m;k<=m;k++){ if(!k) continue; h+='<text x="'+gx(k)+'" y="'+(gy(0)+15)+'" class="tn" text-anchor="middle">'+neg(k)+'</text><text x="'+(gx(0)-6)+'" y="'+(gy(k)+4)+'" class="tn" text-anchor="end">'+neg(k)+'</text>'; }
+  h+='<text x="'+(gx(0)-6)+'" y="'+(gy(0)+15)+'" class="tn ti" text-anchor="end">O</text><text x="'+(gx(m+0.4)-2)+'" y="'+(gy(0)-7)+'" class="axl" text-anchor="end">x</text><text x="'+(gx(0)+7)+'" y="'+(gy(m+0.4)+12)+'" class="axl">y</text>';
+  return h; }
+function mirrorSvg(L,cls){ var e=G.m+0.4, a, b; if(L.t==='x'){ a=[L.k,e]; b=[L.k,-e]; } else if(L.t==='y'){ a=[-e,L.k]; b=[e,L.k]; } else if(L.t==='yx'){ a=[-e,-e]; b=[e,e]; } else { a=[-e,e]; b=[e,-e]; }
+  var lp=L.t==='x'?[L.k,G.m-0.2]:L.t==='y'?[G.m-1.2,L.k]:L.t==='yx'?[4.6,4.1]:[-5.4,4.9];
+  return '<line x1="'+gx(a[0])+'" y1="'+gy(a[1])+'" x2="'+gx(b[0])+'" y2="'+gy(b[1])+'" class="'+(cls||'mir')+'"/><text x="'+(gx(lp[0])+(L.t==='x'&&L.k<=0?-6:6))+'" y="'+(gy(lp[1])-6)+'" class="mlab" data-line="1"'+(L.t==='x'&&L.k<=0?' text-anchor="end"':'')+'>'+lineName(L).replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>')+'</text>'; }
+function triSvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl" data-v="'+labs[i]+'">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+function inGrid(p){ return Math.abs(p[0])<=G.m&&Math.abs(p[1])<=G.m; }
+function svgAt(ev,svg){ var b=svg.getBoundingClientRect(); var x=(ev.clientX-b.left)*2*G.o/b.width, y=(ev.clientY-b.top)*2*G.o/b.height; return [Math.round((x-G.o)/G.s),Math.round((G.o-y)/G.s)]; }
+var CLIPN=0;
+function wrap(inner,click,aria){ var cid='gclip'+(CLIPN++); return '<svg class="gsvg'+(G.big?' big':'')+'" viewBox="0 0 '+(2*G.o)+' '+(2*G.o)+'"'+(G.big?' width="'+(2*G.o)+'" height="'+(2*G.o)+'"':'')+' role="img" aria-label="'+aria+'"'+(click?' onclick="'+click+'(event,this)"':'')+'><defs><clipPath id="'+cid+'"><rect x="'+gx(-G.m-0.4)+'" y="'+gy(G.m+0.4)+'" width="'+(G.s*(2*G.m+0.8))+'" height="'+(G.s*(2*G.m+0.8))+'"/></clipPath></defs>'+gridSvg()+'<g clip-path="url(#'+cid+')">'+inner+'</g></svg>'; }
+
+/* ---------------- Column vectors ---------------- */
+function cv(a,b){ return '<span class="cv" aria-label="column vector '+neg(a)+', '+neg(b)+'"><span>'+neg(a)+'</span><span>'+neg(b)+'</span></span>'; }
+function vwords(a,b){ var h=a===0?'':Math.abs(a)+' '+(a>0?'right':'left'), v=b===0?'':Math.abs(b)+' '+(b>0?'up':'down'); return (h&&v?h+', '+v:h||v||'no move at all'); }
+function addv(p,v){ return [p[0]+v[0],p[1]+v[1]]; }
+function cvIn(id){ return '<span class="cvin">(<span class="stack"><input id="'+id+'T" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="'+id+'B" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span>'; }
+function readVec(id){ var t=document.getElementById(id+'T').value, b=document.getElementById(id+'B').value; if(!String(t).trim()||!String(b).trim()) return null; var x=num(t), y=num(b); if(isNaN(x)||isNaN(y)) return null; return [x,y]; }
+function clearVec(id){ document.getElementById(id+'T').value=''; document.getElementById(id+'B').value=''; }
+function arrowSvg(p,q,cls){ if(samePair(p,q)) return ''; return '<line x1="'+gx(p[0])+'" y1="'+gy(p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="'+(cls||'vec')+'" marker-end="url(#vhead)"/>'; }
+var MARK='<defs><marker id="vhead" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" refX="10" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#3f7a45"/></marker></defs>';
+var SHAPE=[[-3,1],[-1,1],[-1,3],[-3,2]], SHAPEL=['A','B','C','D'];
+function polySvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+
+/* ---------------- Measuring, exactly ---------------- */
+function d2(p,q){ return (p[0]-q[0])*(p[0]-q[0])+(p[1]-q[1])*(p[1]-q[1]); }
+// a length shown exactly: whole numbers and short decimals as they are, otherwise a simplified surd such as 3√5
+function lenStr(p,q){ var s=d2(p,q), r=Math.sqrt(s);
+  if(Math.abs(r*100-Math.round(r*100))<1e-6) return neg(Math.round(r*100)/100);
+  var n=Math.round(4*s); if(Math.abs(n-4*s)>1e-9) return (Math.round(r*10)/10)+' (to 1 d.p.)';
+  var k=1, m=n; for(var f=2;f*f<=m;f++) while(m%(f*f)===0){ k*=f; m/=f*f; }   // √s = k√m ÷ 2
+  return k%2===0?((k/2===1?'':k/2)+'√'+m):FR((k===1?'':k)+'√'+m,'2'); }
+function angAt(a,v,b){ var u=[a[0]-v[0],a[1]-v[1]], w=[b[0]-v[0],b[1]-v[1]]; var c=(u[0]*w[0]+u[1]*w[1])/Math.sqrt((u[0]*u[0]+u[1]*u[1])*(w[0]*w[0]+w[1]*w[1])); return Math.acos(Math.max(-1,Math.min(1,c)))*180/Math.PI; }
+function angStr(x){ return Math.abs(x-Math.round(x))<1e-6?Math.round(x)+'°':(Math.round(x*10)/10)+'° <span class="small">(to 1 d.p.)</span>'; }
+function area(P){ var s=0; for(var i=0;i<P.length;i++){ var a=P[i], b=P[(i+1)%P.length]; s+=a[0]*b[1]-b[0]*a[1]; } return s/2; }
+function sameShape(P,Q){ // congruent with matching corners in order (P[i] ↔ Q[i])
+  for(var i=0;i<P.length;i++) for(var j=i+1;j<P.length;j++) if(Math.abs(d2(P[i],P[j])-d2(Q[i],Q[j]))>1e-9) return false; return true; }
+function sameSet(P,Q){ return P.length===Q.length&&P.every(function(p){ return Q.some(function(q){ return samePair(p,q); }); }); }
+function congruentAny(P,Q){ // some matching of corners keeps every distance
+  var perm=function(a){ if(a.length<2) return [a]; var o=[]; a.forEach(function(x,i){ perm(a.slice(0,i).concat(a.slice(i+1))).forEach(function(r){ o.push([x].concat(r)); }); }); return o; };
+  return perm(Q.map(function(q,i){ return i; })).some(function(ix){ return sameShape(P,ix.map(function(i){ return Q[i]; })); }); }
+// transformations on grid points
+function reflX(p,k){ return [2*k-p[0],p[1]]; } function reflY(p,k){ return [p[0],2*k-p[1]]; }
+function rot90(p,c){ return [c[0]-(p[1]-c[1]),c[1]+(p[0]-c[0])]; }
+function rotN(p,c,n){ for(var i=0;i<((n%4)+4)%4;i++) p=rot90(p,c); return p; }
+
+/* ---------------- Rotation, exactly (multiples of 90°) ---------------- */
+function norm(d){ d=((Math.round(d)%360)+360)%360; return d; }
+function rot(p,c,deg){ var d=norm(deg), x=p[0]-c[0], y=p[1]-c[1], q;
+  q=d===0?[x,y]:d===90?[-y,x]:d===180?[-x,-y]:[y,-x]; return [c[0]+q[0]+0,c[1]+q[1]+0]; }
+function rotName(deg,c){ var d=norm(deg), a=Math.round(deg); var dir=a>=0?'anticlockwise':'clockwise'; return Math.abs(a)+'° '+dir+(c?' about '+pt(c):''); }
+// a rotation typed in words or signs: 90° clockwise, −90, 270 anticlockwise, 90 cw, a quarter turn clockwise, half turn. Returns degrees (anticlockwise positive) or null.
+function rotOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/°|degrees?/g,' ').replace(/anti-?\s*clockwise|counter-?\s*clockwise|acw|ccw/g,' A ').replace(/clockwise|\bcw\b/g,' C ').replace(/\s+/g,' ').trim();
+  var n=null, m=s.match(/-?\d+(\.\d+)?/); if(m) n=parseFloat(m[0]); else if(/quarter/.test(s)) n=90; else if(/half/.test(s)) n=180; else if(/three\s*quarters?/.test(s)) n=270;
+  if(/three\s*quarters?/.test(s)) n=270; if(n===null) return null;
+  var A=/\bA\b/.test(s), C=/\bC\b/.test(s); if(A&&C) return null; if(C) n=-Math.abs(n); return n; }
+function sameRot(a,b){ return a!==null&&b!==null&&norm(a)===norm(b); }
+function arcSvg(c,p,deg,cls){ var r=Math.hypot(p[0]-c[0],p[1]-c[1]); if(!r) return ''; var a0=Math.atan2(p[1]-c[1],p[0]-c[0]), a1=a0+deg*Math.PI/180, large=Math.abs(deg)>180?1:0, sw=deg>0?0:1;
+  var s=[gx(c[0]+r*Math.cos(a0)),gy(c[1]+r*Math.sin(a0))], e=[gx(c[0]+r*Math.cos(a1)),gy(c[1]+r*Math.sin(a1))];
+  return '<path d="M'+s[0]+' '+s[1]+' A'+(r*G.s)+' '+(r*G.s)+' 0 '+large+' '+sw+' '+e[0]+' '+e[1]+'" class="'+(cls||'arc')+'"/>'; }
+function centreSvg(c,lab){ return '<circle cx="'+gx(c[0])+'" cy="'+gy(c[1])+'" r="6" class="cen"/><circle cx="'+gx(c[0])+'" cy="'+gy(c[1])+'" r="11" class="cenr"/>'+(lab?'<text x="'+(gx(c[0])+9)+'" y="'+(gy(c[1])+17)+'" class="vl">'+lab+'</text>':''); }
+
+
+/* ---------------- Enlargement, exactly (fractions shown as fractions) ---------------- */
+var KS=[1/3,1/2,1,3/2,2,3];
+function rat(x){ for(var d=1;d<=12;d++){ var n=Math.round(x*d); if(Math.abs(n/d-x)<1e-9) return [n,d]; } return null; }
+function fr(x){ var r=rat(x); if(!r) return neg(Math.round(x*100)/100); var n=r[0], d=r[1], g=function(a,b){ return b?g(b,a%b):a; }, k=g(Math.abs(n),d); n/=k; d/=k;
+  return d===1?neg(n):(n<0?'−':'')+FR(Math.abs(n),d); }
+function ptF(p){ return '('+fr(p[0])+', '+fr(p[1])+')'; }
+function enl(p,c,k){ return [c[0]+k*(p[0]-c[0]),c[1]+k*(p[1]-c[1])]; }
+function kName(k){ return fr(k); }
+function raySvg(c,p,q,cls){ // the line from the centre through p and q, long enough to pass both
+  var far=[p,q].sort(function(a,b){ return d2(b,c)-d2(a,c); })[0]; if(samePair(far,c)) return '';
+  return '<line x1="'+gx(c[0])+'" y1="'+gy(c[1])+'" x2="'+gx(far[0])+'" y2="'+gy(far[1])+'" class="'+(cls||'ray')+'"/>'; }
+function lineThrough(p,q,cls){ var dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy); if(!L) return ''; var e=30/L;
+  return '<line x1="'+gx(p[0]-dx*e)+'" y1="'+gy(p[1]-dy*e)+'" x2="'+gx(q[0]+dx*e)+'" y2="'+gy(q[1]+dy*e)+'" class="'+(cls||'ray')+'"/>'; }
+function cenSvg(c){ return centreSvg(c,''); }
+var LAB=['A','B','C'], LAB1=['A′','B′','C′'];
+// a scale factor typed as 2, 1.5, 1/2, ½, one half, 3/2
+function kOf(v){ var s=String(v).toLowerCase().replace(/scale\s*factor|sf|×|x(?=\s*\d)/g,'').replace(/⅓/g,' 1/3').replace(/⅔/g,' 2/3').replace(/½/g,' 1/2').replace(/[−–]/g,'-').trim();
+  var m=s.match(/^(\d+)\s+(\d+)\s*\/\s*(\d+)$/); if(m) return +m[1]+(+m[2])/(+m[3]); return num(s); }
+
+/* ---------------- Similarity, exactly ---------------- */
+// labels placed outside the shape, away from its centre
+function polyOut(P,cls,labs,hl){ var cx=0, cy=0; P.forEach(function(p){ cx+=p[0]; cy+=p[1]; }); cx/=P.length; cy/=P.length;
+  var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ var dx=p[0]-cx, dy=p[1]-cy, L=Math.hypot(dx,dy)||1, ux=dx/L, uy=dy/L, x=gx(p[0])+ux*13, y=gy(p[1])-uy*13+5;
+    h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="'+(hl&&hl.indexOf(i)>=0?7:4.5)+'" class="'+cls+'v'+(hl&&hl.indexOf(i)>=0?' hlv':'')+'"/>';
+    if(labs) h+='<text x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" text-anchor="'+(ux>0.35?'start':ux<-0.35?'end':'middle')+'" class="vl" data-v="'+labs[i]+'"><tspan font-style="italic">'+labs[i]+'</tspan></text>'; });
+  return h; }
+function angAtI(P,i){ var n=P.length; return angAt(P[(i+n-1)%n],P[i],P[(i+1)%n]); }
+function sideR(P,i){ return P[(i+1)%P.length]; }
+// every matching of corners that keeps neighbours as neighbours: m[i] is the corner of Q matched with corner i of P
+function dihedral(n){ var out=[]; for(var s=0;s<n;s++){ out.push(Array.apply(null,Array(n)).map(function(_,i){ return (s+i)%n; })); out.push(Array.apply(null,Array(n)).map(function(_,i){ return (s-i+n)%n; })); } return out; }
+function isDihedral(m){ return dihedral(m.length).some(function(d){ return d.every(function(v,i){ return v===m[i]; }); }); }
+function sameAng(a,b){ return Math.abs(a-b)<1e-6; }
+// evidence for one matching: corresponding angles, and the ratio of each pair of corresponding sides (Q over P)
+function evidence(P,Q,m){ var n=P.length, A=[], S=[];
+  for(var i=0;i<n;i++){ var a=angAtI(P,i), b=angAtI(Q,m[i]); A.push({i:i,j:m[i],a:a,b:b,eq:sameAng(a,b)}); }
+  for(i=0;i<n;i++){ var j=(i+1)%n, r2=d2(Q[m[i]],Q[m[j]])/d2(P[i],P[j]); S.push({i:i,j:j,qi:m[i],qj:m[j],r2:r2,r:Math.sqrt(r2)}); }
+  var angOK=A.every(function(x){ return x.eq; }), ratOK=S.every(function(x){ return Math.abs(x.r2-S[0].r2)<1e-9; });
+  return {A:A,S:S,angOK:angOK,ratOK:ratOK,sim:angOK&&ratOK,k:S[0].r}; }
+function simMaps(P,Q){ if(P.length!==Q.length) return []; return dihedral(P.length).filter(function(m){ return evidence(P,Q,m).sim; }); }
+// the matchings that count as correct: the similarity matchings if there are any, otherwise those with the most equal angles
+function goodMaps(P,Q){ var s=simMaps(P,Q); if(s.length) return s; var all=dihedral(P.length), sc=all.map(function(m){ return evidence(P,Q,m).A.filter(function(x){ return x.eq; }).length; }), best=Math.max.apply(null,sc); return all.filter(function(m,i){ return sc[i]===best; }); }
+function cross(o,a,b){ return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]); }
+function ratStr(r2){ var r=Math.sqrt(r2); return rat(r)?fr(r):'√'+fr(r2); }
+
+/* ---------------- CONNECTION: stretch or scale? ---------------- */
+var HS=[[0,0],[4,0],[4,2],[2,4],[0,2]], HA=[-9,-9], WS=[1/2,1,3/2,2,3];
+var ss={w:1,h:1,found:[]};
+function ssPts(){ return HS.map(function(p){ return [HA[0]+p[0]*WS[ss.w],HA[1]+p[1]*WS[ss.h]]; }); }
+function ssStep(k,d){ var n=ss[k]+d; if(n<0||n>=WS.length){ msg('ssRead','warn','The multipliers here run from '+fr(WS[0])+' to '+fr(WS[WS.length-1])+'.'); return; } ss[k]=n; ssDraw(); }
+function ssDraw(){ var w=WS[ss.w], h=WS[ss.h], Q=ssPts(), base=HS.map(function(p){ return [HA[0]+p[0],HA[1]+p[1]]; }), apex=angAt(Q[2],Q[3],Q[4]), g='';
+  g+=polyOut(Q,'img',null)+'<polygon points="'+base.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="ghost2"/>';
+  document.getElementById('ssFig').innerHTML=wrap(g,null,'The house and the resized house');
+  document.getElementById('ssW').innerHTML=fr(w); document.getElementById('ssH').innerHTML=fr(h);
+  document.getElementById('ssTable').innerHTML='<tr><th></th><th>House</th><th>Resized</th></tr><tr><td>width</td><td>4</td><td>'+fr(4*w)+'</td></tr><tr><td>height</td><td>4</td><td>'+fr(4*h)+'</td></tr><tr><td>angle at the peak of the roof</td><td>90°</td><td>'+angStr(apex)+'</td></tr>';
+  var same=ss.w===ss.h, key=ss.w+','+ss.h;
+  if(same&&w!==1&&ss.found.indexOf(key)<0) ss.found.push(key);
+  var list=ss.found.map(function(k){ var a=k.split(','); return 'across × '+fr(WS[+a[0]])+', up × '+fr(WS[+a[1]]); });
+  document.getElementById('ssFound').innerHTML='Same shape, different size, found: '+(list.length?list.join('; '):'none yet')+' ('+Math.min(list.length,3)+' of 3)';
+  var t=w===1&&h===1?'This is the house itself. Change the multipliers.':same?'Across × '+fr(w)+' and up × '+fr(h)+': every length is multiplied by '+fr(w)+', and the roof angle is still 90°. The same shape, '+(w>1?'bigger':'smaller')+'.':'Across × '+fr(w)+' but up × '+fr(h)+': the roof angle is now '+angStr(apex)+'. The house is stretched: not the same shape.';
+  if(ss.found.length>=3) t+='<br><b>✓ Three found.</b> The house keeps its shape exactly when the lengths across and the lengths up are multiplied by the <b>same</b> number. That is an enlargement, and the two shapes are <b>similar</b>.';
+  msg('ssRead',same&&w!==1?'good':'warn',t); }
+
+/* ---------------- MOVEMENT: same shape? photo prints ---------------- */
+var PH=[{a:[6,4],b:[9,6]},{a:[10,8],b:[12,10]},{a:[7,5],b:[14,10]},{a:[4,3],b:[5,4]},{a:[16,9],b:[48,27]},{a:[12,8],b:[9,6]}];
+PH.forEach(function(c){ c.sim=Math.abs(c.b[0]*c.a[1]-c.b[1]*c.a[0])<1e-9; c.opts=Math.random()<0.5?['similar','not similar']:['not similar','similar']; });
+var ph={i:0,pick:null};
+function phRect(x,y,w,h,cls,lab){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" class="'+cls+'"/><text x="'+(x+w/2)+'" y="'+(y+h+16)+'" text-anchor="middle" class="vl">'+lab[0]+' cm</text><text x="'+(x+w+6)+'" y="'+(y+h/2+5)+'" class="vl">'+lab[1]+' cm</text>'; }
+function phRender(){ var c=PH[ph.i], s=Math.min(150/Math.max(c.a[0],c.b[0]),130/Math.max(c.a[1],c.b[1])), h='<svg class="phsvg" viewBox="0 0 440 190" role="img" aria-label="Two photo prints: '+c.a[0]+' cm by '+c.a[1]+' cm, and '+c.b[0]+' cm by '+c.b[1]+' cm">';
+  h+=phRect(20,160-c.a[1]*s,c.a[0]*s,c.a[1]*s,'phA',c.a)+phRect(240,160-c.b[1]*s,c.b[0]*s,c.b[1]*s,'phB',c.b)+'</svg>';
+  document.getElementById('phCount').textContent='Card '+(ph.i+1)+' of '+PH.length;
+  document.getElementById('phFig').innerHTML=h;
+  document.getElementById('phOpts').innerHTML=c.opts.map(function(o){ return '<button class="chip'+(ph.pick===o?' on':'')+'" onclick="phPick(\''+o+'\')">'+o+'</button>'; }).join(''); }
+function phPick(o){ var c=PH[ph.i], ok=(o==='similar')===c.sim, rw=c.b[0]/c.a[0], rh=c.b[1]/c.a[1]; ph.pick=o; phRender();
+  msg('phRead',ok?'good':'warn',(ok?'✓ ':'Look again. ')+'Every corner of a rectangle is 90°, so the ratios decide. Longer sides: '+FR(c.b[0],c.a[0])+' = '+fr(rw)+'. Shorter sides: '+FR(c.b[1],c.a[1])+' = '+fr(rh)+'. '+(c.sim?'The same ratio: similar, with scale factor '+fr(rw)+'.':'Different ratios: not similar. One print would be stretched to fit the other.')); }
+function phNext(){ ph.i=(ph.i+1)%PH.length; ph.pick=null; document.getElementById('phRead').style.display='none'; phRender(); }
+
+/* ---------------- REFLECTION: the Similarity Checker (main activity) ---------------- */
+var L1=['A','B','C','D','E'], L2=['P','Q','R','S','T'];
+// Q is listed in polygon order; lab[] gives each corner of Q its letter, so the letters do not line up with ABCD
+var CK=[
+ {P:[[-8,2],[-6,2],[-7,3],[-8,3]],Q:[[6,-6],[6,-2],[4,-4],[4,-6]],lab:['S','P','Q','R'],note:'turned'},
+ {P:[[-9,2],[-5,2],[-5,4],[-9,4]],Q:[[3,-8],[5,-8],[5,-2],[3,-2]],lab:['Q','R','S','P'],note:'rectangles'},
+ {P:[[-8,-7],[-6,-7],[-8,-3]],Q:[[8,-9],[5,-9],[8,-3]],lab:['R','P','Q'],note:'flipped'},
+ {P:[[-9,2],[-6,2],[-6,5],[-9,5]],Q:[[1,-7],[6,-7],[9,-3],[4,-3]],lab:['R','S','P','Q'],note:'rhombus'},
+ {P:[[-9,-6],[-5,-6],[-5,-4],[-7,-2],[-9,-4]],Q:[[8,4],[6,4],[6,3],[7,2],[8,3]],lab:['S','T','P','Q','R'],note:'half'},
+ {P:[[-9,-7],[-6,-7],[-9,-5]],Q:[[3,7],[6,7],[3,5]],lab:['Q','R','P'],note:'congruent'}];
+CK.forEach(function(c){ c.good=goodMaps(c.P,c.Q); c.ev=evidence(c.P,c.Q,c.good[0]); c.opts=Math.random()<0.5?['similar','not similar']:['not similar','similar']; });
+var ck={i:0,m:[],matched:false,verdict:null,done:[]};
+function ckL1(i){ return L1[i]; } function ckL2(c,j){ return c.lab[j]; }
+function ckName(P,L){ return I(P.map(function(_,i){ return L(i); }).join('')); }
+function ckRender(){ var c=CK[ck.i], n=c.P.length, h=polyOut(c.P,'obj',c.P.map(function(_,i){ return L1[i]; }))+polyOut(c.Q,'img2',c.lab);
+  document.getElementById('ckCount').textContent='Pair '+(ck.i+1)+' of '+CK.length+(ck.done[ck.i]?' ✓':'');
+  document.getElementById('ckFig').innerHTML=wrap(h,null,'Shape '+L1.slice(0,n).join('')+' and a second shape with corners '+c.lab.slice().sort().join(', '));
+  var letters=c.lab.slice().sort();
+  document.getElementById('ckMatch').innerHTML=c.P.map(function(_,i){ return '<div class="drow"><span class="dlab">corner '+I(L1[i])+' matches</span>'+letters.map(function(l){ var j=c.lab.indexOf(l); return '<button class="chip'+(ck.m[i]===j?' on':'')+'" onclick="ckPick('+i+','+j+')"><i>'+l+'</i></button>'; }).join('')+'</div>'; }).join('');
+  document.getElementById('ckEvidence').innerHTML=ck.matched?ckTable(c):'';
+  document.getElementById('ckVerdictBox').style.display=ck.matched?'':'none';
+  document.getElementById('ckOpts').innerHTML=c.opts.map(function(o){ return '<button class="chip'+(ck.verdict===o?' on':'')+'" onclick="ckVerdict(\''+o+'\')">'+o+'</button>'; }).join(''); }
+function ckPick(i,j){ if(ck.matched) return; for(var a=0;a<ck.m.length;a++) if(ck.m[a]===j) ck.m[a]=undefined; ck.m[i]=j; document.getElementById('ckRead').style.display='none'; ckRender(); }
+function ckTable(c){ var e=evidence(c.P,c.Q,ck.m), L=function(j){ return c.lab[j]; }, t='<tr><th>Corresponding</th><th>'+ckName(c.P,ckL1)+'</th><th>second shape</th><th></th></tr>';
+  e.A.forEach(function(x){ t+='<tr><td>angles at '+I(L1[x.i])+' and '+I(L(x.j))+'</td><td>'+angStr(x.a)+'</td><td>'+angStr(x.b)+'</td><td>'+(x.eq?'equal':'different')+'</td></tr>'; });
+  e.S.forEach(function(x){ t+='<tr><td>sides '+I(L1[x.i]+L1[x.j])+' and '+I(L(x.qi)+L(x.qj))+'</td><td>'+lenStr(c.P[x.i],c.P[x.j])+'</td><td>'+lenStr(c.Q[x.qi],c.Q[x.qj])+'</td><td>ratio '+FR(I(L(x.qi)+L(x.qj)),I(L1[x.i]+L1[x.j]))+' = '+ratStr(x.r2)+'</td></tr>'; });
+  return '<table class="kt ckt">'+t+'</table>'; }
+function ckMatch(){ var c=CK[ck.i], n=c.P.length, m=ck.m;
+  if(m.filter(function(v){ return v!==undefined; }).length<n){ msg('ckRead','warn','Match every corner of '+ckName(c.P,ckL1)+' with a corner of the second shape first.'); return; }
+  if(!isDihedral(m)){ msg('ckRead','warn','Not yet. Corners next to each other must match corners next to each other: going round '+ckName(c.P,ckL1)+', the matching corners go round the second shape too, either way round.'); return; }
+  if(c.good.some(function(g){ return g.every(function(v,i){ return v===m[i]; }); })){ ck.matched=true; msg('ckRead','good','✓ A good match. The Checker has lined up the evidence: corresponding angles, and the ratio of each pair of corresponding sides.'); ckRender(); return; }
+  var e=evidence(c.P,c.Q,m), bad=e.A.filter(function(x){ return !x.eq; })[0];
+  if(bad) msg('ckRead','warn','Not yet. The angle at '+I(L1[bad.i])+' is '+angStr(bad.a)+', but the angle at '+I(c.lab[bad.j])+' is '+angStr(bad.b)+'. Corresponding corners have equal angles: start with a corner that stands out.');
+  else msg('ckRead','warn','Not yet. The angles match, but the sides do not line up: match the longest side with the longest side.'); }
+function ckVerdict(o){ ck.verdict=o; ckRender(); }
+function ckCheck(){ var c=CK[ck.i], e=c.ev, v=ck.verdict, kv=document.getElementById('ckK').value;
+  if(!ck.matched){ msg('ckRead','warn','Match the corners first: the evidence depends on which corners correspond.'); return; }
+  if(!v){ msg('ckRead','warn','Choose a verdict: similar, or not similar.'); return; }
+  var why=!e.angOK&&e.ratOK?'Every ratio is '+fr(e.k)+', but the angles are different. <b>For shapes with four or more sides, equal ratios alone are not enough.</b>':e.angOK&&!e.ratOK?'Every pair of angles is equal, but the ratios are not all the same. <b>For shapes with four or more sides, equal angles alone are not enough.</b>':'The angles are not all equal, and the ratios are not all the same.';
+  if(v==='not similar'){ if(!c.ev.sim){ ck.done[ck.i]=true; msg('ckRead','good','✓ Not similar. '+why); } else msg('ckRead','warn','Look again at the evidence: is every pair of angles equal, and is every ratio the same?'); ckRender(); return; }
+  if(!c.ev.sim){ msg('ckRead','warn','Look again at the evidence. '+(e.angOK?'The angles are all equal, but look at the ratio column.':e.ratOK?'The ratios are all the same, but look at the angles.':'Check the angles and the ratios.')); return; }
+  if(!String(kv).trim()){ msg('ckRead','warn','Similar: now give the scale factor, from '+ckName(c.P,ckL1)+' to the second shape.'); return; }
+  var k=kOf(kv);
+  if(isNaN(k)){ msg('ckRead','warn','That scale factor can\'t be read: write a number or a fraction, such as 2 or 1/2.'); return; }
+  if(Math.abs(k-e.k)<1e-9){ ck.done[ck.i]=true; msg('ckRead','good','✓ Similar, with scale factor '+fr(e.k)+': every pair of corresponding angles is equal, and every ratio is '+fr(e.k)+'.'+(c.note==='congruent'?' A scale factor of 1: congruent shapes are similar too.':c.note==='flipped'?' One shape is a mirror image of the other: similar shapes can be flipped.':c.note==='turned'?' Similar shapes can be turned.':'')); ckRender(); return; }
+  if(Math.abs(k*e.k-1)<1e-9) msg('ckRead','warn','The verdict is right. That scale factor goes from the second shape back to '+ckName(c.P,ckL1)+': divide a length of the second shape by the matching length of '+ckName(c.P,ckL1)+'.');
+  else msg('ckRead','warn','The verdict is right. The scale factor is the ratio in the table: a length of the second shape divided by the matching length of '+ckName(c.P,ckL1)+'.'); }
+function ckNext(){ ck.i=(ck.i+1)%CK.length; ck.m=[]; ck.matched=false; ck.verdict=null; document.getElementById('ckK').value=''; document.getElementById('ckRead').style.display='none'; ckRender(); }
+
+/* ---------------- Proof (stretch): why are all squares similar? ---------------- */
+var a_=I('a'), b_=I('b');
+var PROOFS={
+ pr:{steps:[
+  {q:'One square has side '+a_+'; another has side '+b_+'. What is each angle in each square?',chips:['it depends on the side length','90°'],ans:1,ok:'every angle in both squares is 90°, so corresponding angles are equal',hint:'What is true of every corner of every square?'},
+  {q:'Divide each side of the second square by the matching side of the first. What do you get?',chips:[FR(b_,a_)+' for every side','a different ratio for each side'],ans:0,ok:'every side of the second square is '+b_+', and every side of the first is '+a_+', so every ratio is '+FR(b_,a_),hint:'All four sides of a square are the same length.'},
+  {q:'So, for any two squares:',chips:['they are similar only if '+a_+' = '+b_,'they are similar, with scale factor '+FR(b_,a_)],ans:1,ok:'any two squares are similar, with scale factor '+FR(b_,a_),hint:'Both tests are passed: equal angles, and one ratio for every side.'}],
+  done:'✓ <b>That is why.</b> Equal angles and one ratio for every side: any two squares are similar, whatever their sizes. The same argument works for any two equilateral triangles. It fails for rectangles: their two side lengths can be multiplied by different numbers.'}
+};
+var pr={pr:0};
+function prFigure(i){ var S1=[[-9,2],[-5,2],[-5,6],[-9,6]], S2=[[2,-9],[9,-9],[9,-2],[2,-2]], h='';
+  h+=polyOut(S1,'obj',null,i===0?[0,1,2,3]:null)+polyOut(S2,'img2',null,i===0?[0,1,2,3]:null);
+  [S1,S2].forEach(function(S,k){ var c=[(S[0][0]+S[2][0])/2,(S[0][1]+S[2][1])/2];
+    S.forEach(function(p,j){ var q=S[(j+1)%4], m=[(p[0]+q[0])/2,(p[1]+q[1])/2], ux=Math.sign(m[0]-c[0]), uy=Math.sign(m[1]-c[1]);
+      if(i===1) h+='<line x1="'+gx(p[0])+'" y1="'+gy(p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="hl"/>';
+      h+='<text x="'+(gx(m[0])+ux*14)+'" y="'+(gy(m[1])-uy*14+5)+'" text-anchor="middle" class="vl"><tspan font-style="italic">'+(k?'b':'a')+'</tspan></text>'; }); });
+  return wrap(h,null,'Two squares, with sides a and b'+(i===0?', corners highlighted':i===1?', sides highlighted':'')); }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- Always, sometimes or never? ---------------- */
+var AS=[
+ {s:'Two rectangles are similar.',ans:'sometimes',why:'A 6 by 4 and a 9 by 6 rectangle are similar (both ratios are '+FR(3,2)+'). A 4 by 2 and a 6 by 2 rectangle are not (ratios '+FR(3,2)+' and 1).'},
+ {s:'A square and a rectangle that is not a square are similar.',ans:'never',why:'The square\'s sides are all equal; the rectangle\'s are not. Its two side lengths would need two different ratios.'},
+ {s:'Two circles are similar.',ans:'always',why:'A circle is fixed by its radius: every length in one circle is the other\'s multiplied by the ratio of the radii.'},
+ {s:'Two right-angled triangles are similar.',ans:'sometimes',why:'Legs 2 and 4 and legs 3 and 6: similar. Legs 2 and 3 and legs 4 and 5: not similar.'},
+ {s:'Two congruent shapes are similar.',ans:'always',why:'Congruent shapes have equal angles and every ratio is 1: similar, with scale factor 1.'},
+ {s:'Two equilateral triangles are similar.',ans:'always',why:'Every angle is 60°, and all three sides of each triangle are equal, so there is one ratio for every side.'}];
+var asP={};
+function asRender(){ document.getElementById('asCards').innerHTML=AS.map(function(c,i){ var p=asP[i];
+  return '<div class="ascard'+(p?(p===c.ans?' ok':' no'):'')+'"><p style="margin:2px 0">'+c.s+'</p><div class="opts">'+['always','sometimes','never'].map(function(o){ return '<button class="chip'+(p===o?' on':'')+'" onclick="asPick('+i+',\''+o+'\')">'+o+'</button>'; }).join('')+'</div>'+(p?'<p class="small" style="margin:2px 0">'+(p===c.ans?'✓ ':'Not quite: it is <b>'+c.ans+'</b>. ')+c.why+'</p>':'')+'</div>'; }).join(''); }
+function asPick(i,o){ asP[i]=o; asRender(); }
+
+/* ---------------- CREATIVITY: the shape family builder ---------------- */
+var FB=[[-9,7],[-5,7],[-7,9],[-9,9]];
+var FBR=[
+ {t:'a similar shape with scale factor '+FR(1,2),test:function(r){ return r.sim&&Math.abs(r.k-1/2)<1e-9; }},
+ {t:'a similar shape with scale factor '+FR(3,2),test:function(r){ return r.sim&&Math.abs(r.k-3/2)<1e-9; }},
+ {t:'a similar shape that is turned: facing a different way, but not flipped',test:function(r){ return r.sim&&!r.flip&&r.turn; }},
+ {t:'a similar shape that is a mirror image of '+I('ABCD'),test:function(r){ return r.sim&&r.flip; }},
+ {t:'<span class="stretch">stretch</span> a shape with exactly the same angles as '+I('ABCD')+' that is <b>not</b> similar to it',test:function(r){ return !r.sim&&r.sameAng; }}];
+var fb={b:0,pts:[],family:[],done:[]};
+function fbAnalyse(Q){ var r={sim:false,sameAng:false}, ms=dihedral(4);
+  for(var t=0;t<ms.length;t++){ var m=ms[t], e=evidence(FB,Q,m); if(e.angOK) r.sameAng=true;
+    if(e.sim&&!r.sim){ r.sim=true; r.k=e.k; var u=[FB[1][0]-FB[0][0],FB[1][1]-FB[0][1]], v=[Q[m[1]][0]-Q[m[0]][0],Q[m[1]][1]-Q[m[0]][1]];
+      r.flip=(cross(FB[0],FB[1],FB[3])>0)!==(cross(Q[m[0]],Q[m[1]],Q[m[3]])>0);
+      r.turn=!(Math.abs(u[0]*v[1]-u[1]*v[0])<1e-9&&u[0]*v[0]+u[1]*v[1]>0); } }
+  return r; }
+function fbCrosses(Q){ function seg(a,b,c,d){ var d1=cross(a,b,c), d2_=cross(a,b,d), d3=cross(c,d,a), d4=cross(c,d,b); return (d1>0)!==(d2_>0)&&(d3>0)!==(d4>0)&&d1*d2_<0&&d3*d4<0; } return seg(Q[0],Q[1],Q[2],Q[3])||seg(Q[1],Q[2],Q[3],Q[0]); }
+function fbClick(ev,svg){ var p=svgAt(ev,svg); if(!inGrid(p)) return; if(fb.pts.length>=4){ msg('fbRead','warn','You have placed four corners. Check the shape, or start again.'); return; }
+  if(fb.pts.some(function(q){ return samePair(p,q); })) return; fb.pts.push(p); document.getElementById('fbRead').style.display='none'; fbDraw(); }
+function fbUndo(){ fb.pts.pop(); fbDraw(); } function fbClear(){ fb.pts=[]; document.getElementById('fbRead').style.display='none'; fbDraw(); }
+function fbBrief(i){ fb.b=i; fb.pts=[]; document.getElementById('fbRead').style.display='none'; fbDraw(); }
+function fbCheck(){ var Q=fb.pts;
+  if(Q.length<4){ msg('fbRead','warn',I('ABCD')+' has four corners: click four corners, in order round your shape.'); return; }
+  if(fbCrosses(Q)){ msg('fbRead','warn','Two sides cross. Click the corners in order, going round the shape.'); return; }
+  var r=fbAnalyse(Q), B=FBR[fb.b], met=B.test(r), what=r.sim?'similar to '+I('ABCD')+', with scale factor '+fr(r.k)+(r.flip?', flipped':r.turn?', turned':''):r.sameAng?'not similar: the angles match '+I('ABCD')+'\'s, but the sides are not all in the same ratio':'not similar: its angles are not the same as '+I('ABCD')+'\'s';
+  if(met){ fb.done[fb.b]=true; fb.family.push({Q:Q.slice(),sim:r.sim}); fb.pts=[]; fbDraw(); msg('fbRead','good','✓ Brief met. Your shape is '+what+'.'+(fb.b===4?' For four-sided shapes, equal angles alone are not enough.':'')); }
+  else msg('fbRead','warn','Your shape is '+what+'. This brief asks for '+B.t.replace(/<span class="stretch">stretch<\/span> /,'')+'.'); }
+function fbDraw(){ var h=polyOut(FB,'obj',['A','B','C','D']);
+  fb.family.forEach(function(f){ h+='<polygon points="'+f.Q.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+(f.sim?'img':'img2')+'"/>'; });
+  if(fb.pts.length) h+='<polyline points="'+fb.pts.concat(fb.pts.length===4?[fb.pts[0]]:[]).map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="try"/>'+fb.pts.map(function(p){ return '<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="pinv"/>'; }).join('');
+  document.getElementById('fbBriefs').innerHTML=FBR.map(function(B,i){ return '<button class="chip'+(i===fb.b?' on':'')+'" onclick="fbBrief('+i+')">Brief '+(i+1)+(fb.done[i]?' ✓':'')+'</button>'; }).join('');
+  document.getElementById('fbBrief').innerHTML='Make '+FBR[fb.b].t+'.';
+  document.getElementById('fbFig').innerHTML=wrap(h,'fbClick','Shape ABCD, your family of shapes, and the corners you have placed');
+  document.getElementById('fbN').textContent=fb.pts.length+' of 4 corners placed'; }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    ratio:{title:'Ratios as fractions',prompt:'Write 12 ÷ 8 as a fraction in its simplest form.',answer:1.5,hint:'Divide 12 and 8 by their highest common factor, 4.'},
+    enl:{title:'Enlargement (Lesson 6)',prompt:'A side of 6 cm is enlarged by scale factor <span class=fr><span>1</span><span>2</span></span>. How long is the image of that side, in cm?',answer:3,hint:'Multiply the length by the scale factor.'},
+    ang:{title:'Angles in a triangle',prompt:'Two angles of a triangle are 50° and 60°. What is the third angle, in degrees?',answer:70,hint:'The angles of a triangle add up to 180°.'}
+  };
+  function matches(r,v){ if(typeof r.answer==='number') return same(num(String(v).replace(/cm|°/gi,'')),r.answer); if(r.pt) return samePair(pairOf(v),r.answer); if(r.line) return sameLine(lineOf(v),lineOf(r.answer)); var t=String(v).trim().toLowerCase().replace(/[.!]$/,''); return t===r.answer||t==='it is '+r.answer||t==='it\'s '+r.answer||t==='a '+r.answer+' line'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pP(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pV(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pN(n){ return function(v){ return same(kOf(String(v).replace(/cm|°|degrees?/gi,'')),n); }; }
+function pYes(t){ return function(v){ var s=String(v).toLowerCase(); var yes=/\byes\b|\bsimilar\b|\bthey are\b/.test(s)&&!/\bno\b|\bnot\b|n't/.test(s), no=/\bno\b|\bnot\b|n't/.test(s); return t?yes:no; }; }
+var PRACTICE=[
+ {label:"1 of 8 · Two rectangles",q:"Is a 6 cm by 4 cm rectangle similar to a 9 cm by 6 cm rectangle? Answer yes or no.",a:[],eq:pYes(true),prompt:"Every angle of a rectangle is 90°. What decides it, then?",hint:"Compare the longer sides, 9 and 6, and the shorter sides, 6 and 4, as fractions.",sol:"Yes. "+'<span class=fr><span>9</span><span>6</span></span>'+" = "+'<span class=fr><span>3</span><span>2</span></span>'+" and "+'<span class=fr><span>6</span><span>4</span></span>'+" = "+'<span class=fr><span>3</span><span>2</span></span>'+": the same ratio, and every angle is 90°."},
+ {label:"2 of 8 · The scale factor",q:"A 6 cm by 4 cm rectangle is similar to a 9 cm by 6 cm rectangle. What is the scale factor from the smaller to the larger?",a:[],eq:pN(3/2),prompt:"Which length do you divide by which?",hint:"A length of the larger rectangle ÷ the matching length of the smaller one: 9 ÷ 6.",sol:'<span class=fr><span>9</span><span>6</span></span>'+" = "+'<span class=fr><span>3</span><span>2</span></span>'+", which is 1.5."},
+ {label:"3 of 8 · Not similar?",q:"Is a 5 cm by 3 cm rectangle similar to a 10 cm by 5 cm rectangle? Answer yes or no.",a:[],eq:pYes(false),prompt:"Is every pair of sides in the same ratio?",hint:"Longer sides: 10 ÷ 5. Shorter sides: 5 ÷ 3.",sol:"No. "+'<span class=fr><span>10</span><span>5</span></span>'+" = 2, but "+'<span class=fr><span>5</span><span>3</span></span>'+" is not 2: the ratios are different."},
+ {label:"4 of 8 · Triangles",q:"A triangle has sides 4 cm, 6 cm and 7 cm. A similar triangle has corresponding sides 10 cm, 15 cm and 17.5 cm. What is the scale factor?",a:[],eq:pN(5/2),prompt:"Is the ratio the same for every pair?",hint:"10 ÷ 4. Check it with 15 ÷ 6.",sol:'<span class=fr><span>10</span><span>4</span></span>'+" = "+'<span class=fr><span>15</span><span>6</span></span>'+" = "+'<span class=fr><span>5</span><span>2</span></span>'+", which is 2.5."},
+ {label:"5 of 8 · An angle",q:"Two angles of a triangle are 40° and 75°. A larger triangle is similar to it. What is the third angle of the larger triangle, in degrees?",a:[],eq:pN(65),prompt:"What do similar shapes keep the same?",hint:"Find the third angle of the first triangle: the angles add up to 180°.",sol:"180° − 40° − 75° = 65°. Similar shapes have equal corresponding angles, so the larger triangle's angles are 40°, 75° and 65°."},
+ {label:"6 of 8 · Squares",q:"What is the scale factor from a square with side 3 cm to a square with side 7 cm?",a:[],eq:pN(7/3),prompt:"Are any two squares similar?",hint:"7 ÷ 3, as a fraction.",sol:'<span class=fr><span>7</span><span>3</span></span>'+": every side is multiplied by "+'<span class=fr><span>7</span><span>3</span></span>'+"."},
+ {label:"7 of 8 · Congruent shapes",q:"Two shapes are congruent. They are also similar. What is the scale factor?",a:[],eq:pN(1),prompt:"What happens to the lengths?",hint:"Every length stays the same.",sol:"1: every ratio of corresponding sides is 1."},
+ {label:"8 of 8 · A photo (stretch)",q:"A 4 cm by 6 cm photo is enlarged so that the 4 cm side becomes 10 cm, and the photo stays similar. How long does the 6 cm side become, in cm?",a:[],eq:pN(15),prompt:"What is the scale factor?",hint:"10 ÷ 4 = "+'<span class=fr><span>5</span><span>2</span></span>'+". Multiply 6 by it.",sol:"Scale factor "+'<span class=fr><span>10</span><span>4</span></span>'+" = "+'<span class=fr><span>5</span><span>2</span></span>'+"; 6 × "+'<span class=fr><span>5</span><span>2</span></span>'+" = 15 cm."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  var vq=!!q.vec; document.getElementById("pTextWrap").style.display=vq?"none":""; document.getElementById("pVecWrap").style.display=vq?"":"none"; document.getElementById("pVecT").value=""; document.getElementById("pVecB").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],fb=document.getElementById("practiceFeedback"),val;
+  if(q.vec){ var vt=document.getElementById("pVecT").value.trim(), vb=document.getElementById("pVecB").value.trim(); val=(vt&&vb)?vt+", "+vb:""; if(!val&&(vt||vb)){ fb.style.display="block"; fb.className="feedback warn"; fb.textContent="Fill in both boxes: the horizontal move and the vertical move."; pLock(); return; } }
+  else val=document.getElementById("practiceAnswer").value;
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Check the angles and the ratios of corresponding sides — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  ssDraw();
+  phRender();
+  ckRender();
+  prRender('pr');
+  asRender();
+  fbDraw();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('ts-07-similar');</script>
+
+<script src="../../assets/fieldkits/transformations-similarity-and-scale.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(6);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press xⁿ again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="xⁿ"){ /* power key: the next digits typed become a superscript power, e.g. 1.06⁴ */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+
+<script>/* NEO: return to the exact place after the Geometry Studio */
+(function(){
+  var KEY='neoReturn:'+location.pathname, p=location.pathname, i=p.indexOf('/lessons/'), rel=i<0?null:'..'+p.slice(i);
+  function snap(){ var det=[].slice.call(document.querySelectorAll('details')), pv=document.getElementById('practiceView'), a=document.getElementById('practiceAnswer');
+    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:'',boxes:pv?[].slice.call(pv.querySelectorAll('input[id]')).filter(function(x){return x.value;}).map(function(x){return [x.id,x.value];}):[]}; }
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(snap())); }catch(e){} }
+  [].slice.call(document.querySelectorAll('a[href*="geometry-studio.html"]')).forEach(function(a){ var h=a.getAttribute('href');
+    if(rel&&!/[?&]return=/.test(h)) a.setAttribute('href',h+(h.indexOf('?')<0?'?':'&')+'return='+encodeURIComponent(rel));
+    a.addEventListener('click',save); });
+  var s=null; try{ s=JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){}
+  if(!s||Date.now()-s.t>3*3600*1000) return;
+  try{ sessionStorage.removeItem(KEY); }catch(e){}
+  function restore(){ var det=document.querySelectorAll('details'); (s.open||[]).forEach(function(k){ if(det[k]) det[k].open=true; });
+    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; (s.boxes||[]).forEach(function(bx){ var el=document.getElementById(bx[0]); if(el) el.value=bx[1]; }); } }
+    setTimeout(function(){ window.scrollTo(0,s.y); },s.practice?450:60); }
+  if(document.readyState==='complete') setTimeout(restore,80); else window.addEventListener('load',function(){ setTimeout(restore,80); });
+})();
+</script>
+</body>
+</html>

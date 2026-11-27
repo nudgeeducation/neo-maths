@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEO Dynamic Geometry Studio — v0.6.1</title>
+<title>NEO Dynamic Geometry Studio — v0.6.2</title>
 <style>
 body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif}
 .wrap{max-width:1040px;margin:auto;padding:14px}
@@ -74,7 +74,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 <div class="topbar">
   <div class="titleblock">
     <h1>Dynamic Geometry Studio <span id="sketchName" style="font-size:.62em;font-weight:normal;color:#6a7f4e">— (unsaved)</span></h1>
-    <p class="sub">v0.6.1 — a coordinate grid and transformations, now with Enlarge and a task checker. Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
+    <p class="sub">v0.6.2 — a coordinate grid and transformations, now with Enlarge and a task checker. Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
   </div>
   <a id="returnBtn" class="returnbtn" href="#" hidden>← Return to lesson</a>
 </div>
@@ -590,7 +590,7 @@ document.getElementById("toolbox").addEventListener("click",function(e){var b=e.
 });
 
 /* ---------- serialisation + named-sketch store ---------- */
-function serialize(){return {version:"NEO-DGS-0.6.1",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
+function serialize(){return {version:"NEO-DGS-0.6.2",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
 function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;if(data.axes){AX.on=!!data.axes.on;AX.snap=data.axes.snap!==false;AX.coords=!!data.axes.coords;}sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
 function storeMap(){try{return JSON.parse(localStorage.getItem(LSKEY)||"{}");}catch(e){return {};}}
 function storeSet(m){try{localStorage.setItem(LSKEY,JSON.stringify(m));}catch(e){}}
@@ -1202,6 +1202,30 @@ var TASKS={
           "Save your work, with a full description of each enlargement."],
    big:"Save your work and a sentence: every length is multiplied by the scale factor, and every angle stays the same.",
    conj:"What happens to the image when you drag the centre?"},
+ "ts07-similar":{
+   tag:"Transformations · Lesson 7 · Movement",
+   title:"Make a similar shape",
+   intro:"Make a shape that is similar to ABCD but turned, then show the evidence: corresponding angles equal, and every pair of corresponding sides in the same ratio.",
+   setup:{axes:true,coords:true,pts:[["A",1,1],["B",5,1],["C",3,3],["D",1,3]],polys:[["A","B","C","D"]],next:4},
+   steps:["Plot a centre of enlargement with Graph → Plot points…, select it, then Transform → Mark centre.",
+          "Drag a box around ABCD, then Transform → Enlarge from the marked centre…, with scale factor 1/2 or 2.",
+          "Mark a new centre, drag a box around the image, then Transform → Rotate… through 90°. The final image is similar to ABCD, and turned.",
+          "Measure → Distance: AB and the side of the final image that corresponds to it. Measure → Angle: the angle at B and the angle that corresponds to it.",
+          "In “What do you notice?”, write the scale factor from ABCD to the final image, and why the two shapes are similar."],
+   big:"Similar: every pair of corresponding angles is equal, and every pair of corresponding sides is in the same ratio.",
+   conj:"Which corner of the final image corresponds to B? How do you know?"},
+ "ts07-final":{
+   tag:"Transformations · Lesson 7 · Final Task",
+   title:"Similar or not: show the evidence",
+   intro:"Make a similar copy of a shape and a copy with the same angles that is not similar, and show the evidence for each.",
+   setup:{axes:true,coords:true,pts:[["A",-4,-2],["B",0,-2],["C",0,0],["D",-4,0]],polys:[["A","B","C","D"]],next:4},
+   steps:["Make a similar copy of rectangle ABCD: enlarge it (Transform → Enlarge…), then turn or flip the image.",
+          "Make a rectangle with the same angles that is not similar: plot four points with Graph → Plot points…, for example a rectangle 6 long and 2 high.",
+          "Measure corresponding sides of ABCD and of each copy (Measure → Distance), and work out each ratio as a fraction.",
+          "Measure one angle of each shape (Measure → Angle).",
+          "Save your work, with a sentence for each copy: similar or not, and the evidence."],
+   big:"Save your work and a sentence: equal angles alone are not enough; the ratios must all be the same too.",
+   conj:"Could a shape have every ratio the same as ABCD's but not be similar? What would it look like?"},
  "studio-open":{
    tag:"Open workspace",
    title:"Your construction space",
