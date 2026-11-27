@@ -508,6 +508,14 @@
           "file": "lessons/transformations-similarity-and-scale/09-maps-and-scale-drawings.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-10-area",
+          "num": "Lesson 10",
+          "title": "Area scale factor and putting it together",
+          "file": "lessons/transformations-similarity-and-scale/10-area-scale-factor.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
