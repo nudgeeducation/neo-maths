@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEO Dynamic Geometry Studio — v0.6.4</title>
+<title>NEO Dynamic Geometry Studio — v0.6.5</title>
 <style>
 body{margin:0;background:#efe9df;color:#2f3429;font-family:Arial,sans-serif}
 .wrap{max-width:1040px;margin:auto;padding:14px}
@@ -74,7 +74,7 @@ svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 <div class="topbar">
   <div class="titleblock">
     <h1>Dynamic Geometry Studio <span id="sketchName" style="font-size:.62em;font-weight:normal;color:#6a7f4e">— (unsaved)</span></h1>
-    <p class="sub">v0.6.4 — a coordinate grid and transformations, with Enlarge, a task checker and a calculator (Number menu). Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
+    <p class="sub">v0.6.5 — a coordinate grid and transformations, with Enlarge, a task checker and a calculator (Number menu). Sketchpad-style layout: instruments in the left toolbox, operations in the top menus. <b>Select objects, then choose a menu action.</b> Lessons can hand you a task to build here.</p>
   </div>
   <a id="returnBtn" class="returnbtn" href="#" hidden>← Return to lesson</a>
 </div>
@@ -591,7 +591,7 @@ document.getElementById("toolbox").addEventListener("click",function(e){var b=e.
 });
 
 /* ---------- serialisation + named-sketch store ---------- */
-function serialize(){return {version:"NEO-DGS-0.6.4",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
+function serialize(){return {version:"NEO-DGS-0.6.5",axes:{on:AX.on,snap:AX.snap,coords:AX.coords},name:currentName,pointLabel:pointLabel,nextId:nextId,objects:objects.map(function(o){var c={};for(var k in o){if(k==="_last"||k==="_trail")continue;c[k]=o[k];}return c;})};}
 function loadData(data){if(!data||!data.objects)throw 0;objects=data.objects;if(data.axes){AX.on=!!data.axes.on;AX.snap=data.axes.snap!==false;AX.coords=!!data.axes.coords;}sel=[];pending=[];compass=null;pointLabel=data.pointLabel||0;var mx=0;objects.forEach(function(o){if(o.id>mx)mx=o.id;});nextId=data.nextId||(mx+1);currentName=data.name||null;updateTitle();render();}
 function storeMap(){try{return JSON.parse(localStorage.getItem(LSKEY)||"{}");}catch(e){return {};}}
 function storeSet(m){try{localStorage.setItem(LSKEY,JSON.stringify(m));}catch(e){}}
@@ -1251,6 +1251,30 @@ var TASKS={
           "Save your work, with your prediction, your measurement and one sentence about which length goes over which."],
    big:"Save your work and a sentence: one known pair of corresponding sides gives the scale factor for every pair.",
    conj:"Find the length of one of the extra pieces, such as DB. Why can it not give the scale factor?"},
+ "ts09-plan":{
+   tag:"Transformations · Lesson 9 · Movement",
+   title:"A garden plan to scale",
+   intro:"A garden is 8 m by 5 m, with a straight path from one corner to the opposite corner. Draw its plan at 1 : 100, where one grid square stands for 1 cm on the plan, then find the real length of the path.",
+   setup:{axes:true,coords:true,pts:[],next:0},
+   steps:["At 1 : 100, 1 cm on the plan represents 100 cm, which is 1 m. So 8 m becomes 8 cm and 5 m becomes 5 cm.",
+          "Graph → Plot points…: type A(0,0) B(8,0) C(8,5) D(0,5) and leave “Join them in order to make a shape” ticked.",
+          "Draw the path with the Segment tool, from A to C.",
+          "Measure → Distance: A and C. That is the path on the plan, in cm.",
+          "Number → Calculator…: tap the AC key, then × 100, for the real path in cm. Change it into metres, and write it in “What do you notice?”."],
+   big:"At 1 : 100, 1 cm on the plan is 1 m in the garden: multiply by 100, then change cm into m.",
+   conj:"The path is longer than 8 m but shorter than 13 m. Why must that be?"},
+ "ts09-final":{
+   tag:"Transformations · Lesson 9 · Final Task",
+   title:"Make a scale drawing",
+   intro:"Make a scale drawing of a space you know, and use it to find a length you did not measure.",
+   setup:{axes:true,coords:true,pts:[],next:0},
+   steps:["Choose a scale so your space fits the grid, and write it as 1 : n and as “1 cm represents …”. One grid square stands for 1 cm.",
+          "Change each real length into a plan length, then plot the corners with Graph → Plot points…, with “Join them in order to make a shape” ticked.",
+          "Measure a length you did not measure in real life (Measure → Distance), such as a diagonal.",
+          "Use Number → Calculator… to change it back into a real length.",
+          "Save your work, with your scale written both ways and each conversion."],
+   big:"Save your work and a sentence: real to plan, change into cm and divide by n; plan to real, multiply by n and change the units.",
+   conj:"Measure an angle on your drawing. Is it the same angle as in real life? Why?"},
  "studio-open":{
    tag:"Open workspace",
    title:"Your construction space",

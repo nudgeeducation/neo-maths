@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEO Mathematics: Maps and scale drawings</title>
+<style>
+body{margin:0;background:#efe9df;color:#2f3429}
+.neo{font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:22px;background:#f7f3ea;line-height:1.55;border-radius:18px}
+h1{color:#3f5f45;margin-bottom:6px}h2{color:#6a7f4e}
+.info{background:#fffaf0;padding:15px;border-left:6px solid #d8b26e;border-radius:12px;margin:18px 0}
+.guides{background:#eef3e8;padding:14px;border-radius:12px;margin:16px 0}
+.buttonrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
+button,.guidebtn{padding:9px 13px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;text-decoration:none;color:#2f3429;display:inline-block}
+.guidebtn{background:#5c6b4f;color:#fff;border:none}.scratchbtn{background:#365a68;color:#fff;border:none}
+details{padding:15px;margin:12px 0;border-radius:14px}summary{font-size:1.25em;font-weight:bold;cursor:pointer}
+.kw{background:#e8f0e3}.hs{background:#e5eef2}.es{background:#f1e9dc}.dw{background:#ece7f2}.lb{background:#eef0df}.nt{background:#e7efe8}.ft{background:#f3eadc}
+.toolbox{background:#f8f4ee;border:1px solid #cdbfa9;padding:18px;border-radius:14px}
+.readout,.card{background:#fff;padding:12px;border-radius:10px;margin:10px 0}
+.feedback{display:none;margin-top:10px;padding:10px;border-radius:8px;font-weight:bold}
+.good{background:#e3f0df}.bad{background:#f6dddd}.warn{background:#fff1cf}
+.small{font-size:.95em;color:#4f554b}
+table{width:100%;border-collapse:collapse;background:#fff}td,th{border:1px solid #cdbfa9;padding:8px;vertical-align:top;text-align:center}th{background:#f3eadc}
+.practice{font-family:Georgia,'Times New Roman',serif;max-width:960px;margin:auto;padding:24px;background:#f8f4ee;line-height:1.55;border-radius:18px}
+.practice h1{font-size:2.2em}
+.practice input{width:100%;font-size:1em;padding:12px;border:1px solid #bcae98;border-radius:8px;box-sizing:border-box}
+.progress-dot{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;border:1px solid #8c9cab;font-weight:bold;background:#fff}
+.progress-dot.active{background:#e5edf4}.progress-dot.done{background:#e3f0df}
+.chip{display:inline-block;padding:7px 12px;border-radius:20px;border:1px solid #8c9cab;background:#fff;cursor:pointer;font-weight:600;margin:3px}
+.chip.active{background:#dce8ef;border-color:#365a68}
+.bignum{font-size:1.2em;font-weight:bold;color:#3f5f45;text-align:center;margin:4px 0}
+.clue{background:#fffaf0;border:1px solid #e2d4bb;border-radius:10px;padding:10px 12px;margin:8px 0}
+.graphsvg{width:100%;background:#fbf7ef;border:1px solid #cdbfa9;border-radius:12px;display:block;margin:auto}
+.numin{max-width:70px;font-size:1em;padding:8px;border:1px solid #bcae98;border-radius:8px;text-align:center}
+.stretch{background:#efe7f4;border:1px solid #b9a2cf;border-radius:8px;padding:2px 8px;font-size:.85em;font-weight:bold;color:#5c3f7a}
+.uk{font-family:'Times New Roman',Georgia,serif;font-style:italic}
+select{font-family:inherit;font-size:1em;padding:7px 8px;border:1px solid #bcae98;border-radius:8px}
+#rfLines table td{text-align:left}
+</style>
+</head>
+<body>
+
+<style>
+  .neo-chrome, .neo-chrome * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+  .neo-chrome-header { background: #1A2E3B; color: #F7F7F5; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .neo-chrome-header a.neo-home { color: #2AB3A0; text-decoration: none; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; white-space: nowrap; }
+  .neo-chrome-header a.neo-home:hover { text-decoration: underline; }
+  .neo-chrome-header .neo-crumb { font-size: 0.8rem; color: rgba(247,247,245,0.85); text-align: right; }
+  .neo-chrome-header .neo-crumb strong { color: #FFFFFF; font-weight: 600; }
+  .neo-chrome-footer { background: #1A2E3B; color: rgba(247,247,245,0.85); padding: 1.1rem 1.2rem; text-align: center; font-size: 0.8rem; margin-top: 2rem; }
+  .neo-chrome-footer a { color: #2AB3A0; text-decoration: none; margin: 0 0.6rem; }
+  .neo-chrome-footer a:hover { text-decoration: underline; }
+  .neo-chrome-footer .neo-mark { font-size: 0.95rem; color: #FFFFFF; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .neo-chrome-footer .neo-mark span { color: #2AB3A0; }
+  /* On a phone, a wide table (e.g. the Final Task rubric) scrolls inside its own box instead of widening the whole page. */
+  @media (max-width: 700px) { .neo-lesson-root table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+  /* --- Comfort & Access --- */
+  .neo-comfort-btn{background:#2AB3A0;color:#08312b;border:none;border-radius:8px;padding:0.35rem 0.7rem;font-weight:700;font-size:0.72rem;letter-spacing:0.06em;cursor:pointer;white-space:nowrap}
+  .neo-comfort-btn:hover{filter:brightness(1.06)}
+  .neo-comfort-panel{background:#12242e;color:#F7F7F5;padding:0.85rem 1.2rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-end;border-top:1px solid rgba(255,255,255,0.12);font-family:'Inter',-apple-system,'Segoe UI',sans-serif}
+  .neo-comfort-panel[hidden]{display:none}
+  .neo-comfort-group{display:flex;flex-direction:column;gap:0.35rem}
+  .neo-comfort-group>span{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(247,247,245,0.65)}
+  .neo-comfort-row{display:flex;gap:0.4rem}
+  .neo-comfort-panel button.opt{background:rgba(255,255,255,0.10);color:#F7F7F5;border:1px solid rgba(255,255,255,0.25);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.8rem}
+  .neo-comfort-panel button.opt[aria-pressed="true"]{background:#2AB3A0;color:#08312b;border-color:#2AB3A0;font-weight:700}
+  .neo-comfort-reset{margin-left:auto;align-self:center;background:none;border:1px solid rgba(255,255,255,0.3);color:rgba(247,247,245,0.85);border-radius:7px;padding:0.35rem 0.7rem;cursor:pointer;font-size:0.75rem}
+  html[data-neo-text="large"]{font-size:112.5%}
+  html[data-neo-text="larger"]{font-size:125%}
+  html[data-neo-spacing="on"] .neo-lesson-root{letter-spacing:0.012em}
+  html[data-neo-spacing="on"] .neo-lesson-root p,html[data-neo-spacing="on"] .neo-lesson-root li,html[data-neo-spacing="on"] .neo-lesson-root summary,html[data-neo-spacing="on"] .neo-lesson-root h2,html[data-neo-spacing="on"] .neo-lesson-root h3,html[data-neo-spacing="on"] .neo-lesson-root label{line-height:1.9!important;margin-bottom:0.7em!important}
+  html[data-neo-calm="on"]{filter:saturate(0.82) brightness(1.02)}
+  html[data-neo-motion="reduced"] *,html[data-neo-motion="reduced"] *::before,html[data-neo-motion="reduced"] *::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0.001ms!important;transition-duration:0.001ms!important;scroll-behavior:auto!important}}
+  .mathpalette{margin:6px 0}
+  .palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+  .palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .palette-keys[hidden]{display:none}
+  .palette-keys button{min-width:42px;padding:8px 10px;font-size:1.05em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+  .palette-keys button.powkey.on{background:#365a68;color:#fff;border-color:#365a68}
+  .powhint{font-size:.9em;color:#365a68;margin-top:4px}
+  .powhint[hidden]{display:none}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;line-height:1.05}
+  .frac .fnum{padding:0 .25em .5px}
+  .frac .fden{padding:.5px .25em 0;border-top:1.6px solid currentColor}
+  .fracpreview{margin-top:6px;font-size:1.05em;color:#2f3429}
+  .fracpreview[hidden]{display:none}
+  .fracpreview .flabel{font-size:.85em;color:#5c6b4f;margin-right:.4em}
+</style>
+<div class="neo-chrome neo-chrome-header"><a class="neo-home" href="../../index.html">&larr; NEO Maths home</a><div class="neo-crumb">Transformations, Similarity and Scale &middot; <strong>Lesson 09 &mdash; Maps and scale drawings</strong></div><button class="neo-comfort-btn" type="button" onclick="neoComfortToggle()" aria-expanded="false" aria-controls="neoComfortPanel" title="Comfort and access settings">Aa&nbsp;Comfort</button></div><div id="neoComfortPanel" class="neo-comfort neo-comfort-panel" hidden aria-label="Comfort and access settings"><div class="neo-comfort-group"><span>Text size</span><div class="neo-comfort-row"><button class="opt" data-k="text" data-v="normal" onclick="neoComfortSet(&#39;text&#39;,&#39;normal&#39;)">A</button><button class="opt" data-k="text" data-v="large" onclick="neoComfortSet(&#39;text&#39;,&#39;large&#39;)">A+</button><button class="opt" data-k="text" data-v="larger" onclick="neoComfortSet(&#39;text&#39;,&#39;larger&#39;)">A++</button></div></div><div class="neo-comfort-group"><span>Comfort</span><div class="neo-comfort-row"><button class="opt" data-k="spacing" onclick="neoComfortToggleOpt(&#39;spacing&#39;)">More spacing</button><button class="opt" data-k="calm" onclick="neoComfortToggleOpt(&#39;calm&#39;)">Calmer colours</button><button class="opt" data-k="motion" onclick="neoComfortToggleOpt(&#39;motion&#39;)">Reduce motion</button></div></div><button class="neo-comfort-reset" type="button" onclick="neoComfortReset()">Reset</button></div>
+<script>
+(function(){
+ var KEY="neoComfort",d=document.documentElement,st={text:"normal",spacing:false,calm:false,motion:false};
+ try{var sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv)st=Object.assign(st,sv);}catch(e){}
+ function apply(){d.setAttribute("data-neo-text",st.text);st.spacing?d.setAttribute("data-neo-spacing","on"):d.removeAttribute("data-neo-spacing");st.calm?d.setAttribute("data-neo-calm","on"):d.removeAttribute("data-neo-calm");st.motion?d.setAttribute("data-neo-motion","reduced"):d.removeAttribute("data-neo-motion");}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+ function sync(){var ps=document.querySelectorAll("#neoComfortPanel .opt");for(var i=0;i<ps.length;i++){var b=ps[i],k=b.getAttribute("data-k");if(k==="text"){b.setAttribute("aria-pressed",st.text===b.getAttribute("data-v")?"true":"false");}else{b.setAttribute("aria-pressed",st[k]?"true":"false");}}}
+ window.neoComfortToggle=function(){var p=document.getElementById("neoComfortPanel"),btn=document.querySelector(".neo-comfort-btn"),willOpen=p.hasAttribute("hidden");willOpen?p.removeAttribute("hidden"):p.setAttribute("hidden","");if(btn)btn.setAttribute("aria-expanded",willOpen?"true":"false");};
+ window.neoComfortSet=function(k,v){st[k]=v;apply();save();sync();};
+ window.neoComfortToggleOpt=function(k){st[k]=!st[k];apply();save();sync();};
+ window.neoComfortReset=function(){st={text:"normal",spacing:false,calm:false,motion:false};apply();save();sync();};
+ apply();
+ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",sync);}else{sync();}
+})();
+</script>
+<div class="neo-lesson-root">
+
+<style>
+.gsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px;touch-action:manipulation}
+.gsvg .gl{stroke:#e2d9c8;stroke-width:1}.gsvg .ax{stroke:#2f3429;stroke-width:1.6}
+.gsvg .tn{font-family:Arial,sans-serif;font-size:11px;fill:#5c6b4f}.gsvg .ti{font-family:Georgia,serif;font-style:italic;font-size:12px}
+.gsvg .axl{font-family:Georgia,serif;font-style:italic;font-size:16px;fill:#2f3429}
+.gsvg .mir{stroke:#7a4fb0;stroke-width:3}.gsvg .mir.try{stroke-dasharray:7 5}
+.gsvg .mlab{font-family:Georgia,serif;font-size:14px;fill:#7a4fb0;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:4}
+.gsvg .obj{fill:rgba(47,109,176,.28);stroke:#2b6cb0;stroke-width:2.2}.gsvg .objv{fill:#2b6cb0;stroke:#fff;stroke-width:1.5}
+.gsvg .img{fill:rgba(242,193,78,.45);stroke:#b8860b;stroke-width:2.2}.gsvg .imgv{fill:#b8860b;stroke:#fff;stroke-width:1.5}
+.gsvg .try{fill:none;stroke:#b0412f;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.gsvg .perp{stroke:#3f7a45;stroke-width:1.6;stroke-dasharray:5 4}
+.gsvg .selv{fill:none;stroke:#c1622e;stroke-width:2;stroke-dasharray:3 3}
+.gsvg .mid{fill:#3f7a45;stroke:#fff;stroke-width:1.5}.gsvg .ra{fill:none;stroke:#3f7a45;stroke-width:1.8}
+.gsvg .hl{stroke:#b0412f;stroke-width:3.5}.gsvg .mid.hl{fill:#b0412f}.gsvg .hlv{stroke:#b0412f;stroke-width:3}
+.lab .row2{display:flex;flex-wrap:wrap;gap:6px 10px;justify-content:center;align-items:center;margin:6px 0}
+.lab .chip.on,.md .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.lab table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}
+.lab table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df}
+.lab table.lt td:not(:last-child){white-space:nowrap}
+@media (max-width:520px){.lab table.lt{font-size:.88em}.lab table.lt td{padding:3px 4px}}
+.arrows button{min-width:38px}
+table.rt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif;font-size:1.05em}
+table.rt th,table.rt td{border:1.5px solid #9fb0a3;padding:4px 14px;text-align:center}table.rt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.ru .opts,.md .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.ru .opts .chip{font-family:Georgia,serif;font-size:1.05em}
+.wl .ask{font-family:Georgia,serif;font-size:1.15em;text-align:center;margin:6px 0}
+.proof{border-left:4px solid #9a7fc1;background:#f6f2fb;padding:10px 14px;border-radius:8px;margin-top:12px}
+.proof .pl{margin:6px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.2}
+.fr>span{padding:0 3px;font-size:.92em}.fr>span:first-child{border-bottom:1.6px solid currentColor}
+.studio{border:2px solid #365a68;background:#eef3f6}
+@media (max-width:520px){.gsvg .tn{font-size:14px}.gsvg .vl{font-size:17px}.gsvg .mlab{font-size:17px}.gsvg .axl{font-size:19px}}
+.gsvg .cen{fill:#7a4fb0;stroke:#fff;stroke-width:1.5}.gsvg .cenr{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:4 3}
+.gsvg .arc{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .target{fill:none;stroke:#b8860b;stroke-width:2.4;stroke-dasharray:6 4}
+.gsvg .sheet{fill:rgba(255,255,255,.55);stroke:#9fb0a3;stroke-width:1.5}.gsvg .trace{fill:rgba(176,65,47,.18);stroke:#b0412f;stroke-width:2.2}
+.gsvg .ghost{fill:none;stroke:#7a4fb0;stroke-width:2;stroke-dasharray:5 4}
+.gsvg .badge{font-family:Georgia,serif;font-size:13px;font-weight:700;fill:#5a3f10}
+.gsvg .rad{stroke:#3f7a45;stroke-width:2}.gsvg .bis{stroke:#7a4fb0;stroke-width:2;stroke-dasharray:6 4}
+.st .opts,.dz .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.dzscroll{max-width:660px;height:min(620px,88vw);overflow:auto;margin:6px auto;border:2px solid #c9d6bf;border-radius:12px;background:#fbf8f1;-webkit-overflow-scrolling:touch}
+.dzscroll .gsvg.big{max-width:none;width:auto;margin:0;border:none;border-radius:0}
+.dz .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.dz ol{margin:6px 0 6px 22px;font-family:Georgia,serif}
+.tp .turns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.cv{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;padding:1px 7px;margin:0 3px;border-left:2px solid currentColor;border-right:2px solid currentColor;border-radius:9px;line-height:1.15;font-family:Georgia,serif}
+.cv>span{min-width:1.4em;text-align:center}
+.cvin{display:inline-flex;align-items:center;gap:4px;font-size:2.2em;font-family:Georgia,serif;color:#5c6b60;vertical-align:middle}
+.cvin .stack{display:inline-flex;flex-direction:column;gap:4px}
+.cvin input{width:64px;font-size:.42em;padding:5px 6px;text-align:center;border:1.5px solid #9fb0a3;border-radius:8px}
+.gsvg .vec{stroke:#3f7a45;stroke-width:2.2}.gsvg .vec.big{stroke-width:3.2}.gsvg .vec.back{stroke:#b0412f;stroke-dasharray:6 4}.gsvg .vec.sum{stroke:#7a4fb0;stroke-width:3}
+.gsvg .star{font-size:24px;fill:#b8860b}.gsvg .token{fill:#b0412f;stroke:#fff;stroke-width:2}
+.vm .row2,.tt .row2{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;align-items:center;margin:6px 0}
+.vm .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.vm .stepcv{display:inline-flex;align-items:center;gap:10px;font-family:Georgia,serif}
+.vm .stepcv .col{display:inline-flex;flex-direction:column;justify-content:space-around;gap:10px;border-left:2.5px solid #2f3429;border-right:2.5px solid #2f3429;border-radius:16px;padding:6px 14px;min-height:92px}
+.vm .stepcv .btns{display:inline-flex;flex-direction:column;gap:8px}
+.vm .stepcv b{min-width:40px;text-align:center;font-size:1.45em;line-height:1.3}
+.vm table.lt{display:table;border-collapse:collapse;margin:6px auto;background:#fff;font-family:Georgia,serif}.vm table.lt td{padding:3px 8px;border-bottom:1px solid #e2e7df;white-space:nowrap}
+.vx .opts,.tt .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.vchip{font-size:1.15em;padding:6px 12px}
+.tt .mv{display:inline-block;margin:2px 6px}
+.gsvg .img2{fill:rgba(63,143,79,.28);stroke:#3f7a45;stroke-width:2.2}.gsvg .img2v{fill:#3f7a45;stroke:#fff;stroke-width:1.5}
+.gsvg .vl.big{font-size:20px;font-weight:700}
+.gsvg .target2{fill:rgba(63,143,79,.2);stroke:#3f7a45;stroke-width:2.2;stroke-dasharray:6 4}
+.gsvg .pinv{fill:#b0412f;stroke:#fff;stroke-width:1.5}
+.gsvg .ghost2{fill:none;stroke:#9fb0a3;stroke-width:1.5;stroke-dasharray:3 4}
+.gsvg .seg{stroke:#2b6cb0;stroke-width:3}.gsvg .legs{fill:none;stroke:#3f7a45;stroke-width:2;stroke-dasharray:5 4}
+.kl .kprow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;justify-content:center;margin:4px 0;padding:4px 8px;border-radius:8px;background:#fff}
+.kl .kprow.ok{background:#e3f0df}.kl .kprow.no{background:#fbe3dc}
+.kl .kpl{min-width:170px;font-weight:600}.kl .kpr{font-family:Georgia,serif;min-width:90px}
+.kl .chip.on,.cs .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.kl .types{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+table.kt{display:table;border-collapse:collapse;margin:8px auto;background:#fff;font-family:Georgia,serif}
+table.kt th,table.kt td{border:1.5px solid #9fb0a3;padding:4px 10px;text-align:center}table.kt th{background:#eef4e8;font-family:Arial,sans-serif;font-size:.85em}
+.tr .moves{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+.mm .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}
+@media(max-width:600px){.kl .kpl{flex-basis:100%;min-width:0;text-align:center}.kl .kpr{min-width:0}table.kt th,table.kt td{padding:4px 6px}}
+.dform{background:#fff;border:1px solid #d8d0c0;border-radius:10px;padding:8px 10px;margin:8px auto;max-width:560px}
+.drow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:6px 0}.dlab{min-width:140px;font-weight:600}
+.dform .chip.on,.vg .chip.on,.mk .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.vg .gsvg .ghost2{stroke:#b8860b;stroke-width:1.8;fill:rgba(242,193,78,.14)}
+.vg .desc{font-family:Georgia,serif;font-size:1.1em;text-align:center;margin:6px 0}
+@media(max-width:600px){.dlab{min-width:0;flex-basis:100%}}
+.gsvg .ray{stroke:#8a6fb0;stroke-width:1.4;stroke-dasharray:6 4}
+.gsvg .frame{fill:rgba(47,79,107,.05);stroke:#2f4f6b;stroke-width:2.5}
+.gsvg .tn{font-size:9px}
+.kstep{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;margin:6px 0;font-family:Georgia,serif;font-size:1.1em}
+.kstep .kgrp{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.kstep b{min-width:34px;text-align:center;display:inline-block}
+.lab .chip.on,.gs .chip.on,.rf .chip.on,.lr .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.ss .chip.on,.ph .chip.on,.ck .chip.on,.as .chip.on,.fb .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.phsvg{width:100%;max-width:440px;height:auto;display:block;margin:6px auto}
+.phsvg .phA{fill:rgba(47,109,176,.25);stroke:#2b6cb0;stroke-width:2}.phsvg .phB{fill:rgba(63,143,79,.25);stroke:#3f7a45;stroke-width:2}
+.phsvg .vl{font-family:Georgia,serif;font-size:14px;fill:#2f3429}
+.ck .drow{justify-content:center}.ck .dlab{min-width:150px;text-align:right}
+table.ckt td:first-child{text-align:left}table.ckt td:last-child{white-space:nowrap}
+.ascard{background:#fff;border:1px solid #d8d0c0;border-radius:10px;padding:6px 10px;margin:6px 0}
+.ascard.ok{background:#e3f0df}.ascard.no{background:#fbe3dc}
+.ascard .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:4px 0}
+@media(max-width:600px){.ck .dlab{min-width:0;flex-basis:100%;text-align:center}table.ckt{font-size:.85em}table.ckt th,table.ckt td{padding:3px 4px}}
+.tsvg{width:100%;max-width:460px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px}
+.tsvg .obj{fill:rgba(47,109,176,.22);stroke:#2b6cb0;stroke-width:2.2}.tsvg .img2{fill:rgba(63,143,79,.22);stroke:#3f7a45;stroke-width:2.2}
+.tsvg .vl{font-family:Georgia,serif;font-size:15px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}
+.tsvg .sl{font-family:Georgia,serif;font-size:15px;fill:#5a3f10;font-weight:700;paint-order:stroke;stroke:#fbf8f1;stroke-width:3}.tsvg .sl.q{fill:#b0412f}
+.tsvg .small2{font-family:Arial,sans-serif;font-size:12px;fill:#5c6b60}
+.tsvg .am{fill:none;stroke:#7a4fb0;stroke-width:1.6}
+.tsvg .hl{stroke:#b0412f;stroke-width:4}.tsvg .hlc{fill:none;stroke:#b0412f;stroke-width:3}
+.tsvg .seg2{stroke:#3f7a45;stroke-width:2.6}.tsvg .chev{fill:none;stroke:#2f3429;stroke-width:2}
+.tsvg .ground{stroke:#7a6a4f;stroke-width:2}.tsvg .person{stroke:#2b6cb0;stroke-width:5;stroke-linecap:round}.tsvg .tree{stroke:#3f7a45;stroke-width:7;stroke-linecap:round}.tsvg .tree.unk{stroke-dasharray:6 5}
+.tsvg .shadow{stroke:#2f3429;stroke-width:4;opacity:.55}.tsvg .sunray{stroke:#d29a1e;stroke-width:1.6;stroke-dasharray:5 4}
+.ta .chip.on,.sf .chip.on,.sl .chip.on,.sh .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.sf .drow,.ta .drow{justify-content:center}
+.slline{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px;margin:4px 0;font-family:Georgia,serif}
+.ascard{background:#fff;border:1px solid #d8d0c0;border-radius:10px;padding:6px 10px;margin:6px 0}.ascard.ok{background:#e3f0df}.ascard.no{background:#fbe3dc}
+table.kt td:first-child{text-align:left}
+@media(max-width:600px){table.kt{font-size:.85em}table.kt th,table.kt td{padding:3px 4px}.tsvg .vl,.tsvg .sl{font-size:18px}}
+.msvg{width:100%;max-width:480px;height:auto;display:block;margin:6px auto;background:#fbf8f1;border:2px solid #c9d6bf;border-radius:12px}
+.msvg .mt{font-family:Arial,sans-serif;font-size:13px;fill:#2f3429}.msvg .walk{stroke:#b0412f;stroke-width:4;stroke-linecap:round}.msvg .wp{fill:#b0412f}
+.msvg .land{fill:#eef3e3;stroke:#9fb0a3;stroke-width:1.5}.msvg .river{fill:none;stroke:#6aa5c9;stroke-width:6;stroke-linecap:round}.msvg .lake{fill:#9cc8e3;stroke:#6aa5c9}.msvg .sea{fill:#9cc8e3}
+.msvg .wood{fill:#8fbf7f;opacity:.8}.msvg .road{fill:none;stroke:#c9a46b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.msvg .place{fill:#2f3429;stroke:#fff;stroke-width:2}.msvg .place.on{fill:#b0412f}
+.msvg .pn{font-family:Georgia,serif;font-size:14px;fill:#2f3429;paint-order:stroke;stroke:#fbf8f1;stroke-width:3.5}
+.msvg .ruler{stroke:#7a4fb0;stroke-width:3}.msvg .tick{stroke:#7a4fb0;stroke-width:2}.msvg .rl{font-family:Arial,sans-serif;font-size:14px;font-weight:700;fill:#4a2f78;paint-order:stroke;stroke:#fbf8f1;stroke-width:3.5}
+.msvg .sb{font-family:Arial,sans-serif;font-size:13px;font-weight:700;fill:#2f3429;paint-order:stroke;stroke:#eef3e3;stroke-width:3}
+.msvg .ground{fill:rgba(143,191,127,.3);stroke:#3f7a45;stroke-width:2.5}.msvg .mapt{fill:rgba(47,109,176,.2);stroke:#2b6cb0;stroke-width:2.5}.msvg .hl2{stroke:#b0412f;stroke-width:4}.msvg .hlc{fill:none;stroke:#b0412f;stroke-width:3}
+.msvg .page{fill:#fff;stroke:#9fb0a3;stroke-width:1.5}.msvg .cmgrid{stroke:#e2e7df;stroke-width:1}.msvg .room{fill:rgba(47,109,176,.12);stroke:#2b6cb0;stroke-width:2.5}.msvg .room.over{stroke:#b0412f;stroke-dasharray:6 4}
+.msvg .item{fill:rgba(242,193,78,.55);stroke:#b8860b;stroke-width:1.5}.msvg .itl{font-family:Arial,sans-serif;font-size:11px;fill:#5a3f10}
+.strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 6px;margin:8px 0;font-family:Georgia,serif}.strip span{background:#fff;border:1px solid #d8d0c0;border-radius:8px;padding:4px 8px}.strip b{color:#7a4fb0}
+.tw .chip.on,.cv .chip.on,.mp .chip.on,.rm .chip.on,.sl .chip.on{background:#2f4f6b;color:#fff;border-color:#2f4f6b}
+.mp select{font-size:1em;padding:6px 8px;border-radius:8px;border:1.5px solid #9fb0a3;font-family:Georgia,serif}
+.rmrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 8px;margin:6px 0}.rmrow input{max-width:80px}
+@media(max-width:600px){.msvg .pn,.msvg .rl{font-size:19px}.msvg .sb,.msvg .mt{font-size:16px}}
+</style>
+<div id="lessonView">
+<div class="neo">
+<h1>NEO Mathematics: Transformations, Similarity and Scale</h1>
+<h2>Maps and scale drawings</h2>
+<h2 style="font-size:1.25em">Driving Question: <em>How do maps shrink the world exactly?</em></h2>
+
+<div class="info">
+<p><b>Lesson type:</b> Core — map scales as ratios, and scale drawings.</p>
+<p><b>Stepping Stone:</b> use a map scale written as a ratio 1 : <i>n</i>, changing between cm, m and km; change between “1 : <i>n</i>” and “1 cm represents …”; find real distances from a map and map lengths from real distances; choose a scale for a drawing.</p>
+<p><b>You will need:</b> Lessons 6 to 8, units of length, and Constructions Lesson 7 (scale plans) — and the optional <b>✏️ Scratchpad</b>.</p>
+<p><b>NEO Cornerstones:</b> Connection · Movement · Reflection · Creativity · Rest · Nutrition</p>
+<p><b>45-minute shape:</b> Connect 5 · Move 7 · Reflect 8 · Create 8 · Rest 2 · Nourish 15</p>
+</div>
+
+<div class="guides">
+<h3>📚 Lesson Support, Reconnection and Scratchpad</h3>
+<p>Choose only the support that helps now. Every route returns you to this lesson.</p>
+<div class="buttonrow">
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_09_Learner_Guide_v0.1.pdf" target="_blank" rel="noopener">🌱 Open Learner Guide</a>
+<a class="guidebtn" href="NEO_Maths_Y9_Transformations_Lesson_09_Supporting_Adult_Guidance_v0.1.pdf" target="_blank" rel="noopener">📘 Open Supporting Adult Guidance</a>
+<button class="guidebtn" onclick="openReconnect()">🧭 Reconnection Routes</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write the unit ladder: km × 1000 = m, m × 100 = cm. Then write each step of your conversion.')">✏️ Open Maths Scratchpad</button>
+
+</div>
+<div id="reconnectionPanel" class="card" style="display:none" aria-live="polite"></div>
+</div>
+
+<!-- ================= CONNECTION ================= -->
+<details class="kw" open>
+<summary>🌿 Connection — The same walk, three maps</summary>
+<p><b>Start here:</b> the same 2 km walk is drawn on three maps with different scales. Which scale gives the longest line? Predict, then reveal.</p>
+<p><b>What you are trying to notice:</b> in 1 : <i>n</i>, every real length is <i>n</i> times the map length. A larger <i>n</i> makes a smaller map.</p>
+<div class="toolbox tw">
+<h3 style="margin-top:0">🥾 The same walk, three maps</h3>
+<div id="twFig"></div>
+<div class="drow" style="justify-content:center"><span class="dlab">The longest line is at</span><span id="twOpts"></span></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="twReveal()">👁 Reveal the scales</button></div>
+<div id="twRead" class="feedback" aria-live="polite"></div>
+</div>
+<div class="card">
+<h3 style="margin-top:0">🔤 The idea for this lesson</h3>
+<p style="margin:6px 0">A map scale <b>1 : 50 000</b> means every length on the ground is 50 000 times the length on the map, <b>in the same units</b>: 1 cm on the map is 50 000 cm on the ground, which is 500 m.</p>
+<p style="margin:6px 0">Map to ground: multiply by 50 000, then change the units. Ground to map: change into cm, then divide by 50 000. The map is similar to the ground, with scale factor <span class=fr><span>1</span><span>50 000</span></span>.</p>
+</div>
+</details>
+
+<!-- ================= MOVEMENT ================= -->
+<details class="hs">
+<summary>🚶 Movement — The same scale, written two ways</summary>
+<p><b>What to do:</b> for each scale, choose the one that means the same thing, then read the conversion.</p>
+<p><b>What you are trying to notice:</b> “1 cm represents …” is the ratio with the second number changed into m or km.</p>
+<div class="toolbox cv">
+<h3 style="margin-top:0">🔁 Scale converter</h3>
+<div id="cvCards"></div>
+</div>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Draw a garden plan in the Geometry Studio</h3>
+<p>Plot a garden to scale, then measure the plan and use the calculator to find the real lengths.</p>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts09-plan&amp;return=../lessons/transformations-similarity-and-scale/09-maps-and-scale-drawings.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><b>Carry this forward:</b> 1 km = 1000 m = 100 000 cm.</p>
+</details>
+
+<!-- ================= REFLECTION ================= -->
+<details class="es">
+<summary>🪞 Reflection — Which unit went wrong?</summary>
+<p><b>What to do:</b> each working has one slip. Find the line, then read why.</p>
+<p><b>What you are trying to notice:</b> the multiplying is usually right; the slips are in the units, or in multiplying when you should divide.</p>
+<div class="toolbox sl">
+<h3 style="margin-top:0">🕵️ Which unit went wrong?</h3>
+<div id="slCards"></div>
+</div>
+<div class="proof">
+<p style="margin:0"><span class="stretch">stretch</span> <b>Why does a map keep every angle?</b> A pattern suggests; a reason convinces.</p>
+<div id="prFig"></div>
+<div id="prBody"></div>
+<div id="prRead" class="feedback" aria-live="polite"></div>
+</div>
+</details>
+
+<!-- ================= CREATIVITY ================= -->
+<details class="dw">
+<summary>🎨 Creativity — Plan a room</summary>
+<p><b>What to do:</b> a room is 6 m by 4.5 m. Choose a scale so the plan fits a page 10 cm by 8 cm, then work out the plan size of the bed, the desk and the wardrobe.</p>
+<p><b>What you are trying to notice:</b> a plan uses the same ratio idea as a map, with smaller numbers; the best scale is the one that fits and is as large as possible.</p>
+<div class="toolbox rm">
+<h3 style="margin-top:0">🛏️ Plan a room</h3>
+<div class="drow" style="justify-content:center"><span class="dlab">Scale</span><span id="rmScales"></span></div>
+<div id="rmFig"></div>
+<div id="rmRead" class="feedback" aria-live="polite"></div>
+<div id="rmItems" style="display:none">
+<div class="rmrow"><span class="dlab">bed, 2 m by 1.4 m</span><input id="rm0w" class="numin" inputmode="decimal" aria-label="bed length on the plan, cm"> cm by <input id="rm0d" class="numin" inputmode="decimal" aria-label="bed width on the plan, cm"> cm <button onclick="rmCheck(0)">✅</button></div><div id="rm0R" class="feedback"></div>
+<div class="rmrow"><span class="dlab">desk, 1.2 m by 0.6 m</span><input id="rm1w" class="numin" inputmode="decimal" aria-label="desk length on the plan, cm"> cm by <input id="rm1d" class="numin" inputmode="decimal" aria-label="desk width on the plan, cm"> cm <button onclick="rmCheck(1)">✅</button></div><div id="rm1R" class="feedback"></div>
+<div class="rmrow"><span class="dlab">wardrobe, 1 m by 0.6 m</span><input id="rm2w" class="numin" inputmode="decimal" aria-label="wardrobe length on the plan, cm"> cm by <input id="rm2d" class="numin" inputmode="decimal" aria-label="wardrobe width on the plan, cm"> cm <button onclick="rmCheck(2)">✅</button></div><div id="rm2R" class="feedback"></div>
+</div>
+</div>
+</details>
+
+<!-- ================= REST ================= -->
+<details class="lb">
+<summary>🌙 Rest — A pause to let it settle</summary>
+<p>A whole town can fit on a page, and every angle stays true. Take a slow breath.</p>
+<div class="card">
+<p><b>Notice one thing:</b> think of a walk you know well. Roughly how long would it be on a map at 1 : 25 000, where 4 cm is 1 km?</p>
+<p class="small">You can pause here and return whenever you are ready.</p>
+</div>
+</details>
+
+<!-- ================= NUTRITION ================= -->
+<details class="nt">
+<summary>🍎 Nutrition — The Map Scale tool (today's main activity)</summary>
+<p><b>Mode: practical.</b> Walkers' maps are printed at 1 : 25 000 and 1 : 50 000. Here is an invented place to explore.</p>
+<p><b>What to do:</b> work through the missions. Choose two places to put the ruler between them, and read the map length in cm. Then change it into a real distance, or the other way round.</p>
+<p><b>What you are trying to notice:</b> map to ground means multiply by <i>n</i>, then change cm into m or km; ground to map means change into cm, then divide by <i>n</i>.</p>
+<div class="toolbox mp">
+<h3 style="margin-top:0">🗺️ The Map Scale tool</h3>
+<div id="mpCount" class="small" style="text-align:center"></div>
+<p id="mpQ" style="text-align:center"></p>
+<div class="drow" style="justify-content:center"><span>Ruler from</span><select id="mpA" onchange="mpSel()" aria-label="ruler from"></select><span>to</span><select id="mpB" onchange="mpSel()" aria-label="ruler to"></select></div>
+<div id="mpScaleSel" class="drow" style="justify-content:center"><span class="dlab">Map scale</span><span id="mpScales"></span></div>
+<div id="mpFig"></div>
+<p id="mpRuler" style="text-align:center;margin:2px 0"></p>
+<div id="mpAnsRow" class="drow" style="justify-content:center"><span class="dlab">Your answer</span><input id="mpAns" class="numin neo-mathfield" style="max-width:130px" aria-label="your answer" onkeydown="if(event.key==='Enter')mpCheck()"><span id="mpUnit"></span><button onclick="mpCheck()">✅ Check</button></div>
+<div id="mpScaleRow" class="drow" style="justify-content:center;display:none"><span class="dlab">The map is drawn at</span><span id="mpScalePick"></span></div>
+<div class="buttonrow" style="justify-content:center"><button onclick="mpMission(-1)">← Previous mission</button><button onclick="mpShowSteps()">Show the steps</button><button onclick="mpMission(1)">Next mission →</button></div>
+<div id="mpSteps"></div>
+<div id="mpRead" class="feedback" aria-live="polite"></div>
+</div>
+<p class="small">Carry one idea forward: in 1 : <i>n</i>, both numbers are in the same unit.</p>
+</details>
+
+<!-- ================= FINAL TASK ================= -->
+<details class="ft">
+<summary>🛠️ Final Task — Make a scale drawing</summary>
+<p><b>Your task:</b> make a scale drawing of a real space you know, and use it to answer a question.</p>
+<ul>
+<li>Choose a space: a room, a garden, a sports pitch or a route. Measure or estimate its real lengths.</li>
+<li>Choose a scale so the drawing fits your page, and write it as 1 : <i>n</i> and as “1 cm represents …”.</li>
+<li>Draw it, showing each conversion from real length to drawing length.</li>
+<li>Measure one length on your drawing that you did not measure in real life, and work out its real length.</li>
+<li><span class="stretch">stretch</span> Explain why angles on your drawing are the same as in real life.</li>
+</ul>
+<div class="card studio">
+<h3 style="margin-top:0">📐 Build your drawing in the Geometry Studio</h3>
+<a class="guidebtn" style="background:#365a68" href="../../tools/geometry-studio.html?task=ts09-final&amp;return=../lessons/transformations-similarity-and-scale/09-maps-and-scale-drawings.html">📐 Open in the Geometry Studio →</a>
+</div>
+<p><strong>Submission choices:</strong> a saved Studio sketch with a screenshot, an annotated Scratchpad image, a photographed page, or a spoken or video walkthrough.</p>
+<p><strong>Filename pattern:</strong> <code>NEO_MATH_SCALE_DRAWING_FirstName_Date</code></p>
+<table>
+<tr><th>Criterion</th><th>Approaching Proficiency</th><th>Developing Proficiency</th><th>Proficiency</th><th>Refining Proficiency</th></tr>
+<tr><td><b>Understanding</b></td><td>Knows a map is smaller than the real thing.</td><td>Knows 1 : <i>n</i> means real lengths are <i>n</i> times map lengths.</td><td>Knows both numbers in 1 : <i>n</i> are in the same unit.</td><td>Explains a map as a similar copy, with scale factor 1 over <i>n</i>.</td></tr>
+<tr><td><b>Application</b></td><td>Finds a real length using “1 cm represents …”.</td><td>Finds a real distance from a 1 : <i>n</i> scale, in cm.</td><td>Changes the answer into m or km, and works from real to map.</td><td>Chooses the largest scale that fits a page.</td></tr>
+<tr><td><b>Communication</b></td><td>Labels lengths.</td><td>Writes the scale both ways.</td><td>Shows each unit conversion.</td><td>Explains clearly enough to help someone else.</td></tr>
+<tr><td><b>Reflection</b></td><td>Checks the answer is sensible.</td><td>Checks the units.</td><td>Spots multiplying when you should divide.</td><td>Spots a ratio with different units on each side.</td></tr>
+</table>
+</details>
+
+</div>
+<div class="neo-practice-cta" style="background:#fffaf0; padding:20px; margin-top:22px; border-left:6px solid #5c6b4f; border-radius:14px; text-align:center;"><h2 style="margin:0 0 14px;">✏️ Ready to strengthen your understanding?</h2><button type="button" onclick="openPractice()" style="padding:13px 22px; background:#5c6b4f; color:#fff; border:none; border-radius:10px; font-weight:bold; font-size:1.05em; cursor:pointer;">Open Practice Companion</button></div>
+</div>
+<!-- ================= PRACTICE COMPANION ================= -->
+<div id="practiceView" hidden><div class="practice">
+<h1>Maps and scale drawings — Practice Companion</h1>
+<button onclick="returnLesson()">← Return to lesson</button>
+<p>Use support in this order: <b>🤔 Socratic prompt → 💡 hint → ✅ check → 👀 worked solution</b>. The worked solution unlocks separately for each question, once you have used the prompt, used the hint and checked two answers.</p>
+<p class="small">Answer with a number, with its unit if you like, such as 2.5 km. Ratios such as 1 : 50 000 are fine.</p>
+<div id="practiceDots" class="buttonrow"></div>
+<div class="toolbox">
+<p id="practiceLabel" style="font-weight:bold"></p>
+<div id="practiceQuestion" class="readout"></div>
+<div id="pTextWrap"><input id="practiceAnswer" class="neo-mathfield" placeholder="Your answer"></div>
+<div id="pVecWrap" style="display:none"><p class="small" style="margin:4px 0">Type the horizontal move in the first box and the vertical move in the second.</p><span class="cvin">(<span class="stack"><input id="pVecT" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left" onkeydown="if(event.key==='Enter')pCheck()"><input id="pVecB" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down" onkeydown="if(event.key==='Enter')pCheck()"></span>)</span></div>
+<div class="buttonrow">
+<button onclick="pPrompt()">🤔 Socratic prompt</button>
+<button onclick="pHint()">💡 Hint</button>
+<button onclick="pCheck()">✅ Check</button>
+<button id="practiceSolutionButton" onclick="pSolution()" disabled>👀 Worked solution</button>
+<button class="scratchbtn" onclick="openMathsScratchpad('blank','Write the unit ladder: km × 1000 = m, m × 100 = cm. Then write each step of your conversion.')">✏️ Scratchpad</button>
+</div>
+<div id="practiceSupport" class="readout" style="display:none"></div>
+<div id="practiceFeedback" class="feedback"></div>
+</div>
+<div class="buttonrow"><button id="practicePrev" onclick="pPrev()">← Previous</button><button id="practiceNext" onclick="pNext()">Next →</button></div>
+</div></div>
+
+<!-- NEO Maths Scratchpad — GreenPrint standard -->
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:9999;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">You can use this board, paper or another way of recording your thinking. The Scratchpad is optional.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="saveScratchPage()" style="padding:9px 13px;background:#e5f0e2;border:1px solid #4d6b47;border-radius:8px;cursor:pointer;">💾 Save working page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  const storageKey = "neoMathsScratchpad_constructions_l07_v01";
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ try{ localStorage.setItem(storageKey, JSON.stringify({template, strokes, redo, notes, colour, width})); }catch(err){} }
+  function restore(){ try{ const saved = JSON.parse(localStorage.getItem(storageKey) || "null"); if(!saved) return; template = saved.template || template; strokes = saved.strokes || []; redo = saved.redo || []; notes = saved.notes || []; colour = saved.colour || colour; width = saved.width || width; document.getElementById("scratchTemplate").value = template; document.getElementById("scratchColour").value = colour; document.getElementById("scratchWidth").value = String(width); }catch(err){} }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Quadratics_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  restore(); updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* Focused symbol palette for this lesson. */
+window.NEO_PALETTE_SYMBOLS=["−","(",")",",","/",":","½","°"];
+/* ---------------- View switching + helpers ---------------- */
+function openPractice(){document.getElementById("lessonView").hidden=true;document.getElementById("practiceView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function returnLesson(){document.getElementById("practiceView").hidden=true;document.getElementById("lessonView").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+function clean(v){return String(v).toLowerCase().replace(/[,\s]/g,'').replace(/=/g,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-').trim();}
+function NEO_wordNum(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim();
+  if(!s) return NaN;
+  // normalise common fraction phrases to single tokens
+  s=s.replace(/\bone half\b|\ba half\b/g,'half')
+     .replace(/\bthree quarters?\b/g,'threeq')
+     .replace(/\bone quarter\b|\ba quarter\b/g,'quarter')
+     .replace(/\btwo thirds?\b/g,'twothird')
+     .replace(/\bone third\b|\ba third\b/g,'third');
+  var frac={half:0.5,quarter:0.25,threeq:0.75,third:1/3,twothird:2/3};
+  if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,nil:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,fracAdd=0,i,w;
+  for(i=0;i<parts.length;i++){
+    w=parts[i];
+    if(w==='a'||w==='') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;}
+    else if(tens[w]!=null){cur+=tens[w];used=true;}
+    else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(w==='thousand'){total+=(cur||1)*1000;cur=0;used=true;}
+    else if(frac[w]!=null){fracAdd+=frac[w];used=true;}
+    else if(w==='point'){
+      total+=cur;cur=0;var dec='0.',j,any=false;
+      for(j=i+1;j<parts.length;j++){if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;}else return NaN;}
+      if(!any) return NaN;
+      return used?total+parseFloat(dec):NaN;
+    }
+    else return NaN;
+  }
+  return used?total+cur+fracAdd:NaN;
+}
+function num(v){
+  var s=String(v).toLowerCase().trim();
+  if(!s) return NaN;
+  var wn=NEO_wordNum(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/(tan|sin|cos)\s*θ?/g,'').replace(/=/g,'');
+  s=s.replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/−/g,'-');
+  s=s.replace(/(\d)\s*(cm|mm|km|m)\b/g,'$1').replace(/[, ]+/g,'');
+  var fm=s.match(/(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)/);
+  if(fm){var d=parseFloat(fm[2]);return d===0?NaN:parseFloat(fm[1])/d;}
+  var m=s.match(/-?\d+(\.\d+)?/);
+  return m?parseFloat(m[0]):NaN;
+}
+function normText(v){return String(v).toLowerCase().replace(/\s+/g,' ').replace(/[-_]/g,' ').replace(/[.,]/g,'').trim();}
+
+
+/* ---------------- Shared number-line drawing ---------------- */
+function fmt(v){ var s=(Math.round(v*100)/100).toString(); return v<0?'−'+s.slice(1):s; }
+var NL={x0:30,x1:530,y:62};
+function nlX(v,lo,hi){ return NL.x0+(v-lo)*(NL.x1-NL.x0)/(hi-lo); }
+// The axis with integer ticks; extra is SVG drawn on top.
+function nlAxis(lo,hi,opt){
+  opt=opt||{}; var h='<line x1="'+(NL.x0-14)+'" y1="'+NL.y+'" x2="'+(NL.x1+14)+'" y2="'+NL.y+'" stroke="#2f3429" stroke-width="2"/>';
+  h+='<path d="M'+(NL.x1+14)+' '+NL.y+' l-8 -5 v10 z" fill="#2f3429"/><path d="M'+(NL.x0-14)+' '+NL.y+' l8 -5 v10 z" fill="#2f3429"/>';
+  var step=opt.step||1;
+  for(var v=lo;v<=hi+1e-9;v+=step){ var x=nlX(v,lo,hi); h+='<line x1="'+x+'" y1="'+(NL.y-7)+'" x2="'+x+'" y2="'+(NL.y+7)+'" stroke="#2f3429" stroke-width="1.5"/>';
+    if(!opt.labelEvery||Math.round(v)%opt.labelEvery===0) h+='<text x="'+x+'" y="'+(NL.y+26)+'" text-anchor="middle" font-family="Arial" font-size="14" fill="#2f3429">'+fmt(v)+'</text>'; }
+  return h;
+}
+// A solution set: lo/hi may be null (no boundary on that side).
+function nlSet(r,lo,hi,col){
+  col=col||'#3f5f45'; var y=NL.y-22, h='';
+  var xa=r.lo==null?NL.x0-12:nlX(r.lo,lo,hi), xb=r.hi==null?NL.x1+12:nlX(r.hi,lo,hi);
+  h+='<line x1="'+xa+'" y1="'+y+'" x2="'+xb+'" y2="'+y+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round"/>';
+  if(r.lo==null) h+='<path d="M'+(xa-6)+' '+y+' l10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xa+'" cy="'+y+'" r="8" fill="'+(r.loInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  if(r.hi==null) h+='<path d="M'+(xb+6)+' '+y+' l-10 -7 v14 z" fill="'+col+'"/>';
+  else h+='<circle cx="'+xb+'" cy="'+y+'" r="8" fill="'+(r.hiInc?col:'#fbf7ef')+'" stroke="'+col+'" stroke-width="3"/>';
+  return h;
+}
+function inRule(r,x){ return (r.lo==null||(r.loInc?x>=r.lo-1e-9:x>r.lo+1e-9)) && (r.hi==null||(r.hiInc?x<=r.hi+1e-9:x<r.hi-1e-9)); }
+function ruleText(r,v){ v=v||'x';
+  var V='<span class="uk">'+v+'</span>';
+  if(r.lo!=null&&r.hi!=null) return fmt(r.lo)+' '+(r.loInc?'≤':'&lt;')+' '+V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+  if(r.lo!=null) return V+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo);
+  return V+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi);
+}
+function ruleWords(r){
+  var a=r.lo!=null?(r.loInc?'greater than or equal to '+fmt(r.lo):'greater than '+fmt(r.lo)):'', b=r.hi!=null?(r.hiInc?'less than or equal to '+fmt(r.hi):'less than '+fmt(r.hi)):'';
+  return a&&b?a+' and '+b:(a||b);
+}
+// Testing a number against a rule, written out part by part.
+function testText(r,x){
+  var parts=[];
+  if(r.lo!=null){ var ok=r.loInc?x>=r.lo:x>r.lo; parts.push(fmt(x)+' '+(r.loInc?'≥':'&gt;')+' '+fmt(r.lo)+' '+(ok?'✓':'✗')); }
+  if(r.hi!=null){ var ok2=r.hiInc?x<=r.hi:x<r.hi; parts.push(fmt(x)+' '+(r.hiInc?'≤':'&lt;')+' '+fmt(r.hi)+' '+(ok2?'✓':'✗')); }
+  return parts.join(' and ');
+}
+
+
+/* ---------------- Helpers ---------------- */
+function same(a,b,t){ return !isNaN(a)&&Math.abs(a-b)<(t||1e-9); }
+function msg(id,cls,html){ var el=document.getElementById(id); el.style.display='block'; el.className='feedback '+cls; el.innerHTML=html; }
+function chipsHtml(opts,fn){ return opts.map(function(o,k){return '<button class="chip" onclick="'+fn+'('+k+')">'+o+'</button>';}).join(''); }
+function I(t){ return '<i>'+t+'</i>'; }
+function FR(n,d){ return '<span class=fr><span>'+n+'</span><span>'+d+'</span></span>'; }
+function neg(n){ n=Math.round(n*1e9)/1e9; return n<0?'−'+(-n):String(n); }
+function pt(p){ return '('+neg(p[0])+', '+neg(p[1])+')'; }
+function shuffle(a){ for(var m=a.length-1;m>0;m--){ var r=Math.floor(Math.random()*(m+1)), t=a[m]; a[m]=a[r]; a[r]=t; } return a; }
+var X=I('x'), Y=I('y');
+// a coordinate pair typed any way: (5, −1), 5,-1, 5 -1, x = 5, y = −1. Returns [x, y] or null.
+function pairOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/x\s*=|y\s*=/g,' ').replace(/[()\[\]]/g,' ').trim();
+  var m=s.match(/^(-?\d+(?:\.\d+)?)\s*[,;]?\s*(-?\d+(?:\.\d+)?)$/); if(!m){ var a=s.split(/[\s,;]+/).filter(Boolean); if(a.length===2){ var p=num(a[0]), q=num(a[1]); if(!isNaN(p)&&!isNaN(q)) return [p,q]; } return null; }
+  return [parseFloat(m[1]),parseFloat(m[2])]; }
+function samePair(p,q){ return !!p&&same(p[0],q[0])&&same(p[1],q[1]); }
+// a mirror line typed as an equation: x = 3, y = −1, y = x, y = −x (any spacing; x+y=0 and y−x=0 too). Returns {t,k} or null.
+function lineOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/\s+/g,'');
+  var m=s.match(/^x=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=x$/); if(m) return {t:'x',k:parseFloat(m[1])};
+  m=s.match(/^y=(-?\d+(?:\.\d+)?)$/)||s.match(/^(-?\d+(?:\.\d+)?)=y$/); if(m) return {t:'y',k:parseFloat(m[1])};
+  if(/^(y=x|x=y|y-x=0|x-y=0)$/.test(s)) return {t:'yx',k:0};
+  if(/^(y=-x|x=-y|y\+x=0|x\+y=0|-x=y)$/.test(s)) return {t:'ynx',k:0};
+  return null; }
+function sameLine(a,b){ return !!a&&a.t===b.t&&same(a.k,b.k); }
+function lineName(L){ return L.t==='x'?X+' = '+neg(L.k):L.t==='y'?Y+' = '+neg(L.k):L.t==='yx'?Y+' = '+X:Y+' = −'+X; }
+// reflection in a line, exactly
+function refl(p,L){ var x=p[0], y=p[1]; return L.t==='x'?[2*L.k-x,y]:L.t==='y'?[x,2*L.k-y]:L.t==='yx'?[y,x]:[-y,-x]; }
+function onLine(p,L){ return samePair(refl(p,L),p); }
+
+/* ---------------- A coordinate grid (numbered, labelled axes; GreenPrint v2.3) ---------------- */
+var G={o:230,s:21,m:10};
+function gx(x){ return G.o+x*G.s; } function gy(y){ return G.o-y*G.s; }
+function gridSvg(){ var h='', k, m=G.m;
+  for(k=-m;k<=m;k++) h+='<line x1="'+gx(k)+'" y1="'+gy(m+0.4)+'" x2="'+gx(k)+'" y2="'+gy(-m-0.4)+'" class="gl"/><line x1="'+gx(-m-0.4)+'" y1="'+gy(k)+'" x2="'+gx(m+0.4)+'" y2="'+gy(k)+'" class="gl"/>';
+  h+='<line x1="'+gx(-m-0.4)+'" y1="'+gy(0)+'" x2="'+gx(m+0.4)+'" y2="'+gy(0)+'" class="ax"/><line x1="'+gx(0)+'" y1="'+gy(m+0.4)+'" x2="'+gx(0)+'" y2="'+gy(-m-0.4)+'" class="ax"/>';
+  for(k=-m;k<=m;k++){ if(!k) continue; h+='<text x="'+gx(k)+'" y="'+(gy(0)+15)+'" class="tn" text-anchor="middle">'+neg(k)+'</text><text x="'+(gx(0)-6)+'" y="'+(gy(k)+4)+'" class="tn" text-anchor="end">'+neg(k)+'</text>'; }
+  h+='<text x="'+(gx(0)-6)+'" y="'+(gy(0)+15)+'" class="tn ti" text-anchor="end">O</text><text x="'+(gx(m+0.4)-2)+'" y="'+(gy(0)-7)+'" class="axl" text-anchor="end">x</text><text x="'+(gx(0)+7)+'" y="'+(gy(m+0.4)+12)+'" class="axl">y</text>';
+  return h; }
+function mirrorSvg(L,cls){ var e=G.m+0.4, a, b; if(L.t==='x'){ a=[L.k,e]; b=[L.k,-e]; } else if(L.t==='y'){ a=[-e,L.k]; b=[e,L.k]; } else if(L.t==='yx'){ a=[-e,-e]; b=[e,e]; } else { a=[-e,e]; b=[e,-e]; }
+  var lp=L.t==='x'?[L.k,G.m-0.2]:L.t==='y'?[G.m-1.2,L.k]:L.t==='yx'?[4.6,4.1]:[-5.4,4.9];
+  return '<line x1="'+gx(a[0])+'" y1="'+gy(a[1])+'" x2="'+gx(b[0])+'" y2="'+gy(b[1])+'" class="'+(cls||'mir')+'"/><text x="'+(gx(lp[0])+(L.t==='x'&&L.k<=0?-6:6))+'" y="'+(gy(lp[1])-6)+'" class="mlab" data-line="1"'+(L.t==='x'&&L.k<=0?' text-anchor="end"':'')+'>'+lineName(L).replace(/<i>/g,'<tspan font-style="italic">').replace(/<\/i>/g,'</tspan>')+'</text>'; }
+function triSvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl" data-v="'+labs[i]+'">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+function inGrid(p){ return Math.abs(p[0])<=G.m&&Math.abs(p[1])<=G.m; }
+function svgAt(ev,svg){ var b=svg.getBoundingClientRect(); var x=(ev.clientX-b.left)*2*G.o/b.width, y=(ev.clientY-b.top)*2*G.o/b.height; return [Math.round((x-G.o)/G.s),Math.round((G.o-y)/G.s)]; }
+var CLIPN=0;
+function wrap(inner,click,aria){ var cid='gclip'+(CLIPN++); return '<svg class="gsvg'+(G.big?' big':'')+'" viewBox="0 0 '+(2*G.o)+' '+(2*G.o)+'"'+(G.big?' width="'+(2*G.o)+'" height="'+(2*G.o)+'"':'')+' role="img" aria-label="'+aria+'"'+(click?' onclick="'+click+'(event,this)"':'')+'><defs><clipPath id="'+cid+'"><rect x="'+gx(-G.m-0.4)+'" y="'+gy(G.m+0.4)+'" width="'+(G.s*(2*G.m+0.8))+'" height="'+(G.s*(2*G.m+0.8))+'"/></clipPath></defs>'+gridSvg()+'<g clip-path="url(#'+cid+')">'+inner+'</g></svg>'; }
+
+/* ---------------- Column vectors ---------------- */
+function cv(a,b){ return '<span class="cv" aria-label="column vector '+neg(a)+', '+neg(b)+'"><span>'+neg(a)+'</span><span>'+neg(b)+'</span></span>'; }
+function vwords(a,b){ var h=a===0?'':Math.abs(a)+' '+(a>0?'right':'left'), v=b===0?'':Math.abs(b)+' '+(b>0?'up':'down'); return (h&&v?h+', '+v:h||v||'no move at all'); }
+function addv(p,v){ return [p[0]+v[0],p[1]+v[1]]; }
+function cvIn(id){ return '<span class="cvin">(<span class="stack"><input id="'+id+'T" class="numin" inputmode="numeric" aria-label="first number: horizontal move, right or left"><input id="'+id+'B" class="numin" inputmode="numeric" aria-label="second number: vertical move, up or down"></span>)</span>'; }
+function readVec(id){ var t=document.getElementById(id+'T').value, b=document.getElementById(id+'B').value; if(!String(t).trim()||!String(b).trim()) return null; var x=num(t), y=num(b); if(isNaN(x)||isNaN(y)) return null; return [x,y]; }
+function clearVec(id){ document.getElementById(id+'T').value=''; document.getElementById(id+'B').value=''; }
+function arrowSvg(p,q,cls){ if(samePair(p,q)) return ''; return '<line x1="'+gx(p[0])+'" y1="'+gy(p[1])+'" x2="'+gx(q[0])+'" y2="'+gy(q[1])+'" class="'+(cls||'vec')+'" marker-end="url(#vhead)"/>'; }
+var MARK='<defs><marker id="vhead" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" refX="10" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#3f7a45"/></marker></defs>';
+var SHAPE=[[-3,1],[-1,1],[-1,3],[-3,2]], SHAPEL=['A','B','C','D'];
+function polySvg(P,cls,labs){ var h='<polygon points="'+P.map(function(p){ return gx(p[0])+','+gy(p[1]); }).join(' ')+'" class="'+cls+'"/>';
+  P.forEach(function(p,i){ h+='<circle cx="'+gx(p[0])+'" cy="'+gy(p[1])+'" r="4.5" class="'+cls+'v"/>'; if(labs) h+='<text x="'+(gx(p[0])+7)+'" y="'+(gy(p[1])-7)+'" class="vl">'+labs[i].replace(/^([A-Z])/,'<tspan font-style="italic">$1</tspan>')+'</text>'; }); return h; }
+
+/* ---------------- Measuring, exactly ---------------- */
+function d2(p,q){ return (p[0]-q[0])*(p[0]-q[0])+(p[1]-q[1])*(p[1]-q[1]); }
+// a length shown exactly: whole numbers and short decimals as they are, otherwise a simplified surd such as 3√5
+function lenStr(p,q){ var s=d2(p,q), r=Math.sqrt(s);
+  if(Math.abs(r*100-Math.round(r*100))<1e-6) return neg(Math.round(r*100)/100);
+  var n=Math.round(4*s); if(Math.abs(n-4*s)>1e-9) return (Math.round(r*10)/10)+' (to 1 d.p.)';
+  var k=1, m=n; for(var f=2;f*f<=m;f++) while(m%(f*f)===0){ k*=f; m/=f*f; }   // √s = k√m ÷ 2
+  return k%2===0?((k/2===1?'':k/2)+'√'+m):FR((k===1?'':k)+'√'+m,'2'); }
+function angAt(a,v,b){ var u=[a[0]-v[0],a[1]-v[1]], w=[b[0]-v[0],b[1]-v[1]]; var c=(u[0]*w[0]+u[1]*w[1])/Math.sqrt((u[0]*u[0]+u[1]*u[1])*(w[0]*w[0]+w[1]*w[1])); return Math.acos(Math.max(-1,Math.min(1,c)))*180/Math.PI; }
+function angStr(x){ return Math.abs(x-Math.round(x))<1e-6?Math.round(x)+'°':(Math.round(x*10)/10)+'° <span class="small">(to 1 d.p.)</span>'; }
+function area(P){ var s=0; for(var i=0;i<P.length;i++){ var a=P[i], b=P[(i+1)%P.length]; s+=a[0]*b[1]-b[0]*a[1]; } return s/2; }
+function sameShape(P,Q){ // congruent with matching corners in order (P[i] ↔ Q[i])
+  for(var i=0;i<P.length;i++) for(var j=i+1;j<P.length;j++) if(Math.abs(d2(P[i],P[j])-d2(Q[i],Q[j]))>1e-9) return false; return true; }
+function sameSet(P,Q){ return P.length===Q.length&&P.every(function(p){ return Q.some(function(q){ return samePair(p,q); }); }); }
+function congruentAny(P,Q){ // some matching of corners keeps every distance
+  var perm=function(a){ if(a.length<2) return [a]; var o=[]; a.forEach(function(x,i){ perm(a.slice(0,i).concat(a.slice(i+1))).forEach(function(r){ o.push([x].concat(r)); }); }); return o; };
+  return perm(Q.map(function(q,i){ return i; })).some(function(ix){ return sameShape(P,ix.map(function(i){ return Q[i]; })); }); }
+// transformations on grid points
+function reflX(p,k){ return [2*k-p[0],p[1]]; } function reflY(p,k){ return [p[0],2*k-p[1]]; }
+function rot90(p,c){ return [c[0]-(p[1]-c[1]),c[1]+(p[0]-c[0])]; }
+function rotN(p,c,n){ for(var i=0;i<((n%4)+4)%4;i++) p=rot90(p,c); return p; }
+
+/* ---------------- Rotation, exactly (multiples of 90°) ---------------- */
+function norm(d){ d=((Math.round(d)%360)+360)%360; return d; }
+function rot(p,c,deg){ var d=norm(deg), x=p[0]-c[0], y=p[1]-c[1], q;
+  q=d===0?[x,y]:d===90?[-y,x]:d===180?[-x,-y]:[y,-x]; return [c[0]+q[0]+0,c[1]+q[1]+0]; }
+function rotName(deg,c){ var d=norm(deg), a=Math.round(deg); var dir=a>=0?'anticlockwise':'clockwise'; return Math.abs(a)+'° '+dir+(c?' about '+pt(c):''); }
+// a rotation typed in words or signs: 90° clockwise, −90, 270 anticlockwise, 90 cw, a quarter turn clockwise, half turn. Returns degrees (anticlockwise positive) or null.
+function rotOf(v){ var s=String(v).toLowerCase().replace(/[−–—]/g,'-').replace(/°|degrees?/g,' ').replace(/anti-?\s*clockwise|counter-?\s*clockwise|acw|ccw/g,' A ').replace(/clockwise|\bcw\b/g,' C ').replace(/\s+/g,' ').trim();
+  var n=null, m=s.match(/-?\d+(\.\d+)?/); if(m) n=parseFloat(m[0]); else if(/quarter/.test(s)) n=90; else if(/half/.test(s)) n=180; else if(/three\s*quarters?/.test(s)) n=270;
+  if(/three\s*quarters?/.test(s)) n=270; if(n===null) return null;
+  var A=/\bA\b/.test(s), C=/\bC\b/.test(s); if(A&&C) return null; if(C) n=-Math.abs(n); return n; }
+function sameRot(a,b){ return a!==null&&b!==null&&norm(a)===norm(b); }
+function arcSvg(c,p,deg,cls){ var r=Math.hypot(p[0]-c[0],p[1]-c[1]); if(!r) return ''; var a0=Math.atan2(p[1]-c[1],p[0]-c[0]), a1=a0+deg*Math.PI/180, large=Math.abs(deg)>180?1:0, sw=deg>0?0:1;
+  var s=[gx(c[0]+r*Math.cos(a0)),gy(c[1]+r*Math.sin(a0))], e=[gx(c[0]+r*Math.cos(a1)),gy(c[1]+r*Math.sin(a1))];
+  return '<path d="M'+s[0]+' '+s[1]+' A'+(r*G.s)+' '+(r*G.s)+' 0 '+large+' '+sw+' '+e[0]+' '+e[1]+'" class="'+(cls||'arc')+'"/>'; }
+function centreSvg(c,lab){ return '<circle cx="'+gx(c[0])+'" cy="'+gy(c[1])+'" r="6" class="cen"/><circle cx="'+gx(c[0])+'" cy="'+gy(c[1])+'" r="11" class="cenr"/>'+(lab?'<text x="'+(gx(c[0])+9)+'" y="'+(gy(c[1])+17)+'" class="vl">'+lab+'</text>':''); }
+
+
+/* ---------------- Enlargement, exactly (fractions shown as fractions) ---------------- */
+var KS=[1/3,1/2,1,3/2,2,3];
+function rat(x){ for(var d=1;d<=12;d++){ var n=Math.round(x*d); if(Math.abs(n/d-x)<1e-9) return [n,d]; } return null; }
+function fr(x){ var r=rat(x); if(!r) return neg(Math.round(x*100)/100); var n=r[0], d=r[1], g=function(a,b){ return b?g(b,a%b):a; }, k=g(Math.abs(n),d); n/=k; d/=k;
+  return d===1?neg(n):(n<0?'−':'')+FR(Math.abs(n),d); }
+function ptF(p){ return '('+fr(p[0])+', '+fr(p[1])+')'; }
+function enl(p,c,k){ return [c[0]+k*(p[0]-c[0]),c[1]+k*(p[1]-c[1])]; }
+function kName(k){ return fr(k); }
+function raySvg(c,p,q,cls){ // the line from the centre through p and q, long enough to pass both
+  var far=[p,q].sort(function(a,b){ return d2(b,c)-d2(a,c); })[0]; if(samePair(far,c)) return '';
+  return '<line x1="'+gx(c[0])+'" y1="'+gy(c[1])+'" x2="'+gx(far[0])+'" y2="'+gy(far[1])+'" class="'+(cls||'ray')+'"/>'; }
+function lineThrough(p,q,cls){ var dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy); if(!L) return ''; var e=30/L;
+  return '<line x1="'+gx(p[0]-dx*e)+'" y1="'+gy(p[1]-dy*e)+'" x2="'+gx(q[0]+dx*e)+'" y2="'+gy(q[1]+dy*e)+'" class="'+(cls||'ray')+'"/>'; }
+function cenSvg(c){ return centreSvg(c,''); }
+var LAB=['A','B','C'], LAB1=['A′','B′','C′'];
+// a scale factor typed as 2, 1.5, 1/2, ½, one half, 3/2
+function kOf(v){ var s=String(v).toLowerCase().replace(/scale\s*factor|sf|×|x(?=\s*\d)/g,'').replace(/⅓/g,' 1/3').replace(/⅔/g,' 2/3').replace(/½/g,' 1/2').replace(/[−–]/g,'-').trim();
+  var m=s.match(/^(\d+)\s+(\d+)\s*\/\s*(\d+)$/); if(m) return +m[1]+(+m[2])/(+m[3]); return num(s); }
+
+/* ---------------- Lengths with units, exactly ---------------- */
+var UNIT={mm:0.1,cm:1,m:100,km:100000};
+function big(n){ n=Math.round(n*1e9)/1e9; var s=String(Math.abs(n)), p=s.split('.'); if(p[0].length>4) p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0'); return (n<0?'−':'')+p.join('.'); }
+// a length typed with or without a unit; returns {v (in cm), unit (as typed or null)}
+function lenIn(v){ var s=String(v).toLowerCase().replace(/,/g,'').replace(/(\d)\s+(?=\d{3}\b)/g,'$1').trim(), m=s.match(/(kilometres?|kilometers?|km|centimetres?|centimeters?|cm|millimetres?|mm|metres?|meters?|m)\s*\.?$/), u=null;
+  if(m){ u=/^k/.test(m[1])?'km':/^c/.test(m[1])?'cm':/^mi/.test(m[1])||m[1]==='mm'?'mm':'m'; s=s.slice(0,m.index).trim(); }
+  var x=kOf(s); return {x:x,unit:u}; }
+function sameLen(a,b){ return Math.abs(a-b)<1e-6*Math.max(1,Math.abs(b)); }
+function ratioN(v){ var s=String(v).replace(/[\s,]/g,''), m=s.match(/^1:(\d+(?:\.\d+)?)$/); return m?+m[1]:num(s); }
+
+/* ---------------- CONNECTION: same walk, three maps ---------------- */
+var TW=[{n:25000,cm:8},{n:50000,cm:4},{n:100000,cm:2}];
+var tw={pick:null,shown:false,order:[1,2,0]};
+function twRender(){ var h='';
+  tw.order.forEach(function(j,r){ var M=TW[j], y=34+r*58, x0=20, w=M.cm*44;
+    h+='<text x="'+x0+'" y="'+(y-12)+'" class="mt">Map '+'PQR'.charAt(r)+(tw.shown?'   scale 1 : '+big(M.n):'')+'</text><line x1="'+x0+'" y1="'+y+'" x2="'+(x0+w)+'" y2="'+y+'" class="walk"/><circle cx="'+x0+'" cy="'+y+'" r="4" class="wp"/><circle cx="'+(x0+w)+'" cy="'+y+'" r="4" class="wp"/>'+(tw.shown?'<text x="'+(x0+w+8)+'" y="'+(y+5)+'" class="mt">'+M.cm+' cm</text>':''); });
+  document.getElementById('twFig').innerHTML='<svg class="msvg" viewBox="0 0 440 190" width="440" height="190" role="img" aria-label="The same walk drawn on three maps">'+h+'</svg>';
+  document.getElementById('twOpts').innerHTML=['1 : 100 000','1 : 25 000','1 : 50 000'].map(function(o){ return '<button class="chip'+(tw.pick===nb(o)?' on':'')+'" onclick="twPick(\''+o+'\')">'+o+'</button>'; }).join(''); }
+function nb(x){ return String(x).replace(/\u00a0/g,' '); }
+function twPick(o){ tw.pick=nb(o); twRender(); }
+function twReveal(){ if(!tw.pick){ msg('twRead','warn','Predict first: which scale gives the longest line?'); return; } tw.shown=true; twRender();
+  msg('twRead',tw.pick==='1 : 25 000'?'good':'warn',(tw.pick==='1 : 25 000'?'✓ ':'Not quite. ')+'All three lines show the same 2 km walk. At 1 : 25 000 the walk is 8 cm; at 1 : 50 000, 4 cm; at 1 : 100 000, 2 cm. The larger the second number, the smaller the map: every length is divided by it. Check one: 4 cm × 50 000 = 200 000 cm = 2000 m = 2 km.'); }
+
+/* ---------------- MOVEMENT: scale converter cards ---------------- */
+var CV=[
+ {q:'1 : 50 000',opts:['1 cm represents 50 m','1 cm represents 500 m','1 cm represents 5 km','1 cm represents 50 km'],ans:1,why:'50 000 cm = 500 m.'},
+ {q:'1 cm represents 2 km',opts:['1 : 2000','1 : 20 000','1 : 2 000 000','1 : 200 000'],ans:3,why:'2 km = 2000 m = 200 000 cm, so 1 cm : 200 000 cm.'},
+ {q:'1 : 500',opts:['1 cm represents 5 m','1 cm represents 50 m','1 cm represents 500 m','1 cm represents 0.5 km'],ans:0,why:'500 cm = 5 m.'},
+ {q:'2 cm represent 1 km',opts:['1 : 2000','1 : 500 000','1 : 50 000','1 : 200 000'],ans:2,why:'1 km = 100 000 cm, so 2 cm : 100 000 cm, which is 1 cm : 50 000 cm.'},
+ {q:'1 : 1 000 000',opts:['1 cm represents 1 km','1 cm represents 100 km','1 cm represents 1000 m','1 cm represents 10 km'],ans:3,why:'1 000 000 cm = 10 000 m = 10 km.'},
+ {q:'4 cm represent 1 km',opts:['1 : 25 000','1 : 4000','1 : 250 000','1 : 400 000'],ans:0,why:'4 cm : 100 000 cm is 1 cm : 25 000 cm.'}];
+var cvp={};
+function cvRender(){ document.getElementById('cvCards').innerHTML=CV.map(function(c,i){ var p=cvp[i];
+  return '<div class="ascard'+(p!==undefined?(p===c.ans?' ok':' no'):'')+'"><p style="margin:2px 0;font-family:Georgia,serif;font-size:1.1em;text-align:center"><b>'+c.q+'</b> is the same as…</p><div class="opts">'+c.opts.map(function(o,j){ return '<button class="chip'+(p===j?' on':'')+'" onclick="cvPick('+i+','+j+')">'+o+'</button>'; }).join('')+'</div>'+(p!==undefined?'<p class="small" style="margin:2px 0">'+(p===c.ans?'✓ ':'Not quite: '+c.opts[c.ans]+'. ')+c.why+'</p>':'')+'</div>'; }).join(''); }
+function cvPick(i,j){ cvp[i]=j; cvRender(); }
+
+/* ---------------- NUTRITION: the Map Scale tool (main activity) ---------------- */
+// an invented place; positions in cm on a 12 cm by 8 cm map
+var PL={station:{n:'Station',p:[1,1]},school:{n:'School',p:[5,4]},harbour:{n:'Harbour',p:[11,1]},pond:{n:'Mill Pond',p:[1,7]},fell:{n:'Fell Top',p:[11,7]},mill:{n:'Windmill',p:[8,4]}};
+var SC=[25000,50000,100000];
+var mp={a:'station',b:'school',s:1,m:0,steps:false,done:[]};
+// missions: kind 'real' (map → real, answer in unit u), 'map' (real → map, answer in cm), 'scale' (choose the scale)
+var MS=[
+ {t:'Measure from the Station to the School. At 1 : 50 000, how far is it on the ground, in km?',a:'station',b:'school',s:50000,kind:'real',u:'km'},
+ {t:'At 1 : 25 000, how far is the same walk from the Station to the School on the ground, in km?',a:'station',b:'school',s:25000,kind:'real',u:'km'},
+ {t:'At 1 : 100 000, how far is it from the Harbour to Fell Top, in metres?',a:'harbour',b:'fell',s:100000,kind:'real',u:'m'},
+ {t:'A new path will run 1.5 km. At 1 : 50 000, how long should it be on the map, in cm?',s:50000,kind:'map',real:150000,u:'cm'},
+ {t:'On the ground, the Mill Pond is 2.5 km from Fell Top. Measure them on the map. Which scale is this map drawn at?',a:'pond',b:'fell',kind:'scale',s:25000,real:250000},
+ {t:'<span class="stretch">stretch</span> A walk goes from the Mill Pond to the Station, then on to the Harbour. At 1 : 25 000, how far is the whole walk, in km?',s:25000,kind:'real2',legs:[['pond','station'],['station','harbour']],u:'km'}];
+function d2p(a,b){ var p=PL[a].p, q=PL[b].p; return Math.hypot(p[0]-q[0],p[1]-q[1]); }
+function mpCm(){ return d2p(mp.a,mp.b); }
+function cmStr(x){ var r=Math.round(x*10)/10; return Math.abs(r-x)<1e-9?big(r):big(r)+' (to the nearest mm)'; }
+function mpDraw(){ var K=36, ox=14, oy=10, W=12*K+2*ox, H=8*K+2*oy, X=function(x){ return ox+x*K; }, Yp=function(y){ return oy+(8-y)*K; }, h='';
+  h+='<rect x="'+ox+'" y="'+oy+'" width="'+12*K+'" height="'+8*K+'" class="land"/>';
+  h+='<path d="M'+X(0)+' '+Yp(5.6)+' C'+X(3)+' '+Yp(6.4)+' '+X(5)+' '+Yp(2.6)+' '+X(7.5)+' '+Yp(2.8)+' S'+X(10)+' '+Yp(5.5)+' '+X(12)+' '+Yp(5)+'" class="river"/>';
+  h+='<ellipse cx="'+X(1.9)+'" cy="'+Yp(7.1)+'" rx="'+0.7*K+'" ry="'+0.4*K+'" class="lake"/>';
+  [[3.8,6.3],[4.4,6.8],[5,6.2],[9.4,6.1],[9.9,5.6],[8.8,6.6],[6.4,1.2],[7,1.6]].forEach(function(t){ h+='<circle cx="'+X(t[0])+'" cy="'+Yp(t[1])+'" r="7" class="wood"/>'; });
+  h+='<polyline points="'+[PL.station.p,PL.school.p,PL.mill.p,PL.fell.p].map(function(p){ return X(p[0])+','+Yp(p[1]); }).join(' ')+'" class="road"/><polyline points="'+[PL.station.p,PL.harbour.p].map(function(p){ return X(p[0])+','+Yp(p[1]); }).join(' ')+'" class="road"/>';
+  h+='<rect x="'+X(11.4)+'" y="'+oy+'" width="'+0.6*K+'" height="'+8*K+'" class="sea"/>';
+  // the ruler
+  var a=PL[mp.a].p, b=PL[mp.b].p, cm=mpCm();
+  if(mp.a!==mp.b){ h+='<line x1="'+X(a[0])+'" y1="'+Yp(a[1])+'" x2="'+X(b[0])+'" y2="'+Yp(b[1])+'" class="ruler"/>'; var ux=(b[0]-a[0])/cm, uy=(b[1]-a[1])/cm;
+    for(var t=0;t<=cm+1e-9;t+=1){ var px=a[0]+ux*t, py=a[1]+uy*t; h+='<line x1="'+(X(px)-uy*5)+'" y1="'+(Yp(py)-ux*5)+'" x2="'+(X(px)+uy*5)+'" y2="'+(Yp(py)+ux*5)+'" class="tick"/>'; }
+    var mx=(X(a[0])+X(b[0]))/2, my=(Yp(a[1])+Yp(b[1]))/2; h+='<text x="'+(mx+uy*16)+'" y="'+(my+ux*16+5)+'" text-anchor="middle" class="rl">'+(Math.round(cm*10)/10)+' cm</text>'; }
+  Object.keys(PL).forEach(function(k){ var p=PL[k].p, on=k===mp.a||k===mp.b; h+='<circle cx="'+X(p[0])+'" cy="'+Yp(p[1])+'" r="'+(on?7:5)+'" class="place'+(on?' on':'')+'"/><text x="'+(X(p[0])+(p[0]>10?-9:9))+'" y="'+(Yp(p[1])-9)+'" text-anchor="'+(p[0]>10?'end':'start')+'" class="pn">'+PL[k].n+'</text>'; });
+  var hideS=MS[mp.m].kind==='scale'&&!mp.done[mp.m]; h+='<text x="'+(ox+6)+'" y="'+(H-oy-6)+'" class="sb">Scale 1 : '+(hideS?'?':big(SC[mp.s]))+'</text>';
+  document.getElementById('mpFig').innerHTML='<svg class="msvg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="An invented map: Station, School, Windmill, Mill Pond, Fell Top and Harbour, with the ruler from '+PL[mp.a].n+' to '+PL[mp.b].n+'">'+h+'</svg>';
+  var opt=function(sel){ return Object.keys(PL).map(function(k){ return '<option value="'+k+'"'+(k===sel?' selected':'')+'>'+PL[k].n+'</option>'; }).join(''); };
+  document.getElementById('mpA').innerHTML=opt(mp.a); document.getElementById('mpB').innerHTML=opt(mp.b);
+  document.getElementById('mpScalePick').innerHTML=SC.map(function(n,i){ return '<button class="chip" onclick="mpPickScale('+i+')">1 : '+big(n)+'</button>'; }).join('');
+  document.getElementById('mpScaleSel').style.display=hideS?'none':'';
+  document.getElementById('mpScales').innerHTML=SC.map(function(n,i){ return '<button class="chip'+(mp.s===i?' on':'')+'" onclick="mpScale('+i+')">1 : '+big(n)+'</button>'; }).join('');
+  document.getElementById('mpRuler').innerHTML=mp.a===mp.b?'Choose two different places.':'On the map: <b>'+cmStr(cm)+' cm</b> from '+PL[mp.a].n+' to '+PL[mp.b].n+'.';
+  var M=MS[mp.m]; document.getElementById('mpCount').innerHTML='Mission '+(mp.m+1)+' of '+MS.length+(mp.done[mp.m]?' ✓':''); document.getElementById('mpQ').innerHTML=M.t;
+  document.getElementById('mpAnsRow').style.display=M.kind==='scale'?'none':''; document.getElementById('mpScaleRow').style.display=M.kind==='scale'?'':'none';
+  document.getElementById('mpUnit').textContent=M.u||''; document.getElementById('mpSteps').innerHTML=mp.steps?mpStrip():''; }
+function mpStrip(){ var M=MS[mp.m], n=M.s;
+  if(M.kind==='map') return '<div class="strip">'+[big(M.real/100000)+' km','× 1000 = '+big(M.real/100)+' m','× 100 = '+big(M.real)+' cm','÷ '+big(n)+' = '+big(M.real/n)+' cm on the map'].map(function(x){ return '<span>'+x+'</span>'; }).join('<b>→</b>')+'</div>';
+  var cm=M.kind==='real2'?M.legs.reduce(function(t,l){ return t+d2p(l[0],l[1]); },0):d2p(M.a,M.b), real=cm*n;
+  return '<div class="strip">'+[big(cm)+' cm on the map','× '+big(n)+' = '+big(real)+' cm','÷ 100 = '+big(real/100)+' m','÷ 1000 = '+big(real/100000)+' km'].map(function(x){ return '<span>'+x+'</span>'; }).join('<b>→</b>')+'</div>'; }
+function mpSel(){ mp.a=document.getElementById('mpA').value; mp.b=document.getElementById('mpB').value; mpDraw(); }
+function mpScale(i){ mp.s=i; mpDraw(); }
+function mpMission(d){ mp.m=(mp.m+d+MS.length)%MS.length; var M=MS[mp.m]; mp.steps=false; if(M.a){ mp.a=M.a; mp.b=M.b; } if(M.s&&M.kind!=='scale') mp.s=SC.indexOf(M.s); document.getElementById('mpAns').value=''; document.getElementById('mpRead').style.display='none'; mpDraw(); }
+function mpShowSteps(){ mp.steps=true; mpDraw(); }
+function mpCheck(){ var M=MS[mp.m], v=document.getElementById('mpAns').value;
+  if(!String(v).trim()){ msg('mpRead','warn','Type your answer'+(M.u?', in '+M.u:'')+'.'); return; }
+  var L=lenIn(v); if(isNaN(L.x)){ msg('mpRead','warn','That can\'t be read: write a number, such as 2.5 or 2500 m.'); return; }
+  var cmMap=M.kind==='real2'?M.legs.reduce(function(t,l){ return t+d2p(l[0],l[1]); },0):M.kind==='map'?M.real/M.s:d2p(M.a,M.b), trueCm=M.kind==='map'?M.real/M.s:cmMap*M.s, unit=L.unit||M.u, got=L.x*UNIT[unit];
+  if(sameLen(got,trueCm)){ mp.done[mp.m]=true; mp.steps=true; mpDraw(); msg('mpRead','good','✓ '+(M.kind==='map'?big(trueCm)+' cm on the map.':big(trueCm/UNIT[M.u])+' '+M.u+' on the ground.')+' The steps are below.'); return; }
+  var why='Not yet. ';
+  if(M.kind==='map'){ if(sameLen(L.x,M.real*M.s)||sameLen(L.x,M.real/100*M.s)) why+='Going from the ground to the map, divide by the scale, not multiply.'; else if(sameLen(L.x,M.real/M.s/100)||sameLen(L.x,M.real/M.s/100000)) why+='Change the 1.5 km into cm first: × 1000 then × 100.'; else why+='Change the real length into cm, then divide by '+big(M.s)+'.'; }
+  else { ['cm','m','km','mm'].forEach(function(U){ if(why==='Not yet. '&&U!==unit&&sameLen(L.x*UNIT[U],trueCm)) why+='The number is right, but in the wrong unit: '+big(L.x)+' is the distance in '+U+', and the question asks for '+M.u+'. '+(U==='cm'?'Divide by 100 for metres'+(M.u==='km'?', then by 1000 for km.':'.'):U==='m'&&M.u==='km'?'Divide by 1000 for km.':'Change it into '+M.u+'.'); });
+    if(why==='Not yet. '&&sameLen(got,cmMap/M.s*UNIT[unit])) why+='Going from the map to the ground, multiply by the scale.';
+    if(why==='Not yet. '&&M.kind==='real'&&SC[mp.s]!==M.s) why+='Check the scale: this mission is at 1 : '+big(M.s)+'.';
+    if(why==='Not yet. ') why+='Measure on the map in cm, multiply by '+big(M.s)+', then change cm into '+M.u+'.'; }
+  msg('mpRead','warn',why); }
+function mpPickScale(i){ var M=MS[mp.m], n=SC[i], cm=d2p(M.a,M.b);
+  if(n===M.s){ mp.done[mp.m]=true; msg('mpRead','good','✓ 1 : '+big(n)+'. '+big(cm)+' cm × '+big(n)+' = '+big(cm*n)+' cm = '+big(cm*n/100000)+' km.'); }
+  else msg('mpRead','warn','At 1 : '+big(n)+', '+big(cm)+' cm would be '+big(cm*n/100000)+' km on the ground, not '+big(M.real/100000)+' km.');
+  mpDraw(); }
+
+/* ---------------- REFLECTION: which unit went wrong? ---------------- */
+var SL=[
+ {setup:'At 1 : 50 000, a road is 6 cm long on the map. How long is it on the ground?',lines:['6 × 50 000 = 300 000','So the road is 300 000 m long.'],bad:1,why:'300 000 is in cm, the same unit as the 6 cm. 300 000 cm = 3000 m = 3 km.'},
+ {setup:'At 1 : 25 000, how long on the map is a 2 km path?',lines:['2 km = 200 000 cm','200 000 × 25 000 = 5 000 000 000 cm'],bad:1,why:'From the ground to the map, divide: 200 000 ÷ 25 000 = 8 cm.'},
+ {setup:'Write 1 cm represents 3 km as a ratio 1 : <i>n</i>.',lines:['3 km = 3000 m','So the scale is 1 : 3000.'],bad:1,why:'Both sides of a ratio scale must be in the same unit: 3000 m = 300 000 cm, so the scale is 1 : 300 000.'},
+ {setup:'At 1 : 200, a wall on a plan is 4.5 cm. How long is the real wall?',lines:['4.5 × 200 = 900 cm','900 cm = 0.9 m'],bad:1,why:'There are 100 cm in a metre: 900 cm = 9 m.'}];
+var sl={};
+function slRender(){ document.getElementById('slCards').innerHTML=SL.map(function(c,i){ var p=sl[i];
+  return '<div class="ascard'+(p!==undefined?(p===c.bad?' ok':' no'):'')+'"><p style="margin:2px 0">'+c.setup+'</p>'+c.lines.map(function(l,j){ return '<div class="slline"><span>Line '+(j+1)+': '+l+'</span> <button class="chip'+(p===j?' on':'')+'" onclick="slPick('+i+','+j+')">the slip is here</button></div>'; }).join('')+(p!==undefined?'<p class="small" style="margin:4px 0">'+(p===c.bad?'✓ ':'Line '+(p+1)+' is fine. The slip is in line '+(c.bad+1)+'. ')+c.why+'</p>':'')+'</div>'; }).join(''); }
+function slPick(i,j){ sl[i]=j; slRender(); }
+
+/* ---------------- Proof (stretch): why a map keeps every angle ---------------- */
+var PROOFS={
+ pr:{steps:[
+  {q:'On a map at 1 : '+I('n')+', every length on the ground is drawn '+I('n')+' times smaller. As an enlargement, what is the scale factor from the ground to the map?',chips:[I('n'),FR(1,I('n'))],ans:1,ok:'the map is an enlargement of the ground with scale factor '+FR(1,I('n')),hint:'Multiplying by the scale factor must make every length '+I('n')+' times smaller.'},
+  {q:'What does an enlargement do to angles (Lesson 6)?',chips:['it keeps every angle the same','it multiplies every angle by the scale factor'],ans:0,ok:'an enlargement keeps every angle',hint:'Does an enlarged triangle change shape?'},
+  {q:'So the map and the ground are:',chips:['the same size','similar'],ans:1,ok:'the map is similar to the ground',hint:'Same angles, every length multiplied by the same number.'}],
+  done:'✓ <b>That is why.</b> A map is a similar copy of the ground, with scale factor '+FR(1,I('n'))+'. Distances are all shrunk by the same factor, and every angle is kept, so a bearing measured on the map is the bearing on the ground.'}
+};
+var pr={pr:0};
+function prFigure(i){ var g='<svg class="msvg" viewBox="0 0 440 170" width="440" height="170" role="img" aria-label="A triangle of paths on the ground and the same triangle on the map">';
+  var T=[[20,150],[200,150],[60,30]], s=1/3, U=T.map(function(p){ return [280+(p[0]-20)*s*1.2,150-(150-p[1])*s*1.2]; });
+  g+='<polygon points="'+T.map(function(p){ return p.join(','); }).join(' ')+'" class="ground'+(i===0?' hl2':'')+'"/><polygon points="'+U.map(function(p){ return p.join(','); }).join(' ')+'" class="mapt'+(i===0?' hl2':'')+'"/>';
+  if(i===1){ [T,U].forEach(function(P){ g+='<circle cx="'+P[2][0]+'" cy="'+P[2][1]+'" r="12" class="hlc"/>'; }); }
+  g+='<text x="20" y="20" class="mt">On the ground</text><text x="280" y="20" class="mt">On the map</text></svg>'; return g; }
+function prRender(key){ var P=PROOFS[key], i=pr[key], h='';
+  document.getElementById('prFig').innerHTML=prFigure(i);
+  for(var j=0;j<i&&j<P.steps.length;j++) h+='<p class="pl">✓ '+P.steps[j].ok+'</p>';
+  if(i<P.steps.length){ var s=P.steps[i]; h+='<p class="pl"><b>Step '+(i+1)+' of '+P.steps.length+':</b> '+s.q+'</p><div class="buttonrow">'+s.chips.map(function(c,k){return '<button class="chip" onclick="prPick(\''+key+'\','+k+')">'+c+'</button>';}).join('')+'</div>'; }
+  else h+='<p class="pl">'+P.done+'</p>';
+  document.getElementById(key+'Body').innerHTML=h; }
+function prPick(key,k){ var s=PROOFS[key].steps[pr[key]];
+  if(k===s.ans){ pr[key]++; prRender(key); document.getElementById(key+'Read').style.display='none'; }
+  else msg(key+'Read','warn','Not yet. '+s.hint); }
+
+/* ---------------- CREATIVITY: plan a room ---------------- */
+var RM={w:6,d:4.5}, PG={w:10,h:8}, RS=[50,100,200];
+var IT=[{n:'bed',w:2,d:1.4,x:0.2,y:0.2},{n:'desk',w:1.2,d:0.6,x:4.6,y:0.2},{n:'wardrobe',w:1,d:0.6,x:4.8,y:3.7}];
+var rm={s:null,ok:{}};
+function rmScale(i){ rm.s=i; rm.ok={}; IT.forEach(function(_,k){ ['w','d'].forEach(function(q){ var e=document.getElementById('rm'+k+q); if(e) e.value=''; }); }); rmDraw(); }
+function rmFits(n){ return RM.w*100/n<=PG.w+1e-9&&RM.d*100/n<=PG.h+1e-9; }
+function rmDraw(){ var K=32, ox=10, oy=10, h='<rect x="'+ox+'" y="'+oy+'" width="'+PG.w*K+'" height="'+PG.h*K+'" class="page"/>';
+  for(var x=0;x<=PG.w;x++) h+='<line x1="'+(ox+x*K)+'" y1="'+oy+'" x2="'+(ox+x*K)+'" y2="'+(oy+PG.h*K)+'" class="cmgrid"/>'; for(var y=0;y<=PG.h;y++) h+='<line x1="'+ox+'" y1="'+(oy+y*K)+'" x2="'+(ox+PG.w*K)+'" y2="'+(oy+y*K)+'" class="cmgrid"/>';
+  if(rm.s!==null){ var n=RS[rm.s], f=100/n, fits=rmFits(n);
+    h+='<rect x="'+ox+'" y="'+oy+'" width="'+RM.w*f*K+'" height="'+RM.d*f*K+'" class="room'+(fits?'':' over')+'"/>';
+    IT.forEach(function(t,k){ if(rm.ok[k]) h+='<rect x="'+(ox+t.x*f*K)+'" y="'+(oy+t.y*f*K)+'" width="'+t.w*f*K+'" height="'+t.d*f*K+'" class="item"/><text x="'+(ox+(t.x+t.w/2)*f*K)+'" y="'+(t.y<1?oy+(t.y+t.d)*f*K+12:oy+t.y*f*K-4)+'" text-anchor="middle" class="itl">'+t.n+'</text>'; }); }
+  document.getElementById('rmFig').innerHTML='<svg class="msvg" viewBox="0 0 '+(PG.w*K+2*ox)+' '+(PG.h*K+2*oy)+'" width="'+(PG.w*K+2*ox)+'" height="'+(PG.h*K+2*oy)+'" role="img" aria-label="A page 10 cm by 8 cm, with the room plan">'+h+'</svg>';
+  document.getElementById('rmScales').innerHTML=RS.map(function(n,i){ return '<button class="chip'+(rm.s===i?' on':'')+'" onclick="rmScale('+i+')">1 : '+n+'</button>'; }).join('');
+  document.getElementById('rmItems').style.display=rm.s!==null&&rmFits(RS[rm.s])?'':'none';
+  if(rm.s!==null){ var n2=RS[rm.s]; msg('rmRead',rmFits(n2)?'good':'warn',rmFits(n2)?'At 1 : '+n2+' the room is '+big(RM.w*100/n2)+' cm by '+big(RM.d*100/n2)+' cm: it fits the page.'+(n2===200?' It fits, but it is small: could a scale with a smaller second number fit as well?':' Now work out the plan size of each item.'):'At 1 : '+n2+' the room would be '+big(RM.w*100/n2)+' cm by '+big(RM.d*100/n2)+' cm: too big for a 10 cm by 8 cm page.'); } }
+function rmCheck(k){ var n=RS[rm.s], t=IT[k], w=lenIn(document.getElementById('rm'+k+'w').value), d=lenIn(document.getElementById('rm'+k+'d').value), ew=t.w*100/n, ed=t.d*100/n;
+  var gw=w.x*UNIT[w.unit||'cm'], gd=d.x*UNIT[d.unit||'cm'];
+  if(isNaN(w.x)||isNaN(d.x)){ msg('rm'+k+'R','warn','Type both plan lengths, in cm.'); return; }
+  if(sameLen(gw,ew)&&sameLen(gd,ed)){ rm.ok[k]=true; rmDraw(); msg('rm'+k+'R','good','✓ '+big(ew)+' cm by '+big(ed)+' cm on the plan.'); return; }
+  msg('rm'+k+'R','warn',sameLen(gw,t.w*100*n)||sameLen(gd,t.d*100*n)?'From real to plan, divide by '+n+'.':sameLen(gw,t.w/n)||sameLen(gd,t.d/n)?'Change metres into cm first (× 100), then divide by '+n+'.':'Not yet: change '+big(t.w)+' m into cm, then divide by '+n+'.'); }
+
+/* ---------------- Reconnection Routes ---------------- */
+(function(){
+  var RECONNECT={
+    units:{title:'Units of length',prompt:'How many centimetres are there in 1 kilometre?',answer:100000,hint:'1 km = 1000 m, and 1 m = 100 cm.'},
+    sf:{title:'Scale factors (Lesson 6)',prompt:'A length of 10 cm is enlarged by scale factor <span class=fr><span>1</span><span>2</span></span>. How long is the image, in cm?',answer:5,hint:'Multiply by the scale factor.'},
+    plan:{title:'Scale plans (Constructions Lesson 7)',prompt:'On a plan, 1 cm represents 5 m. How many metres do 4 cm represent?',answer:20,hint:'Plan to real: multiply.'}
+  };
+  function matches(r,v){ if(typeof r.answer==='number') return same(num(String(v).replace(/[\s,]/g,'').replace(/cm|°|km|m\b/gi,'')),r.answer); if(r.pt) return samePair(pairOf(v),r.answer); if(r.line) return sameLine(lineOf(v),lineOf(r.answer)); var t=String(v).trim().toLowerCase().replace(/[.!]$/,''); return t===r.answer||t==='it is '+r.answer||t==='it\'s '+r.answer||t==='a '+r.answer+' line'; }
+  window.openReconnect=function(){
+    var p=document.getElementById('reconnectionPanel');p.style.display='block';
+    var btns=Object.keys(RECONNECT).map(function(k){return '<button class="guidebtn" onclick="showReconnect(\''+k+'\')">'+RECONNECT[k].title+'</button>';}).join('');
+    p.innerHTML='<h3>🧭 Reconnection Routes</h3><p>Choose a short recap only if it helps you re-enter this lesson. Using a route is part of learning.</p><div class="buttonrow">'+btns+'<button onclick="closeReconnect()">Return to the lesson</button></div><div id="reconnectTask"></div>';
+  };
+  window.showReconnect=function(key){
+    var r=RECONNECT[key];
+    document.getElementById('reconnectTask').innerHTML='<div class="toolbox"><h3>'+r.title+'</h3><div>'+r.prompt+'</div>'
+     +'<input id="reconnectAnswer" placeholder="Your answer" style="width:100%;max-width:220px;padding:9px;border:1px solid #bcae98;border-radius:8px;margin-top:8px">'
+     +'<div class="buttonrow"><button onclick="checkReconnect(\''+key+'\')">Check</button><button onclick="reconnectHint(\''+key+'\')">Hint</button><button onclick="closeReconnect()">Return to the lesson</button></div>'
+     +'<div id="reconnectFeedback" class="feedback"></div></div>';
+  };
+  window.checkReconnect=function(key){
+    var r=RECONNECT[key],fb=document.getElementById('reconnectFeedback'),v=document.getElementById('reconnectAnswer').value;fb.style.display='block';
+    if(!v.trim()){fb.className='feedback warn';fb.textContent='Enter an answer, or use the hint.';return;}
+    if(matches(r,v)){fb.className='feedback good';fb.textContent='Ready to return. This idea is secure enough for the current lesson.';}
+    else{fb.className='feedback bad';fb.textContent='Not yet. Use the hint, or sketch it on the Scratchpad, then try again.';}
+  };
+  window.reconnectHint=function(key){var fb=document.getElementById('reconnectFeedback');fb.style.display='block';fb.className='feedback warn';fb.innerHTML='<b>💡 Hint:</b> '+RECONNECT[key].hint;};
+  window.closeReconnect=function(){var p=document.getElementById('reconnectionPanel');p.style.display='none';p.innerHTML='';};
+})();
+
+/* ---------------- Answer helpers for inequalities ---------------- */
+// num() plus "minus three" / "negative three" word forms.
+/* ---------------- PRACTICE COMPANION ---------------- */
+function pP(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pV(x,y){ return function(v){ return samePair(pairOf(v),[x,y]); }; }
+function pN(n){ return function(v){ return same(kOf(String(v).replace(/cm|°|degrees?/gi,'')),n); }; }
+function pYes(t){ return function(v){ var s=String(v).toLowerCase(); var yes=/\byes\b|\bsimilar\b|\bthey are\b/.test(s)&&!/\bno\b|\bnot\b|n't/.test(s), no=/\bno\b|\bnot\b|n't/.test(s); return t?yes:no; }; }
+// a length answer: the value in cm, and the unit asked for (used when no unit is typed)
+function pL(cm,u){ return function(v){ var L=lenIn(v); return !isNaN(L.x)&&sameLen(L.x*UNIT[L.unit||u],cm); }; }
+function pR(n){ return function(v){ return same(ratioN(v),n); }; }
+var PRACTICE=[
+ {label:"1 of 8 · Map to ground",q:"On a map at 1 : 50 000, two villages are 3 cm apart. How far apart are they on the ground, in km?",a:[],eq:pL(150000,'km'),prompt:"What does 1 cm on this map stand for?",hint:"3 × 50 000 = 150 000 cm. Change it into m, then km.",sol:"150 000 cm = 1500 m = 1.5 km."},
+ {label:"2 of 8 · Another scale",q:"On a map at 1 : 25 000, a path is 8 cm long. How long is it on the ground, in km?",a:[],eq:pL(200000,'km'),prompt:"Multiply first, then change the units.",hint:"8 × 25 000 = 200 000 cm.",sol:"200 000 cm = 2000 m = 2 km."},
+ {label:"3 of 8 · Ground to map",q:"Two towns are 7 km apart. How far apart are they on a map at 1 : 100 000, in cm?",a:[],eq:pL(7,'cm'),prompt:"Ground to map: multiply or divide?",hint:"7 km = 700 000 cm. Divide by 100 000.",sol:"700 000 ÷ 100 000 = 7 cm."},
+ {label:"4 of 8 · Two ways",q:"Write 1 : 20 000 as “1 cm represents … m”. How many metres?",a:[],eq:pL(20000,'m'),prompt:"1 cm on the map is 20 000 cm on the ground.",hint:"Change 20 000 cm into metres.",sol:"20 000 cm = 200 m: 1 cm represents 200 m."},
+ {label:"5 of 8 · The other way",q:"Write “1 cm represents 5 km” as a ratio 1 : <i>n</i>. What is <i>n</i>?",a:[],eq:pR(500000),prompt:"Both numbers in a ratio scale must be in the same unit.",hint:"5 km = 5000 m = 500 000 cm.",sol:"1 : 500 000."},
+ {label:"6 of 8 · A plan",q:"A plan is drawn at 1 : 50. A room is 4 m long. How long is it on the plan, in cm?",a:[],eq:pL(8,'cm'),prompt:"Change 4 m into cm first.",hint:"4 m = 400 cm. Divide by 50.",sol:"400 ÷ 50 = 8 cm."},
+ {label:"7 of 8 · Plan to real",q:"On a plan at 1 : 200, a wall is 3.5 cm long. How long is the real wall, in m?",a:[],eq:pL(700,'m'),prompt:"Multiply by 200, then change the units.",hint:"3.5 × 200 = 700 cm.",sol:"700 cm = 7 m."},
+ {label:"8 of 8 · Find the scale (stretch)",q:"On a map, 6 cm represents 3 km. Write the scale as 1 : <i>n</i>. What is <i>n</i>?",a:[],eq:pR(50000),prompt:"What does 1 cm represent?",hint:"3 km = 300 000 cm, and that is 6 cm on the map. Divide by 6.",sol:"300 000 ÷ 6 = 50 000, so 1 : 50 000."}
+];
+var pIndex=0, pAttempts=PRACTICE.map(function(){return 0;}), pPromptUsed=PRACTICE.map(function(){return false;}), pHintUsed=PRACTICE.map(function(){return false;}), pDone=PRACTICE.map(function(){return false;});
+function pUnlocked(i){return pPromptUsed[i]&&pHintUsed[i]&&pAttempts[i]>=2;}
+function pLockMsg(i){var r=[];if(!pPromptUsed[i])r.push("use the Socratic prompt");if(!pHintUsed[i])r.push("use the hint");var t=Math.max(0,2-pAttempts[i]);if(t===2)r.push("check two answers");else if(t===1)r.push("check one more answer");return "Worked solution unlocks after you "+r.join(", ")+".";}
+function pLock(){var b=document.getElementById("practiceSolutionButton");if(!b)return;var u=pUnlocked(pIndex);b.disabled=!u;b.setAttribute("aria-disabled",String(!u));b.style.opacity=u?"1":".5";b.style.cursor=u?"pointer":"not-allowed";b.title=u?"Worked solution is available.":pLockMsg(pIndex);}
+function renderPractice(){
+  var q=PRACTICE[pIndex];
+  document.getElementById("practiceLabel").textContent="Question "+q.label;
+  document.getElementById("practiceQuestion").innerHTML=q.q;
+  document.getElementById("practiceAnswer").value="";
+  var vq=!!q.vec; document.getElementById("pTextWrap").style.display=vq?"none":""; document.getElementById("pVecWrap").style.display=vq?"":"none"; document.getElementById("pVecT").value=""; document.getElementById("pVecB").value="";
+  document.getElementById("practiceSupport").style.display="none";
+  document.getElementById("practiceFeedback").style.display="none";
+  document.getElementById("practicePrev").disabled=pIndex===0;
+  document.getElementById("practiceNext").textContent=pIndex===PRACTICE.length-1?"Finish":"Next →";
+  document.getElementById("practiceDots").innerHTML=PRACTICE.map(function(_,i){return '<span class="progress-dot'+(pDone[i]?' done':i===pIndex?' active':'')+'">'+(i+1)+'</span>';}).join("");
+  pLock();
+}
+function pPrompt(){pPromptUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>🤔 Socratic prompt:</b> "+PRACTICE[pIndex].prompt;pLock();}
+function pHint(){pHintUsed[pIndex]=true;var s=document.getElementById("practiceSupport");s.style.display="block";s.innerHTML="<b>💡 Hint:</b> "+PRACTICE[pIndex].hint;pLock();}
+function pCheck(){
+  var q=PRACTICE[pIndex],fb=document.getElementById("practiceFeedback"),val;
+  if(q.vec){ var vt=document.getElementById("pVecT").value.trim(), vb=document.getElementById("pVecB").value.trim(); val=(vt&&vb)?vt+", "+vb:""; if(!val&&(vt||vb)){ fb.style.display="block"; fb.className="feedback warn"; fb.textContent="Fill in both boxes: the horizontal move and the vertical move."; pLock(); return; } }
+  else val=document.getElementById("practiceAnswer").value;
+  fb.style.display="block";
+  if(!val.trim()){fb.className="feedback warn";fb.textContent="Enter an answer first, or use the prompt.";pLock();return;}
+  pAttempts[pIndex]++;
+  var learner=normText(val), stripped=learner.replace(/^(a|an|the)\s+/,"");
+  var ok=(q.a||[]).some(function(x){var nx=normText(x);return nx===learner||nx===stripped;});
+  if(!ok && q.eq){ ok=q.eq(val)===true; }
+  var cls,msg;
+  if(ok){pDone[pIndex]=true;cls="feedback good";msg="Correct.";}
+  else{cls="feedback bad";msg="Not quite yet. Check whether to multiply or divide, and the units — or use the prompt and hint.";}
+  renderPractice();
+  fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className=cls;fb.textContent=msg;
+}
+function pSolution(){
+  var s=document.getElementById("practiceSupport");s.style.display="block";
+  if(!pUnlocked(pIndex)){s.innerHTML="<b>🔒 Worked solution locked.</b> "+pLockMsg(pIndex);pLock();return;}
+  s.innerHTML="<b>👀 Worked solution:</b> "+PRACTICE[pIndex].sol;
+}
+function pPrev(){if(pIndex>0){pIndex--;renderPractice();}}
+function pNext(){if(pIndex<PRACTICE.length-1){pIndex++;renderPractice();}else{var fb=document.getElementById("practiceFeedback");fb.style.display="block";fb.className="feedback";fb.style.background="#e5edf4";fb.textContent="Practice complete. Return to any question or the lesson.";}}
+
+/* ---------------- init ---------------- */
+function initLesson(){
+  twRender();
+  cvRender();
+  slRender();
+  prRender('pr');
+  rmDraw();
+  mpDraw();
+  renderPractice();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initLesson);else initLesson();
+</script>
+
+<script src="../../assets/progress.js"></script>
+<script>NEOProgress.autoTrack('ts-09-maps');</script>
+
+<script src="../../assets/fieldkits/transformations-similarity-and-scale.js"></script>
+<script src="../../assets/fieldkit.js"></script>
+<script>NEOFieldKit.mount(8);</script>
+
+<script>
+/* Maths symbol palette on every answer field (design push). Per-lesson override: window.NEO_PALETTE_SYMBOLS */
+(function(){
+  if(window.__neoPaletteInstalled)return; window.__neoPaletteInstalled=true;
+  var DEFAULT=["a","b","c","x","y","²","³","√","π","+","-","×","÷","=","≈","°"];
+  function syms(){ return (window.NEO_PALETTE_SYMBOLS&&window.NEO_PALETTE_SYMBOLS.length)?window.NEO_PALETTE_SYMBOLS:DEFAULT; }
+  var SUP={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* render any a/b in a plain string as a stacked fraction (numerator over denominator) */
+  function renderFractions(t){ var re=new RegExp("([A-Za-z0-9.²³]+) */ *([A-Za-z0-9.²³]+)","g"); return esc(t).replace(re, function(_,n,d){ return '<span class="frac"><span class="fnum">'+n+'</span><span class="fden">'+d+'</span></span>'; }); }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function updatePreview(f,pv){ var v=f.value||""; if(v.indexOf("/")>=0){ pv.hidden=false; pv.innerHTML='<span class="flabel">Reads as:</span> '+renderFractions(v); } else { pv.hidden=true; pv.innerHTML=""; } }
+  function attach(f){ if(f.dataset.paletteReady)return; f.dataset.paletteReady="1";
+    var w=document.createElement("div"); w.className="mathpalette";
+    var t=document.createElement("button"); t.type="button"; t.className="palette-toggle"; t.textContent="√ Symbols";
+    var k=document.createElement("div"); k.className="palette-keys"; k.hidden=true;
+    var pv=document.createElement("div"); pv.className="fracpreview"; pv.hidden=true; pv.setAttribute("aria-live","polite");
+    var ph=document.createElement("div"); ph.className="powhint"; ph.hidden=true; ph.setAttribute("aria-live","polite"); ph.textContent="Typing a power: type the digits, then press xⁿ again (or type anything else) to come back down.";
+    function powOff(pb){ f.dataset.pow=""; if(pb){ pb.classList.remove("on"); pb.setAttribute("aria-pressed","false"); } ph.hidden=true; }
+    syms().forEach(function(s){ var b=document.createElement("button"); b.type="button";
+      if(s==="xⁿ"){ /* power key: the next digits typed become a superscript power, e.g. 1.06⁴ */
+        b.className="powkey"; b.innerHTML='x<sup>n</sup>'; b.title="Type a power (press, then type the power)"; b.setAttribute("aria-label","Power: type the power next"); b.setAttribute("aria-pressed","false");
+        b.addEventListener("click",function(){ if(f.dataset.pow==="1"){ powOff(b); } else { f.dataset.pow="1"; b.classList.add("on"); b.setAttribute("aria-pressed","true"); ph.hidden=false; } f.focus(); });
+        f.addEventListener("beforeinput",function(e){ if(f.dataset.pow!=="1"||e.inputType!=="insertText"||e.data==null) return;
+          if(/^[0-9]+$/.test(e.data)){ e.preventDefault(); insert(f,e.data.replace(/[0-9]/g,function(d){ return SUP[d]; })); updatePreview(f,pv); } else powOff(b); });
+        k.appendChild(b); return; }
+      b.textContent=s; b.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,s);updatePreview(f,pv);}); k.appendChild(b); });
+    var fr=document.createElement("button"); fr.type="button"; fr.title="Insert a fraction (numerator / denominator)"; fr.innerHTML='<span class="frac"><span class="fnum">a</span><span class="fden">b</span></span>';
+    fr.addEventListener("click",function(){ powOff(k.querySelector(".powkey")); insert(f,"/"); updatePreview(f,pv); }); k.appendChild(fr);
+    t.addEventListener("click",function(){ k.hidden=!k.hidden; });
+    f.addEventListener("input",function(){ updatePreview(f,pv); });
+    w.appendChild(t); w.appendChild(k); w.appendChild(ph); f.insertAdjacentElement("afterend",w); w.insertAdjacentElement("afterend",pv);
+  }
+  function init(){ document.querySelectorAll('input[id$="Answer"], .neo-mathfield').forEach(attach); }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}
+})();
+</script>
+
+<script>
+/* Single-open accordion: opening one panel closes the others (data-keep-open opts out). */
+(function(){
+  if(window.__neoAccordionInstalled)return; window.__neoAccordionInstalled=true;
+  function closeOthers(cur){
+    var scope=cur.closest("#lessonView")||document;
+    scope.querySelectorAll("details").forEach(function(d){
+      if(d!==cur && !d.contains(cur) && d.dataset.keepOpen!=="true") d.open=false;
+    });
+  }
+  document.addEventListener("toggle",function(e){
+    var d=e.target;
+    if(d && d.tagName==="DETAILS" && d.open && (d.closest("#lessonView")||d.closest(".neo-lesson-root"))) closeOthers(d);
+  },true);
+})();
+</script>
+</div>
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:9990;font-family:Arial,sans-serif}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:56px;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span class="neoCalcDeg">DEG</span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+<div class="neo-chrome neo-chrome-footer"><div class="neo-mark">NE<span>O</span> by Nudge Education</div><div><a href="../../index.html">All lessons</a><a href="../../cornerstones.html">The Six Cornerstones</a><a href="../../curriculum.html">Our curriculum</a><a href="../../tools/geometry-studio.html">Geometry Studio</a></div></div>
+
+<script>/* NEO: return to the exact place after the Geometry Studio */
+(function(){
+  var KEY='neoReturn:'+location.pathname, p=location.pathname, i=p.indexOf('/lessons/'), rel=i<0?null:'..'+p.slice(i);
+  function snap(){ var det=[].slice.call(document.querySelectorAll('details')), pv=document.getElementById('practiceView'), a=document.getElementById('practiceAnswer');
+    return {t:Date.now(),y:window.pageYOffset||0,open:det.map(function(d,k){return d.open?k:-1;}).filter(function(k){return k>=0;}),practice:!!(pv&&!pv.hidden),q:(typeof pIndex==='number'?pIndex:null),ans:a?a.value:'',boxes:pv?[].slice.call(pv.querySelectorAll('input[id]')).filter(function(x){return x.value;}).map(function(x){return [x.id,x.value];}):[]}; }
+  function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(snap())); }catch(e){} }
+  [].slice.call(document.querySelectorAll('a[href*="geometry-studio.html"]')).forEach(function(a){ var h=a.getAttribute('href');
+    if(rel&&!/[?&]return=/.test(h)) a.setAttribute('href',h+(h.indexOf('?')<0?'?':'&')+'return='+encodeURIComponent(rel));
+    a.addEventListener('click',save); });
+  var s=null; try{ s=JSON.parse(sessionStorage.getItem(KEY)||'null'); }catch(e){}
+  if(!s||Date.now()-s.t>3*3600*1000) return;
+  try{ sessionStorage.removeItem(KEY); }catch(e){}
+  function restore(){ var det=document.querySelectorAll('details'); (s.open||[]).forEach(function(k){ if(det[k]) det[k].open=true; });
+    if(s.practice&&typeof openPractice==='function'){ openPractice(); if(s.q!=null&&typeof renderPractice==='function'){ try{ pIndex=s.q; }catch(e){} renderPractice(); var a=document.getElementById('practiceAnswer'); if(a&&s.ans) a.value=s.ans; (s.boxes||[]).forEach(function(bx){ var el=document.getElementById(bx[0]); if(el) el.value=bx[1]; }); } }
+    setTimeout(function(){ window.scrollTo(0,s.y); },s.practice?450:60); }
+  if(document.readyState==='complete') setTimeout(restore,80); else window.addEventListener('load',function(){ setTimeout(restore,80); });
+})();
+</script>
+</body>
+</html>

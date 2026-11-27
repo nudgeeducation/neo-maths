@@ -206,6 +206,8 @@ SOURCES = {
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_07_Similar_Shapes/NEO_Maths_Y9_Transformations_Lesson_07_Similar_Shapes_v0.1.html",
     "ts-08-missing-lengths":
         "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_08_Missing_Lengths/NEO_Maths_Y9_Transformations_Lesson_08_Missing_Lengths_v0.1.html",
+    "ts-09-maps":
+        "02_Foundations/01_Lessons/Transformations_Similarity_Scale/Lesson_09_Maps_and_Scale_Drawings/NEO_Maths_Y9_Transformations_Lesson_09_Maps_and_Scale_Drawings_v0.1.html",
     "shapes-06-platonic-solids":
         "02_Foundations/01_Lessons/2D_and_3D_Shapes/Lesson_06_Platonic_Solids/NEO_Maths_Y9_Shapes_Lesson_06_Platonic_Solids_v0.1.html",
     "shapes-07-surface-area":

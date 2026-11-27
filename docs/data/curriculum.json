@@ -500,6 +500,14 @@
           "file": "lessons/transformations-similarity-and-scale/08-missing-lengths.html",
           "status": "live",
           "cornerstones": []
+        },
+        {
+          "id": "ts-09-maps",
+          "num": "Lesson 09",
+          "title": "Maps and scale drawings",
+          "file": "lessons/transformations-similarity-and-scale/09-maps-and-scale-drawings.html",
+          "status": "live",
+          "cornerstones": []
         }
       ]
     },
