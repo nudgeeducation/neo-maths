@@ -330,6 +330,10 @@
         "id": "garden",
         "title": "The Walled Garden"
       },
+      "checkin": {
+        "id": "return-garden",
+        "title": "Return to the Walled Garden"
+      },
       "lessons": [
         {
           "id": "ineq-01-inequality-symbols",
@@ -374,6 +378,10 @@
       "diagnostic": {
         "id": "workshop",
         "title": "The Inventor’s Workshop"
+      },
+      "checkin": {
+        "id": "return-workshop",
+        "title": "Return to the Inventor’s Workshop"
       },
       "lessons": [
         {
@@ -435,6 +443,10 @@
       "diagnostic": {
         "id": "animationstudio",
         "title": "The Animation Studio"
+      },
+      "checkin": {
+        "id": "return-animationstudio",
+        "title": "Return to the Animation Studio"
       },
       "lessons": [
         {
@@ -1044,6 +1056,10 @@
         "id": "observatory",
         "title": "The Observatory"
       },
+      "checkin": {
+        "id": "return-observatory",
+        "title": "Return to the Observatory"
+      },
       "lessons": [
         {
           "id": "ns-01-fdp-fluently",
@@ -1112,6 +1128,10 @@
       "diagnostic": {
         "id": "lighthouse",
         "title": "The Lighthouse"
+      },
+      "checkin": {
+        "id": "return-lighthouse",
+        "title": "Return to the Lighthouse"
       },
       "lessons": [
         {
@@ -1189,6 +1209,10 @@
       "diagnostic": {
         "id": "markethall",
         "title": "The Market Hall"
+      },
+      "checkin": {
+        "id": "return-markethall",
+        "title": "Return to the Market Hall"
       },
       "lessons": [
         {
@@ -1282,6 +1306,10 @@
       "diagnostic": {
         "id": "sortingoffice",
         "title": "The Sorting Office"
+      },
+      "checkin": {
+        "id": "return-sortingoffice",
+        "title": "Return to the Sorting Office"
       },
       "lessons": [
         {

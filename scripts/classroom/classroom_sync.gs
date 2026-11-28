@@ -7,6 +7,9 @@
  * A unit with a `diagnostic` ({id, title}) also gets a "Start here" Material at the
  * top of its topic, linking to that diagnostic expedition on the NEO Maths results
  * service (GreenPrint v2.4: one diagnostic per unit, taken before Lesson 01).
+ * A unit with a `checkin` ({id, title}) also gets a "Unit Check-in" Material, linking
+ * to its end-of-unit check-in on the results service, taken after the last lesson.
+ * Where two units share a half-term, their one check-in belongs to the second unit only.
  *
  * Git is canonical; Classroom is derived. Re-run after any curriculum change —
  * the script is idempotent (lessons are matched on the marker `neo-maths:<lesson id>`
@@ -68,6 +71,17 @@ function syncCourse_(manifest, target) {
       topic = Classroom.Courses.Topics.create({ name: topicName }, courseId);
       topics[topicName] = topic;
       log.topicsCreated++;
+    }
+
+    // The check-in goes in first, so that in a new topic it sits below the last lesson
+    // (Classroom lists newest first). In a topic that already has lessons it arrives at
+    // the top, and is dragged once to the bottom in Classwork.
+    // Only once every lesson in the unit is live, so the check-in never comes before a lesson exists.
+    const unitComplete = unit.lessons.every(function (l) { return l.status === 'live'; });
+    if (unit.checkin && unitComplete) {
+      const marker = CONFIG.MARKER + 'checkin-' + unit.id;
+      wanted[marker] = true;
+      upsert_(courseId, existing, log, marker, checkinTitle_(unit), checkinDescription_(unit, marker), checkinUrl_(unit), topic.topicId);
     }
 
     const lessons = unit.lessons.slice().reverse();
@@ -157,6 +171,16 @@ function startDescription_(unit, marker) {
   ].join('\n');
 }
 
+function checkinTitle_(unit) { return 'Unit Check-in · ' + unit.checkin.title; }
+function checkinUrl_(unit) { return CONFIG.RESULTS_URL + '?page=' + unit.checkin.id; }
+function checkinDescription_(unit, marker) {
+  return [
+    'Finish ' + unit.title + ' here, after the last lesson.',
+    unit.checkin.title + ' goes back to the world of the diagnostic you did at the start, with new locks on each lesson. It shows where you started and where you are now, with no scores and no timers. Sign in with your NEO account.',
+    marker,
+  ].join('\n');
+}
+
 function material_(title, description, url, topicId) {
   return {
     title: title,
@@ -202,6 +226,7 @@ function previewSync() {
       Logger.log('  TOPIC ' + u.title + ' · ' + u.stage + ' (' + u.lessons.length + ' lessons)');
       if (u.diagnostic) Logger.log('     ' + startTitle_(u) + ' → ' + diagnosticUrl_(u));
       u.lessons.forEach(function (l) { Logger.log('     ' + l.num + ' · ' + l.title + ' → ' + CONFIG.SITE_BASE + l.file); });
+      if (u.checkin) Logger.log('     ' + checkinTitle_(u) + ' → ' + checkinUrl_(u));
     });
   });
 }
