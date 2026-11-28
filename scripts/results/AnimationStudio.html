@@ -144,9 +144,12 @@ textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;p
 </style>
 </head>
 <body>
+<div id="calcTopNote" hidden role="status" style="position:fixed;top:60px;right:14px;z-index:100002;background:#fff8e6;border:1px solid #c9a45a;border-radius:10px;padding:8px 12px;font-family:Arial,sans-serif;font-size:14px;color:#2f3429;max-width:300px">This lock is about working it out yourself, so the calculator is resting here.</div>
 <div class="top"><b>NEO MATHS · THE ANIMATION STUDIO</b>
   <div class="tools">
     <button id="kitBtn" title="The tools you have collected">Field kit · <span id="kitCount">0</span></button>
+    <button id="padTopBtn" type="button" onclick="openRoomScratch()" title="Sketch or jot down working. Nothing is saved.">✏️ Scratchpad</button>
+    <button id="calcTopBtn" type="button" onclick="openRoomCalc()" title="A calculator. Using it is never recorded.">🧮 Calculator</button>
     <button id="planBtn" title="See your floor plan at any time">Floor plan</button>
     <button id="stillBtn" aria-pressed="false" title="No movement: rooms change with a gentle fade">Still mode</button>
     <button id="flatBtn" aria-pressed="false" title="No 3D at all: just the questions, one room at a time">Flat view</button>
@@ -450,9 +453,10 @@ function readNote(){
 /* ---------- The lock panel ---------- */
 function speak(t){ try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang='en-GB'; u.rate=.92; speechSynthesis.speak(u);}catch(e){} }
 function openLock(){
+  if(calcRests(at)) calcClose();
   var r=ROOMS[at], s=st[at];
   var h='<h2 id="lt">'+r.name+'</h2><p class="sub">'+r.lesson+'</p><div class="q">'+r.q+'</div>';
-  if('speechSynthesis' in window) h+='<div class="row"><button class="soft" id="readBtn">🔊 Read aloud</button></div>';
+  h+='<div class="row">'+('speechSynthesis' in window?'<button class="soft" id="readBtn">🔊 Read aloud</button>':'')+'<button class="soft" type="button" id="padLockBtn" onclick="openRoomScratch()">✏️ Scratchpad</button>'+(calcRests(at)?'<button class="soft" type="button" id="calcLockBtn" disabled aria-describedby="calcRestNote" title="This one is about working it out yourself">🧮 Calculator</button></div><p class="small" id="calcRestNote">This one is about working it out yourself, so the calculator is resting.</p>':'<button class="soft" type="button" id="calcLockBtn" onclick="openRoomCalc()">🧮 Calculator</button></div>');
   h+='<div class="label">First, how does this lock look to you?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Not sure'],['new','This is new to me']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
   h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
   var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
@@ -525,7 +529,7 @@ function showPlan(){
     '</table><p class="small"><b>For the adult:</b> "Worth a second look" (felt sure, not yet right) is the most useful signal; it often points to a misconception worth a conversation. "Hidden strength" is worth saying out loud. Outcomes use the learner\'s own words and never a score.</p></details>';
   h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the screening room':'Back to the expedition')+'</button><button class="soft" id="printPlan">Print or save this floor plan</button>'+(done?'<button class="soft" id="againBtn">Start a new expedition</button>':'')+'</div>';
   h+='<div id="saveStatus" class="pack noprint" style="margin-top:12px">'+(done?'Saving your floor plan to your learner record…':'Your floor plan is saved when you reach the screening room.')+'</div>';
-  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Animation Studio v0.1</p>';
+  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Animation Studio v0.2</p>';
   $('planPanel').innerHTML=h; $('planModal').classList.add('show');
   $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
   $('printPlan').onclick=function(){$('adultDetails').open=true;window.print();};
@@ -566,7 +570,7 @@ function welcome(){
   var h='<h2 id="wt">Welcome to the Animation Studio</h2><p class="sub">Transformations, Similarity and Scale · Foundations · before you set off</p>'+
    '<div class="info"><p><b>This is an expedition, not a test.</b> There is no clock to beat, no score and nothing to lose. It takes about 10 minutes, and you can stop and come back.</p>'+
    '<p>The Animation Studio is where a short film is made: characters are flipped, turned, slid and resized, frame by frame. It has six rooms, one for each part of the unit, and you walk from the storyboard wall to the screening room. Each room has a locked door, and the right answer is the key. If a lock looks unfamiliar, every room also has a <b>side passage</b> that leads on just the same. Taking it is a good choice: it tells us what to help you with.</p><p>In every room you will also find a <b>tool for your field kit</b> on the bench. It comes with you into the lessons, and looking things up in it is never recorded.</p></div>'+
-   '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>When you reach the screening room, your floor plan is saved to your <b>NEO learner record</b>, in a spreadsheet that NEO keeps in its own Google Drive. Your supporting adult and NEO maths staff can see it, and they see exactly the floor plan you see. You can always see it too, in your <b>learner passport</b>.</p><p>Your comment at the end is only saved if you choose to share it.</p></details>'+
+   '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Anything you draw or write on the <b>Scratchpad</b> is just for your thinking: it is never saved or sent. Using the <b>calculator</b> is never recorded either.</p><p>Only your answers and how each lock looked to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>When you reach the screening room, your floor plan is saved to your <b>NEO learner record</b>, in a spreadsheet that NEO keeps in its own Google Drive. Your supporting adult and NEO maths staff can see it, and they see exactly the floor plan you see. You can always see it too, in your <b>learner passport</b>.</p><p>Your comment at the end is only saved if you choose to share it.</p></details>'+
    '<p>If moving between rooms feels uncomfortable, choose <b>Still mode</b>: rooms change with a gentle fade and nothing moves. <b>Flat view</b> shows just the questions, with no 3D at all. Every question has a <b>Read aloud</b> button. You can change any of these from the top bar at any time.</p>'+
    '<div class="row">'+(saved?'<button class="go" id="contBtn">Continue where you left off</button><button class="soft" id="newBtn">Start a new expedition</button>':'<button class="go" id="enterBtn">Step inside</button><button class="soft" id="enterStillBtn">Step inside in Still mode</button><button class="soft" id="enterFlatBtn">Use Flat view</button>')+'</div>';
   $('welcomePanel').innerHTML=h;
@@ -580,7 +584,230 @@ $('planBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) sh
 $('stillBtn').onclick=function(){setStill(!still());};
 $('flatBtn').onclick=function(){setFlat(!flat());};
 $('comfortBtn').onclick=function(){var on=document.body.classList.toggle('comfort');this.setAttribute('aria-pressed',on);};
-document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if($('lockModal').classList.contains('show')) closeLock(); else { $('planModal').classList.remove('show'); $('kitModal').classList.remove('show'); } } });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var so=document.getElementById('neoScratchpadOverlay'); if(so&&!so.hidden){ closeMathsScratchpad(); return; } if($('lockModal').classList.contains('show')) closeLock(); else { $('planModal').classList.remove('show'); $('kitModal').classList.remove('show'); } } });
+</script>
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:100000;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">Use this board, paper, or no notes at all: whatever helps you think. Each room has its own page. <b>Nothing you draw or write here is saved or sent.</b></p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  var PAGES={}, pageKey=null;
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ if(pageKey) PAGES[pageKey]={template:template,strokes:strokes,redo:redo,notes:notes}; }
+  function restore(){ var p=pageKey&&PAGES[pageKey]; if(!p) return; template=p.template; strokes=p.strokes; redo=p.redo; notes=p.notes; document.getElementById("scratchTemplate").value=template; }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  // one page per room, kept in memory only
+  window.openRoomScratchpad=function(key,tpl,tip){ store(); pageKey=key; if(PAGES[key]){ restore(); window.openMathsScratchpad(null,tip); } else { strokes=[]; redo=[]; notes=[]; window.openMathsScratchpad(tpl||"blank",tip); } };
+  window.__scratchState=function(){ return {key:pageKey,strokes:strokes.length,notes:notes.length,template:template,open:!overlay.hidden}; };
+  window.__scratchAddStroke=function(){ strokes.push({tool:"pen",colour:colour,width:width,points:[{x:10,y:10},{x:60,y:60}]}); renderInk(); store(); };
+  updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* The Scratchpad in an expedition: one page per room, a suggested background, nothing saved or sent. */
+var PADS=["coordinate-grid", "coordinate-grid", "coordinate-grid", "square-grid", "blank", "square-grid"];
+function openRoomScratch(){ var i=(typeof at==='number'&&typeof ROOMS!=='undefined'&&at<ROOMS.length)?at:-1, r=i>=0?ROOMS[i]:null;
+  var tpl=(r&&r.pad)||(i>=0&&PADS[i])||'blank';
+  openRoomScratchpad('room'+i,tpl,(r?r.name+': s':'S')+'ketch it, jot down your working, or try an idea out. Nothing here is saved or sent.'); }
+</script>
+
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:100001;font-family:Arial,sans-serif}
+#neoCalcToggle{display:none!important}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:0;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span><span class="neoCalcDeg">DEG</span> <button type="button" onclick="neoCalcToggle()" aria-label="Close the calculator" style="border:none;background:none;font-size:1.3em;cursor:pointer;color:#5c6b4f;padding:0 2px">×</button></span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Using the calculator is never recorded. Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+
+<script>
+/* The calculator in an expedition: never recorded; it rests in the locks listed in CALC_OFF. */
+var CALC_OFF=[];
+function calcRests(i){ return i>=0&&i<ROOMS.length&&(ROOMS[i].calc===false||CALC_OFF.indexOf(i)>=0); }
+function calcClose(){ var p=document.getElementById('neoCalcPanel'); if(p&&!p.hidden) neoCalcToggle(); }
+function openRoomCalc(){ var i=(typeof at==='number'&&at<ROOMS.length)?at:-1;
+  if(calcRests(i)){ calcClose(); var n=document.getElementById('calcRestNote'); if(n){ n.hidden=false; } else if(typeof hud==='function'){ /* top bar, outside a lock */ var m=document.getElementById('calcTopNote'); if(m){ m.hidden=false; setTimeout(function(){ m.hidden=true; },4000); } } return; }
+  var p=document.getElementById('neoCalcPanel'); if(p&&p.hidden) neoCalcToggle(); }
 </script>
 </body>
 </html>
