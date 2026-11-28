@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Return to the Lighthouse · Algebraic Expressions</title>
+<style>
+:root{--ink:#2f3429;--paper:#f7f3ea;--h1:#3f5f45;--h2:#6a7f4e;--gold:#d8b26e;--teal:#2AB3A0;--blue:#365a68;--night:#0f1a24;
+--ready:#e3f0df;--strength:#e5eef2;--refresh:#fff1cf;--new:#f1e9dc}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);font-family:Arial,sans-serif;color:var(--ink);overflow:hidden}
+body.comfort{font-size:1.15em;letter-spacing:.02em}
+body.comfort .panel,body.comfort .hud{line-height:1.75}
+.top{position:fixed;inset:0 0 auto 0;height:52px;background:#1b2b3a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;gap:10px;z-index:30}
+.top b{color:#7fd8cc;letter-spacing:.12em;font-size:.8em;white-space:nowrap}
+.top .tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.top button{background:#2b4152;color:#fff;border:1px solid #4d6577;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;font-size:.82em}
+.top button[aria-pressed=true]{background:var(--teal);color:#08201d;border-color:var(--teal)}
+
+/* 3D scene */
+#vp{position:fixed;top:52px;left:0;right:0;bottom:0;overflow:hidden;perspective:900px;perspective-origin:50% 40%}
+#world{position:absolute;left:50%;top:46%;width:0;height:0;transform-style:preserve-3d;transition:transform 2.6s cubic-bezier(.45,.05,.35,1)}
+body.still #world{transition:none}
+body.flat #vp,body.flat #veil{display:none}
+body.flat{background:#efe9df;overflow:auto}
+body.flat .hud{position:static;transform:none;margin:76px auto 20px}
+.f{position:absolute;transform-style:preserve-3d}
+.wall{background:repeating-linear-gradient(0deg,rgba(90,80,60,.10) 0 2px,transparent 2px 70px),linear-gradient(180deg,#efe9dc 0%,#e0d6c2 55%,#c9bca2 100%);box-shadow:inset 0 0 120px rgba(40,30,15,.30)}
+.wall.side{background:repeating-linear-gradient(0deg,rgba(90,80,60,.10) 0 2px,transparent 2px 70px),linear-gradient(90deg,#cfc3a8 0%,#ebe4d4 100%)}
+.wall.side.r{background:repeating-linear-gradient(0deg,rgba(90,80,60,.10) 0 2px,transparent 2px 70px),linear-gradient(270deg,#cfc3a8 0%,#ebe4d4 100%)}
+.floor{background:repeating-linear-gradient(90deg,#6d4e33 0 118px,#5e422b 118px 120px),#6d4e33;box-shadow:inset 0 0 220px rgba(0,0,0,.5)}
+.floor.tiles{background:repeating-conic-gradient(#9a907e 0 25%,#7d7362 0 50%) 0 0/120px 120px;box-shadow:inset 0 0 220px rgba(0,0,0,.5)}
+.ceiling{background:repeating-linear-gradient(90deg,#5e422b 0 34px,#7a5a3c 34px 220px)}
+.prop{position:absolute;left:50%;top:50%;transform:translate(-50%,-55%)}
+.p-port{width:280px;height:280px;border-radius:50%;border:20px solid #8a8f94;box-shadow:inset 0 0 0 6px #5c6670,0 0 30px rgba(120,170,220,.3);background:radial-gradient(circle at 72% 30%,#fff6d0 0 16px,transparent 18px),linear-gradient(#9cc7e4 0 56%,#2f6d8f 56% 100%)}
+.p-crates{display:flex;gap:18px;align-items:flex-end;height:320px}
+.p-crates i{display:block;width:130px;background:repeating-linear-gradient(90deg,#a3744a 0 28px,#8a5f37 28px 32px);border:7px solid #5a3b22}
+.p-crates i:nth-child(1){height:130px}.p-crates i:nth-child(2){height:200px}.p-crates i:nth-child(3){height:120px}
+.p-crates b{display:block;width:110px;height:150px;border-radius:40px/18px;background:repeating-linear-gradient(0deg,#7a5233 0 30px,#3a2a10 30px 36px);border:6px solid #3a2a10}
+.p-stair svg{display:block}
+.p-chart svg{width:520px;height:330px;border:10px solid #8a6d40;border-radius:4px;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.p-dials{display:flex;gap:26px}
+.p-dials i{display:block;width:130px;height:130px;border-radius:50%;border:10px solid #8f6a26;background:conic-gradient(from 200deg,#2f3429 0 2deg,transparent 2deg),repeating-conic-gradient(#3a2a10 0 1deg,transparent 1deg 15deg),radial-gradient(circle,#f7efd9 0 60%,#e6d5ae 61%);box-shadow:0 0 18px rgba(255,210,120,.35)}
+.p-lens{width:300px;height:380px;border-radius:40px;border:14px solid #8f6a26;background:radial-gradient(circle,rgba(255,250,220,.95) 0 24px,transparent 26px),repeating-radial-gradient(circle,#eaf5fb 0 14px,#b7d4e4 14px 19px);box-shadow:0 0 40px rgba(180,220,255,.45)}
+.p-gallery{width:600px;height:330px;border:14px solid #5c6670;border-radius:10px;background:radial-gradient(circle at 78% 34%,#fff1c2 0 26px,transparent 28px),linear-gradient(#f3c98b 0 32%,#9cc7e4 32% 58%,#2f6d8f 58% 100%);position:relative}
+.p-gallery:after{content:"";position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(#333 0 8px,transparent 8px),repeating-linear-gradient(90deg,transparent 0 44px,#333 44px 52px)}
+.p-lamp{width:280px;height:380px;border-radius:130px 130px 18px 18px;border:12px solid #3a3a3a;background:radial-gradient(circle at 50% 56%,#fffbe6 0 46px,#f2c14e 80px,rgba(242,193,78,0) 150px),repeating-linear-gradient(90deg,transparent 0 56px,rgba(58,58,58,.8) 56px 62px),#2b3440;box-shadow:0 0 50px rgba(242,193,78,.45)}
+.arch{position:absolute;left:50%;bottom:0;width:220px;height:380px;margin-left:-110px;border-radius:110px 110px 0 0;background:#2a1d14;overflow:hidden;border:10px solid #8a7a5c;border-bottom:0}
+.arch .curtain{position:absolute;inset:0;background:repeating-linear-gradient(90deg,#2f5f7a 0 18px,#244c63 18px 30px);transition:transform 1.4s ease}
+.arch.open .curtain{transform:translateY(-100%)}
+.arch .glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(255,200,110,.55),transparent 60%)}
+.door{background:repeating-linear-gradient(90deg,#2f5f7a 0 46px,#264f66 46px 50px);border:8px solid #1d3a4c;transform-origin:0 50%;transition:transform 1.8s ease;cursor:pointer}
+body.still .door{transition:none}
+.door .lock{position:absolute;right:26px;top:48%;width:46px;height:62px;border-radius:10px;background:linear-gradient(#e4c27a,#a9802f);box-shadow:0 0 0 3px #6b5020,0 0 18px rgba(255,210,120,.5)}
+.door .lock:after{content:"";position:absolute;left:18px;top:20px;width:10px;height:22px;border-radius:5px;background:#3a2614}
+.lintel{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.plaque{background:linear-gradient(#e9d7a8,#c9ad6c);color:#3a2a10;font-family:Georgia,serif;font-weight:700;font-size:26px;padding:8px 26px;border-radius:6px;box-shadow:0 2px 0 #7a6243;white-space:nowrap}
+.lamp{width:44px;height:44px;border-radius:50%;background:#6f6a60;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25);transition:all 1.2s}
+.lamp.gold{background:radial-gradient(circle,#fff5c9,#f2c14e 60%,#c58a1c);box-shadow:0 0 30px 12px rgba(242,193,78,.7)}
+.lamp.blue{background:radial-gradient(circle,#e8f6ff,#7fb6e0 60%,#3f7aa8);box-shadow:0 0 30px 12px rgba(127,182,224,.6)}
+.seaview{position:absolute;left:50%;top:6%;width:900px;height:520px;margin-left:-450px;border-radius:40px;border:16px solid #5c6670;overflow:hidden;background:radial-gradient(circle at 82% 22%,#fff8d8 0 22px,transparent 24px),radial-gradient(circle at 20% 30%,#fff 0 2px,transparent 3px),radial-gradient(circle at 55% 18%,#fff 0 1.5px,transparent 2.5px),linear-gradient(#0b1626 0 58%,#163a55 58% 100%)}
+.seaview .beam{position:absolute;left:50%;top:44%;width:760px;height:180px;margin-top:-90px;transform-origin:0 50%;background:linear-gradient(90deg,rgba(255,240,180,.9),rgba(255,240,180,0));clip-path:polygon(0 45%,100% 0,100% 100%,0 55%);animation:sweep 7s ease-in-out infinite alternate}
+@keyframes sweep{from{transform:rotate(-18deg)}to{transform:rotate(10deg)}}
+body.still .seaview .beam{animation:none}
+@media (prefers-reduced-motion:reduce){.seaview .beam{animation:none}}
+.biglamp{position:absolute;left:50%;bottom:0;width:240px;height:300px;margin-left:-120px;border-radius:120px 120px 16px 16px;border:12px solid #3a3a3a;background:radial-gradient(circle at 50% 55%,#fffbe6 0 50px,#f2c14e 90px,rgba(242,193,78,0) 150px),#2b3440;box-shadow:0 0 70px rgba(242,193,78,.6)}
+
+/* Furniture, field-kit objects and notes */
+.desk svg,.plant svg{width:100%;height:100%;display:block}
+.item{cursor:pointer;transition:opacity 1s,filter .6s}
+.item svg{width:100%;height:100%}
+.item.ready{filter:drop-shadow(0 0 14px rgba(255,220,130,.95))}
+.item.taken{opacity:0;pointer-events:none}
+.rug{border-radius:16px;box-shadow:0 0 0 14px rgba(0,0,0,.08)}
+.note{position:absolute;left:60px;top:250px;width:150px;height:110px;background:#f3e6c4;border:6px solid #8a6d40;border-radius:4px;font-family:Georgia,serif;font-size:21px;font-weight:700;color:#3a2a10;display:grid;place-items:center;text-align:center;cursor:pointer;transform:rotate(-3deg);box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.note:before{content:"";position:absolute;top:-12px;left:66px;width:14px;height:14px;border-radius:50%;background:#b0412f}
+
+/* HUD and panels */
+#veil{position:fixed;inset:52px 0 0 0;background:#000;opacity:0;pointer-events:none;transition:opacity .9s;z-index:5}
+#veil.on{opacity:1}
+.hud{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(780px,calc(100% - 24px));background:rgba(247,243,234,.97);border-radius:16px;padding:12px 16px 14px;z-index:10;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.where{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.where .room{font-weight:700;color:var(--h1)}
+.where .leads{font-size:.88em;color:#5c6b4f}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:13px;height:13px;border-radius:50%;background:#d9d2c4;border:2px solid #b9ae98}
+.dots i.gold{background:#f2c14e;border-color:#c58a1c}.dots i.blue{background:#7fb6e0;border-color:#3f7aa8}
+.dots i.here{outline:3px solid var(--teal);outline-offset:1px}
+.dots i.domedot{border-radius:3px}
+.hud .say{margin:0 0 10px;font-size:1.05em}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button.go,button.opt,button.soft{padding:9px 14px;border-radius:10px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600;color:var(--ink);font-size:1em}
+button.go{background:var(--blue);color:#fff;border-color:var(--blue)}
+button.soft{border-style:dashed;color:#5c6b4f}
+button.opt[aria-pressed=true]{background:var(--h1);color:#fff;border-color:var(--h1)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.modal{position:fixed;inset:52px 0 0 0;display:none;align-items:center;justify-content:center;z-index:20;background:rgba(10,16,24,.55);padding:16px}
+.modal.show{display:flex}
+.panel{background:var(--paper);border-radius:18px;padding:20px 22px;width:min(680px,100%);max-height:calc(100vh - 90px);overflow:auto}
+.panel h2{color:var(--h1);margin:0 0 4px}
+.panel .sub{color:#5c6b4f;margin:0 0 10px;font-size:.92em}
+.panel .q{font-size:1.25em;margin:6px 0 12px}.big{font-family:Georgia,'Times New Roman',serif;font-size:1.25em;white-space:nowrap}
+.label{font-weight:700;color:#5c6b4f;margin:12px 0 6px}
+input.ans{font-size:1.15em;padding:8px 10px;border-radius:8px;border:1px solid #738697;width:10em}
+.locked{opacity:.45;pointer-events:none}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;display:none}
+.fb.show{display:block}.fb.good{background:var(--ready)}.fb.try{background:var(--refresh)}.fb.calm{background:var(--strength)}
+.info{background:#fffaf0;padding:12px 14px;border-left:6px solid var(--gold);border-radius:10px;margin:12px 0}
+.glass{background:#e5eef2;padding:10px 14px;border-radius:10px;margin:10px 0;font-size:.95em}
+.glass summary{font-weight:700;cursor:pointer}
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.roomcard{border-radius:12px;padding:10px;background:#fff;border:3px solid #d9d2c4;text-align:center;font-size:.92em}
+.roomcard .lampdot{width:20px;height:20px;border-radius:50%;margin:0 auto 6px;background:#c9c2b4}
+.roomcard.gold{border-color:#f2c14e}.roomcard.gold .lampdot{background:#f2c14e;box-shadow:0 0 12px #f2c14e}
+.roomcard.blue{border-color:#7fb6e0}.roomcard.blue .lampdot{background:#7fb6e0;box-shadow:0 0 12px #7fb6e0}
+.roomcard.unvisited{opacity:.6}
+.roomcard small{display:block;color:#5c6b4f;margin-top:4px}
+.pack{background:var(--new);border-radius:12px;padding:10px 14px}
+table.adult{width:100%;border-collapse:collapse;font-size:.88em;background:#fff}
+table.adult th,table.adult td{border:1px solid #d9d2c4;padding:6px 8px;text-align:left;vertical-align:top}
+table.adult th{background:#eef3e8}
+textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #738697;padding:8px;font:inherit}
+.small{font-size:.85em;color:#5c6b4f}
+.tool{display:grid;grid-template-columns:72px 1fr;gap:14px;align-items:start;background:#fff;border-radius:12px;padding:12px 14px;margin:10px 0}
+.tool .ic svg{width:72px;height:72px}
+.tool h3{margin:0 0 4px;color:var(--h1);font-size:1.05em}
+.tool p{margin:4px 0}
+.tool table.sq{border-collapse:collapse;font-size:.95em}
+.tool table.sq td{border:1px solid #d9d2c4;padding:3px 7px;text-align:center}
+.kitlist{columns:2;margin:6px 0 0;padding-left:18px}
+.didyou{background:#fffaf0;border-left:6px solid var(--gold);border-radius:10px;padding:12px 14px;font-size:1.05em}
+@media (max-width:700px){.plan{grid-template-columns:repeat(2,1fr)}.top b{display:none}}
+@media print{body{overflow:visible;background:#fff}.top,#vp,#veil,.hud,.noprint{display:none!important}.modal{position:static;display:block;background:none;padding:0}.modal:not(#planModal){display:none!important}.panel{max-height:none;box-shadow:none}details{display:block}details>*{display:block}}
+
+.mathpalette{margin:8px 0 0;flex-basis:100%}
+.palette-toggle{background:#365a68;color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px}
+.palette-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.palette-keys[hidden]{display:none}
+.palette-keys button{min-width:44px;padding:8px 10px;font-size:1.1em;background:#fff;border:1px solid #bcae98;border-radius:8px;cursor:pointer;color:#2f3429}
+.palette-keys button:focus-visible,.palette-toggle:focus-visible{outline:3px solid #f2c14e;outline-offset:2px}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .15em;line-height:1.2}
+.fr>span{display:block;padding:0 .25em}
+.fr>span:first-child{border-bottom:2px solid currentColor}
+.readas{flex-basis:100%;margin-top:6px;font-size:1.05em}
+.readas:empty{display:none}
+.ralabel{font-size:.8em;opacity:.75;margin-right:4px}
+.f.item{visibility:hidden!important}
+.journey{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;justify-content:center;margin-top:4px}
+.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:rgba(0,0,0,.08)}
+.chip.now{background:#2f5f7a;color:#fff}
+.roomcard.gold .chip.now{background:#8f6a26}
+.exam{border:1px solid rgba(0,0,0,.15);border-radius:10px;padding:10px 12px;margin:10px 0;background:rgba(255,255,255,.55)}
+.exam .marks{font-size:12px;opacity:.75}
+.confirm{border:2px solid #8f6a26;border-radius:10px;padding:10px 14px;margin-top:12px;background:rgba(255,248,230,.7)}
+.confirm label{display:block;margin:6px 0;cursor:pointer}
+.confirm label small{display:block;opacity:.8;margin-left:24px}
+.judged{border-left:5px solid #8f6a26;padding:6px 12px;margin:10px 0;background:rgba(255,248,230,.7)}
+.cards{margin:10px 0;border:1px solid rgba(0,0,0,.12);border-radius:10px;padding:6px 12px;background:rgba(255,255,255,.5)}
+.cards summary{cursor:pointer;font-weight:700}
+.ccard{border-left:5px solid rgba(0,0,0,.15);padding:6px 10px;margin:8px 0;background:rgba(255,255,255,.6);border-radius:6px}
+.ccard.sug{border-left-color:#2f5f7a;background:rgba(232,242,248,.8)}
+.ccard ul{margin:4px 0 0 18px;padding:0}.ccard li{margin:3px 0}
+</style>
+</head>
+<body>
+<div id="calcTopNote" hidden role="status" style="position:fixed;top:60px;right:14px;z-index:100002;background:#fff8e6;border:1px solid #c9a45a;border-radius:10px;padding:8px 12px;font-family:Arial,sans-serif;font-size:14px;color:#2f3429;max-width:300px">This lock is about working it out yourself, so the calculator is resting here.</div>
+<div class="top"><b>NEO MATHS · RETURN TO THE LIGHTHOUSE</b>
+  <div class="tools">
+    <button id="kitBtn" title="The tools you have collected">Field kit · <span id="kitCount">0</span></button>
+    <button id="padTopBtn" type="button" onclick="openRoomScratch()" title="Sketch or jot down working. Nothing is saved.">✏️ Scratchpad</button>
+    <button id="calcTopBtn" type="button" onclick="openRoomCalc()" title="A calculator. Using it is never recorded.">🧮 Calculator</button>
+    <button id="planBtn" title="See your floor plan at any time">Floor plan</button>
+    <button id="stillBtn" aria-pressed="false" title="No movement: floors change with a gentle fade">Still mode</button>
+    <button id="flatBtn" aria-pressed="false" title="No 3D at all: just the questions, one floor at a time">Flat view</button>
+    <button id="comfortBtn" aria-pressed="false" title="Larger text and more space">Aa Comfort</button>
+  </div></div>
+<div id="vp" aria-hidden="true"><div id="world"></div></div>
+<div id="veil"></div>
+
+<div class="hud" id="hud">
+  <div class="where"><div><span class="room" id="roomName"></span> <span class="leads" id="leads"></span></div><div class="dots" id="dots" aria-hidden="true"></div></div>
+  <p class="say" id="say" aria-live="polite"></p>
+  <div class="row" id="acts"></div>
+</div>
+
+<div class="modal show" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wt"><div class="panel" id="welcomePanel"></div></div>
+<div class="modal" id="lockModal" role="dialog" aria-modal="true" aria-labelledby="lt"><div class="panel" id="lockPanel"></div></div>
+<div class="modal" id="kitModal" role="dialog" aria-modal="true" aria-labelledby="kt"><div class="panel" id="kitPanel"></div></div>
+<div class="modal" id="planModal" role="dialog" aria-modal="true" aria-labelledby="pt"><div class="panel" id="planPanel"></div></div>
+
+<script>window.NEO_PALETTE_SYMBOLS=["x", "y", "n", "²", "³", "−", "+", "(", ")", "="];</script>
+<script id="neoPalette">
+/* NEO symbols palette for expeditions (same keys and preview as the lessons). Symbols: window.NEO_PALETTE_SYMBOLS */
+var NEOPalette=(function(){
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+  // How a typed answer is read: everything after "/" up to the next + or - is the denominator.
+  function readAs(v){
+    var s=String(v).trim(); if(!s||s.indexOf('/')<0) return '';
+    s=s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/').replace(/\^2/g,'²').replace(/\^3/g,'³');
+    var lead=''; var m=s.match(/^([a-z]=)/i); if(m){ lead=m[1]; s=s.slice(2); }
+    function strip(t){ if(t.charAt(0)==='('&&t.charAt(t.length-1)===')'){ var d=0; for(var k=0;k<t.length-1;k++){ if(t.charAt(k)==='(') d++; else if(t.charAt(k)===')') d--; if(d===0) return t; } return t.slice(1,-1); } return t; }
+    function show(t){ return esc(t).replace(/([a-z])/g,'<i>$1</i>').replace(/-/g,' − ').replace(/\+/g,' + ').replace(/^ − /,'−'); }
+    var terms=[], cur='', d=0;
+    for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c==='(') d++; if(c===')') d--; if(d===0&&(c==='+'||c==='-')&&i>0&&'/('.indexOf(s.charAt(i-1))<0){ terms.push(cur); cur=c; } else cur+=c; }
+    terms.push(cur);
+    var html=terms.map(function(t){ var sign=''; if(t.charAt(0)==='+'||t.charAt(0)==='-'){ sign=t.charAt(0)==='+'?' + ':' − '; t=t.slice(1); }
+      var dd=0, at=-1; for(var k=0;k<t.length;k++){ var ch=t.charAt(k); if(ch==='(') dd++; else if(ch===')') dd--; else if(ch==='/'&&dd===0){ at=k; break; } }
+      return sign+(at<0?show(t):F(show(strip(t.slice(0,at))),show(strip(t.slice(at+1))))); }).join('');
+    return '<span class="ralabel">Reads as:</span> '+(lead?'<i>'+lead.charAt(0)+'</i> = ':'')+html; }
+  function insert(f,s){ f.focus(); var a=f.selectionStart,b=f.selectionEnd; if(a==null){a=b=f.value.length;} f.value=f.value.slice(0,a)+s+f.value.slice(b); var p=a+s.length; try{f.selectionStart=f.selectionEnd=p;}catch(e){} f.focus(); }
+  function attach(f){ if(!f||f.dataset.paletteReady) return; f.dataset.paletteReady='1';
+    var w=document.createElement('div'); w.className='mathpalette';
+    var t=document.createElement('button'); t.type='button'; t.className='palette-toggle'; t.textContent='√ Symbols'; t.setAttribute('aria-expanded','false');
+    var k=document.createElement('div'); k.className='palette-keys'; k.hidden=true;
+    var pv=document.createElement('div'); pv.className='readas'; pv.setAttribute('aria-live','polite');
+    function upd(){ pv.innerHTML=readAs(f.value); }
+    (window.NEO_PALETTE_SYMBOLS||[]).forEach(function(s){ var b=document.createElement('button'); b.type='button'; b.textContent=s; b.setAttribute('aria-label','Insert '+s); b.onclick=function(){ insert(f,s); upd(); }; k.appendChild(b); });
+    var fr=document.createElement('button'); fr.type='button'; fr.title='Insert a fraction bar (numerator / denominator)'; fr.setAttribute('aria-label','Insert a fraction bar');
+    fr.innerHTML=F('a','b'); fr.onclick=function(){ insert(f,'/'); upd(); }; k.appendChild(fr);
+    t.onclick=function(){ k.hidden=!k.hidden; t.setAttribute('aria-expanded',String(!k.hidden)); };
+    f.addEventListener('input',upd);
+    w.appendChild(t); w.appendChild(k);
+    var row=f.parentNode; row.parentNode.insertBefore(pv,row.nextSibling); row.parentNode.insertBefore(w,pv);
+  }
+  return {attach:attach,readAs:readAs,F:F};
+})();
+</script>
+
+<script>var NEO_APP_URL=<?= appUrl ?>;</script>
+<script>
+/* ---------- Answer reading: equivalent forms always accepted ---------- */
+function num(v){
+  var s=String(v).trim().toLowerCase().replace(/−/g,'-').replace(/\s+/g,'').replace(/÷/g,'/');
+  var g={'½':.5,'¼':.25,'¾':.75,'⅓':1/3,'⅜':.375}; if(g[s]!=null) return g[s];
+  var w={'fourteen':14,'seven':7,'ten':10,'six':6,'nine':9,'thirtyeight':38,'twentythree':23,'minusten':-10,'negativeten':-10}; if(w[s.replace(/-/g,'')]!=null) return w[s.replace(/-/g,'')];
+  s=s.replace(/²/g,'^2').replace(/³/g,'^3'); var m;
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\^(-?\d+(?:\.\d+)?)$/))) return Math.pow(+m[1],+m[2]);
+  if((m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/))) return +m[1]/+m[2];
+  if(/^\+?-?\d*\.?\d+$/.test(s)) return +s; return NaN;
+}
+function near(a,b,t){return Math.abs(a-b)<(t||1e-9)}
+function alg(v){return String(v).toLowerCase().replace(/\s+/g,'').replace(/[×*·]/g,'').replace(/−/g,'-');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function $(id){return document.getElementById(id);}
+
+var CHART='<svg viewBox="0 0 520 330" role="img" aria-label="A sea chart with a lighthouse, rocks and the safe channel"><rect width="520" height="330" fill="#e9dcb8"/><g stroke="#c9b48a" stroke-width="1"><path d="M0 55H520M0 110H520M0 165H520M0 220H520M0 275H520M65 0V330M130 0V330M195 0V330M260 0V330M325 0V330M390 0V330M455 0V330"/></g><path d="M0 0 H200 C190 60 150 90 120 150 C95 200 60 230 0 250 Z" fill="#c8b98a" stroke="#6b5a2f" stroke-width="3"/><path d="M150 120 l12 -40 l12 40 z" fill="#b0412f"/><circle cx="162" cy="76" r="6" fill="#f2c14e"/><g fill="#6b5a2f"><circle cx="300" cy="120" r="7"/><circle cx="320" cy="140" r="5"/><circle cx="360" cy="230" r="8"/><circle cx="380" cy="250" r="5"/></g><path d="M500 300 C430 250 400 190 330 180 C270 170 240 120 220 60" fill="none" stroke="#2f5f7a" stroke-width="4" stroke-dasharray="10 8"/><g transform="translate(450 60)"><circle r="34" fill="none" stroke="#6b5a2f" stroke-width="3"/><path d="M0 -30 L7 0 L0 30 L-7 0 Z" fill="#b0412f"/><text y="-38" text-anchor="middle" font-family="Georgia" font-size="16" fill="#3a2a10">N</text></g></svg>';
+var STAIR='<svg viewBox="0 0 320 440" width="320" height="440" role="img" aria-label="Stone steps spiralling up the tower"><path d="M14 440 V170 A146 146 0 0 1 306 170 V440 Z" fill="#4a4236" stroke="#8a7a5c" stroke-width="14"/><path d="M40 400 h150 l-14 22 h-150 z" fill="#d8cdb5" stroke="#6b5f4b" stroke-width="2"/><path d="M66 360 h150 l-14 22 h-150 z" fill="#c4b89c" stroke="#6b5f4b" stroke-width="2"/><path d="M92 320 h150 l-14 22 h-150 z" fill="#d8cdb5" stroke="#6b5f4b" stroke-width="2"/><path d="M118 280 h150 l-14 22 h-150 z" fill="#c4b89c" stroke="#6b5f4b" stroke-width="2"/><path d="M144 240 h150 l-14 22 h-150 z" fill="#d8cdb5" stroke="#6b5f4b" stroke-width="2"/><path d="M170 200 h150 l-14 22 h-150 z" fill="#c4b89c" stroke="#6b5f4b" stroke-width="2"/><path d="M196 160 h150 l-14 22 h-150 z" fill="#d8cdb5" stroke="#6b5f4b" stroke-width="2"/><path d="M222 120 h150 l-14 22 h-150 z" fill="#c4b89c" stroke="#6b5f4b" stroke-width="2"/><path d="M60 380 L250 100" stroke="#3a2a10" stroke-width="6" stroke-linecap="round"/><path d="M80 380 V352 M130 306 V278 M180 232 V204 M228 162 V134" stroke="#3a2a10" stroke-width="4"/></svg>';
+// Shared answer readers for the check-ins (QA gate 6a): the canonical NEO number reader, with words and fractions.
+function cWord(str){
+  var s=String(str).toLowerCase().replace(/[-–—]/g,' ').replace(/\band\b/g,' ').replace(/\s+/g,' ').trim(); if(!s) return NaN;
+  s=s.replace(/\bone half\b|\ba half\b/g,'half').replace(/\bthree quarters?\b/g,'threeq').replace(/\bone quarter\b|\ba quarter\b/g,'quarter').replace(/\btwo thirds?\b/g,'twothird').replace(/\bone third\b|\ba third\b/g,'third').replace(/\bone eighth\b|\ban eighth\b/g,'eighth');
+  var frac={half:.5,quarter:.25,threeq:.75,third:1/3,twothird:2/3,eighth:.125}; if(frac[s]!=null) return frac[s];
+  var ones={zero:0,nought:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+  var tens={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+  var parts=s.split(' '),total=0,cur=0,used=false,add=0;
+  for(var i=0;i<parts.length;i++){ var w=parts[i]; if(w==='a') continue;
+    if(ones[w]!=null){cur+=ones[w];used=true;} else if(tens[w]!=null){cur+=tens[w];used=true;} else if(w==='hundred'){cur=(cur||1)*100;used=true;}
+    else if(frac[w]!=null){add+=frac[w];used=true;}
+    else if(w==='point'){ total+=cur; cur=0; var dec='0.',any=false; for(var j=i+1;j<parts.length;j++){ if(ones[parts[j]]!=null&&ones[parts[j]]<10){dec+=ones[parts[j]];any=true;} else return NaN; } return any&&used?total+parseFloat(dec):NaN; }
+    else return NaN; }
+  return used?total+cur+add:NaN; }
+function cnum(v){
+  var s=String(v).toLowerCase().trim(); if(!s) return NaN;
+  var mm=s.match(/^(minus|negative)\s+(.+)$/); if(mm){ var w=cnum(mm[2]); return isNaN(w)?NaN:-w; }
+  var wn=cWord(s); if(!isNaN(wn)) return wn;
+  s=s.replace(/÷/g,'/').replace(/^[a-z]\s*=/,'').replace(/½/g,'0.5').replace(/¼/g,'0.25').replace(/¾/g,'0.75').replace(/⅓/g,'(1/3)').replace(/[−–]/g,'-').replace(/^\+/,'');
+  s=s.replace(/(\d)\s*(cm|mm|km|m|kg|g|p|%)\s*$/,'$1').replace(/^£/,'').replace(/,/g,'').replace(/\s+/g,'');
+  var mx=s.match(/^(-?\d+)(?:\s|\+)?(\d+)\/(\d+)$/); if(mx&&s.indexOf(' ')<0&&/^\d+ \d+\/\d+$/.test(String(v).trim())) return +mx[1]+(+mx[2])/(+mx[3]);
+  var fm=s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/); if(fm){ var d=parseFloat(fm[2]); return d===0?NaN:parseFloat(fm[1])/d; }
+  return /^-?\d*\.?\d+$/.test(s)?parseFloat(s):NaN; }
+function ceq(a,b){ return Math.abs(a-b)<1e-9; }
+function CF(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+// a typed fraction, kept as typed: returns [numerator, denominator] or null
+function fracOf(v){ var m=String(v).replace(/[−–]/g,'-').replace(/\s+/g,'').match(/^(-?\d+)\/(\d+)$/); return m?[+m[1],+m[2]]:null; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
+/* ---------- The unit: one floor per lesson, now asking about each lesson's own idea ---------- */
+// Algebraic answers are checked by value at several test numbers, never by matching text (QA gate 6a).
+function evalAt(expr,letter,v){
+  var s=String(expr).toLowerCase().replace(/\s+/g,'').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/[−–]/g,'-').replace(/²/g,'^2').replace(/³/g,'^3');
+  if(!s||!new RegExp('^[0-9.+\\-*/()^'+letter+']+$').test(s)) return NaN;
+  s=s.replace(/\)(?=\d)/g,')*').replace(/(\d|\))(?=[a-z(])/g,'$1*').replace(new RegExp('('+letter+')(?=[\\d(])','g'),'$1*');
+  s=s.replace(new RegExp(letter,'g'),'('+v+')').replace(/\^/g,'**').replace(/(^|[(+\-*\/])-(\([^()]*\)|\d+(?:\.\d+)?)\*\*/g,'$1-1*$2**');
+  try{ var r=Function('"use strict";return ('+s+');')(); return typeof r==='number'&&isFinite(r)?r:NaN; }catch(e){ return NaN; }
+}
+function sameExpr(a,b,letter){ var t=[2.5,3,7,10.5,-4], ok=true; t.forEach(function(v){ var x=evalAt(a,letter,v), y=evalAt(b,letter,v); if(isNaN(x)||isNaN(y)||Math.abs(x-y)>1e-9) ok=false; }); return ok; }
+function expanded(v){ return !/[()]/.test(String(v)); }
+// A typed fraction is read the usual way: everything after "/" up to the next + or − is the denominator,
+// so (3x+1)/x(x+1) means (3x+1) ÷ [x(x+1)], not [(3x+1) ÷ x] × (x+1).
+function wrapDen(s){ var out='', i=0;
+  while(i<s.length){ var c=s.charAt(i); out+=c; i++;
+    if(c!=='/') continue;
+    var j=i, d=0; if(s.charAt(j)==='-'||s.charAt(j)==='+') j++;
+    for(;j<s.length;j++){ var ch=s.charAt(j); if(ch==='(') d++; else if(ch===')'){ if(d===0) break; d--; } else if(d===0&&(ch==='+'||ch==='-'||ch==='/'||ch==='=')) break; }
+    out+='('+s.slice(i,j)+')'; i=j; }
+  return out; }
+function tidy(v){ return wrapDen(String(v).toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/\*/g,'').replace(/÷/g,'/')); }
+// A stacked fraction with a horizontal bar.
+function F(n,d){ return '<span class="fr"><span>'+n+'</span><span>'+d+'</span></span>'; }
+var DP=['<div class="prop p-port"></div>','<div class="prop p-crates"><i></i><i></i><i></i><b></b></div>','<div class="prop p-stair">'+STAIR+'</div>','<div class="prop p-chart">'+CHART+'</div>','<div class="prop p-dials"><i></i><i></i><i></i></div>','<div class="prop p-lens"></div>','<div class="prop p-gallery"></div>','<div class="prop p-lamp"></div>'], DF=["tiles", "", "tiles", "", "tiles", "", "tiles", ""];
+var ROOMS=[
+ {name:'The Door', lesson:'Lesson 1 · Expressions, equations, formulae and identities', prop:'<div class="prop p-port"></div>', floor:'tiles',
+  arrive:'You are back at the foot of the lighthouse. The round window still looks out over the sea, and the blue door has a new lock.',
+  q:'Which of these is an <b>identity</b>: true for every value of <i>x</i>?', speak:'Which of these is an identity, true for every value of x?',
+  choices:['2x + 3 = 11','2(x + 3) = 2x + 6','A = lw','3x + 2'], answer:'2(x + 3) = 2x + 6', route:'Lesson 1 Practice Companion: expressions, equations, formulae and identities',
+  why:{'2x + 3 = 11':'That is an equation: it is only true when <i>x</i> = 4. An identity is true for every value.','A = lw':'That is a formula: it links different quantities (area, length and width).','3x + 2':'That is an expression: it has no equals sign, so it cannot be true or false.'},
+  adult:{'2x + 3 = 11':'Chose an equation: equation and identity not yet distinguished.','A = lw':'Chose a formula: the four words not yet secure.','3x + 2':'Chose an expression: may not yet see that an identity is a statement that is always true.'},
+  hint:'Try <i>x</i> = 1 and <i>x</i> = 5 in each statement. Which one stays true?',
+  card:{show:'“Sort these: 5<i>x</i> − 2 = 13, 3(<i>x</i> − 1) = 3<i>x</i> − 3, <i>v</i> = <i>u</i> + <i>at</i>, 4<i>y</i> + 1. Which is which?”',why:'“How can you tell an identity from an equation?”',whatif:'“Can you make up an identity of your own?”',listen:'an identity is true for every value; an equation only for some.'},
+  show:'2(<i>x</i> + 3) = 2<i>x</i> + 6 is true whatever <i>x</i> is: expanding the left side gives the right side exactly. That makes it an identity.'},
+ {name:'The Store Room', lesson:'Lesson 2 · Expanding and factorising', prop:'<div class="prop p-crates"><i></i><i></i><i></i><b></b></div>', floor:'',
+  arrive:'The Store Room. The crates have been restacked since you were last here, each label rewritten.',
+  q:'Factorise <b>fully</b>: <span class="big">6<i>x</i>² + 9<i>x</i></span>', speak:'Factorise fully: six x squared plus nine x.', route:'Lesson 2 Practice Companion: taking out the highest common factor',
+  check:function(v){ var s=tidy(v); if(!sameExpr(s,'6x^2+9x','x')) { if(sameExpr(s,'6x^2+9','x')) return 'lostx'; return 'no'; }
+    if(expanded(s)) return 'notfact'; if(/^3x\(/.test(s)&&/\)$/.test(s)) return 'right'; if(/^\(.*\)3x$/.test(s)) return 'right'; return 'partial'; },
+  why:{notfact:'That is equal, but it has not been factorised yet. Take a common factor outside a bracket.', partial:'That is factorised, but not fully. Look inside the bracket: is there still a common factor?', lostx:'Check the 9<i>x</i>: it has an <i>x</i> as well.'},
+  adult:{notfact:'Rewrote without factorising: what "factorise" asks for not yet secure.', partial:'Took out part of the common factor (e.g. 3 or x): highest common factor not yet secure.', lostx:'Dropped a letter while factorising.'},
+  hint:'What is the highest common factor of 6<i>x</i>² and 9<i>x</i>? Look at the numbers and the letters.',
+  card:{show:'“Factorise 8<i>x</i>² + 12<i>x</i> fully. How do you know you have finished?”',why:'“Why does expanding your answer check it?”',whatif:'“What if it were 8<i>x</i>² + 12? What changes?”',listen:'the highest common factor, letters as well as numbers.'},
+  show:'The highest common factor is 3<i>x</i>: 6<i>x</i>² = 3<i>x</i> × 2<i>x</i> and 9<i>x</i> = 3<i>x</i> × 3. So 6<i>x</i>² + 9<i>x</i> = 3<i>x</i>(2<i>x</i> + 3).'},
+ {name:'The Stairwell', lesson:'Lesson 3 · Expanding three brackets', prop:'<div class="prop p-stair">'+STAIR+'</div>', floor:'tiles',
+  arrive:'The Stairwell. The stone steps spiral up as before: each step rests on the one below.',
+  q:'Expand and simplify <span class="big">(<i>x</i> + 1)(<i>x</i> + 2)(<i>x</i> − 3)</span>.', speak:'Expand and simplify: bracket x plus one, bracket x plus two, bracket x minus three.', route:'Lesson 3 Practice Companion: expanding three brackets',
+  check:function(v){ var s=tidy(v); if(sameExpr(s,'x^3-7x-6','x')) return expanded(s)?'right':'brackets'; if(sameExpr(s,'x^3-6','x')) return 'firstlast'; if(sameExpr(s,'x^2+3x+2','x')) return 'two'; if(sameExpr(s,'x^3+7x-6','x')||sameExpr(s,'x^3-7x+6','x')||sameExpr(s,'x^3-6x^2-7x-6','x')) return 'sign'; return 'no'; },
+  why:{brackets:'That is still in brackets. Multiply out fully, then collect like terms.', firstlast:'Only the first and last terms were multiplied. Expand two brackets first, then multiply that by the third.', two:'That is the first two brackets multiplied. Now multiply it by (<i>x</i> − 3).', sign:'Nearly. Check the signs when you multiply by −3, and collect the <i>x</i>² terms: +3<i>x</i>² and −3<i>x</i>² cancel.'},
+  adult:{brackets:'Left the answer in brackets: expanding fully not yet secure.', firstlast:'Multiplied firsts and lasts only: needs the two-step grid method.', two:'Stopped after two brackets: may not yet see the product as (two brackets) × (third).', sign:'Sign or collecting slip in the final step: method secure, accuracy worth a look.'},
+  hint:'First (<i>x</i> + 1)(<i>x</i> + 2) = <i>x</i>² + 3<i>x</i> + 2. Then use a grid to multiply that by (<i>x</i> − 3).',
+  card:{show:'“Talk me through (<i>x</i> + 2)(<i>x</i> − 1)(<i>x</i> + 3). Where would you start?”',why:'“Why is it easier to expand two brackets first?”',whatif:'“How many terms could you have before collecting like terms?”',listen:'two brackets first, then a grid for the third; careful signs.'},
+  show:'(<i>x</i> + 1)(<i>x</i> + 2) = <i>x</i>² + 3<i>x</i> + 2. Times (<i>x</i> − 3): <i>x</i>³ + 3<i>x</i>² + 2<i>x</i> − 3<i>x</i>² − 9<i>x</i> − 6 = <i>x</i>³ − 7<i>x</i> − 6.'},
+ {name:'The Chart Room', lesson:'Lesson 4 · Simplifying algebraic fractions', prop:'<div class="prop p-chart">'+CHART+'</div>', floor:'',
+  arrive:'The Chart Room. A new chart is pinned to the wall, with a shorter channel marked between the rocks.',
+  q:'Simplify <span class="big">'+F('<i>x</i>² + 5<i>x</i> + 6','<i>x</i> + 3')+'</span>.', speak:'Simplify: x squared plus five x plus six, all over x plus three.', route:'Lesson 4 Practice Companion: factorise, then cancel common factors',
+  check:function(v){ var s=tidy(v); if(sameExpr(s,'x+2','x')) return /\//.test(s)?'notyet':'right'; if(sameExpr(s,'x^2+5x+2','x')) return 'terms'; if(sameExpr(s,'x+3','x')) return 'other'; if(sameExpr(s,'x^2+4x+2','x')||sameExpr(s,'x^2+5x','x')) return 'terms'; return 'no'; },
+  why:{notyet:'That is equal, but it can still be simplified: cancel the common factor.', terms:'It looks as if separate terms were cancelled. Only <b>factors</b> can cancel: factorise the numerator first.', other:'Factorise the numerator and see which bracket matches the denominator.'},
+  adult:{notyet:'Did not finish cancelling.', terms:'Cancelled terms rather than factors: the key misconception for algebraic fractions.', other:'Factorised but cancelled the wrong bracket.'},
+  hint:'Factorise <i>x</i>² + 5<i>x</i> + 6 first. Is one of its brackets (<i>x</i> + 3)?',
+  card:{show:'“Simplify '+F('<i>x</i>² + 7<i>x</i> + 12','<i>x</i> + 4')+'.”',why:'“Why can you not cancel the 12 with the 4?”',whatif:'“Is there any value of <i>x</i> this does not work for?”',listen:'only factors cancel, never separate terms.'},
+  show:'<i>x</i>² + 5<i>x</i> + 6 = (<i>x</i> + 2)(<i>x</i> + 3). The factor (<i>x</i> + 3) cancels, leaving <i>x</i> + 2 (for <i>x</i> ≠ −3).'},
+ {name:'The Watch Room', lesson:'Lesson 5 · Adding and subtracting algebraic fractions', prop:'<div class="prop p-dials"><i></i><i></i><i></i></div>', floor:'tiles',
+  arrive:'The Watch Room. The logbook is open at a fresh page for tonight\'s watch.',
+  q:'Write as a single fraction: <span class="big">'+F('1','<i>x</i>')+' + '+F('2','<i>x</i> + 1')+'</span>', speak:'Write as a single fraction: one over x, plus two over x plus one.', route:'Lesson 5 Practice Companion: a common denominator for algebraic fractions',
+  check:function(v){ var s=tidy(v); if(sameExpr(s,'(3x+1)/(x*(x+1))','x')) return (s.split('/').length===2)?'right':'single'; if(sameExpr(s,'3/(2x+1)','x')) return 'tops'; if(sameExpr(s,'3/(x*(x+1))','x')) return 'num'; return 'no'; },
+  why:{single:'That has the right value, but it is not yet one fraction. Combine everything over one common denominator.', tops:'The numerators and the denominators were added separately. Algebraic fractions need a common denominator, just like number fractions.', num:'The common denominator <i>x</i>(<i>x</i> + 1) is right. Now change each numerator too: '+F('1','<i>x</i>')+' becomes '+F('<i>x</i> + 1','<i>x</i>(<i>x</i> + 1)')+'.'},
+  adult:{tops:'Added numerators and denominators: common denominators not yet transferred to algebra.', num:'Found the common denominator but did not scale the numerators.', single:'Value correct but not combined into one fraction.'},
+  hint:'Use the common denominator <i>x</i>(<i>x</i> + 1). What does each numerator become?',
+  card:{show:'“Write '+F('2','<i>x</i>')+' + '+F('3','<i>x</i> − 1')+' as a single fraction. What do they need first?”',why:'“How is this like adding '+F('1','3')+' and '+F('1','4')+'?”',whatif:'“What goes wrong if you add the numerators and add the denominators? Try it with numbers.”',listen:'a common denominator, and scaling each numerator.'},
+  show:''+F('1','<i>x</i>')+' = '+F('<i>x</i> + 1','<i>x</i>(<i>x</i> + 1)')+' and '+F('2','<i>x</i> + 1')+' = '+F('2<i>x</i>','<i>x</i>(<i>x</i> + 1)')+'. Adding the numerators: '+F('3<i>x</i> + 1','<i>x</i>(<i>x</i> + 1)')+'.'},
+ {name:'The Lens Room', lesson:'Lesson 6 · Changing the subject, harder cases', prop:'<div class="prop p-lens"></div>', floor:'',
+  arrive:'The Lens Room. The great lens is back on its stand, its rings catching the light.',
+  q:'Make <i>x</i> the subject of <span class="big"><i>y</i> = '+F('<i>x</i> + 2','<i>x</i> − 1')+'</span>. Type <i>x</i> = …', speak:'Make x the subject of y equals x plus two, over x minus one.', route:'Lesson 6 Practice Companion: when the subject appears twice',
+  check:function(v){ var t=tidy(v).replace(/^x=/,''); if(/x/.test(t)) return 'stillx'; if(sameExpr(t,'(y+2)/(y-1)','y')) return 'right'; if(sameExpr(t,'(y-2)/(y+1)','y')||sameExpr(t,'(y-2)/(y-1)','y')||sameExpr(t,'(y+2)/(y+1)','y')) return 'sign'; return 'no'; },
+  why:{stillx:'There is still an <i>x</i> on the right-hand side. Collect every <i>x</i> term on one side, then factorise.', sign:'Nearly: check the signs as you collect the terms.'},
+  adult:{stillx:'Left x on both sides: collecting and factorising the subject not yet secure.', sign:'Method right, sign slip when collecting terms.'},
+  hint:'Multiply both sides by (<i>x</i> − 1). Collect the <i>x</i> terms on one side, then take <i>x</i> out as a factor.',
+  card:{show:'“Make <i>x</i> the subject of <i>y</i> = '+F('2<i>x</i> + 1','<i>x</i> − 3')+'.”',why:'“Why do you need every <i>x</i> term on one side?”',whatif:'“How could you check your new formula with a number?”',listen:'clearing the fraction, collecting the <i>x</i> terms, factorising.'},
+  show:'<i>y</i>(<i>x</i> − 1) = <i>x</i> + 2, so <i>xy</i> − <i>y</i> = <i>x</i> + 2. Then <i>xy</i> − <i>x</i> = <i>y</i> + 2, so <i>x</i>(<i>y</i> − 1) = <i>y</i> + 2 and <i>x</i> = '+F('<i>y</i> + 2','<i>y</i> − 1')+'.'},
+ {name:'The Gallery', lesson:'Lesson 7 · Algebraic proof', prop:'<div class="prop p-gallery"></div>', floor:'tiles',
+  arrive:'The Gallery. From the balcony you can see the whole coastline you have travelled.',
+  q:'Prove that the sum of three consecutive whole numbers is a multiple of 3.<br><i>n</i> + (<i>n</i> + 1) + (<i>n</i> + 2) = 3<i>n</i> + 3 = … Which line finishes the proof?', speak:'Prove that the sum of three consecutive whole numbers is a multiple of three. n plus n plus one plus n plus two equals three n plus three, equals what? Which line finishes the proof?',
+  choices:['= 3n + 3, which is odd','= 9, so it works','= 3(n + 1), which is 3 × a whole number','= 3(n + 3), a multiple of 3'], answer:'= 3(n + 1), which is 3 × a whole number', route:'Lesson 7 Practice Companion: finishing a proof',
+  why:{'= 3n + 3, which is odd':'3<i>n</i> + 3 is not always odd (try <i>n</i> = 1: 6). Show the form you need: 3 × something.','= 9, so it works':'One example is not a proof. The algebra has to cover every <i>n</i>.','= 3(n + 3), a multiple of 3':'Expand 3(<i>n</i> + 3): it gives 3<i>n</i> + 9, not 3<i>n</i> + 3.'},
+  adult:{'= 3n + 3, which is odd':'Did not reach the required form: what a proof must conclude not yet secure.','= 9, so it works':'Treats an example as a proof.','= 3(n + 3), a multiple of 3':'Factorising slip at the last step.'},
+  hint:'A multiple of 3 is 3 × a whole number. Can you take 3 out of 3<i>n</i> + 3?',
+  card:{show:'“Convince me that the sum of two consecutive odd numbers is always a multiple of 4.”',why:'“Why is checking examples not enough?”',whatif:'“Is the sum of five consecutive whole numbers always a multiple of 5? How would you find out?”',listen:'general algebra such as 2<i>n</i> + 1 and 2<i>n</i> + 3, and a concluding sentence.'},
+  show:'3<i>n</i> + 3 = 3(<i>n</i> + 1). Since <i>n</i> + 1 is a whole number, the sum is 3 × a whole number: always a multiple of 3. ∎'},
+ {name:'The Lantern', lesson:'Lesson 8 · Function notation, domain and range', prop:'<div class="prop p-lamp"></div>', floor:'',
+  arrive:'The Lantern. The great lamp is lit now, turning slowly above you.',
+  q:'f(<i>x</i>) = '+F('1','<i>x</i> − 4')+'. Which value must be <b>excluded</b> from the domain?', speak:'f of x equals one over x minus four. Which value must be excluded from the domain?', route:'Lesson 8 Practice Companion: domain and excluded values',
+  check:function(v){var n=cnum(String(v).replace(/^\s*x\s*=\s*/i,'')); if(near(n,4)) return 'right'; if(near(n,-4)) return 'sign'; if(near(n,0)) return 'zero'; if(near(n,1)) return 'num'; return 'no';},
+  why:{sign:'Put −4 into the denominator: −4 − 4 = −8, which is fine. Which input makes <i>x</i> − 4 zero?', zero:'f(0) = '+F('1','0 − 4')+' = −'+F('1','4')+', which is fine. The denominator is <i>x</i> − 4, not <i>x</i>.', num:'The numerator can be anything. It is the <b>denominator</b> that can never be zero.'},
+  adult:{sign:'Sign error finding the excluded value.', zero:'Excluded 0 by habit: may be thinking of 1/x.', num:'Looked at the numerator: which part cannot be zero not yet secure.'},
+  hint:'Which input would make the machine jam? When is <i>x</i> − 4 equal to zero?',
+  card:{show:'“g(<i>x</i>) = '+F('1','<i>x</i> + 2')+'. What can you not put into g, and why?”',why:'“What does g(5) mean, in your own words?”',whatif:'“Could you design a function that cannot take the number 7?”',listen:'you cannot divide by zero; g(□) means put □ where <i>x</i> was.'},
+  show:'<i>x</i> − 4 = 0 when <i>x</i> = 4, and you cannot divide by zero. So 4 is excluded: the domain is all numbers except 4.'}
+];
+
+
+var START_OUT={ready:'Ready',strength:'Hidden strength',refresh:'Got there with a nudge',look:'Worth a second look',new:'New ground',unvisited:'Not visited'};
+var SAMPLE_START=['refresh','ready','new','look','refresh','new','strength','ready'];
+
+/* ---------- The Exam Corner: optional, untimed, never recorded ---------- */
+var EXAM=[
+ {q:'Expand and simplify (<i>x</i> + 4)(<i>x</i> − 3)(2<i>x</i> + 1).', marks:3,
+  check:function(v){ var s=tidy(v); return sameExpr(s,'2x^3+3x^2-23x-12','x')&&expanded(s); },
+  model:'(<i>x</i> + 4)(<i>x</i> − 3) = <i>x</i>² + <i>x</i> − 12.<br>(<i>x</i>² + <i>x</i> − 12)(2<i>x</i> + 1) = 2<i>x</i>³ + <i>x</i>² + 2<i>x</i>² + <i>x</i> − 24<i>x</i> − 12<br>= 2<i>x</i>³ + 3<i>x</i>² − 23<i>x</i> − 12'},
+ {q:'Simplify fully '+F('<i>x</i>² − 9','<i>x</i>² + <i>x</i> − 6')+'.', marks:3,
+  check:function(v){ var s=tidy(v), ok=true; [4,5,7,-1.5,10].forEach(function(t){ var a=evalAt(s,'x',t), b=(t-3)/(t-2); if(isNaN(a)||Math.abs(a-b)>1e-9) ok=false; }); return ok&&!/\^2|²/.test(s); },
+  model:'<i>x</i>² − 9 = (<i>x</i> + 3)(<i>x</i> − 3) and <i>x</i>² + <i>x</i> − 6 = (<i>x</i> + 3)(<i>x</i> − 2).<br>Cancel (<i>x</i> + 3): the answer is '+F('<i>x</i> − 3','<i>x</i> − 2')+'.'},
+ {q:'f(<i>x</i>) = 3<i>x</i> − 5. Solve f(<i>x</i>) = 13.', marks:2,
+  check:function(v){ return near(num(String(v).replace(/^\s*x\s*=\s*/i,'')),6); },
+  model:'3<i>x</i> − 5 = 13, so 3<i>x</i> = 18 and <i>x</i> = 6. Check: f(6) = 18 − 5 = 13.'}
+];
+var DOME=ROOMS.length;
+
+/* ---------- The field kit: one tool per floor ---------- */
+var IC={
+ scroll:'<svg viewBox="0 0 100 100"><rect x="18" y="20" width="64" height="60" rx="6" fill="#f3e6c4" stroke="#8a6d40" stroke-width="4"/><circle cx="18" cy="50" r="8" fill="#c9a35a" stroke="#8a6d40" stroke-width="3"/><circle cx="82" cy="50" r="8" fill="#c9a35a" stroke="#8a6d40" stroke-width="3"/><text x="50" y="58" font-size="22" text-anchor="middle" fill="#3a2a10" font-family="Georgia" font-style="italic">x→(−2)</text></svg>',
+ hook:'<svg viewBox="0 0 100 100"><path d="M30 20 Q14 50 30 80" fill="none" stroke="#5c6670" stroke-width="9" stroke-linecap="round"/><path d="M70 20 Q86 50 70 80" fill="none" stroke="#5c6670" stroke-width="9" stroke-linecap="round"/><text x="50" y="60" font-size="24" text-anchor="middle" fill="#3a2a10" font-family="Georgia">×</text></svg>',
+ net:'<svg viewBox="0 0 100 100"><rect x="14" y="14" width="72" height="72" fill="#e9d7a8" stroke="#5a3b22" stroke-width="4"/><path d="M50 14V86M14 50H86" stroke="#5a3b22" stroke-width="4"/><text x="32" y="38" font-size="13" text-anchor="middle" fill="#3a2a10">x²</text><text x="68" y="38" font-size="13" text-anchor="middle" fill="#3a2a10">2x</text><text x="32" y="74" font-size="13" text-anchor="middle" fill="#3a2a10">3x</text><text x="68" y="74" font-size="13" text-anchor="middle" fill="#3a2a10">6</text></svg>',
+ compass:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#f7efd9" stroke="#8f6a26" stroke-width="8"/><path d="M50 18 L58 50 L50 82 L42 50 Z" fill="#b0412f"/><path d="M50 50 L58 50 L50 82 L42 50 Z" fill="#365a68"/><circle cx="50" cy="50" r="5" fill="#3a2a10"/></svg>',
+ log:'<svg viewBox="0 0 100 100"><rect x="14" y="18" width="72" height="64" rx="4" fill="#2f4f6b" stroke="#1b2b3a" stroke-width="3"/><rect x="48" y="18" width="4" height="64" fill="#1b2b3a"/><rect x="20" y="26" width="24" height="48" fill="#e9d7a8"/><rect x="56" y="26" width="24" height="48" fill="#e9d7a8"/><text x="32" y="56" font-size="14" text-anchor="middle" fill="#3a2a10">½</text><text x="68" y="56" font-size="14" text-anchor="middle" fill="#3a2a10">⅓</text></svg>',
+ scales:'<svg viewBox="0 0 100 100"><rect x="47" y="22" width="6" height="62" fill="#8f6a26"/><rect x="30" y="84" width="40" height="8" rx="3" fill="#8f6a26"/><rect x="14" y="24" width="72" height="5" fill="#8f6a26"/><path d="M16 29 L6 52 H30 Z M84 29 L70 52 H94 Z" fill="#c9a35a" stroke="#8f6a26" stroke-width="2"/></svg>',
+ lantern:'<svg viewBox="0 0 100 100"><rect x="34" y="10" width="32" height="10" rx="3" fill="#3a3a3a"/><rect x="28" y="20" width="44" height="58" rx="8" fill="#fff1b8" stroke="#3a3a3a" stroke-width="5"/><circle cx="50" cy="49" r="11" fill="#f2c14e"/><rect x="30" y="78" width="40" height="10" rx="3" fill="#3a3a3a"/><text x="50" y="98" font-size="10" text-anchor="middle" fill="#3a2a10">2n+1</text></svg>',
+ machine:'<svg viewBox="0 0 100 100"><rect x="26" y="26" width="48" height="48" rx="6" fill="#9aa5ad" stroke="#5c6670" stroke-width="3"/><text x="50" y="56" font-size="16" text-anchor="middle" fill="#1b2b3a" font-family="Georgia">f</text><path d="M6 50H24M76 50H94" stroke="#3a2a10" stroke-width="4"/><path d="M18 44 L24 50 L18 56 M88 44 L94 50 L88 56" fill="none" stroke="#3a2a10" stroke-width="4"/></svg>'
+};
+var KIT=[
+ {name:'substitution scroll', title:'Substitution scroll', icon:IC.scroll, body:function(){return '<p><b>Put the number in brackets wherever the letter appears.</b></p><p>If <i>x</i> = −3, then <i>x</i>² − 4<i>x</i> = (−3)² − 4 × (−3) = 9 + 12 = 21.</p><p>A negative number squared is positive. Subtracting a negative is adding.</p>';}},
+ {name:'bracket hook', title:'Bracket hook', icon:IC.hook, body:function(){return '<p><b>Multiply every term inside the bracket.</b></p><p>4(3<i>x</i> − 2) = 12<i>x</i> − 8</p><p><b>Factorising</b> runs it backwards: find the common factor and take it outside. 12<i>x</i> − 8 = 4(3<i>x</i> − 2).</p>';}},
+ {name:'grid net', title:'Grid net', icon:IC.net, body:function(){return '<p><b>Double brackets: every term times every term.</b></p><p>(<i>x</i> + 3)(<i>x</i> + 2): the grid cells are <i>x</i>², 2<i>x</i>, 3<i>x</i> and 6, so the answer is <i>x</i>² + 5<i>x</i> + 6.</p><p>Write the signs in the grid too: −2 stays −2.</p>';}},
+ {name:'factor compass', title:'Factor compass', icon:IC.compass, body:function(){return '<p><b>To factorise <i>x</i>² + <i>bx</i> + <i>c</i>:</b> find two numbers that multiply to make <i>c</i> and add to make <i>b</i>.</p><p><i>x</i>² + 7<i>x</i> + 10: 2 × 5 = 10 and 2 + 5 = 7, so it is (<i>x</i> + 2)(<i>x</i> + 5).</p><p>Check by expanding.</p>';}},
+ {name:'keeper’s logbook', title:'Keeper’s logbook', icon:IC.log, body:function(){return '<p><b>To add or subtract fractions, give them a common denominator first.</b></p><p>1/2 + 1/3 = 3/6 + 2/6 = 5/6</p><p>Change the numerator by the same factor as the denominator: 1/3 = 2/6, because both were multiplied by 2.</p>';}},
+ {name:'balance scales', title:'Balance scales', icon:IC.scales, body:function(){return '<p><b>To change the subject, do the same to both sides.</b></p><p>Undo the steps in reverse order. <i>p</i> = 4<i>q</i> − 5: add 5 to both sides, then divide both sides by 4, so <i>q</i> = (<i>p</i> + 5)/4.</p>';}},
+ {name:'odd-and-even lantern', title:'Odd-and-even lantern', icon:IC.lantern, body:function(){return '<p><b>Any even number can be written 2<i>n</i>. Any odd number can be written 2<i>n</i> + 1.</b></p><p>Consecutive whole numbers: <i>n</i>, <i>n</i> + 1, <i>n</i> + 2.</p><p>Testing examples suggests a rule; writing it in algebra proves it for every number.</p>';}},
+ {name:'function machine', title:'Function machine', icon:IC.machine, body:function(){return '<p><b>A rule turns each input into one output.</b></p><p>Rule: double, then subtract 3. Input 5 → 5 × 2 = 10 → 10 − 3 = 7.</p><p>In algebra: <i>y</i> = 2<i>x</i> − 3.</p>';}}
+];
+var NOTES=[
+ 'The word <i>algebra</i> comes from <i>al-jabr</i>, in a book written in Baghdad around 820 by the mathematician al-Khwārizmī. It meant “restoring”: moving a term to the other side of an equation.',
+ 'The Pharos of Alexandria, one of the first lighthouses, was built around 280 BCE. It stood for well over a thousand years.',
+ 'Expanding (<i>x</i> + 1)³ gives <i>x</i>³ + 3<i>x</i>² + 3<i>x</i> + 1. The numbers 1, 3, 3, 1 are a row of Pascal’s triangle.',
+ 'Every lighthouse has its own pattern of flashes, called its <i>character</i>, so that sailors can tell one lighthouse from another at night.',
+ 'Music uses fractions too: a minim is half a semibreve, and a crotchet is a quarter. Two crotchets and a minim fill a bar of 4/4 exactly.',
+ 'In 1822 Augustin Fresnel designed a lens made of rings of glass. It bent the light into one strong beam that ships could see from many kilometres away.',
+ 'Around 300 BCE, Euclid proved that there is no largest prime number. His proof still works today, unchanged.',
+ 'A calculator shows an error for 1 ÷ 0. In the language of functions, 0 is not in the domain of “divide 1 by this number”.'
+];
+var RUGS=['#2f4f6b','#7b2f2f','#3f5f45','#6b4a7a','#7a5a2f','#2f5f5a','#6b3a2f','#3d4f7a'];
+var DESK='<svg viewBox="0 0 300 150"><rect x="10" y="40" width="280" height="16" rx="3" fill="#7a5233"/><rect x="24" y="56" width="14" height="94" fill="#5a3b22"/><rect x="262" y="56" width="14" height="94" fill="#5a3b22"/><rect x="40" y="56" width="220" height="38" fill="#6b472b"/><rect x="132" y="68" width="36" height="8" rx="4" fill="#c9a35a"/><rect x="236" y="20" width="6" height="22" fill="#3a2a10"/><path d="M222 4 L256 4 L250 22 L228 22 Z" fill="#2f5f5a"/><ellipse cx="239" cy="40" rx="30" ry="8" fill="rgba(255,220,140,.35)"/></svg>';
+var PLANT='<svg viewBox="0 0 150 260"><ellipse cx="55" cy="90" rx="20" ry="58" fill="#4d7a3f" transform="rotate(-22 55 90)"/><ellipse cx="95" cy="92" rx="20" ry="60" fill="#5f8a4e" transform="rotate(20 95 92)"/><ellipse cx="75" cy="70" rx="18" ry="66" fill="#41693a"/><ellipse cx="40" cy="140" rx="16" ry="40" fill="#5f8a4e" transform="rotate(-50 40 140)"/><ellipse cx="112" cy="140" rx="16" ry="40" fill="#4d7a3f" transform="rotate(50 112 140)"/><path d="M38 170 L112 170 L102 255 L48 255 Z" fill="#b5653f"/><rect x="32" y="162" width="86" height="16" rx="4" fill="#9a5233"/></svg>';
+
+/* ---------- State, kept on this device until the check-in is saved ---------- */
+var KEY='neo-lighthouse-algebraic-expressions-return-v01', START_KEY='neo-lighthouse-algebraic-expressions-v01';
+function fresh(){return ROOMS.map(function(){return {feel:null,result:null,side:false,signal:null,kit:true};});}
+var st=fresh(), at=0, opened=[];
+function save(){try{localStorage.setItem(KEY,JSON.stringify({st:st,at:at}));}catch(e){}}
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d&&d.st&&d.st.length===ROOMS.length)return d;}catch(e){}return null;}
+function forget(){try{localStorage.removeItem(KEY);localStorage.removeItem(KEY+'-exp');}catch(e){}}
+var EXP=(function(){var id;try{id=localStorage.getItem(KEY+'-exp');}catch(e){}if(!id){id='chk-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);try{localStorage.setItem(KEY+'-exp',id);}catch(e){}}return id;})();
+var UNIT={name:'Algebraic Expressions and Identities',id:'y10-algebraic-expressions'};
+var SERVER=null, recordWaiting=false, recorded=false, recording=false;
+
+/* ---------- Building the rooms ---------- */
+var D=1300,W=1200,H=700,L=1200,DW=280,DH=460, world=$('world'), building=0;
+function face(w,h,tf,cls,html){var e=document.createElement('div');e.className='f '+cls;
+  e.style.cssText='width:'+w+'px;height:'+h+'px;left:'+(-w/2)+'px;top:'+(-h/2)+'px;transform:'+tf;if(html)e.innerHTML=html;e.dataset.r=building;world.appendChild(e);return e;}
+function build(i){
+  building=i;
+  var z=-i*D, zb=z-L/2, last=i===DOME, r=ROOMS[i]||{};
+  face(W,L,'translate3d(0,'+H/2+'px,'+z+'px) rotateX(90deg)','floor '+(r.floor||''));
+  face(W,L,'translate3d(0,'+(-H/2)+'px,'+z+'px) rotateX(-90deg)','ceiling');
+  face(L,H,'translate3d('+(-W/2)+'px,0,'+z+'px) rotateY(90deg)','wall side', last?'<div class="prop p-port"></div>':r.prop);
+  face(L,H,'translate3d('+(W/2)+'px,0,'+z+'px) rotateY(-90deg)','wall side r', last?'<div class="prop p-port"></div>':'<div class="arch" id="arch'+i+'"><div class="glow"></div><div class="curtain"></div></div>');
+  if(last){ face(W,H,'translate3d(0,0,'+zb+'px)','wall','<div class="seaview"><div class="beam"></div></div><div class="biglamp"></div>'); return; }
+  var pw=(W-DW)/2;
+  var lw=face(pw,H,'translate3d('+(-(DW/2+pw/2))+'px,0,'+zb+'px)','wall','<div class="note" role="button" tabindex="-1">Did you<br>know?</div>');
+  lw.querySelector('.note').onclick=function(){ if(i===at) readNote(); };
+  face(pw,H,'translate3d('+(DW/2+pw/2)+'px,0,'+zb+'px)','wall');
+  face(DW+2,H-DH,'translate3d(0,'+(-DH/2)+'px,'+zb+'px)','wall');
+  face(560,170,'translate3d(0,'+(-DH/2-30)+'px,'+(zb+1)+'px)','lintel','<div class="plaque">'+r.name+'</div><div class="lamp" id="lamp'+i+'"></div>');
+  var d=face(DW,DH,'translate3d(0,'+((H-DH)/2)+'px,'+zb+'px)','door','<div class="lock"></div>'); d.id='door'+i;
+  d.onclick=function(){ if(i===at && !isOpen(i)) openLock(); };
+  // Furniture kept to the edges, so the door and the desk stay the focus.
+  var rug=face(640,420,'translate3d(0,'+(H/2-2)+'px,'+(z-40)+'px) rotateX(90deg)','rug'); rug.style.background='repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 10px,transparent 10px 40px),'+RUGS[i]; rug.style.border='10px solid rgba(233,215,168,.55)';
+  face(300,150,'translate3d(-380px,'+(H/2-75)+'px,'+(z-330)+'px)','desk',DESK);
+  var it=face(96,96,'translate3d(-420px,'+(H/2-150-40)+'px,'+(z-328)+'px)','item',KIT[i].icon); it.id='item'+i;
+  it.onclick=function(){ if(i===at) pickUp(); };
+  face(150,260,'translate3d(420px,'+(H/2-130)+'px,'+(z-470)+'px)','plant',PLANT);
+}
+for(var i=0;i<=DOME;i++) build(i);
+function place(i,glide){ world.style.transform='translate3d(0,0,'+(-300+i*D)+'px)'; if(!glide) hideBehind(); }
+// Rooms already left sit between the viewer and the screen, so hide them once we have arrived.
+function hideBehind(){ [].forEach.call(world.children,function(e){ e.style.visibility= +e.dataset.r<at?'hidden':''; }); }
+function isOpen(i){var s=st[i];return s.result==='right'||s.result==='second';}
+function still(){return document.body.classList.contains('still');}
+function flat(){return document.body.classList.contains('flat');}
+function setStill(on){document.body.classList.toggle('still',on);$('stillBtn').setAttribute('aria-pressed',on);}
+function setFlat(on){document.body.classList.toggle('flat',on);$('flatBtn').setAttribute('aria-pressed',on);}
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) setStill(true);
+// Restore lamps, doors and curtains to match the saved state.
+function restoreScene(){ kitCount(); st.forEach(function(s,i){ if(s.kit){ $('item'+i).classList.add('taken'); } if(isOpen(i)){ $('door'+i).style.transform+=' rotateY(-100deg)'; $('lamp'+i).classList.add('gold'); } else if(s.side){ $('arch'+i).classList.add('open'); $('lamp'+i).classList.add('blue'); } }); }
+
+/* ---------- HUD ---------- */
+function dots(){ $('dots').innerHTML=ROOMS.map(function(r,i){var c=isOpen(i)?'gold':st[i].side?'blue':'';return '<i class="'+c+(i===at?' here':'')+'"></i>';}).join('')+'<i class="domedot'+(at===DOME?' here':'')+'"></i>'; }
+function hud(text,buttons){
+  $('roomName').textContent= at===DOME?'The Beacon':ROOMS[at].name;
+  $('leads').textContent= at===DOME?'· the end of the check-in':'· from '+ROOMS[at].lesson;
+  $('say').innerHTML=text; dots(); var a=$('acts'); a.innerHTML='';
+  buttons.forEach(function(b){var e=document.createElement('button');e.className=b[2]||'go';e.textContent=b[0];e.onclick=b[1];if(b[3])e.disabled=true;a.appendChild(e);});
+}
+function roomHud(){
+  if(at===DOME){ hud('You\'re back at the top of the tower. Look how far the beacon reaches now.',[['See where you started and where you are now',showPlan,'go']]); return; }
+  var r=ROOMS[at], s=st[at], done=isOpen(at), side=s.side;
+  var text=r.arrive, resolved=done||side, k=KIT[at];
+  if(done) text='The door is open, and the lamp above it is lit.'; else if(side) text='The curtain is drawn back. A lantern lights the side passage, and this idea is on your next-steps list.';
+  if(resolved && !s.kit) text+=' On the desk, the '+k.name+' is waiting for you.';
+  var b=[['Examine the lock',openLock,'go',done],['Take the side passage',takeSide,'soft',done||side]];
+  if(resolved && !s.kit) b.push(['Pick up the '+k.name,pickUp,'go']);
+  b.push([at===DOME-1?'Climb up to the beacon →':'Climb on →',walkOn,'go',!resolved]);
+  b.push(['Did you know?',readNote,'soft']);
+  hud(text,b);
+  var el=$('item'+at); if(el) el.classList.toggle('ready',resolved && !s.kit);
+}
+
+/* ---------- Field kit and notes ---------- */
+function kitCount(){ var n=st.filter(function(s){return s.kit;}).length; $('kitCount').textContent=n; return n; }
+function toolCard(i){ var k=KIT[i]; return '<div class="tool"><div class="ic">'+k.icon+'</div><div><h3>'+k.title+'</h3><p class="small">Found in '+ROOMS[i].name+'</p>'+k.body()+'</div></div>'; }
+function kitModal(html){ $('kitPanel').innerHTML=html+'<div class="row" style="margin-top:12px"><button class="go" id="kitClose">Back to the expedition</button></div>'; $('kitModal').classList.add('show'); $('kitClose').onclick=function(){$('kitModal').classList.remove('show');try{speechSynthesis.cancel();}catch(e){}}; setTimeout(function(){$('kitClose').focus();},0); }
+function pickUp(){
+  var s=st[at]; if(s.kit) return;
+  if(!(isOpen(at)||s.side)){ $('say').innerHTML='Something on the desk catches your eye. It will be yours to take once you\'ve dealt with the lock — either way through.'; return; }
+  s.kit=true; save(); kitCount(); var el=$('item'+at); if(el){el.classList.remove('ready');el.classList.add('taken');}
+  kitModal('<h2 id="kt">You add the '+KIT[at].name+' to your field kit</h2><p class="sub">It comes with you up the Lighthouse and into the unit. Looking things up in your kit is good practice, and it is never recorded.</p>'+toolCard(at));
+  roomHud();
+}
+function showKit(){
+  var have=ROOMS.map(function(r,i){return i;}).filter(function(i){return st[i].kit;});
+  kitModal('<h2 id="kt">Your field kit</h2><p class="sub">Tools you have collected. Use them whenever they help, in the Lighthouse and in the unit. Using your kit is never recorded.</p>'+
+    (have.length?have.map(toolCard).join(''):'<p>Your kit is empty so far. Each floor has a tool waiting on its desk.</p>'));
+}
+function readNote(){
+  var i=at===DOME?DOME-1:at;
+  kitModal('<h2 id="kt">Did you know?</h2><p class="sub">'+ROOMS[i].name+' · just for interest: this is not part of the expedition</p><div class="didyou">'+NOTES[i]+'</div>'+('speechSynthesis' in window?'<div class="row" style="margin-top:10px"><button class="soft" id="noteRead">🔊 Read aloud</button></div>':''));
+  if($('noteRead')) $('noteRead').onclick=function(){speak(NOTES[i]);};
+}
+
+/* ---------- The lock panel ---------- */
+function speak(t){ try{ speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(t); u.lang='en-GB'; u.rate=.92; speechSynthesis.speak(u);}catch(e){} }
+function openLock(){
+  if(calcRests(at)) calcClose();
+  var r=ROOMS[at], s=st[at];
+  var h='<h2 id="lt">'+r.name+'</h2><p class="sub">'+r.lesson+'</p><div class="q">'+r.q+'</div>';
+  h+='<div class="row">'+('speechSynthesis' in window?'<button class="soft" id="readBtn">🔊 Read aloud</button>':'')+'<button class="soft" type="button" id="padLockBtn" onclick="openRoomScratch()">✏️ Scratchpad</button>'+(calcRests(at)?'<button class="soft" type="button" id="calcLockBtn" disabled aria-describedby="calcRestNote" title="This one is about working it out yourself">🧮 Calculator</button></div><p class="small" id="calcRestNote">This one is about working it out yourself, so the calculator is resting.</p>':'<button class="soft" type="button" id="calcLockBtn" onclick="openRoomCalc()">🧮 Calculator</button></div>');
+  h+='<div class="label">First, how does this idea feel to you now?</div><div class="row">'+[['sure','I\'ve got this'],['unsure','Getting there'],['new','Not yet sure']].map(function(f){return '<button class="opt" data-feel="'+f[0]+'" aria-pressed="'+(s.feel===f[0])+'">'+f[1]+'</button>';}).join('')+'</div>';
+  h+='<div class="'+(s.feel?'':'locked')+'"><div class="label">Now try a key</div><div class="row">'+(r.choices?r.choices.map(function(c){return '<button class="opt" data-key="'+esc(c)+'">'+esc(c)+'</button>';}).join(''):'<input class="ans" id="ans" autocomplete="off" aria-label="Your answer"><button class="go" id="tryBtn">Try the key</button>')+'</div></div>';
+  var have=ROOMS.map(function(x,i){return i;}).filter(function(i){return st[i].kit;});
+  if(have.length) h+='<details class="glass"><summary>🎒 Open my field kit ('+have.length+')</summary>'+have.map(toolCard).join('')+'</details>';
+  h+='<div class="fb" id="fb" role="status"></div><div class="row noprint" style="margin-top:14px"><button class="soft" id="sideFromLock">Take the side passage instead</button><button class="soft" id="closeLock">Step back</button></div>';
+  $('lockPanel').innerHTML=h; $('lockModal').classList.add('show'); if($('ans')) NEOPalette.attach($('ans'));
+  if($('readBtn')) $('readBtn').onclick=function(){speak(r.speak);};
+  [].forEach.call(document.querySelectorAll('[data-feel]'),function(b){b.onclick=function(){s.feel=b.dataset.feel;save();openLock();setTimeout(function(){var a=$('ans')||document.querySelector('[data-key]');if(a)a.focus();},0);};});
+  if(r.choices) [].forEach.call(document.querySelectorAll('[data-key]'),function(b){b.onclick=function(){tryKey(b.dataset.key);};});
+  else { $('tryBtn').onclick=function(){tryKey($('ans').value);}; $('ans').onkeydown=function(e){if(e.key==='Enter')tryKey(this.value);}; }
+  $('sideFromLock').onclick=function(){closeLock();takeSide();}; $('closeLock').onclick=closeLock;
+  setTimeout(function(){var f=document.querySelector('[data-feel]');if(f)f.focus();},0);
+}
+function closeLock(){ try{speechSynthesis.cancel();}catch(e){} $('lockModal').classList.remove('show'); roomHud(); }
+function fb(k,m){var f=$('fb');f.className='fb show '+k;f.innerHTML=m;}
+function tryKey(v){
+  var r=ROOMS[at], s=st[at]; if(!String(v).trim()) return;
+  var res=r.choices?(v===r.answer?'right':v):r.check(v);
+  if(res==='right'){
+    s.result= s.result==='notyet'?'second':'right'; save();
+    fb('good','<b>The key turns.</b> '+r.show);
+    setTimeout(function(){closeLock();$('door'+at).style.transform+=' rotateY(-100deg)';$('lamp'+at).classList.add('gold');roomHud();},1700);
+  } else {
+    if(s.result===null) s.result='notyet';
+    if(!s.signal && r.adult && r.adult[res]) s.signal=r.adult[res];
+    save();
+    var why=r.why&&r.why[res];
+    fb('try',(why?why:'The key doesn\'t turn yet. '+r.hint)+' <button class="soft" id="showBtn">Show me how</button>');
+    $('showBtn').onclick=function(){fb('calm',r.show+' You can try the key again, or take the side passage. Either is fine.');};
+  }
+}
+function takeSide(){ var s=st[at]; s.side=true; save(); $('arch'+at).classList.add('open'); $('lamp'+at).classList.add('blue'); roomHud(); }
+function walkOn(){
+  var viaDoor=isOpen(at), next=at+1;
+  hud('…',[]);
+  if(flat()){ at=next; place(at); save(); arrive(); return; }
+  if(!viaDoor || still()){
+    $('veil').classList.add('on');
+    setTimeout(function(){at=next;world.style.transition='none';place(at);world.offsetWidth;world.style.transition='';save();setTimeout(function(){$('veil').classList.remove('on');arrive();},350);},950);
+  } else { at=next; place(at,true); save(); setTimeout(function(){hideBehind();arrive();},2700); }
+}
+function arrive(){ roomHud(); if(at===DOME) setTimeout(showPlan, flat()?0:1200); }
+
+/* ---------- Floor plan: where you started, where you are now ---------- */
+var FROM_DIAG={'Ready':'ready','Hidden strength':'strength','Got there with a nudge':'refresh','Worth a second look':'look','New ground':'new','Not visited yet':'unvisited'};
+START_OUT.wait='…'; START_OUT.none='No diagnostic saved';
+function startOutcomes(){
+  if(served()){ if(!SERVER) return {real:false,wait:true,o:ROOMS.map(function(){return 'wait';})};
+    if(!SERVER.start.length) return {real:false,none:true,failed:!!SERVER.failed,o:ROOMS.map(function(){return 'none';})};
+    return {real:true,o:ROOMS.map(function(r,i){ var hit=SERVER.start.filter(function(x){return x.room===r.name;})[0]||SERVER.start[i]; return (hit&&FROM_DIAG[hit.outcome])||'unvisited'; })}; }
+  try{ var d=JSON.parse(localStorage.getItem(START_KEY)||'null'); if(d&&d.st&&d.st.length===ROOMS.length){
+    return {real:true,o:d.st.map(function(s){ if(s.result==='right') return s.feel==='sure'?'ready':'strength'; if(s.result==='second') return 'refresh'; if(s.result==='notyet'&&s.feel==='sure') return 'look'; if(s.result===null&&!s.side) return 'unvisited'; return 'new'; })}; } }catch(e){}
+  return {real:false,o:SAMPLE_START};
+}
+function outcome(i){ var s=st[i];
+  if(s.result==='right') return s.feel==='sure'?'secure':'strength';
+  if(s.result==='second') return 'getting';
+  if(s.result==='notyet' && s.feel==='sure') return 'look';
+  if(s.result===null && !s.side) return 'unvisited';
+  return 'notyet'; }
+var OUT={secure:'Secure',strength:'Secure: a hidden strength',getting:'Getting there',look:'Worth a second look',notyet:'Not yet',unvisited:'Not visited yet'};
+var LEARN={secure:'You can do this on your own.',strength:'You felt unsure, but you got it. You know more than you think.',getting:'You got there with a nudge. A little more practice will make it stick.',look:'You felt sure, but it didn\'t work out this time. A short look back will help.',notyet:'This is next on your list. It\'s fine not to have it yet.',unvisited:'Waiting for you.'};
+var LABELS=[
+ ['Approaching Proficiency','Beginning to use the unit\'s ideas with support; several floors are next steps.'],
+ ['Developing Proficiency','Uses most of the unit\'s ideas, sometimes with a nudge; a few next steps.'],
+ ['Proficiency','Uses the unit\'s ideas independently and explains them.'],
+ ['Refining Proficiency','Secure throughout, and extends the ideas: proof, harder cases, explaining to others.']];
+var AKEY=KEY+'-adult';
+function adultGet(){ if(served()) return SERVER&&SERVER.label; try{ return JSON.parse(localStorage.getItem(AKEY)||'null'); }catch(e){ return null; } }
+function adultSet(v){ if(served()) return; try{ if(v) localStorage.setItem(AKEY,JSON.stringify(v)); else localStorage.removeItem(AKEY); }catch(e){} }
+/* ---------- Maths conversation cards: one per floor, the suggested ones first ---------- */
+function cardsHtml(o){ if(!ROOMS.some(function(r){return r.card;})) return '';
+  var order=ROOMS.map(function(r,i){return i;}).filter(function(i){return ROOMS[i].card;}), sug=function(i){return ['look','notyet','getting'].indexOf(o[i])>=0;};
+  order.sort(function(a,b){ return (sug(b)?1:0)-(sug(a)?1:0) || a-b; });
+  var n=order.filter(sug).length;
+  return '<details class="cards" id="cardsDetails"'+(n?' open':'')+'><summary>Maths conversation cards'+(n?' · '+n+' suggested':'')+'</summary>'+
+    '<p class="small">A maths conversation is a short, relaxed chat, useful when the check-in does not show what the learner really knows: for example, when they felt sure but it did not work out, when reading or typing is a barrier, or when they would rather talk. Five to ten minutes, one or two cards. The learner can talk, point, sketch or use their field kit; no writing is needed. Listen more than you ask, and never give the answer to check them. Record one line, in the learner\'s own words where you can.</p>'+
+    order.map(function(i){ var r=ROOMS[i], c=r.card; return '<div class="ccard'+(sug(i)?' sug':'')+'"><b>'+r.name+'</b> <span class="small">'+r.lesson+'</span>'+(sug(i)?' <span class="chip now">suggested</span>':'')+
+      '<ul><li><b>Show me:</b> '+c.show+'</li><li><b>Why:</b> '+c.why+'</li><li><b>What if:</b> '+c.whatif+'</li><li><b>Listen for:</b> '+c.listen+'</li></ul></div>'; }).join('')+'</details>'; }
+function showPlan(){
+  var o=ROOMS.map(function(r,i){return outcome(i);}), done=at===DOME, start=startOutcomes(), judged=adultGet();
+  var feelTxt={sure:'I\'ve got this',unsure:'Getting there',new:'Not yet sure',null:'—'};
+  var h='<h2 id="pt">Where you started, and where you are now</h2><p class="sub">Algebraic Expressions and Identities · Intermediate · end-of-unit check-in</p>';
+  if(judged) h+='<div class="judged"><b>Your supporting adult\'s view of the unit: '+esc(judged.label)+'</b>'+(judged.note?'<br>'+esc(judged.note):'')+'</div>';
+  h+='<p>'+(done?'Gold lamps are ideas you can now use on your own. Blue lanterns are your next steps.':'Your check-in so far. You can carry on whenever you like.')+'</p>';
+  if(start.wait) h+='<p class="small">Fetching where you started from your learner record…</p>';
+  else if(start.none) h+='<p class="small">'+(start.failed?'Where you started could not be fetched just now. Your check-in still shows where you are now.':'There is no diagnostic for this unit in your learner record, so there is no start to compare with. Your check-in still shows where you are now.')+'</p>';
+  else if(!start.real) h+='<p class="small"><b>Prototype note:</b> the diagnostic at the start of the unit was not taken on this device, so "Start" shows an example.</p>';
+  h+='<div class="plan">'+ROOMS.map(function(r,i){var c=['secure','strength'].indexOf(o[i])>=0?'gold':o[i]==='unvisited'?'unvisited':'blue';
+      return '<div class="roomcard '+c+'"><div class="lampdot"></div><b>'+r.name+'</b><small>'+r.lesson.replace(/ · /,': ')+'</small>'+
+        '<div class="journey"><span class="chip">Start: '+START_OUT[start.o[i]]+'</span>→<span class="chip now">Now: '+OUT[o[i]]+'</span></div><small>'+LEARN[o[i]]+'</small></div>';}).join('')+
+    '<div class="roomcard"><div class="lampdot" style="border-radius:4px;background:#2b4470"></div><b>The Beacon</b><small>'+(done?'Reached':'At the top of the tower')+'</small></div></div>';
+  var routes=ROOMS.filter(function(r,i){return ['look','notyet','getting'].indexOf(o[i])>=0;}).map(function(r){return r.route;}); routes=routes.filter(function(x,i){return routes.indexOf(x)===i;});
+  h+= routes.length?'<div class="pack"><b>Your next steps</b><p>Each one takes about ten minutes. When you\'re ready, you can come back and try those floors again.</p><ul>'+routes.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'
+    : (done?'<div class="pack"><b>No next steps for this unit.</b> Every idea is secure. You\'re ready for what comes next.</div>':'');
+  if(done) h+='<div class="label">Looking back (optional, and only shared if you choose)</div><textarea id="feelText" placeholder="What are you proudest of in this unit? Is there anything you\'d like more help with?"></textarea><div class="row noprint" style="margin-top:6px"><button class="soft" id="shareFeel">Share this with my supporting adult</button><span id="feelStatus" class="small"></span></div>'+
+    (EXAM.length?'<div class="row"><button class="soft" id="examBtn">Visit the Exam Corner (optional practice)</button></div>':'');
+  h+='<details class="glass" id="adultDetails"><summary>See exactly what your supporting adult sees</summary><p class="small">The same information as your floor plan. No scores, no times, no attempt counts.</p><table class="adult"><tr><th>Floor · lessons</th><th>At the start</th><th>How it felt now</th><th>Now</th><th>What it might suggest</th><th>Next step</th></tr>'+
+    ROOMS.map(function(r,i){var x=o[i];return '<tr><td>'+r.name+'<br><span class="small">'+r.lesson+'</span></td><td>'+START_OUT[start.o[i]]+'</td><td>'+feelTxt[st[i].feel]+'</td><td>'+OUT[x]+'</td><td>'+(st[i].signal?esc(st[i].signal):(x==='strength'?'Felt unsure but was right: worth saying out loud.':x==='notyet'&&st[i].side?'Chose to leave this for now.':'—'))+'</td><td>'+(['look','notyet','getting'].indexOf(x)>=0?esc(r.route):'—')+'</td></tr>';}).join('')+
+    '</table><p class="small"><b>For the adult:</b> compare each floor\'s start with now. "Worth a second look" (felt sure, not yet right) usually points to a misconception worth a conversation'+(ROOMS.some(function(r){return r.card;})?': the maths conversation cards below can help.':'.')+(EXAM.length?' The Exam Corner is never recorded.':'')+'</p>'+cardsHtml(o)+
+    (served()?'<div class="confirm"><b>Adult confirmation for this unit</b><p class="small">'+(judged?'Confirmed: <b>'+esc(judged.label)+'</b>.':'Not confirmed yet.')+' Your supporting adult chooses one label for the unit (Approaching Proficiency, Developing Proficiency, Proficiency or Refining Proficiency) from the NEO educator dashboard, signed in with their own NEO account. You will see it at the top of this page and in your learner passport.</p></div></details>':'<div class="confirm"><b>Adult confirmation for this unit</b><p class="small">Choose the one label that best fits, using this floor plan and the Final Tasks you have seen. The learner sees what you choose.</p>'+
+    LABELS.map(function(l,k){return '<label><input type="radio" name="lab" value="'+k+'"'+(judged&&judged.label===l[0]?' checked':'')+'> <b>'+l[0]+'</b><small>'+l[1]+'</small></label>';}).join('')+
+    '<textarea id="adultNote" placeholder="Optional: one sentence for the learner and their family">'+(judged&&judged.note?esc(judged.note):'')+'</textarea><div class="row"><button class="go" id="confirmBtn">Confirm</button>'+(judged?'<button class="soft" id="unconfirmBtn">Clear</button>':'')+'</div><p class="small" id="confirmMsg"></p></div></details>');
+  h+='<div class="row noprint"><button class="go" id="closePlan">'+(done?'Back to the beacon':'Back to the check-in')+'</button><button class="soft" id="printPlan">Print or save this page</button>'+(done?'<button class="soft" id="againBtn">Start the check-in again</button>':'')+'</div>';
+  h+='<div id="saveStatus" class="pack noprint" style="margin-top:12px">'+(done?(recorded?'<b>Saved to your learner record ✓</b>'+passportLink():'Saving your check-in to your learner record…'):'Your check-in is saved when you reach the Beacon.')+'</div>';
+  h+='<p class="small" style="margin-top:12px">NEO Maths results service · Return to the Lighthouse v0.3 · 28 November 2026</p>';
+  $('planPanel').innerHTML=h; $('planModal').classList.add('show');
+  $('closePlan').onclick=function(){$('planModal').classList.remove('show');};
+  $('printPlan').onclick=function(){$('adultDetails').open=true;if($('cardsDetails'))$('cardsDetails').open=true;window.print();};
+  if($('againBtn')) $('againBtn').onclick=function(){forget();adultSet(null);location.reload();};
+  if($('examBtn')) $('examBtn').onclick=examCorner;
+  if($('confirmBtn')) $('confirmBtn').onclick=function(){ var r=document.querySelector('input[name="lab"]:checked'); if(!r){ $('confirmMsg').textContent='Choose a label first.'; return; }
+    adultSet({label:LABELS[+r.value][0],note:$('adultNote').value.trim()}); showPlan(); $('adultDetails').open=true; };
+  if($('unconfirmBtn')) $('unconfirmBtn').onclick=function(){ adultSet(null); showPlan(); $('adultDetails').open=true; };
+  if($('shareFeel')) $('shareFeel').onclick=shareFeeling;
+  if(done) record();
+}
+
+/* ---------- The learner record (NEO results service) ---------- */
+function served(){ return typeof google!=='undefined' && google.script && google.script.run; }
+function passportLink(){ return (typeof NEO_APP_URL==='string'&&NEO_APP_URL)?' <a href="'+NEO_APP_URL+'?page=passport" target="_top">Open my learner passport</a>.':''; }
+function planOpen(){ return $('planModal')&&$('planModal').classList.contains('show'); }
+// Where the learner started (their own saved diagnostic) and the confirmed label, fetched once on arrival.
+if(served()) google.script.run
+  .withSuccessHandler(function(d){ SERVER={start:(d&&d.start)||[],label:(d&&d.label)||null}; if(recordWaiting) record(); if(planOpen()) showPlan(); })
+  .withFailureHandler(function(){ SERVER={start:[],label:null,failed:true}; if(recordWaiting) record(); if(planOpen()) showPlan(); })
+  .getCheckinStart(UNIT.id);
+function record(){
+  var box=$('saveStatus'); if(!box||recorded||recording) return;
+  if(!served()){ box.innerHTML='This copy is not connected to the NEO results service, so nothing has been saved. Open the check-in from your NEO link to save it.'; return; }
+  if(!SERVER){ recordWaiting=true; return; } recordWaiting=false; recording=true;
+  var start=startOutcomes(), feelTxt={sure:'I\'ve got this',unsure:'Getting there',new:'Not yet sure'};
+  var rooms=ROOMS.map(function(r,i){ var x=outcome(i);
+    return {room:r.name, lesson:r.lesson, start:start.real?START_OUT[start.o[i]]:'', felt:feelTxt[st[i].feel]||'', now:OUT[x],
+      suggests:st[i].signal||(x==='strength'?'Felt unsure but was right: worth saying out loud.':x==='notyet'&&st[i].side?'Chose to leave this for now.':''),
+      route:['look','notyet','getting'].indexOf(x)>=0?r.route:''}; });
+  google.script.run
+    .withSuccessHandler(function(){ recording=false; recorded=true; var b=$('saveStatus'); if(b) b.innerHTML='<b>Saved to your learner record ✓</b>'+passportLink(); })
+    .withFailureHandler(function(){ recording=false; var b=$('saveStatus'); if(!b) return; b.innerHTML='Your check-in could not be saved just now. It is still here. <button class="soft" id="saveAgain">Try saving again</button>'; $('saveAgain').onclick=function(){b.innerHTML='Saving…';record();}; })
+    .saveCheckin({unit:UNIT.name, unitId:UNIT.id, checkin:EXP, rooms:rooms});
+}
+function shareFeeling(){
+  var t=($('feelText').value||'').trim(), out=$('feelStatus');
+  if(!t){ out.textContent='Write something first, or leave it empty: it is optional.'; return; }
+  if(!served()){ out.textContent='This copy is not connected, so it cannot be shared from here.'; return; }
+  out.textContent='Sharing…';
+  google.script.run.withSuccessHandler(function(){ out.textContent='Shared with your supporting adult ✓'; })
+    .withFailureHandler(function(){ out.textContent='Could not share just now. Please try again.'; })
+    .saveComment({unit:UNIT.name, unitId:UNIT.id, expedition:EXP, comment:t});
+}
+function examCorner(){
+  $('planModal').classList.remove('show');
+  kitModal('<h2 id="kt">The Exam Corner</h2><p class="sub">Optional practice for later. These questions are written like the ones in the International GCSE exam.</p>'+
+    '<div class="info"><p>There is no clock, and <b>nothing here is recorded</b>. Try one, all of them, or none. You can look at a model answer whenever you like.</p></div>'+
+    EXAM.map(function(e,k){ return '<div class="exam"><p>'+(k+1)+'. '+e.q+' <span class="marks">(in the exam: '+e.marks+' marks)</span></p><div class="row"><input class="ans" id="ex'+k+'" autocomplete="off" aria-label="Your answer to question '+(k+1)+'"><button class="go" data-ex="'+k+'">Check</button><button class="soft" data-model="'+k+'">See a model answer</button></div><div class="fb" id="exfb'+k+'" role="status"></div></div>'; }).join(''));
+  [].forEach.call(document.querySelectorAll('[data-ex]'),function(b){ b.onclick=function(){ var k=+b.dataset.ex, v=$('ex'+k).value, f=$('exfb'+k); if(!v.trim()) return;
+    var ok=EXAM[k].check(v); f.className='fb show '+(ok?'good':'try'); f.innerHTML=ok?'<b>Yes, that\'s right.</b> In the exam, show each step to earn every mark.':'Not quite yet. Have another go, or look at the model answer.'; }; });
+  EXAM.forEach(function(e,k){ NEOPalette.attach($('ex'+k)); });
+  [].forEach.call(document.querySelectorAll('[data-model]'),function(b){ b.onclick=function(){ var k=+b.dataset.model, f=$('exfb'+k); f.className='fb show calm'; f.innerHTML='<b>Model answer</b><br>'+EXAM[k].model; }; });
+}
+
+/* ---------- Welcome ---------- */
+function welcome(){
+  var saved=load();
+  var h='<h2 id="wt">Return to the Lighthouse</h2><p class="sub">Algebraic Expressions and Identities · Intermediate · end-of-unit check-in</p>'+
+   '<div class="info"><p><b>This is a check-in, not a test.</b> You climbed this lighthouse at the start of the unit. Now that you\'ve worked through the lessons, you\'re back to see how far you\'ve come. There is no clock, no score and nothing to lose. It takes about 20 minutes, and you can stop and come back.</p>'+
+   '<p>Each of the eight floors now asks about the big idea of its lessons. Before each lock, you\'ll say how that idea feels to you now. If a lock is one you\'re not ready for yet, the <b>side passage</b> is still there: taking it simply adds that idea to your next steps.</p>'+
+   '<p>Your field kit from the start of the unit comes with you, and every lock has a <b>Scratchpad</b> for sketches and working, and a <b>calculator</b> wherever one helps. None of these is ever recorded.</p>'+
+   '<p>At the end, your plan shows <b>where you started and where you are now</b>. Your supporting adult sees exactly the same page. Afterwards, if you\'d like to, you can visit the <b>Exam Corner</b> for some optional exam-style practice. It is never recorded.</p></div>'+
+   '<details class="glass"><summary>What is saved, and who can see it?</summary><p>Anything you draw or write on the <b>Scratchpad</b> is just for your thinking: it is never saved or sent. Using the <b>calculator</b> is never recorded either.</p><p>Only your answers and how each idea felt to you. Nothing else: not how long you took, not how many tries, not what you clicked.</p><p>Your supporting adult sees exactly the plan you see, and adds one overall label for the unit, which you will see too. When you reach the Beacon, your check-in is saved to your <b>NEO learner record</b>, in a spreadsheet that NEO keeps in its own Google Drive, next to the diagnostic you did at the start of the unit. Your supporting adult and NEO maths staff can see it, and you can always see it too, in your <b>learner passport</b>. The label for the unit is chosen by your supporting adult, signed in with their own NEO account. Your comment at the end is only saved if you choose to share it.</p></details>'+
+   '<p>If moving between floors feels uncomfortable, choose <b>Still mode</b>: floors change with a gentle fade and nothing moves. <b>Flat view</b> shows just the questions, with no 3D at all. Every question has a <b>Read aloud</b> button. You can change any of these from the top bar at any time.</p>'+
+   '<div class="row">'+(saved?'<button class="go" id="contBtn">Continue where you left off</button><button class="soft" id="newBtn">Start the check-in again</button>':'<button class="go" id="enterBtn">Step inside</button><button class="soft" id="enterStillBtn">Step inside in Still mode</button><button class="soft" id="enterFlatBtn">Use Flat view</button>')+'</div>';
+  $('welcomePanel').innerHTML=h;
+  function go(){ kitCount(); $('welcome').classList.remove('show'); world.style.transition='none'; place(at); world.offsetWidth; world.style.transition=''; roomHud(); }
+  if(saved){ $('contBtn').onclick=function(){st=saved.st;at=saved.at;restoreScene();go();}; $('newBtn').onclick=function(){forget();st=fresh();at=0;go();}; }
+  else { $('enterBtn').onclick=go; $('enterStillBtn').onclick=function(){setStill(true);go();}; $('enterFlatBtn').onclick=function(){setFlat(true);go();}; }
+}
+place(0); welcome();
+$('kitBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) showKit(); };
+$('planBtn').onclick=function(){ if(!$('welcome').classList.contains('show')) showPlan(); };
+$('stillBtn').onclick=function(){setStill(!still());};
+$('flatBtn').onclick=function(){setFlat(!flat());};
+$('comfortBtn').onclick=function(){var on=document.body.classList.toggle('comfort');this.setAttribute('aria-pressed',on);};
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var so=document.getElementById('neoScratchpadOverlay'); if(so&&!so.hidden){ closeMathsScratchpad(); return; } if($('lockModal').classList.contains('show')) closeLock(); else { $('planModal').classList.remove('show'); $('kitModal').classList.remove('show'); } } });
+</script>
+<div id="neoScratchpadOverlay" hidden style="position:fixed;inset:0;z-index:100000;background:rgba(39,45,35,.70);padding:16px;overflow:auto;">
+  <div role="dialog" aria-modal="true" aria-labelledby="neoScratchpadTitle" style="max-width:980px;margin:10px auto;background:#f7f3ea;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;font-family:Arial,sans-serif;color:#2f3429;">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div>
+        <h2 id="neoScratchpadTitle" style="margin:0;color:#3f5f45;">✏️ NEO Maths Scratchpad</h2>
+        <p id="neoScratchpadSubtitle" style="margin:4px 0 0;color:#5c6b4f;">Use the Scratchpad to predict, sketch, test and revise.</p>
+      </div>
+      <button type="button" onclick="closeMathsScratchpad()" style="padding:9px 13px;background:#fff;border:1px solid #7d8875;border-radius:9px;font-weight:bold;cursor:pointer;">× Close</button>
+    </div>
+    <p style="background:#fffaf0;padding:10px;border-radius:10px;margin:14px 0;">Use this board, paper, or no notes at all: whatever helps you think. Each room has its own page. <b>Nothing you draw or write here is saved or sent.</b></p>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;font-size:.96em;">
+      <button id="scratchPenBtn" type="button" onclick="setScratchTool('pen')" style="padding:7px 10px;border:1px solid #4d6b47;background:#e5f0e2;border-radius:8px;cursor:pointer;white-space:nowrap;">✏️ Pen</button>
+      <button id="scratchLineBtn" type="button" onclick="setScratchTool('line')" style="padding:7px 10px;border:1px solid #54718a;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">📏 Line</button>
+      <label for="scratchColour" style="font-weight:bold;white-space:nowrap;">Colour</label>
+      <select id="scratchColour" onchange="updateScratchColour()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:115px;">
+        <option value="#2f3429">Charcoal</option><option value="#315d72">Ocean blue</option><option value="#5c6b4f">Moss green</option><option value="#70466b">Plum</option><option value="#9a5f3f">Earth brown</option><option value="#b24c4c">Berry red</option>
+      </select>
+      <label for="scratchWidth" style="font-weight:bold;white-space:nowrap;">Width</label>
+      <select id="scratchWidth" onchange="updateScratchWidth()" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:92px;">
+        <option value="2">Thin</option><option value="4" selected>Medium</option><option value="7">Thick</option>
+      </select>
+      <button id="scratchEraserBtn" type="button" onclick="setScratchTool('eraser')" style="padding:7px 10px;border:1px solid #7d8875;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">🧽 Eraser</button>
+      <button type="button" onclick="scratchUndo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↶ Undo</button>
+      <button type="button" onclick="scratchRedo()" style="padding:7px 10px;border:1px solid #738697;background:#fff;border-radius:8px;cursor:pointer;white-space:nowrap;">↷ Redo</button>
+      <button type="button" onclick="setScratchTool('note')" style="padding:7px 10px;border:1px solid #8a7932;background:#fff7c7;border-radius:8px;cursor:pointer;white-space:nowrap;">🗒 Sticky Note</button>
+      <span style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto;">
+        <label for="scratchTemplate" style="font-weight:bold;white-space:nowrap;">Background</label>
+        <select id="scratchTemplate" onchange="changeScratchTemplate(this.value)" style="padding:7px 8px;border:1px solid #bcae98;border-radius:8px;min-width:145px;">
+          <option value="blank">Blank</option><option value="square-grid">Square grid</option><option value="isometric">Isometric grid</option><option value="coordinate-grid">Coordinate grid</option><option value="ratio-table">Ratio table</option><option value="double-number-line">Double number line</option>
+        </select>
+      </span>
+    </div>
+    <div id="neoScratchCanvasWrap" style="position:relative;background:#fff;border:1px solid #cdbfa9;border-radius:12px;overflow:hidden;touch-action:none;aspect-ratio:920/560;">
+      <canvas id="neoScratchBackgroundCanvas" width="920" height="560" aria-hidden="true" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:#fff;pointer-events:none;"></canvas>
+      <canvas id="neoScratchCanvas" width="920" height="560" aria-label="Scratchpad drawing layer" style="position:absolute;inset:0;display:block;width:100%;height:100%;background:transparent;touch-action:none;cursor:crosshair;"></canvas>
+      <div id="neoStickyLayer" aria-label="Scratchpad sticky notes" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <button type="button" onclick="newScratchPage()" style="padding:9px 13px;background:#e5edf4;border:1px solid #315d72;border-radius:8px;cursor:pointer;">📄 New page</button>
+      <button type="button" onclick="downloadScratchImage()" style="padding:9px 13px;background:#f3e6f1;border:1px solid #70466b;border-radius:8px;cursor:pointer;">🖼 Save as image</button>
+      <button type="button" onclick="clearScratchpad()" style="padding:9px 13px;background:#fffaf0;border:1px solid #8a7932;border-radius:8px;cursor:pointer;">🗑 Clear board</button>
+    </div>
+    <div id="scratchStatus" aria-live="polite" style="display:none;margin-top:10px;padding:10px;border-radius:9px;background:#e5edf4;"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById("neoScratchpadOverlay");
+  const subtitle = document.getElementById("neoScratchpadSubtitle");
+  const canvas = document.getElementById("neoScratchCanvas");
+  const bgCanvas = document.getElementById("neoScratchBackgroundCanvas");
+  const stickyLayer = document.getElementById("neoStickyLayer");
+  const ctx = canvas.getContext("2d");
+  const bg = bgCanvas.getContext("2d");
+  let tool = "pen", colour = "#2f3429", width = 4, template = "blank";
+  let drawing = false, current = null, strokes = [], redo = [], notes = [];
+  var PAGES={}, pageKey=null;
+  function status(msg, col){ const box = document.getElementById("scratchStatus"); box.style.display = "block"; box.style.background = col || "#e5edf4"; box.textContent = msg; }
+  function point(e){ const r = canvas.getBoundingClientRect(); return { x:(e.clientX-r.left)*canvas.width/r.width, y:(e.clientY-r.top)*canvas.height/r.height }; }
+  function drawBackground(){
+    bg.clearRect(0,0,bgCanvas.width,bgCanvas.height); bg.fillStyle = "#fff"; bg.fillRect(0,0,bgCanvas.width,bgCanvas.height); bg.save(); bg.lineWidth = 1; bg.strokeStyle = "#e6dccb";
+    if(template === "square-grid" || template === "coordinate-grid"){ const _cx=bgCanvas.width/2,_cy=bgCanvas.height/2; for(let x=_cx; x>=0; x-=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let x=_cx+28; x<=bgCanvas.width; x+=28){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,bgCanvas.height); bg.stroke(); } for(let y=_cy; y>=0; y-=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } for(let y=_cy+28; y<=bgCanvas.height; y+=28){ bg.beginPath(); bg.moveTo(0,y); bg.lineTo(bgCanvas.width,y); bg.stroke(); } }
+    if(template === "isometric"){ bg.strokeStyle="#e3d8c3"; bg.lineWidth=1; const W=bgCanvas.width, Hh=bgCanvas.height, s=34, slope=Math.tan(Math.PI/6), st=s*slope; for(let x=0;x<=W;x+=s){ bg.beginPath(); bg.moveTo(x,0); bg.lineTo(x,Hh); bg.stroke(); } for(let c=0;c<=Hh+slope*W;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c-slope*W); bg.stroke(); } for(let c=-slope*W;c<=Hh;c+=st){ bg.beginPath(); bg.moveTo(0,c); bg.lineTo(W,c+slope*W); bg.stroke(); } }
+    if(template === "coordinate-grid"){ bg.strokeStyle = "#9fb2bd"; bg.lineWidth = 2; bg.beginPath(); bg.moveTo(bgCanvas.width/2,0); bg.lineTo(bgCanvas.width/2,bgCanvas.height); bg.moveTo(0,bgCanvas.height/2); bg.lineTo(bgCanvas.width,bgCanvas.height/2); bg.stroke(); }
+    if(template === "ratio-table"){ bg.strokeStyle = "#cdbfa9"; bg.lineWidth = 1.5; for(let x=80; x<=840; x+=190){ bg.beginPath(); bg.moveTo(x,70); bg.lineTo(x,490); bg.stroke(); } for(let y=70; y<=490; y+=70){ bg.beginPath(); bg.moveTo(80,y); bg.lineTo(840,y); bg.stroke(); } }
+    if(template === "double-number-line"){ bg.strokeStyle = "#315d72"; bg.lineWidth = 3; [210,350].forEach(function(y){ bg.beginPath(); bg.moveTo(90,y); bg.lineTo(830,y); bg.stroke(); for(let x=90; x<=830; x+=74){ bg.beginPath(); bg.moveTo(x,y-10); bg.lineTo(x,y+10); bg.stroke(); } }); }
+    bg.restore();
+  }
+  function drawStroke(s){ if(!s || !s.points || !s.points.length) return; ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; if(s.tool === "eraser"){ ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = Math.max(18, s.width * 5); } else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.colour; ctx.lineWidth = s.width; } const pts = s.points; ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); if(s.tool === "line"){ const last = pts[pts.length-1]; ctx.lineTo(last.x, last.y); } else { pts.slice(1).forEach(function(p){ ctx.lineTo(p.x,p.y); }); if(pts.length === 1) ctx.lineTo(pts[0].x+0.1, pts[0].y+0.1); } ctx.stroke(); ctx.restore(); }
+  function renderInk(){ ctx.clearRect(0,0,canvas.width,canvas.height); strokes.forEach(drawStroke); }
+  function renderNotes(){ stickyLayer.innerHTML = ""; notes.forEach(function(note, i){ const card = document.createElement("div"); card.style.cssText = "position:absolute;left:"+note.x+"%;top:"+note.y+"%;width:180px;min-height:110px;background:#fff7c7;border:1px solid #b9a85b;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.16);pointer-events:auto;"; const bar = document.createElement("div"); bar.textContent = "Sticky note"; bar.style.cssText = "font-weight:bold;background:#f1e39a;border-radius:8px 8px 0 0;padding:6px;cursor:move;"; const remove = document.createElement("button"); remove.type = "button"; remove.textContent = "×"; remove.style.cssText = "float:right;border:none;background:transparent;cursor:pointer;font-weight:bold;"; remove.onclick = function(){ notes.splice(i,1); renderNotes(); store(); }; bar.appendChild(remove); const area = document.createElement("textarea"); area.value = note.text || ""; area.placeholder = "Type a thought..."; area.style.cssText = "width:100%;height:90px;border:none;background:transparent;padding:8px;resize:none;outline:none;"; area.oninput = function(){ note.text = area.value; store(); }; let drag = null; bar.onpointerdown = function(e){ drag = {sx:e.clientX, sy:e.clientY, bx:note.x, by:note.y}; bar.setPointerCapture(e.pointerId); }; bar.onpointermove = function(e){ if(!drag) return; const r = stickyLayer.getBoundingClientRect(); note.x = Math.max(0, Math.min(90, drag.bx + ((e.clientX-drag.sx)/r.width)*100)); note.y = Math.max(0, Math.min(85, drag.by + ((e.clientY-drag.sy)/r.height)*100)); card.style.left = note.x + "%"; card.style.top = note.y + "%"; }; bar.onpointerup = function(e){ drag = null; store(); try{ bar.releasePointerCapture(e.pointerId); }catch(err){} }; card.appendChild(bar); card.appendChild(area); stickyLayer.appendChild(card); }); }
+  function renderAllScratch(){ drawBackground(); renderInk(); renderNotes(); }
+  function store(){ if(pageKey) PAGES[pageKey]={template:template,strokes:strokes,redo:redo,notes:notes}; }
+  function restore(){ var p=pageKey&&PAGES[pageKey]; if(!p) return; template=p.template; strokes=p.strokes; redo=p.redo; notes=p.notes; document.getElementById("scratchTemplate").value=template; }
+  function updateButtons(){ document.getElementById("scratchPenBtn").style.background = tool==="pen" ? "#e5f0e2" : "#fff"; document.getElementById("scratchLineBtn").style.background = tool==="line" ? "#e5edf4" : "#fff"; document.getElementById("scratchEraserBtn").style.background = tool==="eraser" ? "#e5f0e2" : "#fff"; canvas.style.cursor = tool==="eraser" ? "cell" : tool==="note" ? "copy" : "crosshair"; }
+  canvas.addEventListener("pointerdown", function(e){ if(tool === "note"){ const r = canvas.getBoundingClientRect(); notes.push({x:((e.clientX-r.left)/r.width)*100, y:((e.clientY-r.top)/r.height)*100, text:""}); renderNotes(); window.setScratchTool("pen"); status("Sticky note added. Type your thought or drag the note by its top bar.", "#fff7c7"); store(); e.preventDefault(); return; } drawing = true; canvas.setPointerCapture(e.pointerId); const p = point(e); current = {tool, width, colour, points: tool==="line" ? [p,p] : [p]}; strokes.push(current); redo = []; renderInk(); e.preventDefault(); });
+  canvas.addEventListener("pointermove", function(e){ if(!drawing || !current) return; const p = point(e); if(current.tool === "line") current.points[1] = p; else current.points.push(p); renderInk(); e.preventDefault(); });
+  function finish(e){ if(!drawing) return; drawing = false; current = null; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} store(); e.preventDefault(); }
+  canvas.addEventListener("pointerup", finish); canvas.addEventListener("pointercancel", finish);
+  window.openMathsScratchpad = function(requestedTemplate, customSubtitle){ if(requestedTemplate){ template = requestedTemplate; document.getElementById("scratchTemplate").value = template; } subtitle.textContent = customSubtitle || "Use the Scratchpad to predict, sketch, test and revise."; overlay.hidden = false; document.body.style.overflow = "hidden"; renderAllScratch(); };
+  window.closeMathsScratchpad = function(){ store(); overlay.hidden = true; document.body.style.overflow = ""; };
+  window.setScratchTool = function(t){ tool = t; updateButtons(); if(t === "line") status("Line tool: press at the start point, drag to the end point, then release."); if(t === "note") status("Click anywhere on the Scratchpad to place a sticky note.", "#fff7c7"); };
+  window.updateScratchColour = function(){ colour = document.getElementById("scratchColour").value; store(); };
+  window.updateScratchWidth = function(){ width = Number(document.getElementById("scratchWidth").value); store(); };
+  window.changeScratchTemplate = function(v){ template = v; drawBackground(); store(); status("Background changed. Your drawing marks are unchanged.", "#e3f0df"); };
+  window.scratchUndo = function(){ if(!strokes.length){ status("Nothing to undo yet.", "#fff1cf"); return; } redo.push(strokes.pop()); renderInk(); store(); };
+  window.scratchRedo = function(){ if(!redo.length){ status("Nothing to redo yet.", "#fff1cf"); return; } strokes.push(redo.pop()); renderInk(); store(); };
+  window.newScratchPage = function(){ if((strokes.length || notes.length) && !confirm("Start a new Scratchpad page? This clears the current learner marks and notes.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("New Scratchpad page started."); };
+  window.saveScratchPage = function(){ store(); status("Working page saved in this browser.", "#e3f0df"); };
+  window.clearScratchpad = function(){ if(!confirm("Clear learner marks and sticky notes? The selected background will remain.")) return; strokes = []; redo = []; notes = []; renderAllScratch(); store(); status("Learner marks cleared. Background preserved.", "#fff1cf"); };
+  window.downloadScratchImage = function(){ const exportCanvas = document.createElement("canvas"); exportCanvas.width = canvas.width; exportCanvas.height = canvas.height; const ex = exportCanvas.getContext("2d"); ex.drawImage(bgCanvas,0,0); ex.drawImage(canvas,0,0); notes.forEach(function(note){ const x=(note.x/100)*canvas.width, y=(note.y/100)*canvas.height; ex.fillStyle="#fff7c7"; ex.strokeStyle="#b9a85b"; ex.lineWidth=2; ex.fillRect(x,y,180,110); ex.strokeRect(x,y,180,110); ex.fillStyle="#2f3429"; ex.font="14px Arial"; const words=(note.text||"").split(/\s+/); let line="", yy=y+24; words.forEach(function(w){ const test=line+w+" "; if(ex.measureText(test).width>160){ ex.fillText(line,x+10,yy); line=w+" "; yy+=18; } else line=test; }); ex.fillText(line,x+10,yy); }); const link=document.createElement("a"); link.download="NEO_Maths_Scratchpad.png"; link.href=exportCanvas.toDataURL("image/png"); link.click(); status("Scratchpad image saved.", "#e3f0df"); };
+  // one page per room, kept in memory only
+  window.openRoomScratchpad=function(key,tpl,tip){ store(); pageKey=key; if(PAGES[key]){ restore(); window.openMathsScratchpad(null,tip); } else { strokes=[]; redo=[]; notes=[]; window.openMathsScratchpad(tpl||"blank",tip); } };
+  window.__scratchState=function(){ return {key:pageKey,strokes:strokes.length,notes:notes.length,template:template,open:!overlay.hidden}; };
+  window.__scratchAddStroke=function(){ strokes.push({tool:"pen",colour:colour,width:width,points:[{x:10,y:10},{x:60,y:60}]}); renderInk(); store(); };
+  updateButtons(); renderAllScratch();
+})();
+</script>
+<script>
+/* The Scratchpad in an expedition: one page per room, a suggested background, nothing saved or sent. */
+var PADS=["blank", "blank", "blank", "blank", "blank", "blank", "blank", "blank"];
+function openRoomScratch(){ var i=(typeof at==='number'&&typeof ROOMS!=='undefined'&&at<ROOMS.length)?at:-1, r=i>=0?ROOMS[i]:null;
+  var tpl=(r&&r.pad)||(i>=0&&PADS[i])||'blank';
+  openRoomScratchpad('room'+i,tpl,(r?r.name+': s':'S')+'ketch it, jot down your working, or try an idea out. Nothing here is saved or sent.'); }
+</script>
+
+<style>
+#neoCalcWrap{position:fixed;right:16px;bottom:16px;z-index:100001;font-family:Arial,sans-serif}
+#neoCalcToggle{display:none!important}
+#neoCalcToggle{background:#365a68;color:#fff;border:none;border-radius:24px;padding:11px 16px;font-weight:700;font-size:1em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#neoCalcPanel{position:absolute;right:0;bottom:0;width:246px;background:#f7f3ea;border:1px solid #cdbfa9;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.30);padding:12px}
+#neoCalcPanel[hidden]{display:none}
+.neoCalcHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.neoCalcHead b{color:#3f5f45}
+.neoCalcDeg{font-size:.72em;font-weight:700;color:#fff;background:#5c6b4f;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+#neoCalcExpr{min-height:22px;background:#fff;border:1px solid #cdbfa9;border-radius:8px;padding:7px 9px;font-size:1.05em;text-align:right;word-break:break-all;color:#2f3429}
+#neoCalcResult{min-height:20px;text-align:right;font-size:1.15em;font-weight:700;color:#2f6b46;padding:3px 4px 8px}
+.neoCalcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.neoCalcGrid button{padding:11px 0;font-size:1em;border:1px solid #bcae98;border-radius:9px;background:#fff;cursor:pointer;color:#2f3429;font-weight:600}
+.neoCalcGrid button:hover{background:#f0ebe0}
+.neoCalcGrid button.fn{background:#e5eef2;border-color:#7d97a6;font-size:.92em}
+.neoCalcGrid button.op{background:#eef3e8}
+.neoCalcGrid button.eq{background:#2f6b46;color:#fff;border:none}
+.neoCalcGrid button.clr{background:#f6e6de;border-color:#c69}
+@media print{#neoCalcWrap{display:none}}
+</style>
+<div id="neoCalcWrap">
+  <button id="neoCalcToggle" type="button" onclick="neoCalcToggle()" aria-expanded="false" aria-controls="neoCalcPanel">&#129518; Calculator</button>
+  <div id="neoCalcPanel" hidden role="dialog" aria-label="Scientific calculator, degrees">
+    <div class="neoCalcHead"><b>Calculator</b><span><span class="neoCalcDeg">DEG</span> <button type="button" onclick="neoCalcToggle()" aria-label="Close the calculator" style="border:none;background:none;font-size:1.3em;cursor:pointer;color:#5c6b4f;padding:0 2px">×</button></span></div>
+    <div id="neoCalcExpr" aria-live="polite">0</div>
+    <div id="neoCalcResult" aria-live="polite"></div>
+    <div class="neoCalcGrid">
+      <button type="button" class="fn" onclick="neoCalcFn('sin')">sin</button>
+      <button type="button" class="fn" onclick="neoCalcFn('cos')">cos</button>
+      <button type="button" class="fn" onclick="neoCalcFn('tan')">tan</button>
+      <button type="button" class="clr" onclick="neoCalcBack()">&#9003;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('asin')">sin&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('acos')">cos&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('atan')">tan&#8315;&#185;</button>
+      <button type="button" class="fn" onclick="neoCalcFn('sqrt')">&#8730;</button>
+      <button type="button" class="fn" onclick="neoCalcKey('(')">(</button>
+      <button type="button" class="fn" onclick="neoCalcKey(')')">)</button>
+      <button type="button" class="clr" onclick="neoCalcClear()">C</button>
+      <button type="button" class="op" onclick="neoCalcKey('÷')">&#247;</button>
+      <button type="button" onclick="neoCalcKey('7')">7</button>
+      <button type="button" onclick="neoCalcKey('8')">8</button>
+      <button type="button" onclick="neoCalcKey('9')">9</button>
+      <button type="button" class="op" onclick="neoCalcKey('×')">&#215;</button>
+      <button type="button" onclick="neoCalcKey('4')">4</button>
+      <button type="button" onclick="neoCalcKey('5')">5</button>
+      <button type="button" onclick="neoCalcKey('6')">6</button>
+      <button type="button" class="op" onclick="neoCalcKey('-')">&#8722;</button>
+      <button type="button" onclick="neoCalcKey('1')">1</button>
+      <button type="button" onclick="neoCalcKey('2')">2</button>
+      <button type="button" onclick="neoCalcKey('3')">3</button>
+      <button type="button" class="op" onclick="neoCalcKey('+')">+</button>
+      <button type="button" onclick="neoCalcKey('0')">0</button>
+      <button type="button" onclick="neoCalcKey('.')">.</button>
+      <button type="button" class="eq" style="grid-column:span 2" onclick="neoCalcEq()">=</button>
+    </div>
+    <p style="font-size:.78em;color:#5c6b4f;margin:8px 2px 0">Using the calculator is never recorded. Angles are in <b>degrees</b>. Examples: 9 &#215; sin(37) = 5.42; &nbsp;sin&#8315;&#185;(0.5) = 30</p>
+  </div>
+</div>
+<script>
+(function(){
+  if(window.__neoCalcInstalled)return; window.__neoCalcInstalled=true;
+  var expr="";
+  function isFn(x){return x==="sin"||x==="cos"||x==="tan"||x==="sqrt"||x==="asin"||x==="acos"||x==="atan";}
+  function evalExpr(input){
+    var s=String(input).replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/°/g,"");
+    var toks=s.match(/\d+\.?\d*|\.\d+|asin|acos|atan|sin|cos|tan|sqrt|√|[()+\-*/]/g);
+    if(!toks) return NaN;
+    var out=[], ops=[], prec={"+":1,"-":1,"*":2,"/":2,"u":4}, prev=null;
+    for(var i=0;i<toks.length;i++){ var t=toks[i]; if(t==="√")t="sqrt";
+      if(/^[\d.]/.test(t)){ out.push(parseFloat(t)); prev="n"; }
+      else if(isFn(t)){ ops.push(t); prev="f"; }
+      else if(t==="("){ ops.push("("); prev="("; }
+      else if(t===")"){ while(ops.length&&ops[ops.length-1]!=="(") out.push(ops.pop()); if(ops.length) ops.pop(); if(ops.length&&isFn(ops[ops.length-1])) out.push(ops.pop()); prev="n"; }
+      else { var op=t; if(op==="-"&&(prev===null||prev==="("||prev==="o"||prev==="f")) op="u";
+        while(ops.length){ var tp=ops[ops.length-1]; if(tp!=="(" && (isFn(tp) || (prec[tp] && prec[tp]>=prec[op]))) out.push(ops.pop()); else break; }
+        ops.push(op); prev="o"; }
+    }
+    while(ops.length){ var o=ops.pop(); if(o!=="(") out.push(o); }
+    var st=[];
+    for(var j=0;j<out.length;j++){ var x=out[j];
+      if(typeof x==="number"){ st.push(x); }
+      else if(x==="u"){ if(!st.length)return NaN; st.push(-st.pop()); }
+      else if(isFn(x)){ if(!st.length)return NaN; var a=st.pop(), r;
+        if(x==="sin")r=Math.sin(a*Math.PI/180); else if(x==="cos")r=Math.cos(a*Math.PI/180); else if(x==="tan")r=Math.tan(a*Math.PI/180);
+        else if(x==="sqrt")r=Math.sqrt(a);
+        else if(x==="asin")r=(a<-1||a>1)?NaN:Math.asin(a)*180/Math.PI; else if(x==="acos")r=(a<-1||a>1)?NaN:Math.acos(a)*180/Math.PI; else if(x==="atan")r=Math.atan(a)*180/Math.PI;
+        st.push(r); }
+      else { if(st.length<2)return NaN; var b=st.pop(), a2=st.pop(); st.push(x==="+"?a2+b:x==="-"?a2-b:x==="*"?a2*b:a2/b); }
+    }
+    return st.length===1?st[0]:NaN;
+  }
+  function render(){
+    document.getElementById("neoCalcExpr").textContent = (expr||"0").replace(/asin/g,"sin⁻¹").replace(/acos/g,"cos⁻¹").replace(/atan/g,"tan⁻¹");
+    var v=evalExpr(expr);
+    document.getElementById("neoCalcResult").textContent = (expr && isFinite(v)) ? "= "+(Math.round(v*1e6)/1e6) : "";
+  }
+  window.neoCalcEval=evalExpr;
+  window.neoCalcToggle=function(){ var p=document.getElementById("neoCalcPanel"); p.hidden=!p.hidden; document.getElementById("neoCalcToggle").setAttribute("aria-expanded", String(!p.hidden)); };
+  window.neoCalcKey=function(s){ expr+=s; render(); };
+  window.neoCalcFn=function(f){ expr+=(f==="sqrt"?"√":f)+"("; render(); };
+  window.neoCalcClear=function(){ expr=""; render(); };
+  window.neoCalcBack=function(){ var m=expr.match(/(asin\(|acos\(|atan\(|sin\(|cos\(|tan\(|√\()$/); expr=m?expr.slice(0,-m[0].length):expr.slice(0,-1); render(); };
+  window.neoCalcEq=function(){ var v=evalExpr(expr); document.getElementById("neoCalcResult").textContent = isFinite(v) ? "= "+(Math.round(v*1e6)/1e6) : "= —"; };
+  render();
+})();
+</script>
+
+<script>
+/* The calculator in an expedition: never recorded; it rests in the locks listed in CALC_OFF. */
+var CALC_OFF=[];
+function calcRests(i){ return i>=0&&i<ROOMS.length&&(ROOMS[i].calc===false||CALC_OFF.indexOf(i)>=0); }
+function calcClose(){ var p=document.getElementById('neoCalcPanel'); if(p&&!p.hidden) neoCalcToggle(); }
+function openRoomCalc(){ var i=(typeof at==='number'&&at<ROOMS.length)?at:-1;
+  if(calcRests(i)){ calcClose(); var n=document.getElementById('calcRestNote'); if(n){ n.hidden=false; } else if(typeof hud==='function'){ /* top bar, outside a lock */ var m=document.getElementById('calcTopNote'); if(m){ m.hidden=false; setTimeout(function(){ m.hidden=true; },4000); } } return; }
+  var p=document.getElementById('neoCalcPanel'); if(p&&p.hidden) neoCalcToggle(); }
+</script>
+</body>
+</html>

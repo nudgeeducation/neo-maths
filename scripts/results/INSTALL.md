@@ -3,7 +3,7 @@
 About 15 minutes, once. Done by someone with a NEO Google account (`@nudgeeducation.online`) who can edit the **Diagnostic Assessments** folder on the NEO Drive. The service then belongs to NEO and runs under that account.
 
 **What you will end up with**
-- A spreadsheet called **NEO Maths Results** in the Diagnostic Assessments folder, with three tabs: **Diagnostics**, **Comments** and **Staff**.
+- A spreadsheet called **NEO Maths Results** in the Diagnostic Assessments folder, with three tabs: **Diagnostics**, **Comments** and **Staff**. Two more, **CheckIns** and **Labels**, are added automatically the first time a Unit Check-in is saved or a label is confirmed.
 - One web address that opens every diagnostic expedition, the learner passport and the educator dashboard.
 
 ## 1. Create the project
@@ -49,6 +49,7 @@ Add these endings to the Web app URL:
 | `?page=workshop` | The Inventor's Workshop diagnostic (Year 9, Formulae and Rearranging) |
 | `?page=passport` | The learner passport: the signed-in person's own record |
 | `?page=educator` | The educator dashboard (Staff tab only) |
+| `?page=return-…` | A Unit Check-in (for example `?page=return-observatory`) |
 
 Complete the Observatory once with a test learner account, then check that seven rows appear on the **Diagnostics** tab and that the passport and dashboard show them.
 
@@ -69,4 +70,4 @@ The new expedition opens at the same web address with its own ending, for exampl
 
 ## What is saved
 
-Only the date, the learner's NEO email, and for each room: how the lock looked to the learner, the outcome, what a common mistake might suggest, and the suggested Reconnection Route. A comment is saved only when the learner presses **Share this with my supporting adult**. No timings, attempt counts, clicks or field-kit use. Learners can only ever see their own record; staff see everyone's.
+Only the date, the learner's NEO email, and for each room: how the lock looked to the learner, the outcome, what a common mistake might suggest, and the suggested Reconnection Route. A comment is saved only when the learner presses **Share this with my supporting adult**. No timings, attempt counts, clicks or field-kit use. For a Unit Check-in, the same for each room, plus where the learner started (from their own diagnostic) and where they are now. The unit label is saved only when a member of staff confirms it from the educator dashboard, with that adult's email. Learners can only ever see their own record; staff see everyone's.

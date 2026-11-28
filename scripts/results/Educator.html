@@ -21,19 +21,27 @@ td.o{font-size:.85em;white-space:nowrap}
 select{font-size:1em;padding:6px 8px;border-radius:8px;border:1px solid #bcae98}
 a.learner{color:#365a68;font-weight:600}
 .small{font-size:.86em;color:#5c6b4f}
+.Secure{background:#e3f0df}.Getting{background:#fff8e1}.Not{background:#f1e9dc}
+td.ck{font-size:.82em;min-width:110px}td.confirm{min-width:190px}td.ck b{display:block;font-size:1.05em}
+.confirm select,.confirm input{font-size:.92em;padding:5px 6px;border-radius:8px;border:1px solid #bcae98;margin:2px 0;max-width:100%}
+.confirm button{font-size:.9em;padding:5px 10px;border-radius:8px;border:1px solid #738697;background:#fff;cursor:pointer;font-weight:600}
+.confirm .now{display:block;font-weight:700;color:#3f5f45}
 .key span{display:inline-block;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0;font-size:.85em}
 </style>
 </head>
 <body>
-<div class="top"><b>NEO MATHS · EDUCATOR DASHBOARD</b><span><a href="<?= appUrl ?>?page=passport">My learner view</a> <? for (var i = 0; i < expeditions.length; i++) { ?><a href="<?= appUrl ?>?page=<?= expeditions[i].page ?>"><?= expeditions[i].name ?></a> <? } ?></span></div>
+<div class="top"><b>NEO MATHS · EDUCATOR DASHBOARD</b><span><a href="<?= appUrl ?>?page=passport">My learner view</a> <? for (var i = 0; i < expeditions.length; i++) { ?><a href="<?= appUrl ?>?page=<?= expeditions[i].page ?>"><?= expeditions[i].name ?></a> <? } ?><? for (var j = 0; j < checkins.length; j++) { ?><a href="<?= appUrl ?>?page=<?= checkins[j].page ?>"><?= checkins[j].name ?></a> <? } ?></span></div>
 <main class="neo">
-  <h1>Diagnostic expeditions</h1>
+  <h1>Diagnostics and Unit Check-ins</h1>
   <p class="sub" id="who">Loading…</p>
   <div class="info">Each learner's latest expedition per unit, in the learner's own words. There are no scores. <b>"Worth a second look"</b> (felt sure, not yet right) is the most useful signal: it often points to a misconception worth a conversation. <b>"Hidden strength"</b> is worth saying out loud to the learner. Select a learner to open the passport they see.</div>
   <p><label for="unit"><b>Unit</b></label> <select id="unit" onchange="draw()"></select></p>
   <div class="key small">Key: <span class="Ready">Ready</span><span class="Hidden">Hidden strength</span><span class="Got">Got there with a nudge</span><span class="Worth">Worth a second look</span><span class="New">New ground</span></div>
   <h2>Learners and rooms</h2><div class="card" id="grid"></div>
   <h2>Where to look first</h2><div class="card" id="signals"></div>
+  <h2>Unit Check-ins: where each learner started, and where they are now</h2>
+  <div class="info small">Each learner's latest check-in for this unit. In each room, the first line is the diagnostic at the start of the unit and the second is the check-in. When you have looked at the check-in and the Final Tasks, <b>confirm one label for the unit</b>. The learner sees the label (and your note) in their check-in and their passport. Your NEO email is saved with it.</div>
+  <div class="card" id="checkins"></div>
   <h2>Comments learners chose to share</h2><div class="card" id="notes"></div>
 </main>
 <script>
@@ -68,11 +76,41 @@ function draw(){
     '<b>Possible misconceptions</b>'+(looks.length?'<ul>'+looks.join('')+'</ul>':'<p class="small">None so far.</p>')+
     '<b>Reconnection Routes suggested</b>'+(rk.length?'<ul>'+rk.map(function(k){return '<li>'+esc(k)+' — '+routes[k].map(esc).join(', ')+'</li>';}).join('')+'</ul>':'<p class="small">None so far.</p>');
   var notes=DATA.comments.filter(function(c){return c.unitId===u;}).sort(function(a,b){return a.saved<b.saved?1:-1;});
+  drawCheckins(u);
   document.getElementById('notes').innerHTML=notes.length?'<ul>'+notes.map(function(c){return '<li>'+day(c.saved)+' · <b>'+esc(c.learner)+'</b>: “'+esc(c.comment)+'”</li>';}).join('')+'</ul>':'<p class="small">None shared yet.</p>';
+}
+// Unit Check-ins: latest per learner, start → now in each room, and the label (staff confirm it here).
+function latestCheckins(unitId){
+  var by={}; (DATA.checkins||[]).forEach(function(r){ if(r.unitId!==unitId) return; var k=r.learner; if(!by[k]||by[k].saved<r.saved) by[k]={saved:r.saved,checkin:r.checkin,rows:[]}; });
+  (DATA.checkins||[]).forEach(function(r){ if(r.unitId===unitId&&by[r.learner]&&by[r.learner].checkin===r.checkin) by[r.learner].rows.push(r); });
+  return by;
+}
+function labelFor(learner,unitId){ var last=null; (DATA.labels||[]).forEach(function(l){ if(l.learner===String(learner).toLowerCase()&&l.unitId===unitId) last=l; }); return last&&last.label?last:null; }
+function drawCheckins(u){
+  var by=latestCheckins(u), learners=Object.keys(by).sort(), box=document.getElementById('checkins');
+  if(!learners.length){ box.innerHTML='No check-ins saved for this unit yet.'; return; }
+  var rooms=[]; learners.forEach(function(l){ by[l].rows.forEach(function(r){ if(rooms.indexOf(r.room)<0) rooms.push(r.room); }); });
+  box.innerHTML='<table><tr><th>Learner</th><th>Completed</th><th>Label for the unit</th>'+rooms.map(function(r){return '<th>'+esc(r)+'</th>';}).join('')+'</tr>'+
+    learners.map(function(l,n){ var map={}; by[l].rows.forEach(function(r){map[r.room]=r;}); var lab=labelFor(l,u);
+      return '<tr><td><a class="learner" href="'+APP+'?page=passport&learner='+encodeURIComponent(l)+'">'+esc(l)+'</a></td><td>'+day(by[l].saved)+'</td>'+
+        '<td class="confirm" data-learner="'+esc(l)+'">'+(lab?'<span class="now">'+esc(lab.label)+'</span><span class="small">'+day(lab.saved)+' · '+esc(lab.by)+(lab.note?'<br>“'+esc(lab.note)+'”':'')+'</span><br>':'<span class="small">Not confirmed yet</span><br>')+
+        '<select aria-label="Label for '+esc(l)+'"><option value="">Choose a label…</option>'+(DATA.labelNames||[]).map(function(x){return '<option'+(lab&&lab.label===x?' selected':'')+'>'+esc(x)+'</option>';}).join('')+'</select><br>'+
+        '<input type="text" placeholder="Optional note for the learner" aria-label="Note for '+esc(l)+'" value="'+esc(lab?lab.note:'')+'"><br>'+
+        '<button data-act="confirm">Confirm</button>'+(lab?' <button data-act="clear">Clear</button>':'')+' <span class="small msg" role="status"></span></td>'+
+        rooms.map(function(rm){ var r=map[rm]; return r?'<td class="ck '+cls(r.now)+'" title="'+esc((r.felt?'Felt: '+r.felt+'. ':'')+(r.suggests||'')+(r.route?' Next step: '+r.route:''))+'">'+esc(r.start||'No diagnostic')+' →<b>'+esc(r.now)+'</b></td>':'<td></td>'; }).join('')+'</tr>'; }).join('')+'</table>'+
+    '<p class="small">Hover over a room to see how it felt to the learner, what it might suggest and the next step. Key for now: <span class="Secure">Secure</span> · <span class="Getting">Getting there</span> · <span class="Worth">Worth a second look</span> · <span class="Not">Not yet</span>.</p>';
+  [].forEach.call(box.querySelectorAll('td.confirm button'),function(b){ b.onclick=function(){
+    var td=b.closest('td'), learner=td.getAttribute('data-learner'), label=b.getAttribute('data-act')==='clear'?'':td.querySelector('select').value, msg=td.querySelector('.msg');
+    if(b.getAttribute('data-act')==='confirm'&&!label){ msg.textContent='Choose a label first.'; return; }
+    var note=label?td.querySelector('input').value.trim():'', unit=document.getElementById('unit').selectedOptions[0].textContent;
+    msg.textContent='Saving…';
+    google.script.run.withSuccessHandler(function(){ DATA.labels.push({saved:new Date().toISOString(),learner:learner.toLowerCase(),unit:unit,unitId:u,label:label,note:note,by:DATA.educator}); drawCheckins(u); })
+      .withFailureHandler(function(e){ msg.textContent='Could not save just now: '+(e&&e.message); })
+      .confirmLabel({learner:learner,unit:unit,unitId:u,label:label,note:note}); }; });
 }
 google.script.run.withSuccessHandler(function(d){
   DATA=d; document.getElementById('who').textContent='Signed in as '+d.educator;
-  var units={}; d.rows.forEach(function(r){units[r.unitId]=r.unit;});
+  var units={}; d.rows.concat(d.checkins||[]).forEach(function(r){ if(!units[r.unitId]) units[r.unitId]=r.unit; });
   var ids=Object.keys(units); document.getElementById('unit').innerHTML=ids.length?ids.map(function(k){return '<option value="'+esc(k)+'">'+esc(units[k])+'</option>';}).join(''):'<option value="">No results yet</option>';
   draw();
 }).withFailureHandler(function(e){ document.getElementById('who').textContent='The dashboard could not load: '+(e&&e.message); }).getEducatorData();
